@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar'
+import CreateProperty from './CreateProperty'
+import Footer from './Footer'
 import {
     Container,
     Row,
-    Col,
-    Jumbotron
+    Col
 } from 'reactstrap'
 
 class App extends Component {
@@ -12,15 +13,10 @@ class App extends Component {
     return (
       <div>
         <Navbar />
-        <Jumbotron>
-          <Container>
-            <Row>
-              <Col>
-                <h1>Property Management</h1>
-              </Col>
-            </Row>
-          </Container>
-        </Jumbotron>
+        <Container>
+          <CreateProperty />
+        </Container>
+        <Footer />
       </div>
     )
   }

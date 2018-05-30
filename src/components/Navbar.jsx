@@ -30,8 +30,8 @@ class Navbar extends Component {
     const {isOpen} = this.state
 
     return (
-      <div>
-        <BSNavbar color="inverse" light expand="md">
+      <div className="fsnavbar">
+        <BSNavbar color="light" light fixed="top" expand="md">
           <img src={logo} className="fsnavbar-logo" alt="logo" href=""/>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={isOpen} navbar>
