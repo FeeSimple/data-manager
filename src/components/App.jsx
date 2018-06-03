@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import Navbar from './Navbar'
-import PropertyDetails from './PropertyDetails'
 import { Container } from 'reactstrap'
+import Properties from './Properties'
+import Navbar from './Navbar'
+
 
 class App extends Component {
   render() {
@@ -9,7 +10,7 @@ class App extends Component {
       <div>
         <Navbar />
         <Container>
-          <PropertyDetails />
+          <Properties />
         </Container>
       </div>
     )

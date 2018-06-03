@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import {
     Form,
-    FormGroup,
-    FormText,
+    FormGroup,    
     Label,
     Input,
     Col,

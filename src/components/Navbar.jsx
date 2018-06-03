@@ -31,7 +31,9 @@ class Navbar extends Component {
     return (
       <div className="fsnavbar">
         <BSNavbar color="light" light fixed="top" expand="md">
-          <img src={logo} className="fsnavbar-logo" alt="logo" href=""/>
+          <a href="/properties">
+            <img src={logo} className="fsnavbar-logo" alt="logo"/>
+          </a>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>

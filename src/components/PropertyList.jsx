@@ -1,26 +1,20 @@
 import React, { Component } from 'react'
-import {
-  MdChevronRight,
-  MdKeyboardArrowRight
-} from 'react-icons/lib/md'
+import { MdChevronRight } from 'react-icons/lib/md'
+import {withRouter} from 'react-router-dom'
+import {idFromPath} from '../utils/index'
 import {
     ListGroup,
-    ListGroupItem,
-    ListGroupItemHeading,
-    ListGroupItemText,
+    ListGroupItem,    
     Col,
     Row
 } from 'reactstrap'
 
 class PropertyList extends Component {
 
-  state = {
-    active:undefined
-  }
-
   propertyClick = (e,property) => {
     e.preventDefault()
     this.setState({active:property.id})
+    this.props.history.push('/properties/'+property.id);
   }
 
   render() {
@@ -86,34 +80,31 @@ class PropertyList extends Component {
         unit_count:4
       },
     ]
-    const {active} = this.state
+    const {pathname} = this.props.location
+    const id = Number(idFromPath(pathname))
 
     return (
-      <div>
-        <h1>Property List</h1>
-        <hr />
-        <ListGroup>
-          {properties.map((property) => (
-            <ListGroupItem
-              key={property.id}
-              onClick={(e) => this.propertyClick(e,property)}
-              active={active===property.id?true:false}
-              >
-              <Row >
-                <Col>
-                  <h3>{property.name}</h3>
-                  {property.city} | {property.region}
-                </Col>
-                <Col xs="3" md="3" className="text-right">
-                  <MdChevronRight size={44}/>
-                </Col>
-              </Row>
-            </ListGroupItem>
-          ))}
-        </ListGroup>
-      </div>
+      <ListGroup>
+        {properties.map((property) => (
+          <ListGroupItem
+            key={property.id}
+            onClick={(e) => this.propertyClick(e,property)}
+            active={id===property.id?true:false}
+            >
+            <Row >
+              <Col>
+                <h5>{property.name}</h5>
+                <p>{property.city}</p>
+              </Col>
+              <Col xs="3" md="3" className="text-right">
+                <MdChevronRight size={34}/>
+              </Col>
+            </Row>
+          </ListGroupItem>
+        ))}
+      </ListGroup>
     )
   }
 }
 
-export default PropertyList
+export default withRouter(PropertyList)
