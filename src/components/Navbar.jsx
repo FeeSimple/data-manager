@@ -9,7 +9,6 @@ import {
     NavLink
 } from 'reactstrap'
 
-
 class Navbar extends Component {
   state = {
     isOpen: false

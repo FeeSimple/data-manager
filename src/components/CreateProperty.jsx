@@ -29,9 +29,9 @@ class CreateProperty extends Component {
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label for="address1" sm={2}>Address 1</Label>
+            <Label for="address2" sm={2}>Address 2</Label>
             <Col sm={10}>
-              <Input type="textarea" name="address1" id="address1" />
+              <Input type="textarea" name="address2" id="address2" />
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -59,7 +59,7 @@ class CreateProperty extends Component {
             </Col>
           </FormGroup>
           <FormGroup check row>
-            <Button>Submit</Button>
+            <Button color="primary">Submit</Button>
           </FormGroup>
         </Form>
       </div>
