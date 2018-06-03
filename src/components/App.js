@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar'
-import CreateProperty from './CreateProperty'
+import PropertyList from './PropertyList'
 import Footer from './Footer'
 import {
     Container,
@@ -14,9 +14,8 @@ class App extends Component {
       <div>
         <Navbar />
         <Container>
-          <CreateProperty />
-        </Container>
-        <Footer />
+          <PropertyList />
+        </Container>        
       </div>
     )
   }
