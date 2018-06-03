@@ -3,9 +3,8 @@ import { Container } from 'reactstrap'
 import Properties from './Properties'
 import Navbar from './Navbar'
 
-
 class App extends Component {
-  render() {
+  render () {
     return (
       <div>
         <Navbar />
