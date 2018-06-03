@@ -12,7 +12,7 @@ class CreateProperty extends Component {
   render () {
     return (
       <div>
-        <h1>Create Property</h1>
+        <h4>Create Property</h4>
         <hr />
         <Form>
           <FormGroup row>

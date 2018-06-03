@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import Media from 'react-media'
 import PropertyDetails from './PropertyDetails'
 import PropertyList from './PropertyList'
@@ -16,24 +16,28 @@ class Properties extends Component {
       <div>
         <div className='clearfix'>
           <h1 className='float-left'>Properties</h1>
-          <Button color='primary float-right' href='/properties'>New...</Button>
+          <Button color='primary float-right' href='/properties/new'>New...</Button>
         </div>
         <hr />
         <Media query={{ maxWidth: 799 }}>
           {screenIsSmall => screenIsSmall
             ? (<Switch>
-              <Route exact path='/properties/' component={PropertyList} />
-              <Route path='/properties/:id' component={PropertyDetails} />
-            </Switch>)
-            : (<Row >
-              <Col md='4'>
-                <Route path='/properties/' component={PropertyList} />
-              </Col>
-              <Col>
-                <Route exact path='/properties/' component={CreateProperty} />
+                <Route exact path='/properties/new' component={CreateProperty} />
+                <Route exact path='/properties/' component={PropertyList} />
                 <Route path='/properties/:id' component={PropertyDetails} />
-              </Col>
-            </Row>)
+              </Switch>)
+            : (<Row >
+                <Col md='4'>
+                  <Route path='/properties/' component={PropertyList} />
+                </Col>
+                <Col>
+                  <Redirect from='/properties' to='/properties/new' />
+                  <Switch>
+                    <Route exact path='/properties/new' component={CreateProperty} />
+                    <Route path='/properties/:id' component={PropertyDetails} />
+                  </Switch>
+                </Col>
+              </Row>)
           }
         </Media>
       </div>

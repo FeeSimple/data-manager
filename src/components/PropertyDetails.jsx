@@ -31,22 +31,34 @@ class PropertyDetails extends Component {
 
   render() {
     const {isEditing} = this.state
+    const property = {
+      id:0,
+      name: 'St Paul',
+      address1: 'Lehigh Street, 145',
+      address2: '',
+      city: 'Emmaus',
+      region: 'LeHigh Valley',
+      postal_code:'58016',
+      unit_count:1
+    }
 
     return (
       <div>
-        <h1>Property Details</h1>
+        <h4>Property Details</h4>
         <hr />
         <Form>
           <FormGroup row>
             <Label for="propertyName" sm={2}>Name</Label>
             <Col sm={10}>
-             <Input name="propertyName" id="propertyName" disabled={!isEditing}/>
+             <Input name="propertyName" id="propertyName"
+                value={property.name} disabled={!isEditing}/>
             </Col>
           </FormGroup>
           <FormGroup row>
             <Label for="address1" sm={2}>Address 1</Label>
             <Col sm={10}>
               <Input type="textarea" name="address1"
+                value={property.address1}
                 id="address1" disabled={!isEditing} />
             </Col>
           </FormGroup>
@@ -54,32 +66,36 @@ class PropertyDetails extends Component {
             <Label for="address1" sm={2}>Address 2</Label>
             <Col sm={10}>
               <Input type="textarea" name="address2"
+                value={property.address2}
                 id="address2" disabled={!isEditing} />
             </Col>
           </FormGroup>
           <FormGroup row>
             <Label for="city" sm={2}>City</Label>
             <Col sm={10}>
-             <Input name="city" id="city" disabled={!isEditing} />
+             <Input name="city" id="city" disabled={!isEditing}
+               value={property.city}/>
             </Col>
           </FormGroup>
           <FormGroup row>
             <Label for="region" sm={2}>Region</Label>
             <Col sm={10}>
-             <Input name="region" id="region" disabled={!isEditing}/>
+             <Input name="region" id="region" disabled={!isEditing}
+              value={property.region}/>
             </Col>
           </FormGroup>
           <FormGroup row>
             <Label for="postalCode" sm={2}>Postal Code</Label>
             <Col sm={10}>
-             <Input name="postalCode" id="postalCode" disabled={!isEditing} />
+             <Input name="postalCode" id="postalCode" disabled={!isEditing}
+              value={property.postal_code}/>
             </Col>
           </FormGroup>
           <FormGroup row>
             <Label for="unitCount" sm={2}>Unit Count</Label>
             <Col sm={10}>
              <Input type="number" name="unitCount"
-              id="unitCount" disabled={!isEditing}/>
+              id="unitCount" disabled={!isEditing} value={property.unit_count}/>
             </Col>
           </FormGroup>
           <Button color="primary" hidden={isEditing}
