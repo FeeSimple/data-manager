@@ -1,3 +1,4 @@
 export const idFromPath = (pathname) => {
-  return pathname.substring(pathname.lastIndexOf('/') + 1, pathname.length)
+  const result = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.length)
+  return result === ''?'-1':result
 }
