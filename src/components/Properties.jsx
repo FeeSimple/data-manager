@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import Media from 'react-media'
 import PropertyDetails from './PropertyDetails'
 import PropertyList from './PropertyList'
 import CreateProperty from './CreateProperty'
+import NoSelection from './NoSelection'
 import {
   Button,
   Col,
@@ -31,10 +32,10 @@ class Properties extends Component {
                   <Route path='/properties/' component={PropertyList} />
                 </Col>
                 <Col>
-                  <Redirect from='/properties' to='/properties/new' />
                   <Switch>
                     <Route exact path='/properties/new' component={CreateProperty} />
                     <Route path='/properties/:id' component={PropertyDetails} />
+                    <Route path='/properties/' component={NoSelection} />
                   </Switch>
                 </Col>
               </Row>)
