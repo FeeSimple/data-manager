@@ -1,14 +1,5 @@
 import React, { Component } from 'react'
-import {
-    Form,
-    FormGroup,
-    Label,
-    Input,
-    Col,
-    Row,
-    Button,
-    Container
-} from 'reactstrap'
+import { Row } from 'reactstrap'
 
 class NoSelection extends Component {
   render() {
