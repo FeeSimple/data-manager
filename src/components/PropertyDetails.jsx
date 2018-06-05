@@ -103,7 +103,7 @@ class PropertyDetails extends Component {
             Edit
           </Button>
           <Button color="primary" hidden={!isEditing}
-            onClick={(e) => this.save(e)} style={{'margin-right':'0.5em'}}>
+            onClick={(e) => this.save(e)} style={{marginRight:'0.5em'}}>
             Save
           </Button>
           <Button outline color="primary" hidden={!isEditing}
