@@ -4,16 +4,15 @@ import {withRouter} from 'react-router-dom'
 import {idFromPath} from '../utils/index'
 import {
     ListGroup,
-    ListGroupItem,    
+    ListGroupItem,
     Col,
     Row
 } from 'reactstrap'
 
-class PropertyList extends Component {
+class PropertyListContainer extends Component {
 
   propertyClick = (e,property) => {
     e.preventDefault()
-    this.setState({active:property.id})
     this.props.history.push('/properties/'+property.id);
   }
 
@@ -84,27 +83,34 @@ class PropertyList extends Component {
     const id = Number(idFromPath(pathname))
 
     return (
-      <ListGroup>
-        {properties.map((property) => (
-          <ListGroupItem
-            key={property.id}
-            onClick={(e) => this.propertyClick(e,property)}
-            active={id===property.id?true:false}
-            >
-            <Row >
-              <Col>
-                <h5>{property.name}</h5>
-                <p>{property.city}</p>
-              </Col>
-              <Col xs="3" md="3" className="text-right">
-                <MdChevronRight size={34}/>
-              </Col>
-            </Row>
-          </ListGroupItem>
-        ))}
-      </ListGroup>
+      <PropertyList
+        id={id}
+        properties={properties}
+        onPropertySelect={this.propertyClick} />
     )
   }
 }
 
-export default withRouter(PropertyList)
+const PropertyList = ({id,properties,onPropertySelect}) => (
+  <ListGroup>
+    {properties.map((property) => (
+      <ListGroupItem
+        key={property.id}
+        onClick={(e) => onPropertySelect(e,property)}
+        active={id===property.id?true:false}
+        >
+        <Row >
+          <Col>
+            <h5>{property.name}</h5>
+            <p>{property.city}</p>
+          </Col>
+          <Col xs="3" md="3" className="text-right">
+            <MdChevronRight size={34}/>
+          </Col>
+        </Row>
+      </ListGroupItem>
+    ))}
+  </ListGroup>
+)
+
+export default withRouter(PropertyListContainer)

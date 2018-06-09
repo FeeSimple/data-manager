@@ -9,7 +9,7 @@ import {
     NavLink
 } from 'reactstrap'
 
-class Navbar extends Component {
+class NavbarContainer extends Component {
   state = {
     isOpen: false
   }
@@ -29,29 +29,33 @@ class Navbar extends Component {
     const {isOpen} = this.state
 
     return (
-      <div className="fsnavbar">
-        <BSNavbar color="light" light fixed="top" expand="md">
-          <a href="/properties">
-            <img src={logo} className="fsnavbar-logo" alt="logo"/>
-          </a>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="http://feesimple.io">FeeSimple Home</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/feesimple">Github</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="http://feesimple.io/pdf/FeeSimple-Whitepaper-v0.8.0.pdf">Whitepaper</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </BSNavbar>
-      </div>
+      <Navbar isOpen={isOpen} logo={logo} onToggleClick={this.toggle}/>
     )
   }
 }
 
-export default Navbar
+const Navbar = ({isOpen,logo,onToggleClick}) => (
+  <div className="fsnavbar">
+    <BSNavbar color="light" light fixed="top" expand="md">
+      <a href="/properties">
+        <img src={logo} className="fsnavbar-logo" alt="logo"/>
+      </a>
+      <NavbarToggler onClick={onToggleClick} />
+      <Collapse isOpen={isOpen} navbar>
+        <Nav className="ml-auto" navbar>
+          <NavItem>
+            <NavLink href="http://feesimple.io">FeeSimple Home</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="https://github.com/feesimple">Github</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="http://feesimple.io/pdf/FeeSimple-Whitepaper-v0.8.0.pdf">Whitepaper</NavLink>
+          </NavItem>
+        </Nav>
+      </Collapse>
+    </BSNavbar>
+  </div>
+)
+
+export default NavbarContainer

@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React Component from 'react'
 import logo from '../feesimple-logo.svg'
 import {
   Container
 } from 'reactstrap'
 
-class Footer extends Component {
-  render () {
+export default function Footer () {
     return (
       <div className='fsfooter'>
         <Container>
@@ -15,5 +14,3 @@ class Footer extends Component {
     )
   }
 }
-
-export default Footer
