@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom';
+import { idFromPath } from '../utils/index'
+import { addProperty, removeProperty, editProperty } from '../actions'
 import {
     Form,
     FormGroup,
@@ -8,47 +12,66 @@ import {
     Button
 } from 'reactstrap'
 
+// View Modes
+const READING = 'reading'
+const EDITING = 'editing'
+const CREATING = 'creating'
+
 class PropertyDetailsContainer extends Component {
   state = {
-    isEditing: false
+    mode: ''
   }
 
-  toggleEdit = (e) => {
-    e.preventDefault()
+  newProperty = () => ({
+    name: '',
+    address1: '',
+    address2: '',
+    city: '',
+    region: '',
+    postal_code: '',
+    unit_count: 0
+  })
 
-    const {isEditing} = this.state
-    this.setState({isEditing: !isEditing})
+  edit = (e) => {
+    this.setState({mode: EDITING})
   }
 
   cancel = (e) => {
-    this.toggleEdit(e)
-    console.info('Cancel edit')
+    this.setState({mode: READING})
   }
 
   save = (e) => {
     console.info('Save changes')
   }
 
-  render() {
-    const { isEditing } = this.state
+  create = (e,property) => {
+    console.info('Create property')
+  }
 
-    const property = {
-      id:0,
-      name: 'St Paul',
-      address1: 'Lehigh Street, 145',
-      address2: '',
-      city: 'Emmaus',
-      region: 'LeHigh Valley',
-      postal_code:'58016',
-      unit_count:1
-    }
+  componentDidMount(){
+    const { isCreating } = this.props
+    isCreating
+      ? this.setState({ mode: CREATING })
+      : this.setState({ mode: READING })
+  }
+
+  render() {
+    const { mode } = this.state
+    const { pathname } = this.props.location
+    const { properties } = this.props
+    const selectedId = idFromPath(pathname)
+
+    let property = properties[selectedId]
+      ? properties[selectedId]
+      : this.newProperty()
 
     return (
       <PropertyDetails
         property={property}
-        isEditing={isEditing}
-        onEditClick={this.toggleEdit}
+        mode={mode}
+        onEditClick={this.edit}
         onSaveClick={this.save}
+        onCreateClick={this.create}
         onCancelClick={this.cancel}/>
     )
   }
@@ -56,9 +79,10 @@ class PropertyDetailsContainer extends Component {
 
 const PropertyDetails = ({
   property,
-  isEditing,
+  mode,
   onEditClick,
   onCancelClick,
+  onCreateClick,
   onSaveClick
 }) => (
   <div>
@@ -69,7 +93,7 @@ const PropertyDetails = ({
         <Label for="propertyName" sm={2}>Name</Label>
         <Col sm={10}>
          <Input name="propertyName" id="propertyName"
-            value={property.name} disabled={!isEditing}/>
+            value={property.name} disabled={mode===READING}/>
         </Col>
       </FormGroup>
       <FormGroup row>
@@ -77,7 +101,7 @@ const PropertyDetails = ({
         <Col sm={10}>
           <Input type="textarea" name="address1"
             value={property.address1}
-            id="address1" disabled={!isEditing} />
+            id="address1" disabled={mode===READING} />
         </Col>
       </FormGroup>
       <FormGroup row>
@@ -85,27 +109,27 @@ const PropertyDetails = ({
         <Col sm={10}>
           <Input type="textarea" name="address2"
             value={property.address2}
-            id="address2" disabled={!isEditing} />
+            id="address2" disabled={mode===READING} />
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="city" sm={2}>City</Label>
         <Col sm={10}>
-         <Input name="city" id="city" disabled={!isEditing}
+         <Input name="city" id="city" disabled={mode===READING}
            value={property.city}/>
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="region" sm={2}>Region</Label>
         <Col sm={10}>
-         <Input name="region" id="region" disabled={!isEditing}
+         <Input name="region" id="region" disabled={mode===READING}
           value={property.region}/>
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="postalCode" sm={2}>Postal Code</Label>
         <Col sm={10}>
-         <Input name="postalCode" id="postalCode" disabled={!isEditing}
+         <Input name="postalCode" id="postalCode" disabled={mode===READING}
           value={property.postal_code}/>
         </Col>
       </FormGroup>
@@ -113,18 +137,22 @@ const PropertyDetails = ({
         <Label for="unitCount" sm={2}>Unit Count</Label>
         <Col sm={10}>
          <Input type="number" name="unitCount"
-          id="unitCount" disabled={!isEditing} value={property.unit_count}/>
+          id="unitCount" disabled={mode===READING} value={property.unit_count}/>
         </Col>
       </FormGroup>
-      <Button color="primary" hidden={isEditing}
+      <Button color="primary" hidden={mode!==READING}
         onClick={(e) => onEditClick(e)}>
         Edit
       </Button>
-      <Button color="primary" hidden={!isEditing}
+      <Button color="primary" hidden={mode!==EDITING}
         onClick={(e) => onSaveClick(e)} style={{marginRight:'0.5em'}}>
         Save
       </Button>
-      <Button outline hidden={!isEditing}
+      <Button color="primary" hidden={mode!==CREATING}
+        onClick={(e) => onCreateClick(e,property)} style={{marginRight:'0.5em'}}>
+        Create
+      </Button>
+      <Button outline hidden={mode!==EDITING}
         onClick={(e) => onCancelClick(e)}>
         Cancel
       </Button>
@@ -132,6 +160,11 @@ const PropertyDetails = ({
   </div>
 )
 
+function mapStateToProps({properties}){
+  return {properties}
+}
 
-
-export default PropertyDetailsContainer
+export default withRouter(connect(
+  mapStateToProps,
+  {addProperty,editProperty,removeProperty}
+)(PropertyDetailsContainer))

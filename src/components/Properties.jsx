@@ -32,7 +32,9 @@ export default function Properties () {
               </Col>
               <Col>
                 <Switch>
-                  <Route exact path='/properties/new' component={CreateProperty} />
+                  <Route exact path='/properties/new'>
+                    <PropertyDetails isCreating={true}/>
+                  </Route>
                   <Route path='/properties/:id' component={PropertyDetails} />
                   <Route path='/properties/' component={NoSelection} />
                 </Switch>
