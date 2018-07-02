@@ -14,7 +14,7 @@ class PropertyListContainer extends Component {
 
   propertyClick = (e,id) => {
     e.preventDefault()
-    this.props.history.push('/properties/'+id);
+    this.props.history.push('/'+id);
   }
 
   render() {
