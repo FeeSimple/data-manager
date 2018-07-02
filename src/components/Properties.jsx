@@ -16,27 +16,27 @@ export default function Properties () {
     <div>
       <div className='clearfix'>
         <h1 className='float-left'>Properties</h1>
-        <Button color='primary float-right' href='/properties/new'>New...</Button>
+        <Button color='primary float-right' href='/new'>New...</Button>
       </div>
       <hr />
       <Media query={{ maxWidth: 799 }}>
         {screenIsSmall => screenIsSmall
           ? (<Switch>
-              <Route exact path='/properties/new' component={CreateProperty} />
-              <Route exact path='/properties/' component={PropertyList} />
-              <Route path='/properties/:id' component={PropertyDetails} />
+              <Route exact path='/new' component={CreateProperty} />
+              <Route exact path='/' component={PropertyList} />
+              <Route path='/:id' component={PropertyDetails} />
             </Switch>)
           : (<Row >
               <Col md='4'>
-                <Route path='/properties/' component={PropertyList} />
+                <Route path='/' component={PropertyList} />
               </Col>
               <Col>
                 <Switch>
-                  <Route exact path='/properties/new'>
+                  <Route exact path='/new'>
                     <PropertyDetails isCreating={true}/>
                   </Route>
-                  <Route path='/properties/:id' component={PropertyDetails} />
-                  <Route path='/properties/' component={NoSelection} />
+                  <Route path='/:id' component={PropertyDetails} />
+                  <Route path='/' component={NoSelection} />
                 </Switch>
               </Col>
             </Row>)
