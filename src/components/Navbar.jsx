@@ -37,7 +37,7 @@ class NavbarContainer extends Component {
 const Navbar = ({isOpen,logo,onToggleClick}) => (
   <div className="fsnavbar">
     <BSNavbar color="light" light fixed="top" expand="md">
-      <a href="/properties">
+      <a href="/">
         <img src={logo} className="fsnavbar-logo" alt="logo"/>
       </a>
       <NavbarToggler onClick={onToggleClick} />

@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router'
 import { Container } from 'reactstrap'
 import Properties from './Properties'
 import Navbar from './Navbar'
@@ -25,22 +26,20 @@ class AppContainer extends React.Component{
 }
 
 
-const App = () => {
-  return (
-    <div>
-      <Navbar />
-      <Container>
-        <Properties />
-      </Container>
-    </div>
-  )
-}
+const App = () => (
+  <div>
+    <Navbar />
+    <Container>
+      <Properties />
+    </Container>
+  </div>
+)
 
 function mapStateToProps ({ scatter, identity }) {
   return { scatter, identity }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   { setScatter, setIdentity }
-)(AppContainer)
+)(AppContainer))

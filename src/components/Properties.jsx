@@ -23,8 +23,8 @@ export default function Properties () {
         {screenIsSmall => screenIsSmall
           ? (<Switch>
               <Route exact path='/new' component={CreateProperty} />
+              <Route exact path='/:id' component={PropertyDetails} />
               <Route exact path='/' component={PropertyList} />
-              <Route path='/:id' component={PropertyDetails} />
             </Switch>)
           : (<Row >
               <Col md='4'>
@@ -35,8 +35,8 @@ export default function Properties () {
                   <Route exact path='/new'>
                     <PropertyDetails isCreating={true}/>
                   </Route>
-                  <Route path='/:id' component={PropertyDetails} />
-                  <Route path='/' component={NoSelection} />
+                  <Route exact path='/:id' component={PropertyDetails} />
+                  <Route exact path='/' component={NoSelection} />
                 </Switch>
               </Col>
             </Row>)

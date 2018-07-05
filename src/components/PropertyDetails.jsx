@@ -48,6 +48,10 @@ class PropertyDetailsContainer extends Component {
     console.info('Create property')
   }
 
+  onChangePlaceHolder = (e) => {
+    console.info('onChangePlaceHolder')
+  }
+
   componentDidMount(){
     const { isCreating } = this.props
     isCreating
@@ -72,7 +76,8 @@ class PropertyDetailsContainer extends Component {
         onEditClick={this.edit}
         onSaveClick={this.save}
         onCreateClick={this.create}
-        onCancelClick={this.cancel}/>
+        onCancelClick={this.cancel}
+        onChangePlaceHolder={this.onChangePlaceHolder}/>
     )
   }
 }
@@ -83,7 +88,8 @@ const PropertyDetails = ({
   onEditClick,
   onCancelClick,
   onCreateClick,
-  onSaveClick
+  onSaveClick,
+  onChangePlaceHolder
 }) => (
   <div>
     <h4>Property Details</h4>
@@ -92,52 +98,81 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for="propertyName" sm={2}>Name</Label>
         <Col sm={10}>
-         <Input name="propertyName" id="propertyName"
-            value={property.name} disabled={mode===READING}/>
+          <Input
+            name="propertyName" 
+            id="propertyName"
+            value={property.name} 
+            onChange={onChangePlaceHolder}
+            disabled={mode===READING}/>
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="address1" sm={2}>Address 1</Label>
         <Col sm={10}>
-          <Input type="textarea" name="address1"
-            value={property.address1}
-            id="address1" disabled={mode===READING} />
+          <Input 
+            id="address1" 
+            name="address1"
+            type="textarea" 
+            onChange={onChangePlaceHolder}
+            value={property.address1}            
+            disabled={mode===READING} />
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="address1" sm={2}>Address 2</Label>
         <Col sm={10}>
-          <Input type="textarea" name="address2"
+          <Input 
+            id="address2" 
+            name="address2"
+            type="textarea" 
             value={property.address2}
-            id="address2" disabled={mode===READING} />
+            onChange={onChangePlaceHolder}
+            disabled={mode===READING} />
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="city" sm={2}>City</Label>
         <Col sm={10}>
-         <Input name="city" id="city" disabled={mode===READING}
-           value={property.city}/>
+          <Input 
+            id="city" 
+            name="city" 
+            disabled={mode===READING}
+            onChange={onChangePlaceHolder}
+            value={property.city}/>
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="region" sm={2}>Region</Label>
         <Col sm={10}>
-         <Input name="region" id="region" disabled={mode===READING}
-          value={property.region}/>
+          <Input 
+            id="region"
+            name="region"
+            disabled={mode===READING}
+            onChange={onChangePlaceHolder}
+            value={property.region}/>
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="postalCode" sm={2}>Postal Code</Label>
         <Col sm={10}>
-         <Input name="postalCode" id="postalCode" disabled={mode===READING}
-          value={property.postal_code}/>
+          <Input 
+            id="postalCode" 
+            name="postalCode" 
+            disabled={mode===READING}
+            onChange={onChangePlaceHolder}
+            value={property.postal_code}/>
         </Col>
       </FormGroup>
       <FormGroup row>
         <Label for="unitCount" sm={2}>Unit Count</Label>
         <Col sm={10}>
-         <Input type="number" name="unitCount"
-          id="unitCount" disabled={mode===READING} value={property.unit_count}/>
+          <Input 
+            id="unitCount" 
+            type="number" 
+            name="unitCount"
+            onChange={onChangePlaceHolder}
+            disabled={mode===READING} 
+            value={property.unit_count}/>
         </Col>
       </FormGroup>
       <Button color="primary" hidden={mode!==READING}
@@ -166,5 +201,5 @@ function mapStateToProps({properties}){
 
 export default withRouter(connect(
   mapStateToProps,
-  {addProperty,editProperty,removeProperty}
+  { addProperty, editProperty, removeProperty }
 )(PropertyDetailsContainer))
