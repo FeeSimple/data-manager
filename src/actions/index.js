@@ -4,8 +4,16 @@ import {
   EDIT_PROPERTY,
   REMOVE_PROPERTY,
   SET_IDENTITY,
-  SET_SCATTER
+  SET_SCATTER,
+  SET_EOSJS
 } from '../actions/types'
+
+export function setEosJs (eosjs) {
+  return {
+    type: SET_EOSJS,
+    eosjs
+  }
+}
 
 export function setScatter (scatter) {
   return {

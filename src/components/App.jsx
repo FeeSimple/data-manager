@@ -5,17 +5,17 @@ import Navbar from './Navbar'
 import { connect } from 'react-redux'
 import { setScatter, setIdentity } from '../actions'
 import getScatter from '../utils/getScatter'
-//import Eos from 'eosjs'
 
 class AppContainer extends React.Component{
   
   componentWillMount () {    
+
     getScatter.then((results) => {
       const { scatter } = results
       setScatter(scatter)
-      setIdentity(scatter.identity)
+      setIdentity(scatter.identity)      
     }).catch((error) => {
-      console.log('Error finding scatter.')
+      console.error('Error setting up scatter.', error)
     })
   }
 
