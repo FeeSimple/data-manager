@@ -2,8 +2,24 @@ import {
   ADD_PROPERTIES,
   ADD_PROPERTY,
   EDIT_PROPERTY,
-  REMOVE_PROPERTY
+  REMOVE_PROPERTY,
+  SET_IDENTITY,
+  SET_SCATTER
 } from '../actions/types'
+
+export function setScatter (scatter) {
+  return {
+    type: SET_SCATTER,
+    scatter
+  }
+}
+
+export function setIdentity (identity) {
+  return {
+    type: SET_IDENTITY,
+    identity
+  }
+}
 
 export function addProperties (properties) {
   return {
