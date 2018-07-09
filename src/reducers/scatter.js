@@ -1,28 +1,20 @@
 import {
-    SET_SCATTER,
-    SET_IDENTITY    
+    SET_SCATTER    
   } from '../actions/types'
   
   const initialState = {
-    scatter: null,
-    identity: null
+    instance: null    
   }
   
-  export function scatterjs (state = initialState, action) {
-    const { scatter, identity } = action
+  export function scatter (state = initialState, action) {    
+    const { instance } = action
     switch (action.type) {      
       case SET_SCATTER: {
         return {
           ...state,
-          scatter
+          instance
         }
-      }
-      case SET_IDENTITY: {
-        return {
-          ...state,
-          identity
-        }
-      }
+      }      
       default:
         return state
     }

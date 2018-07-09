@@ -3,6 +3,7 @@ import { MdChevronRight } from 'react-icons/lib/md'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { idFromPath } from '../utils/index'
+import { addProperties } from '../actions'
 import {
     ListGroup,
     ListGroupItem,
@@ -15,12 +16,13 @@ class PropertyListContainer extends Component {
   propertyClick = (e,id) => {
     e.preventDefault()
     this.props.history.push('/'+id);
-  }
+  }  
 
   render() {
+
     const { properties } = this.props
     const { pathname } = this.props.location
-    const selectedId = idFromPath(pathname)
+    const selectedId = idFromPath(pathname)    
 
     return (
       <PropertyList
@@ -64,11 +66,11 @@ const PropertyList = ({selectedId,properties,onPropertySelect}) => (
     </div>
 )
 
-function mapStateToProps({properties}){
-  return {properties}
+function mapStateToProps({ properties, scatter, eosjs }){
+  return { properties, scatter, eosjs }
 }
 
 export default withRouter(connect(
   mapStateToProps,
-  null,
+  { addProperties },
 )(PropertyListContainer))

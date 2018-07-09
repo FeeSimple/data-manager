@@ -1,5 +1,4 @@
 export const SET_SCATTER = 'SET_SCATTER'
-export const SET_IDENTITY = 'SET_IDENTITY'
 export const SET_EOSJS = 'SET_EOSJS'
 
 export const ADD_PROPERTIES = 'ADD_PROPERTIES'

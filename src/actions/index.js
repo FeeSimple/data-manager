@@ -3,29 +3,21 @@ import {
   ADD_PROPERTY,
   EDIT_PROPERTY,
   REMOVE_PROPERTY,
-  SET_IDENTITY,
   SET_SCATTER,
-  SET_EOSJS
+  SET_EOSJS  
 } from '../actions/types'
 
-export function setEosJs (eosjs) {
+export function setEosJs (instance) {
   return {
     type: SET_EOSJS,
-    eosjs
+    instance
   }
 }
 
-export function setScatter (scatter) {
+export function setScatter (instance) {
   return {
     type: SET_SCATTER,
-    scatter
-  }
-}
-
-export function setIdentity (identity) {
-  return {
-    type: SET_IDENTITY,
-    identity
+    instance
   }
 }
 
