@@ -1,5 +1,5 @@
 export const SET_SCATTER = 'SET_SCATTER'
-export const SET_EOSJS = 'SET_EOSJS'
+export const SET_EOSCLIENT = 'SET_EOSCLIENT'
 
 export const ADD_PROPERTIES = 'ADD_PROPERTIES'
 export const ADD_PROPERTY = 'ADD_PROPERTY'

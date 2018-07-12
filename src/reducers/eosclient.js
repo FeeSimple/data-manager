@@ -1,13 +1,13 @@
-import { SET_EOSJS } from '../actions/types'
+import { SET_EOSCLIENT } from '../actions/types'
 
 const initialState = {
   instance: null
 }
 
-export function eosjs (state = initialState, action) {  
+export function eosclient (state = initialState, action) {  
   const { instance } = action
   switch (action.type) {      
-    case SET_EOSJS: {      
+    case SET_EOSCLIENT: {      
       return {
         ...state,
         instance

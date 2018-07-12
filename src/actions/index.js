@@ -4,12 +4,12 @@ import {
   EDIT_PROPERTY,
   REMOVE_PROPERTY,
   SET_SCATTER,
-  SET_EOSJS  
+  SET_EOSCLIENT
 } from '../actions/types'
 
-export function setEosJs (instance) {
+export function setEosClient (instance) {
   return {
-    type: SET_EOSJS,
+    type: SET_EOSCLIENT,
     instance
   }
 }

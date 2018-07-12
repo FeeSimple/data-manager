@@ -8,8 +8,8 @@ import {
 const initialState = {
   0:{
     name: 'St Paul',
-    address1: 'Lehigh Street, 145',
-    address2: '',
+    address_1: 'Lehigh Street, 145',
+    address_2: '',
     city: 'Emmaus',
     region: 'LeHigh Valley',
     postal_code:'58016',
@@ -17,8 +17,8 @@ const initialState = {
   },
   1:{
     name: 'Lincoln Building',
-    address1: 'Herriman St, 545',
-    address2: '5th Block',
+    address_1: 'Herriman St, 545',
+    address_2: '5th Block',
     city: 'Salt Lake City',
     region: 'Park City',
     postal_code:'58086',
@@ -26,8 +26,8 @@ const initialState = {
   },
   2:{
     name: 'John Ferry',
-    address1: 'Sandpoint Avenue, 3332',
-    address2: '2nd floor',
+    address_1: 'Sandpoint Avenue, 3332',
+    address_2: '2nd floor',
     city: 'Idaho City',
     region: 'Boise County',
     postal_code:'58543',
@@ -35,8 +35,8 @@ const initialState = {
   },
   3:{
     name: 'St Paul',
-    address1: 'Lehigh Street, 145',
-    address2: '',
+    address_1: 'Lehigh Street, 145',
+    address_2: '',
     city: 'Emmaus',
     region: 'LeHigh Valley',
     postal_code:'58016',
@@ -44,8 +44,8 @@ const initialState = {
   },
   4:{
     name: 'Lincoln Building',
-    address1: 'Herriman St, 545',
-    address2: '5th Block',
+    address_1: 'Herriman St, 545',
+    address_2: '5th Block',
     city: 'Salt Lake City',
     region: 'Park City',
     postal_code:'58086',
@@ -53,8 +53,8 @@ const initialState = {
   },
   5:{
     name: 'John Ferry',
-    address1: 'Sandpoint Avenue, 3332',
-    address2: '2nd floor',
+    address_1: 'Sandpoint Avenue, 3332',
+    address_2: '2nd floor',
     city: 'Idaho City',
     region: 'Boise County',
     postal_code:'58543',
@@ -62,10 +62,17 @@ const initialState = {
   }
 }
 
-export function properties (state = initialState, action) {
+export function properties (state = {}, action) {
+  const { properties } = action
   switch (action.type) {
     case ADD_PROPERTIES: {
-      return state
+      let newState = {
+        ...state
+      }
+      properties.map(p => {
+        newState[p.id] = p
+      })
+      return newState
     }
     case ADD_PROPERTY: {
       return state

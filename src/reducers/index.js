@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import { properties } from './properties'
 import { scatter } from './scatter'
-import { eosjs } from './eosjs'
+import { eosclient } from './eosclient'
 
 export default combineReducers({
   properties,
-  eosjs,
+  eosclient,
   scatter
 })

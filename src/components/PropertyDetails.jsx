@@ -24,8 +24,8 @@ class PropertyDetailsContainer extends Component {
 
   newProperty = () => ({
     name: '',
-    address1: '',
-    address2: '',
+    address_1: '',
+    address_2: '',
     city: '',
     region: '',
     postal_code: '',
@@ -114,7 +114,7 @@ const PropertyDetails = ({
             name="address1"
             type="textarea" 
             onChange={onChangePlaceHolder}
-            value={property.address1}            
+            value={property.address_1}            
             disabled={mode===READING} />
         </Col>
       </FormGroup>
@@ -125,7 +125,7 @@ const PropertyDetails = ({
             id="address2" 
             name="address2"
             type="textarea" 
-            value={property.address2}
+            value={property.address_2}
             onChange={onChangePlaceHolder}
             disabled={mode===READING} />
         </Col>
