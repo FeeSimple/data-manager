@@ -21,28 +21,51 @@ class PropertyDetails extends Component {
   state = {
     mode: '',
     loading: false,
-    property: {
-      name: '',
-      address_1: '',
-      address_2: '',
-      city: '',
-      region: '',
-      postal_code: '',
-      unit_count: 0
-    },
+    prevProperty: {},
+    property: newProperty(),
   }
 
   edit = (e) => {
-    this.setState({mode: EDITING})
+    const { property } = this.state
+    this.setState({
+      mode: EDITING,
+      prevProperty: {
+        ...property
+      }
+    })
   }
 
   cancel = (e) => {
-    // TODO: reset fields
-    this.setState({mode: READING})
+    const { prevProperty } = this.state
+    this.setState({
+      mode: READING,
+      property: {
+        ...prevProperty
+      },
+      prevProperty: {}
+    })
   }
 
-  save = (e) => {
-    console.info('Save changes')
+  save = (e) => {    
+    e.preventDefault()
+    this.setState({ loading: true })
+
+    const eosClient = this.props.eosClient.instance
+    const { property } = this.state
+
+    eosClient
+      .transaction('modproperty', {
+        author: 'fsmgrcode333',
+        ...property
+      })
+      .then(res => {
+        console.log(res);
+        this.setState({ loading: false });
+      })
+      .catch(err => {
+        this.setState({ loading: false });
+        console.log(err);
+    })
   }
 
   create = (e) => {
@@ -50,7 +73,7 @@ class PropertyDetails extends Component {
     this.setState({ loading: true })
 
     const eosClient = this.props.eosClient.instance
-    const { property } = this.state    
+    const { property } = this.state
     eosClient
       .transaction('addproperty', {
         author: 'fsmgrcode333',

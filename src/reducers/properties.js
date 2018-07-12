@@ -62,14 +62,14 @@ const fakeData = {
   }
 }
 
-export function properties (state = {}, action) {
+export function properties (state = fakeData, action) {
   const { properties } = action
   switch (action.type) {
     case ADD_PROPERTIES: {
       let newState = {
         ...state
       }
-      properties.map(p => {
+      properties.forEach(p => {
         newState[p.id] = p
       })
       return newState
