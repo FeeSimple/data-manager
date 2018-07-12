@@ -5,7 +5,7 @@ import {
   REMOVE_PROPERTY
 } from '../actions/types'
 
-const initialState = {
+const fakeData = {
   0:{
     name: 'St Paul',
     address_1: 'Lehigh Street, 145',

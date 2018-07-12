@@ -4,7 +4,7 @@ const initialState = {
   instance: null
 }
 
-export function eosclient (state = initialState, action) {  
+export function eosClient (state = initialState, action) {  
   const { instance } = action
   switch (action.type) {      
     case SET_EOSCLIENT: {      
