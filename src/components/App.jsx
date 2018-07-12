@@ -6,8 +6,8 @@ import Navbar from './Navbar'
 import { connect } from 'react-redux'
 import { setScatter, addProperties, setEosClient } from '../actions'
 
-class AppContainer extends React.Component{
-  render(){
+class AppContainer extends React.Component {
+  render () {
     return App()
   }
 }

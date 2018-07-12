@@ -22,24 +22,24 @@ export default function Properties () {
       <Media query={{ maxWidth: 799 }}>
         {screenIsSmall => screenIsSmall
           ? (<Switch>
-              <Route exact path='/new' component={CreateProperty} />
-              <Route exact path='/:id' component={PropertyDetails} />
-              <Route exact path='/' component={PropertyList} />
-            </Switch>)
+            <Route exact path='/new' component={CreateProperty} />
+            <Route exact path='/:id' component={PropertyDetails} />
+            <Route exact path='/' component={PropertyList} />
+          </Switch>)
           : (<Row >
-              <Col md='4'>
-                <Route path='/' component={PropertyList} />
-              </Col>
-              <Col>
-                <Switch>
-                  <Route exact path='/new'>
-                    <PropertyDetails isCreating={true}/>
-                  </Route>
-                  <Route exact path='/:id' component={PropertyDetails} />
-                  <Route exact path='/' component={NoSelection} />
-                </Switch>
-              </Col>
-            </Row>)
+            <Col md='4'>
+              <Route path='/' component={PropertyList} />
+            </Col>
+            <Col>
+              <Switch>
+                <Route exact path='/new'>
+                  <PropertyDetails isCreating />
+                </Route>
+                <Route exact path='/:id' component={PropertyDetails} />
+                <Route exact path='/' component={NoSelection} />
+              </Switch>
+            </Col>
+          </Row>)
         }
       </Media>
     </div>

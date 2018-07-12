@@ -17,7 +17,7 @@ const logger = store => next => action => {
   console.info('dispatching', action)
   let result = next(action)
   console.log('next state', store.getState())
-  console.groupEnd(action.type)  
+  console.groupEnd(action.type)
   return result
 }
 
@@ -30,15 +30,15 @@ const store = createStore(
   )
 )
 
-const eosClient = new EOSClient('fsmgrcode333','fsmgrcode333')
+const eosClient = new EOSClient('fsmgrcode333', 'fsmgrcode333')
 store.dispatch(setEosClient(eosClient))
 eosClient
   .getTableRows('property')
-  .then(data => {    
+  .then(data => {
     store.dispatch(addProperties(data.rows))
   })
   .catch(e => {
-    console.error(e);
+    console.error(e)
   })
 
 getScatter.then((results) => {

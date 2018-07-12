@@ -6,59 +6,59 @@ import {
 } from '../actions/types'
 
 const fakeData = {
-  0:{
+  0: {
     name: 'St Paul',
     address_1: 'Lehigh Street, 145',
     address_2: '',
     city: 'Emmaus',
     region: 'LeHigh Valley',
-    postal_code:'58016',
-    unit_count:1
+    postal_code: '58016',
+    unit_count: 1
   },
-  1:{
+  1: {
     name: 'Lincoln Building',
     address_1: 'Herriman St, 545',
     address_2: '5th Block',
     city: 'Salt Lake City',
     region: 'Park City',
-    postal_code:'58086',
-    unit_count:7
+    postal_code: '58086',
+    unit_count: 7
   },
-  2:{
+  2: {
     name: 'John Ferry',
     address_1: 'Sandpoint Avenue, 3332',
     address_2: '2nd floor',
     city: 'Idaho City',
     region: 'Boise County',
-    postal_code:'58543',
-    unit_count:4
+    postal_code: '58543',
+    unit_count: 4
   },
-  3:{
+  3: {
     name: 'St Paul',
     address_1: 'Lehigh Street, 145',
     address_2: '',
     city: 'Emmaus',
     region: 'LeHigh Valley',
-    postal_code:'58016',
-    unit_count:1
+    postal_code: '58016',
+    unit_count: 1
   },
-  4:{
+  4: {
     name: 'Lincoln Building',
     address_1: 'Herriman St, 545',
     address_2: '5th Block',
     city: 'Salt Lake City',
     region: 'Park City',
-    postal_code:'58086',
-    unit_count:7
+    postal_code: '58086',
+    unit_count: 7
   },
-  5:{
+  5: {
     name: 'John Ferry',
     address_1: 'Sandpoint Avenue, 3332',
     address_2: '2nd floor',
     city: 'Idaho City',
     region: 'Boise County',
-    postal_code:'58543',
-    unit_count:4
+    postal_code: '58543',
+    unit_count: 4
   }
 }
 
