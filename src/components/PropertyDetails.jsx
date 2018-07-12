@@ -17,26 +17,27 @@ const READING = 'reading'
 const EDITING = 'editing'
 const CREATING = 'creating'
 
-class PropertyDetailsContainer extends Component {
+class PropertyDetails extends Component {
   state = {
-    mode: ''
+    mode: '',
+    loading: false,
+    property: {
+      name: '',
+      address_1: '',
+      address_2: '',
+      city: '',
+      region: '',
+      postal_code: '',
+      unit_count: 0
+    },
   }
-
-  newProperty = () => ({
-    name: '',
-    address_1: '',
-    address_2: '',
-    city: '',
-    region: '',
-    postal_code: '',
-    unit_count: 0
-  })
 
   edit = (e) => {
     this.setState({mode: EDITING})
   }
 
   cancel = (e) => {
+    // TODO: reset fields
     this.setState({mode: READING})
   }
 
@@ -44,12 +45,42 @@ class PropertyDetailsContainer extends Component {
     console.info('Save changes')
   }
 
-  create = (e,property) => {
-    console.info('Create property')
+  create = (e) => {
+    e.preventDefault()
+    this.setState({ loading: true })
+
+    const eosClient = this.props.eosClient.instance
+    const { property } = this.state    
+    eosClient
+      .transaction('addproperty', {
+        author: 'fsmgrcode333',
+        ...property
+      })
+      .then(res => {
+        console.log(res);
+        this.setState({ loading: false })
+      })
+      .catch(err => {
+        this.setState({ loading: false })
+        console.log(err);
+      })
   }
 
-  onChangePlaceHolder = (e) => {
-    console.info('onChangePlaceHolder')
+  handleChange(event) {    
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
+
+    this.setState(prevState => {
+      let state = {
+        ...prevState
+      }
+      state.property = {
+        ...prevState.property,
+        [name]: value
+      }
+      return state
+    })
   }
 
   componentDidMount(){
@@ -57,149 +88,140 @@ class PropertyDetailsContainer extends Component {
     isCreating
       ? this.setState({ mode: CREATING })
       : this.setState({ mode: READING })
-  }
 
-  render() {
-    const { mode } = this.state
     const { pathname } = this.props.location
     const { properties } = this.props
     const selectedId = idFromPath(pathname)
-
     let property = properties[selectedId]
       ? properties[selectedId]
-      : this.newProperty()
+      : newProperty()
+    
+    this.setState({ property })
+  }
 
+  render() {    
     return (
-      <PropertyDetails
-        property={property}
-        mode={mode}
-        onEditClick={this.edit}
-        onSaveClick={this.save}
-        onCreateClick={this.create}
-        onCancelClick={this.cancel}
-        onChangePlaceHolder={this.onChangePlaceHolder}/>
+      <div>
+        <h4>Property Details</h4>
+        <hr />
+        <Form>
+          <FormGroup row>
+            <Label for="name" sm={2}>Name</Label>
+            <Col sm={10}>
+              <Input
+                name="name" 
+                id="name"
+                value={this.state.property.name} 
+                onChange={(e) => this.handleChange(e)}
+                disabled={this.state.mode===READING}/>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="address_1" sm={2}>Address 1</Label>
+            <Col sm={10}>
+              <Input 
+                id="address_1" 
+                name="address_1"
+                type="textarea" 
+                onChange={(e) => this.handleChange(e)}
+                value={this.state.property.address_1}            
+                disabled={this.state.mode===READING} />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="address_2" sm={2}>Address 2</Label>
+            <Col sm={10}>
+              <Input 
+                id="address_2" 
+                name="address_2"
+                type="textarea" 
+                value={this.state.property.address_2}
+                onChange={(e) => this.handleChange(e)}
+                disabled={this.state.mode===READING} />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="city" sm={2}>City</Label>
+            <Col sm={10}>
+              <Input 
+                id="city" 
+                name="city" 
+                disabled={this.state.mode===READING}
+                onChange={(e) => this.handleChange(e)}
+                value={this.state.property.city}/>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="region" sm={2}>Region</Label>
+            <Col sm={10}>
+              <Input 
+                id="region"
+                name="region"
+                disabled={this.state.mode===READING}
+                onChange={(e) => this.handleChange(e)}
+                value={this.state.property.region}/>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="postal_code" sm={2}>Postal Code</Label>
+            <Col sm={10}>
+              <Input 
+                id="postal_code" 
+                name="postal_code" 
+                disabled={this.state.mode===READING}
+                onChange={(e) => this.handleChange(e)}
+                value={this.state.property.postal_code}/>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="unit_count" sm={2}>Unit Count</Label>
+            <Col sm={10}>
+              <Input 
+                id="unit_count" 
+                type="number" 
+                name="unit_count"
+                onChange={(e) => this.handleChange(e)}
+                disabled={this.state.mode===READING} 
+                value={this.state.property.unit_count}/>
+            </Col>
+          </FormGroup>
+          <Button color="primary" hidden={this.state.mode!==READING}
+            onClick={this.edit}>
+            Edit
+          </Button>
+          <Button color="primary" hidden={this.state.mode!==EDITING}
+            onClick={this.save} style={{marginRight:'0.5em'}}>
+            Save
+          </Button>
+          <Button color="primary" hidden={this.state.mode!==CREATING}
+            onClick={this.create} style={{marginRight:'0.5em'}}>
+            Create
+          </Button>
+          <Button outline hidden={this.state.mode!==EDITING}
+            onClick={this.cancel}>
+            Cancel
+          </Button>
+        </Form>
+      </div>
     )
   }
 }
 
-const PropertyDetails = ({
-  property,
-  mode,
-  onEditClick,
-  onCancelClick,
-  onCreateClick,
-  onSaveClick,
-  onChangePlaceHolder
-}) => (
-  <div>
-    <h4>Property Details</h4>
-    <hr />
-    <Form>
-      <FormGroup row>
-        <Label for="propertyName" sm={2}>Name</Label>
-        <Col sm={10}>
-          <Input
-            name="propertyName" 
-            id="propertyName"
-            value={property.name} 
-            onChange={onChangePlaceHolder}
-            disabled={mode===READING}/>
-        </Col>
-      </FormGroup>
-      <FormGroup row>
-        <Label for="address1" sm={2}>Address 1</Label>
-        <Col sm={10}>
-          <Input 
-            id="address1" 
-            name="address1"
-            type="textarea" 
-            onChange={onChangePlaceHolder}
-            value={property.address_1}            
-            disabled={mode===READING} />
-        </Col>
-      </FormGroup>
-      <FormGroup row>
-        <Label for="address1" sm={2}>Address 2</Label>
-        <Col sm={10}>
-          <Input 
-            id="address2" 
-            name="address2"
-            type="textarea" 
-            value={property.address_2}
-            onChange={onChangePlaceHolder}
-            disabled={mode===READING} />
-        </Col>
-      </FormGroup>
-      <FormGroup row>
-        <Label for="city" sm={2}>City</Label>
-        <Col sm={10}>
-          <Input 
-            id="city" 
-            name="city" 
-            disabled={mode===READING}
-            onChange={onChangePlaceHolder}
-            value={property.city}/>
-        </Col>
-      </FormGroup>
-      <FormGroup row>
-        <Label for="region" sm={2}>Region</Label>
-        <Col sm={10}>
-          <Input 
-            id="region"
-            name="region"
-            disabled={mode===READING}
-            onChange={onChangePlaceHolder}
-            value={property.region}/>
-        </Col>
-      </FormGroup>
-      <FormGroup row>
-        <Label for="postalCode" sm={2}>Postal Code</Label>
-        <Col sm={10}>
-          <Input 
-            id="postalCode" 
-            name="postalCode" 
-            disabled={mode===READING}
-            onChange={onChangePlaceHolder}
-            value={property.postal_code}/>
-        </Col>
-      </FormGroup>
-      <FormGroup row>
-        <Label for="unitCount" sm={2}>Unit Count</Label>
-        <Col sm={10}>
-          <Input 
-            id="unitCount" 
-            type="number" 
-            name="unitCount"
-            onChange={onChangePlaceHolder}
-            disabled={mode===READING} 
-            value={property.unit_count}/>
-        </Col>
-      </FormGroup>
-      <Button color="primary" hidden={mode!==READING}
-        onClick={(e) => onEditClick(e)}>
-        Edit
-      </Button>
-      <Button color="primary" hidden={mode!==EDITING}
-        onClick={(e) => onSaveClick(e)} style={{marginRight:'0.5em'}}>
-        Save
-      </Button>
-      <Button color="primary" hidden={mode!==CREATING}
-        onClick={(e) => onCreateClick(e,property)} style={{marginRight:'0.5em'}}>
-        Create
-      </Button>
-      <Button outline hidden={mode!==EDITING}
-        onClick={(e) => onCancelClick(e)}>
-        Cancel
-      </Button>
-    </Form>
-  </div>
-)
+const newProperty = () => ({
+  name: '',
+  address_1: '',
+  address_2: '',
+  city: '',
+  region: '',
+  postal_code: '',
+  unit_count: 0
+})
 
-function mapStateToProps({properties}){
-  return {properties}
+function mapStateToProps({ properties, eosClient }){
+  return { properties, eosClient }
 }
 
 export default withRouter(connect(
   mapStateToProps,
   { addProperty, editProperty, removeProperty }
-)(PropertyDetailsContainer))
+)(PropertyDetails))

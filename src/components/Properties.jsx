@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom'
 import Media from 'react-media'
 import PropertyDetails from './PropertyDetails'
 import PropertyList from './PropertyList'
-import CreateProperty from './CreateProperty'
 import NoSelection from './NoSelection'
 import {
   Button,
@@ -22,7 +21,9 @@ export default function Properties () {
       <Media query={{ maxWidth: 799 }}>
         {screenIsSmall => screenIsSmall
           ? (<Switch>
-            <Route exact path='/new' component={CreateProperty} />
+            <Route exact path='/new'>
+              <PropertyDetails isCreating />
+            </Route>
             <Route exact path='/:id' component={PropertyDetails} />
             <Route exact path='/' component={PropertyList} />
           </Switch>)
