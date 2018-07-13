@@ -22,7 +22,7 @@ const store = createStore(
   )
 )
 
-const eosClient = new EOSClient('fsmgrcode333', 'fsmgrcode333')
+const eosClient = new EOSClient('fsmgrcode111', 'fsmgrcode111')
 store.dispatch(setEosClient(eosClient))
 eosClient
   .getTableRows('property')

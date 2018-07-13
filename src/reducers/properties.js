@@ -62,8 +62,8 @@ const fakeData = {
   }
 }
 
-export function properties (state = fakeData, action) {
-  const { properties } = action
+export function properties (state = {}, action) {
+  const { properties, property } = action
   switch (action.type) {
     case ADD_PROPERTIES: {
       let newState = {
@@ -74,8 +74,11 @@ export function properties (state = fakeData, action) {
       })
       return newState
     }
-    case ADD_PROPERTY: {
-      return state
+    case ADD_PROPERTY: {      
+      return {
+        ...state,
+        [property.id]: property
+      }
     }
     case EDIT_PROPERTY: {
       return state

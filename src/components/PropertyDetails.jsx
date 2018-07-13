@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 import { idFromPath } from '../utils/index'
-import { addProperty, removeProperty, editProperty } from '../actions'
+import { addProperty, removeProperty, editProperty, addProperties } from '../actions'
 import {
     Form,
     FormGroup,
@@ -55,37 +55,49 @@ class PropertyDetails extends Component {
 
     eosClient
       .transaction('modproperty', {
-        author: 'fsmgrcode333',
+        author: 'fsmgrcode111',
         ...property
       })
       .then(res => {
-        console.log(res);
-        this.setState({ loading: false });
+        console.log(res)
+        addProperty(property)
+        this.setState({ 
+          mode: READING,
+          loading: false
+        })
       })
       .catch(err => {
-        this.setState({ loading: false });
-        console.log(err);
+        this.setState({ 
+          mode: READING,
+          loading: false
+        })
+        console.log(err)
     })
   }
 
   create = (e) => {
     e.preventDefault()
     this.setState({ loading: true })
+    const { addProperties } = this.props
 
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
     eosClient
       .transaction('addproperty', {
-        author: 'fsmgrcode333',
+        author: 'fsmgrcode111',
         ...property
       })
       .then(res => {
-        console.log(res);
+        console.log(res)
+        return eosClient.getTableRows('property')          
+      })
+      .then(data => {
+        addProperties(data.rows)
         this.setState({ loading: false })
       })
       .catch(err => {
         this.setState({ loading: false })
-        console.log(err);
+        console.log(err)
       })
   }
 
@@ -106,7 +118,7 @@ class PropertyDetails extends Component {
     })
   }
 
-  componentDidMount(){
+  componentWillReceiveProps(){
     const { isCreating } = this.props
     isCreating
       ? this.setState({ mode: CREATING })
@@ -117,9 +129,9 @@ class PropertyDetails extends Component {
     const selectedId = idFromPath(pathname)
     let property = properties[selectedId]
       ? properties[selectedId]
-      : newProperty()
+      : newProperty()    
     
-    this.setState({ property })
+    this.setState({ property })    
   }
 
   render() {    
@@ -246,5 +258,5 @@ function mapStateToProps({ properties, eosClient }){
 
 export default withRouter(connect(
   mapStateToProps,
-  { addProperty, editProperty, removeProperty }
+  { addProperty, editProperty, removeProperty, addProperties }
 )(PropertyDetails))
