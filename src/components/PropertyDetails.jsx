@@ -19,10 +19,10 @@ const CREATING = 'creating'
 
 class PropertyDetails extends Component {
   state = {
-    mode: '',
+    mode: READING,
     loading: false,
     prevProperty: {},
-    property: newProperty(),
+    property: undefined,
   }
 
   edit = (e) => {
@@ -118,23 +118,26 @@ class PropertyDetails extends Component {
     })
   }
 
-  componentWillReceiveProps(){
-    const { isCreating } = this.props
-    isCreating
-      ? this.setState({ mode: CREATING })
-      : this.setState({ mode: READING })
+  render() {
+    const { isCreating, properties } = this.props
+    if(!isCreating && typeof this.state.property === 'undefined'){
+      const { pathname } = this.props.location
+      const selectedId = idFromPath(pathname)
+      this.setState({
+        mode: READING,
+        property: properties[selectedId]
+      })
+      return <div/>
+    }
 
-    const { pathname } = this.props.location
-    const { properties } = this.props
-    const selectedId = idFromPath(pathname)
-    let property = properties[selectedId]
-      ? properties[selectedId]
-      : newProperty()    
-    
-    this.setState({ property })    
-  }
+    if(isCreating && this.state.property === 'undefined'){
+      this.setState({
+        mode: CREATING,
+        property: newProperty()
+      })
+      return <div/>
+    }
 
-  render() {    
     return (
       <div>
         <h4>Property Details</h4>
