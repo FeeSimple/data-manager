@@ -24,14 +24,14 @@ const store = createStore(
 
 const eosClient = new EOSClient('fsmgrcode111', 'fsmgrcode111')
 store.dispatch(setEosClient(eosClient))
-// eosClient
-//   .getTableRows('property')
-//   .then(data => {
-//     store.dispatch(addProperties(data.rows))
-//   })
-//   .catch(e => {
-//     console.error(e)
-//   })
+eosClient
+  .getTableRows('property')
+  .then(data => {
+    store.dispatch(addProperties(data.rows))
+  })
+  .catch(e => {
+    console.error(e)
+  })
 
 getScatter.then((results) => {
   const { scatter } = results

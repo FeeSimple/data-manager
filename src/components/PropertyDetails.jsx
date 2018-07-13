@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { idFromPath } from '../utils/index'
 import { addProperty, removeProperty, editProperty, addProperties } from '../actions'
 import {
     Form,
@@ -17,18 +16,18 @@ const READING = 'reading'
 const EDITING = 'editing'
 const CREATING = 'creating'
 
-class PropertyDetails extends Component {
+class PropertyDetailsContainer extends Component {
   state = {
     mode: READING,
     loading: false,
     prevProperty: {},
-    property: undefined,
+    property: newProperty()
   }
 
-  edit = (e) => {
-    const { property } = this.state
+  edit = (e,property) => {    
     this.setState({
       mode: EDITING,
+      property,
       prevProperty: {
         ...property
       }
@@ -104,7 +103,7 @@ class PropertyDetails extends Component {
   handleChange(event) {    
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name
+    const name = target.name    
 
     this.setState(prevState => {
       let state = {
@@ -119,131 +118,151 @@ class PropertyDetails extends Component {
   }
 
   render() {
-    const { isCreating, properties } = this.props
-    if(!isCreating && typeof this.state.property === 'undefined'){
-      const { pathname } = this.props.location
-      const selectedId = idFromPath(pathname)
-      this.setState({
-        mode: READING,
-        property: properties[selectedId]
-      })
-      return <div/>
-    }
-
-    if(isCreating && this.state.property === 'undefined'){
-      this.setState({
-        mode: CREATING,
-        property: newProperty()
-      })
-      return <div/>
-    }
-
+    const { isCreating, properties, id } = this.props    
+    const mode = isCreating ? CREATING : this.state.mode    
+    let property = mode === EDITING || mode === CREATING  ? this.state.property : properties[id]
     return (
       <div>
-        <h4>Property Details</h4>
-        <hr />
-        <Form>
-          <FormGroup row>
-            <Label for="name" sm={2}>Name</Label>
-            <Col sm={10}>
-              <Input
-                name="name" 
-                id="name"
-                value={this.state.property.name} 
-                onChange={(e) => this.handleChange(e)}
-                disabled={this.state.mode===READING}/>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="address_1" sm={2}>Address 1</Label>
-            <Col sm={10}>
-              <Input 
-                id="address_1" 
-                name="address_1"
-                type="textarea" 
-                onChange={(e) => this.handleChange(e)}
-                value={this.state.property.address_1}            
-                disabled={this.state.mode===READING} />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="address_2" sm={2}>Address 2</Label>
-            <Col sm={10}>
-              <Input 
-                id="address_2" 
-                name="address_2"
-                type="textarea" 
-                value={this.state.property.address_2}
-                onChange={(e) => this.handleChange(e)}
-                disabled={this.state.mode===READING} />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="city" sm={2}>City</Label>
-            <Col sm={10}>
-              <Input 
-                id="city" 
-                name="city" 
-                disabled={this.state.mode===READING}
-                onChange={(e) => this.handleChange(e)}
-                value={this.state.property.city}/>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="region" sm={2}>Region</Label>
-            <Col sm={10}>
-              <Input 
-                id="region"
-                name="region"
-                disabled={this.state.mode===READING}
-                onChange={(e) => this.handleChange(e)}
-                value={this.state.property.region}/>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="postal_code" sm={2}>Postal Code</Label>
-            <Col sm={10}>
-              <Input 
-                id="postal_code" 
-                name="postal_code" 
-                disabled={this.state.mode===READING}
-                onChange={(e) => this.handleChange(e)}
-                value={this.state.property.postal_code}/>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="unit_count" sm={2}>Unit Count</Label>
-            <Col sm={10}>
-              <Input 
-                id="unit_count" 
-                type="number" 
-                name="unit_count"
-                onChange={(e) => this.handleChange(e)}
-                disabled={this.state.mode===READING} 
-                value={this.state.property.unit_count}/>
-            </Col>
-          </FormGroup>
-          <Button color="primary" hidden={this.state.mode!==READING}
-            onClick={this.edit}>
-            Edit
-          </Button>
-          <Button color="primary" hidden={this.state.mode!==EDITING}
-            onClick={this.save} style={{marginRight:'0.5em'}}>
-            Save
-          </Button>
-          <Button color="primary" hidden={this.state.mode!==CREATING}
-            onClick={this.create} style={{marginRight:'0.5em'}}>
-            Create
-          </Button>
-          <Button outline hidden={this.state.mode!==EDITING}
-            onClick={this.cancel}>
-            Cancel
-          </Button>
-        </Form>
+        {typeof property === 'undefined' && <h1>404 - Property not found</h1>}
+        {isCreating
+          ? typeof property !== 'undefined' && 
+            <PropertyDetails
+              property={property}
+              mode={mode}
+              onEditClick={this.edit}
+              onSaveClick={this.save}
+              onCreateClick={this.create}
+              onCancelClick={this.cancel}
+              onChange={(e) => this.handleChange(e)}
+            />
+          : typeof property !== 'undefined' && 
+            <PropertyDetails
+              property={property}
+              mode={mode}
+              onEditClick={this.edit}
+              onSaveClick={this.save}
+              onCreateClick={this.create}
+              onCancelClick={this.cancel}
+              onChange={(e) => this.handleChange(e)}
+            />
+        }
       </div>
     )
   }
 }
+
+const PropertyDetails = ({
+  property,
+  mode,
+  onEditClick,
+  onCancelClick,
+  onCreateClick,
+  onSaveClick,
+  onChange
+}) => (
+  <div>
+    <h4>Property Details</h4>
+    <hr />
+    <Form>
+      <FormGroup row>
+        <Label for="name" sm={2}>Name</Label>
+        <Col sm={10}>
+          <Input
+            name="name" 
+            id="name"
+            value={property.name} 
+            onChange={onChange}
+            disabled={mode===READING}/>
+        </Col>
+      </FormGroup>
+      <FormGroup row>
+        <Label for="address_1" sm={2}>Address 1</Label>
+        <Col sm={10}>
+          <Input 
+            id="address_1" 
+            name="address_1"
+            type="textarea" 
+            onChange={onChange}
+            value={property.address_1}            
+            disabled={mode===READING} />
+        </Col>
+      </FormGroup>
+      <FormGroup row>
+        <Label for="address_2" sm={2}>Address 2</Label>
+        <Col sm={10}>
+          <Input 
+            id="address_2" 
+            name="address_2"
+            type="textarea" 
+            value={property.address_2}
+            onChange={onChange}
+            disabled={mode===READING} />
+        </Col>
+      </FormGroup>
+      <FormGroup row>
+        <Label for="city" sm={2}>City</Label>
+        <Col sm={10}>
+          <Input 
+            id="city" 
+            name="city" 
+            disabled={mode===READING}
+            onChange={onChange}
+            value={property.city}/>
+        </Col>
+      </FormGroup>
+      <FormGroup row>
+        <Label for="region" sm={2}>Region</Label>
+        <Col sm={10}>
+          <Input 
+            id="region"
+            name="region"
+            disabled={mode===READING}
+            onChange={onChange}
+            value={property.region}/>
+        </Col>
+      </FormGroup>
+      <FormGroup row>
+        <Label for="postal_code" sm={2}>Postal Code</Label>
+        <Col sm={10}>
+          <Input 
+            id="postal_code" 
+            name="postal_code" 
+            disabled={mode===READING}
+            onChange={onChange}
+            value={property.postal_code}/>
+        </Col>
+      </FormGroup>
+      <FormGroup row>
+        <Label for="unit_count" sm={2}>Unit Count</Label>
+        <Col sm={10}>
+          <Input 
+            id="unit_count" 
+            type="number" 
+            name="unit_count"
+            onChange={onChange}
+            disabled={mode===READING} 
+            value={property.unit_count}/>
+        </Col>
+      </FormGroup>
+      <Button color="primary" hidden={mode!==READING}
+        onClick={(e) => onEditClick(e,property)}>
+        Edit
+      </Button>
+      <Button color="primary" hidden={mode!==EDITING}
+        onClick={(e) => onSaveClick(e)} style={{marginRight:'0.5em'}}>
+        Save
+      </Button>
+      <Button color="primary" hidden={mode!==CREATING}
+        onClick={(e) => onCreateClick(e,property)} style={{marginRight:'0.5em'}}>
+        Create
+      </Button>
+      <Button outline hidden={mode!==EDITING}
+        onClick={(e) => onCancelClick(e)}>
+        Cancel
+      </Button>
+    </Form>
+  </div>
+)
 
 const newProperty = () => ({
   name: '',
@@ -262,4 +281,4 @@ function mapStateToProps({ properties, eosClient }){
 export default withRouter(connect(
   mapStateToProps,
   { addProperty, editProperty, removeProperty, addProperties }
-)(PropertyDetails))
+)(PropertyDetailsContainer))
