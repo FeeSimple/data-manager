@@ -1,6 +1,6 @@
 import eosjs from 'eosjs2'
 
-const rpc = new eosjs.Rpc.JsonRpc('http://138.197.194.220:8877');
+const rpc = new eosjs.Rpc.JsonRpc('http://127.0.0.1:8877');
 const signatureProvider = new eosjs.SignatureProvider(['5JxDmFneCLdS2LKqBacTpHdFRvaBXQs9m956R3ovCohXCdFvPma']);
 
 export default class EOSClient {
