@@ -51,6 +51,7 @@ class PropertyDetailsContainer extends Component {
 
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
+    const { history } = this.props
 
     eosClient
       .transaction('modproperty', {
@@ -78,7 +79,7 @@ class PropertyDetailsContainer extends Component {
   create = (e) => {
     e.preventDefault()
     this.setState({ loading: true })
-    const { addProperties } = this.props
+    const { addProperties, history } = this.props
 
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
