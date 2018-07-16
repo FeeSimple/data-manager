@@ -60,7 +60,7 @@ class PropertyDetailsContainer extends Component {
       })
       .then(res => {
         console.log(res)
-        eosClient.getTableRows('property')        
+        return eosClient.getTableRows('property')        
       })
       .then(data => {
         addProperties(data.rows)
