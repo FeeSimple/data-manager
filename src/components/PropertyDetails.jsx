@@ -54,7 +54,7 @@ class PropertyDetailsContainer extends Component {
 
     eosClient
       .transaction('modproperty', {
-        author: 'fsmgrcode111',
+        owner: 'fsmgrcode111',
         ...property
       })
       .then(res => {
@@ -83,7 +83,7 @@ class PropertyDetailsContainer extends Component {
     const { property } = this.state
     eosClient
       .transaction('addproperty', {
-        author: 'fsmgrcode111',
+        owner: 'fsmgrcode111',
         ...property
       })
       .then(res => {
