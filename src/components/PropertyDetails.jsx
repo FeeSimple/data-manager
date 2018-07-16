@@ -60,12 +60,15 @@ class PropertyDetailsContainer extends Component {
       })
       .then(res => {
         console.log(res)
-        addProperty(property)
-        history.push('/'+property.id)
+        eosClient.getTableRows('property')        
+      })
+      .then(data => {
+        addProperties(data.rows)
         this.setState({ 
           mode: READING,
           loading: false
         })
+        history.push('/'+property.id)
       })
       .catch(err => {
         this.setState({ 
@@ -94,8 +97,8 @@ class PropertyDetailsContainer extends Component {
       })
       .then(data => {
         addProperties(data.rows)
-        history.push('/')
         this.setState({ loading: false })
+        history.push('/')
       })
       .catch(err => {
         this.setState({ loading: false })
