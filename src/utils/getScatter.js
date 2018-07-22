@@ -6,6 +6,35 @@ let getScatter = new Promise((resolve, reject) => {
       console.info('Scatter detected.')
       scatter.requireVersion(4.0)
 
+      let network
+      switch (process.env.REACT_APP_ENV) {
+        case 'dev':
+          console.info('Suggesting dev environment testnet.')
+          network = {
+            protocol:'http',
+            blockchain:'eos',
+            host:process.env.REACT_APP_NODEOS_ADDR,
+            port:process.env.REACT_APP_NODEOS_PORT,
+            chainId: process.env.REACT_APP_CHAIN_ID,
+          }
+          break;
+        case 'staging':
+          network = {
+            protocol:'http',
+            blockchain:'eos',
+            host:process.env.REACT_APP_NODEOS_ADDR,
+            port:process.env.REACT_APP_NODEOS_PORT,
+            chainId: process.env.REACT_APP_CHAIN_ID,
+          }
+          break;      
+        default:
+          console.error('unknown environment')
+          break;
+      }
+
+
+      network && scatter.suggestNetwork(network)
+
       results = {
         scatter
       }

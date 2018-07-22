@@ -19,8 +19,8 @@
     "redux-logger": "^3.0.6"
   },
   "scripts": {
-    "start": "PORT=3001 NODEOS_ADDR=http://138.197.194.220 NODEOS_PORT=8877 react-scripts start",
-    "dev":"PORT=8080 REACT_APP_NODEOS_ADDR=http://127.0.0.1 REACT_APP_NODEOS_PORT=8888 react-scripts start",
+    "start": "PORT=3001 NODEOS_ADDR=http://138.197.194.220 NODEOS_PORT=8877 REACT_APP_ENV=staging react-scripts start",
+    "dev":"PORT=8080 REACT_APP_NODEOS_ADDR=http://127.0.0.1 REACT_APP_NODEOS_PORT=8888 REACT_APP_ENV=dev react-scripts start",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

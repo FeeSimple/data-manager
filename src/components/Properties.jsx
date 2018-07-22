@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import Media from 'react-media'
-import PropertyDetails from './PropertyDetails'
+import PropertyDetailsContainer from './PropertyDetailsContainer'
 import PropertyList from './PropertyList'
 import NoSelection from './NoSelection'
 import {
@@ -23,13 +23,13 @@ export default function Properties () {
           ? (
             <Switch>
               <Route exact path='/new'>
-                <PropertyDetails isCreating />
+                <PropertyDetailsContainer isCreating />
               </Route>
               <Route 
                 exact 
                 path='/:id' 
                 render={({match}) => (
-                  <PropertyDetails id={match.params.id}/>
+                  <PropertyDetailsContainer id={match.params.id}/>
               )}/>
               <Route exact path='/' component={PropertyList} />
             </Switch>)
@@ -41,13 +41,13 @@ export default function Properties () {
               <Col>
                 <Switch>
                   <Route exact path='/new'>
-                    <PropertyDetails isCreating />
+                    <PropertyDetailsContainer isCreating />
                   </Route>
                   <Route 
                     exact 
                     path='/:id' 
                     render={({match}) => (
-                      <PropertyDetails id={match.params.id}/>
+                      <PropertyDetailsContainer id={match.params.id}/>
                   )}/>
                   <Route exact path='/' component={NoSelection} />
                 </Switch>
