@@ -34,38 +34,39 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  save = (e) => {    
+  save = async (e) => {    
     e.preventDefault()
     this.setState({ loading: true })
 
-    const eosClient = this.props.eosClient.instance
     const { property } = this.state
-    const { history } = this.props
+    const { contracts } = this.props
+    const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]
+    const scatter = this.props.scatter.instance
+    const { network } = this.props.scatter
 
-    eosClient
-      .transaction('modproperty', {
-        author: process.env.REACT_APP_FSMGR_ACC_NAME,
-        ...property
-      })
-      .then(res => {
-        console.log(res)
-        return eosClient.getTableRows(PROPERTY)        
-      })
-      .then(data => {
-        addProperties(data.rows)
-        this.setState({ 
-          mode: READING,
-          loading: false
-        })
-        history.push('/'+property.id)
-      })
-      .catch(err => {
-        this.setState({ 
-          mode: READING,
-          loading: false
-        })
-        console.log(err)
-      })
+    const account = await getAccountFrom(scatter,network)
+
+    const options = {
+      authorization: [
+          `${account.name}@${account.authority}`,
+          `${process.env.REACT_APP_FSMGR_ACC_NAME}@active`
+      ]
+    }
+
+    await fsmgrcontract.modproperty(
+      account.name,
+      property.id,
+      property.name,
+      property.address_1,
+      property.address_2,
+      property.city,
+      property.region,
+      property.postal_code,
+      property.unit_count,
+      options
+    )
+        
+    window.location.reload()
   }
 
   create = async (e) => {
@@ -75,17 +76,9 @@ class PropertyDetailsContainer extends Component {
     const scatter = this.props.scatter.instance
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
-    const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]    
+    const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]
     
-    if(!scatter || !scatter.identity || !scatter.identity.accounts[0]){
-      console.info('No identity available. Requesting...',scatter.identity)
-      await scatter.getIdentity({ accounts: [network] })
-    }
-
-    const account = scatter
-      .identity
-      .accounts
-      .find(account => account.blockchain === 'eos')
+    const account = await getAccountFrom(scatter,network)
 
     const options = {
       authorization: [
@@ -94,7 +87,7 @@ class PropertyDetailsContainer extends Component {
       ]
     }
 
-    fsmgrcontract.addproperty(
+    await fsmgrcontract.addproperty(
       account.name,
       property.name,
       property.address_1,
@@ -104,30 +97,18 @@ class PropertyDetailsContainer extends Component {
       property.postal_code,
       property.unit_count,
       options
-    ).then(res => {
-      console.log(res)
-      console.info('eosClient',eosClient)
-      return eosClient.getTableRows(
-        true,
-        process.env.REACT_APP_FSMGR_ACC_NAME,
-        process.env.REACT_APP_FSMGR_ACC_NAME,
-        PROPERTY
-      )
-    })
-    .then(data => {
-      addProperties(data.rows)
-      this.setState({ 
-        mode: READING,
-        loading: false
-      })      
-    })
-    .catch(err => {
-      this.setState({ 
-        mode: READING,
-        loading: false
-      })
-      console.log(err)
-    })
+    )
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      process.env.REACT_APP_FSMGR_ACC_NAME,
+      process.env.REACT_APP_FSMGR_ACC_NAME,
+      PROPERTY
+    )
+    
+    addProperties(rows)
+    this.setState({ mode: READING, loading: false })
+    
   }
 
   handleChange(event) {    
@@ -179,6 +160,18 @@ class PropertyDetailsContainer extends Component {
       </div>
     )
   }
+}
+
+const getAccountFrom = async (scatter, network) => {
+  if(!scatter || !scatter.identity || !scatter.identity.accounts[0]){
+    console.info('No identity available. Requesting...',scatter.identity)
+    await scatter.getIdentity({ accounts: [network] })
+  }
+
+  return scatter
+    .identity
+    .accounts
+    .find(account => account.blockchain === 'eos')
 }
 
 const newProperty = () => ({

@@ -44,24 +44,11 @@ export function addProperties (properties) {
   }
 }
 
-export function addProperty ({
-  name,
-  address_1,
-  address_2,
-  city,
-  region,
-  postal_code,
-  unit_count
-}) {
+export function addProperty (property) {
+  console.info('creating action')
   return {
     type: ADD_PROPERTY,
-    name,
-    address_1,
-    address_2,
-    city,
-    region,
-    postal_code,
-    unit_count
+    property
   }
 }
 
