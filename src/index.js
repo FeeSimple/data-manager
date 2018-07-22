@@ -8,7 +8,8 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 import { setEosClient, addProperties, setScatter } from './actions'
-import EOSClient from './utils/eos-client'
+import Eos from 'eosjs'
+import { PROPERTY } from './utils/tables'
 import getScatter from './utils/getScatter'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -23,20 +24,22 @@ const store = createStore(
   )
 )
 
-const eosClient = new EOSClient(process.env.REACT_APP_FSMGR_ACC_NAME, process.env.REACT_APP_FSMGR_ACC_NAME)
-store.dispatch(setEosClient(eosClient))
-eosClient
-  .getTableRows('property')
-  .then(data => {
-    store.dispatch(addProperties(data.rows))
-  })
-  .catch(e => {
-    console.error(e)
-  })
+getScatter.then( async (results) => {
+  const { scatter, network } = results
+  const eosClient = scatter.eos(network, Eos, {}, 'http')
 
-getScatter.then((results) => {
-  const { scatter } = results
   store.dispatch(setScatter(scatter))
+  store.dispatch(setEosClient(eosClient))
+  
+  console.info('eosClient app:',eosClient)
+  const contract = await eosClient.contract(process.env.REACT_APP_FSMGR_ACC_NAME)
+  const { rows } = await eosClient.getTableRows(
+    true,
+    process.env.REACT_APP_FSMGR_ACC_NAME,
+    process.env.REACT_APP_FSMGR_ACC_NAME,
+    PROPERTY
+  )
+  store.dispatch(addProperties(rows))
 }).catch((error) => {
   console.error('Error setting up scatter.', error)
 })

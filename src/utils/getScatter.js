@@ -32,11 +32,11 @@ let getScatter = new Promise((resolve, reject) => {
           break;
       }
 
-
-      network && scatter.suggestNetwork(network)
+      network && scatter.suggestNetwork(network)      
 
       results = {
-        scatter
+        scatter,
+        network
       }
 
       resolve(results)

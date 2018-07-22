@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { addProperty, removeProperty, editProperty, addProperties } from '../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
+import { PROPERTY } from '../utils/tables'
 
 class PropertyDetailsContainer extends Component {
   state = {
@@ -48,7 +49,7 @@ class PropertyDetailsContainer extends Component {
       })
       .then(res => {
         console.log(res)
-        return eosClient.getTableRows('property')        
+        return eosClient.getTableRows(PROPERTY)        
       })
       .then(data => {
         addProperties(data.rows)
@@ -76,12 +77,12 @@ class PropertyDetailsContainer extends Component {
     const { property } = this.state
     eosClient
       .transaction('addproperty', {
-        author: 'fsmgrcode111',
+        author: process.env.REACT_APP_FSMGR_ACC_NAME,
         ...property
       })
       .then(res => {
         console.log(res)        
-        return eosClient.getTableRows('property')          
+        return eosClient.getTableRows(PROPERTY)          
       })
       .then(data => {
         addProperties(data.rows)
