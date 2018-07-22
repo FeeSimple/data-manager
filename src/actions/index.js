@@ -4,8 +4,24 @@ import {
   EDIT_PROPERTY,
   REMOVE_PROPERTY,
   SET_SCATTER,
-  SET_EOSCLIENT
+  SET_EOSCLIENT,
+  SET_FSMGRCONTRACT,
+  SET_NETWORK
 } from '../actions/types'
+
+export function setNetwork (network) {
+  return {
+    type: SET_NETWORK,
+    network
+  }
+}
+
+export function setFsMgrContract (instance) {
+  return {
+    type: SET_FSMGRCONTRACT,
+    instance
+  }
+}
 
 export function setEosClient (instance) {
   return {

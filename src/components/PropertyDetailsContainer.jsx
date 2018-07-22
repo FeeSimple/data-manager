@@ -65,34 +65,69 @@ class PropertyDetailsContainer extends Component {
           loading: false
         })
         console.log(err)
-    })
+      })
   }
 
-  create = (e) => {
+  create = async (e) => {
     e.preventDefault()
     this.setState({ loading: true })
-    const { addProperties, history } = this.props
-
+    const { addProperties, history, contracts, network } = this.props
+    const scatter = this.props.scatter.instance
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
-    eosClient
-      .transaction('addproperty', {
-        author: process.env.REACT_APP_FSMGR_ACC_NAME,
-        ...property
+    const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]    
+    
+    if(!scatter || !scatter.identity || !scatter.identity.accounts[0]){
+      console.info('No identity available. Requesting...',scatter.identity)
+      await scatter.getIdentity({ accounts: [network] })
+    }
+
+    const account = scatter
+      .identity
+      .accounts
+      .find(account => account.blockchain === 'eos')
+
+    const options = {
+      authorization: [
+          `${account.name}@${account.authority}`,
+          `${process.env.REACT_APP_FSMGR_ACC_NAME}@active`
+      ]
+    }
+
+    fsmgrcontract.addproperty(
+      account.name,
+      property.name,
+      property.address_1,
+      property.address_2,
+      property.city,
+      property.region,
+      property.postal_code,
+      property.unit_count,
+      options
+    ).then(res => {
+      console.log(res)
+      console.info('eosClient',eosClient)
+      return eosClient.getTableRows(
+        true,
+        process.env.REACT_APP_FSMGR_ACC_NAME,
+        process.env.REACT_APP_FSMGR_ACC_NAME,
+        PROPERTY
+      )
+    })
+    .then(data => {
+      addProperties(data.rows)
+      this.setState({ 
+        mode: READING,
+        loading: false
+      })      
+    })
+    .catch(err => {
+      this.setState({ 
+        mode: READING,
+        loading: false
       })
-      .then(res => {
-        console.log(res)        
-        return eosClient.getTableRows(PROPERTY)          
-      })
-      .then(data => {
-        addProperties(data.rows)
-        this.setState({ loading: false })
-        history.push('/')
-      })
-      .catch(err => {
-        this.setState({ loading: false })
-        console.log(err)
-      })
+      console.log(err)
+    })
   }
 
   handleChange(event) {    
@@ -146,119 +181,6 @@ class PropertyDetailsContainer extends Component {
   }
 }
 
-// const PropertyDetails = ({
-//   property,
-//   mode,
-//   onEditClick,
-//   onCancelClick,
-//   onCreateClick,
-//   onSaveClick,
-//   onChange
-// }) => (
-//   <div>
-//     <h4>Property Details</h4>
-//     <hr />
-//     <Form>
-//       <FormGroup row>
-//         <Label for="name" sm={2}>Name</Label>
-//         <Col sm={10}>
-//           <Input
-//             name="name" 
-//             id="name"
-//             value={property.name} 
-//             onChange={onChange}
-//             disabled={mode===READING}/>
-//         </Col>
-//       </FormGroup>
-//       <FormGroup row>
-//         <Label for="address_1" sm={2}>Address 1</Label>
-//         <Col sm={10}>
-//           <Input 
-//             id="address_1" 
-//             name="address_1"
-//             type="textarea" 
-//             onChange={onChange}
-//             value={property.address_1}            
-//             disabled={mode===READING} />
-//         </Col>
-//       </FormGroup>
-//       <FormGroup row>
-//         <Label for="address_2" sm={2}>Address 2</Label>
-//         <Col sm={10}>
-//           <Input 
-//             id="address_2" 
-//             name="address_2"
-//             type="textarea" 
-//             value={property.address_2}
-//             onChange={onChange}
-//             disabled={mode===READING} />
-//         </Col>
-//       </FormGroup>
-//       <FormGroup row>
-//         <Label for="city" sm={2}>City</Label>
-//         <Col sm={10}>
-//           <Input 
-//             id="city" 
-//             name="city" 
-//             disabled={mode===READING}
-//             onChange={onChange}
-//             value={property.city}/>
-//         </Col>
-//       </FormGroup>
-//       <FormGroup row>
-//         <Label for="region" sm={2}>Region</Label>
-//         <Col sm={10}>
-//           <Input 
-//             id="region"
-//             name="region"
-//             disabled={mode===READING}
-//             onChange={onChange}
-//             value={property.region}/>
-//         </Col>
-//       </FormGroup>
-//       <FormGroup row>
-//         <Label for="postal_code" sm={2}>Postal Code</Label>
-//         <Col sm={10}>
-//           <Input 
-//             id="postal_code" 
-//             name="postal_code" 
-//             disabled={mode===READING}
-//             onChange={onChange}
-//             value={property.postal_code}/>
-//         </Col>
-//       </FormGroup>
-//       <FormGroup row>
-//         <Label for="unit_count" sm={2}>Unit Count</Label>
-//         <Col sm={10}>
-//           <Input 
-//             id="unit_count" 
-//             type="number" 
-//             name="unit_count"
-//             onChange={onChange}
-//             disabled={mode===READING} 
-//             value={property.unit_count}/>
-//         </Col>
-//       </FormGroup>
-//       <Button color="primary" hidden={mode!==READING}
-//         onClick={(e) => onEditClick(e,property)}>
-//         Edit
-//       </Button>
-//       <Button color="primary" hidden={mode!==EDITING}
-//         onClick={(e) => onSaveClick(e)} style={{marginRight:'0.5em'}}>
-//         Save
-//       </Button>
-//       <Button color="primary" hidden={mode!==CREATING}
-//         onClick={(e) => onCreateClick(e,property)} style={{marginRight:'0.5em'}}>
-//         Create
-//       </Button>
-//       <Button outline hidden={mode!==EDITING}
-//         onClick={(e) => onCancelClick(e)}>
-//         Cancel
-//       </Button>
-//     </Form>
-//   </div>
-// )
-
 const newProperty = () => ({
   name: '',
   address_1: '',
@@ -269,8 +191,8 @@ const newProperty = () => ({
   unit_count: 0
 })
 
-function mapStateToProps({ properties, eosClient }){
-  return { properties, eosClient }
+function mapStateToProps({ properties, eosClient, scatter, contracts }){
+  return { properties, eosClient, scatter, contracts }
 }
 
 export default withRouter(connect(
