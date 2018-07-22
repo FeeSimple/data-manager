@@ -55,7 +55,7 @@ class PropertyDetailsContainer extends Component {
 
     eosClient
       .transaction('modproperty', {
-        author: 'fsmgrcode111',
+        author: process.env.REACT_APP_FSMGR_ACC_NAME,
         ...property
       })
       .then(res => {

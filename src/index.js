@@ -12,6 +12,7 @@ import EOSClient from './utils/eos-client'
 import getScatter from './utils/getScatter'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+require('dotenv').config()
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -22,7 +23,7 @@ const store = createStore(
   )
 )
 
-const eosClient = new EOSClient('fsmgrcode111', 'fsmgrcode111')
+const eosClient = new EOSClient(process.env.REACT_APP_FSMGR_ACC_NAME, process.env.REACT_APP_FSMGR_ACC_NAME)
 store.dispatch(setEosClient(eosClient))
 eosClient
   .getTableRows('property')
