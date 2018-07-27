@@ -13,7 +13,7 @@ class AppContainer extends React.Component {
 }
 
 const App = () => (
-  <div>
+  <div className="fsapp">
     <Navbar />
     <Container>
       <Properties />

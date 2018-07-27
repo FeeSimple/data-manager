@@ -11,6 +11,7 @@ import { setEosClient, addProperties, setScatter, setFsMgrContract, setNetwork }
 import Eos from 'eosjs'
 import { PROPERTY } from './utils/tables'
 import getScatter from './utils/getScatter'
+import { getAccountFrom } from './utils'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 require('dotenv').config()
@@ -26,18 +27,23 @@ const store = createStore(
 
 getScatter.then( async (results) => {
   const { scatter, network } = results
-  const eosClient = scatter.eos(network, Eos, {}, 'http')    
-  const { rows } = await eosClient.getTableRows(
-    true,
-    process.env.REACT_APP_FSMGR_ACC_NAME,
-    process.env.REACT_APP_FSMGR_ACC_NAME,
-    PROPERTY
-  )
+  console.info('Eos',Eos)
+  const eosClient = scatter.eos(network, Eos, {}, 'http')
   store.dispatch(setScatter(scatter))
   store.dispatch(setNetwork(network))
   store.dispatch(setEosClient(eosClient))
+
+  const account = await getAccountFrom(scatter,network)
+
+  const { rows } = await eosClient.getTableRows(
+    true,
+    process.env.REACT_APP_FSMGR_ACC_NAME,
+    account.name,
+    PROPERTY
+  )  
   store.dispatch(addProperties(rows))
-  store.dispatch(setFsMgrContract(await eosClient.contract(process.env.REACT_APP_FSMGR_ACC_NAME)))
+  const contract = await eosClient.contract(process.env.REACT_APP_FSMGR_ACC_NAME)
+  store.dispatch(setFsMgrContract(contract))  
 }).catch((error) => {
   console.error('Error setting up scatter.', error)
 })

@@ -42,15 +42,14 @@ class PropertyDetailsContainer extends Component {
     const { contracts } = this.props
     const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]
     const scatter = this.props.scatter.instance
+    const eosClient = this.props.eosClient.instance
     const { network } = this.props.scatter
 
     const account = await getAccountFrom(scatter,network)
-
     const options = {
-      authorization: [
-          `${account.name}@${account.authority}`,
-          `${process.env.REACT_APP_FSMGR_ACC_NAME}@active`
-      ]
+      authorization: `${account.name}@${account.authority}`,
+      broadcast: true,
+      sign: true
     }
 
     await fsmgrcontract.modproperty(
@@ -79,12 +78,10 @@ class PropertyDetailsContainer extends Component {
     const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]
     
     const account = await getAccountFrom(scatter,network)
-
     const options = {
-      authorization: [
-          `${account.name}@${account.authority}`,
-          `${process.env.REACT_APP_FSMGR_ACC_NAME}@active`
-      ]
+      authorization: `${account.name}@${account.authority}`,
+      broadcast: true,
+      sign: true
     }
 
     await fsmgrcontract.addproperty(
@@ -102,13 +99,12 @@ class PropertyDetailsContainer extends Component {
     const { rows } = await eosClient.getTableRows(
       true,
       process.env.REACT_APP_FSMGR_ACC_NAME,
-      process.env.REACT_APP_FSMGR_ACC_NAME,
+      account.name,
       PROPERTY
     )
     
     addProperties(rows)
     this.setState({ mode: READING, loading: false })
-    
   }
 
   handleChange(event) {    

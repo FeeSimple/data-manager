@@ -5,14 +5,12 @@
   "scripts": {
     "start": "PORT=3001 NODEOS_ADDR=138.197.194.220 NODEOS_PORT=8877 REACT_APP_ENV=staging react-scripts start",
     "dev": "PORT=8080 REACT_APP_NODEOS_ADDR=127.0.0.1 REACT_APP_NODEOS_PORT=8888 REACT_APP_ENV=dev react-scripts start",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --env=jsdom"
   },
   "dependencies": {
     "bootstrap": "^4.1.1",
     "dotenv": "^6.0.0",
-    "eosjs": "14.0.0",
-    "eosjs2": "0.0.4",
+    "eosjs": "15.0.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-icons": "^2.2.7",
@@ -23,5 +21,5 @@
     "reactstrap": "^6.0.1",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6"
-  }  
+  }
 }
