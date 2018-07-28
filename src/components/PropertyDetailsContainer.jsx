@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { addProperty, removeProperty, editProperty, addProperties } from '../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { PROPERTY } from '../utils/tables'
+import { getAccountFrom } from '../utils'
 
 class PropertyDetailsContainer extends Component {
   state = {
@@ -156,18 +157,6 @@ class PropertyDetailsContainer extends Component {
       </div>
     )
   }
-}
-
-const getAccountFrom = async (scatter, network) => {
-  if(!scatter || !scatter.identity || !scatter.identity.accounts[0]){
-    console.info('No identity available. Requesting...',scatter.identity)
-    await scatter.getIdentity({ accounts: [network] })
-  }
-
-  return scatter
-    .identity
-    .accounts
-    .find(account => account.blockchain === 'eos')
 }
 
 const newProperty = () => ({

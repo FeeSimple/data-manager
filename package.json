@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "PORT=3001 NODEOS_ADDR=138.197.194.220 NODEOS_PORT=8877 REACT_APP_ENV=staging react-scripts start",
-    "dev": "PORT=8080 REACT_APP_NODEOS_ADDR=127.0.0.1 REACT_APP_NODEOS_PORT=8888 REACT_APP_ENV=dev react-scripts start",
+    "start": "PORT=3001 REACT_APP_NODEOS_ADDR=138.197.194.220 REACT_APP_NODEOS_PORT=8877 REACT_APP_ENV=staging REACT_APP_CHAIN_ID=1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32 react-scripts start",
+    "dev": "PORT=8080 REACT_APP_NODEOS_ADDR=127.0.0.1 REACT_APP_NODEOS_PORT=8888 REACT_APP_ENV=dev REACT_APP_CHAIN_ID=cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f react-scripts start",
     "test": "react-scripts test --env=jsdom"
   },
   "dependencies": {

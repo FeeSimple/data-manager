@@ -13,7 +13,7 @@ let getScatter = new Promise((resolve, reject) => {
     let network
     switch (process.env.REACT_APP_ENV) {
       case 'dev':{
-        console.info('Suggesting dev environment testnet.')
+        console.info('Suggesting dev environment testnet.')        
         network = {
           protocol:'http',
           blockchain:'eos',
@@ -21,10 +21,11 @@ let getScatter = new Promise((resolve, reject) => {
           port:process.env.REACT_APP_NODEOS_PORT,
           chainId: process.env.REACT_APP_CHAIN_ID,
         }
+        console.info('network: ',network)
         break;
       }
       case 'staging':{
-        console.info('Suggesting staging environment testnet.')
+        console.info('Suggesting staging environment testnet.')        
         network = {
           protocol:'http',
           blockchain:'eos',
@@ -32,6 +33,7 @@ let getScatter = new Promise((resolve, reject) => {
           port:process.env.REACT_APP_NODEOS_PORT,
           chainId: process.env.REACT_APP_CHAIN_ID,
         }
+        console.info('network: ',network)
         break;      
       }
       default:
