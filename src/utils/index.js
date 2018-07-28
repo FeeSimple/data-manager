@@ -19,3 +19,60 @@ export const getAccountFrom = async (scatter, network) => {
     .accounts
     .find(account => account.blockchain === 'eos')
 }
+
+export const fakeData = {
+  0: {
+    name: 'St Paul',
+    address_1: 'Lehigh Street, 145',
+    address_2: '',
+    city: 'Emmaus',
+    region: 'LeHigh Valley',
+    postal_code: '58016',
+    unit_count: 1
+  },
+  1: {
+    name: 'Lincoln Building',
+    address_1: 'Herriman St, 545',
+    address_2: '5th Block',
+    city: 'Salt Lake City',
+    region: 'Park City',
+    postal_code: '58086',
+    unit_count: 7
+  },
+  2: {
+    name: 'John Ferry',
+    address_1: 'Sandpoint Avenue, 3332',
+    address_2: '2nd floor',
+    city: 'Idaho City',
+    region: 'Boise County',
+    postal_code: '58543',
+    unit_count: 4
+  },
+  3: {
+    name: 'St Paul',
+    address_1: 'Lehigh Street, 145',
+    address_2: '',
+    city: 'Emmaus',
+    region: 'LeHigh Valley',
+    postal_code: '58016',
+    unit_count: 1
+  },
+  4: {
+    name: 'Lincoln Building',
+    address_1: 'Herriman St, 545',
+    address_2: '5th Block',
+    city: 'Salt Lake City',
+    region: 'Park City',
+    postal_code: '58086',
+    unit_count: 7
+  },
+  5: {
+    name: 'John Ferry',
+    address_1: 'Sandpoint Avenue, 3332',
+    address_2: '2nd floor',
+    city: 'Idaho City',
+    region: 'Boise County',
+    postal_code: '58543',
+    unit_count: 4
+  }
+}
