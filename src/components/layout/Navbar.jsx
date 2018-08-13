@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Navbar as BSNavbar } from 'reactstrap'
-import logo from '../feesimple-logo.svg'
+import logo from '../../feesimple-logo.svg'
 import {
     Collapse,
     NavbarToggler,

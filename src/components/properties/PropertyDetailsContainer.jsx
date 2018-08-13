@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { addProperty, removeProperty, editProperty, addProperties } from '../actions'
+import { addProperty, removeProperty, editProperty, addProperties } from '../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
-import { PROPERTY } from '../utils/tables'
-import { getAccountFrom } from '../utils'
+import { PROPERTY } from '../../utils/tables'
+import { getAccountFrom } from '../../utils'
 
 class PropertyDetailsContainer extends Component {
   state = {

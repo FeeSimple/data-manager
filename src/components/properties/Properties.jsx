@@ -3,12 +3,13 @@ import { Route, Switch, Link } from 'react-router-dom'
 import Media from 'react-media'
 import PropertyDetailsContainer from './PropertyDetailsContainer'
 import PropertyList from './PropertyList'
-import NoSelection from './NoSelection'
+import NoSelection from '../NoSelection'
 import {
   Button,
   Col,
   Row
 } from 'reactstrap'
+
 
 export default function Properties () {
   return (

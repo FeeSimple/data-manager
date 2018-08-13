@@ -1,8 +1,8 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import { Container } from 'reactstrap'
-import Properties from './Properties'
-import Navbar from './Navbar'
+import Properties from './properties/Properties'
+import Navbar from './layout/Navbar'
 import { connect } from 'react-redux'
 import { setScatter, addProperties, setEosClient } from '../actions'
 

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { MdChevronRight } from 'react-icons/lib/md'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { idFromPath } from '../utils/index'
-import { addProperties } from '../actions'
+import { idFromPath } from '../../utils'
+import { addProperties } from '../../actions'
 import {
     ListGroup,
     ListGroupItem,
