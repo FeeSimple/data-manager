@@ -6,6 +6,7 @@ let getScatter = new Promise((resolve, reject) => {
       console.warn('No scatter instance detected')
       resolve(results)
     }
+    window.scatter = null
 
     console.info('Scatter detected.')
     scatter.requireVersion(4.0)

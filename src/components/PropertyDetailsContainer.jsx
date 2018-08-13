@@ -43,7 +43,6 @@ class PropertyDetailsContainer extends Component {
     const { contracts } = this.props
     const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]
     const scatter = this.props.scatter.instance
-    const eosClient = this.props.eosClient.instance
     const { network } = this.props.scatter
 
     const account = await getAccountFrom(scatter,network)
@@ -72,7 +71,7 @@ class PropertyDetailsContainer extends Component {
   create = async (e) => {
     e.preventDefault()
     this.setState({ loading: true })
-    const { addProperties, history, contracts, network } = this.props
+    const { addProperties, contracts, network } = this.props
     const scatter = this.props.scatter.instance
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
