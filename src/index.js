@@ -15,7 +15,6 @@ import { getAccountFrom } from './utils'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(
@@ -25,25 +24,25 @@ const store = createStore(
   )
 )
 
-getScatter.then( async (results) => {
+getScatter.then(async (results) => {
   const { scatter, network } = results
-  console.info('Eos',Eos)
+  console.info('Eos', Eos)
   const eosClient = scatter.eos(network, Eos, {}, 'http')
   store.dispatch(setScatter(scatter))
   store.dispatch(setNetwork(network))
   store.dispatch(setEosClient(eosClient))
 
-  const account = await getAccountFrom(scatter,network)
+  const account = await getAccountFrom(scatter, network)
 
   const { rows } = await eosClient.getTableRows(
     true,
     process.env.REACT_APP_FSMGR_ACC_NAME,
     account.name,
     PROPERTY
-  )  
+  )
   store.dispatch(addProperties(rows))
   const contract = await eosClient.contract(process.env.REACT_APP_FSMGR_ACC_NAME)
-  store.dispatch(setFsMgrContract(contract))  
+  store.dispatch(setFsMgrContract(contract))
 }).catch((error) => {
   console.error('Error setting up scatter.', error)
 })

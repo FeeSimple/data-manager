@@ -9,7 +9,7 @@ const initialState = {
 }
 
 export function scatter (state = initialState, action) {
-  const { instance, network } = action  
+  const { instance, network } = action
   switch (action.type) {
     case SET_SCATTER: {
       return {
@@ -17,7 +17,7 @@ export function scatter (state = initialState, action) {
         instance
       }
     }
-    case SET_NETWORK: {      
+    case SET_NETWORK: {
       return {
         ...state,
         network

@@ -17,7 +17,7 @@ export function properties (state = {}, action) {
       })
       return newState
     }
-    case ADD_PROPERTY: {      
+    case ADD_PROPERTY: {
       return {
         ...state,
         [property.id]: property
