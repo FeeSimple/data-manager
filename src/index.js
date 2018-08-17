@@ -14,7 +14,7 @@ import getScatter from './utils/getScatter'
 import { getAccountFrom } from './utils'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-require('dotenv').config()
+
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
