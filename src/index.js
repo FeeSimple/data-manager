@@ -11,7 +11,7 @@ import { setEosClient, addProperties, setScatter, setFsMgrContract, setNetwork }
 import Eos from 'eosjs'
 import { PROPERTY } from './utils/tables'
 import getScatter from './utils/getScatter'
-import { getAccountFrom } from './utils'
+import { getAccountFrom, getFallbackEos } from './utils'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -26,7 +26,6 @@ const store = createStore(
 
 getScatter.then(async (results) => {
   const { scatter, network } = results
-  console.info('Eos', Eos)
   const eosClient = scatter.eos(network, Eos, {}, 'http')
   store.dispatch(setScatter(scatter))
   store.dispatch(setNetwork(network))
@@ -46,6 +45,10 @@ getScatter.then(async (results) => {
 }).catch((error) => {
   console.error('Error setting up scatter.', error)
 })
+
+// Fallback eosjs
+const eos = getFallbackEos(Eos)
+store.dispatch(setEosClient(eos))
 
 ReactDOM.render(
   <BrowserRouter>

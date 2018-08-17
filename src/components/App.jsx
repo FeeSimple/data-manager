@@ -17,7 +17,8 @@ const App = () => (
   <div className='fsapp'>
     <Navbar />
     <Container>
-      <Properties />      
+      {/* <Properties /> */}
+      <LoginContainer />
     </Container>
   </div>
 )

@@ -3,6 +3,13 @@ export const idFromPath = (pathname) => {
   return result === '' ? '-1' : result
 }
 
+export const getFallbackEos = (Eos) => {  
+  return Eos({
+    httpEndpoint: `http://${process.env.REACT_APP_NODEOS_ADDR}:${process.env.REACT_APP_NODEOS_PORT}`,    
+    chainId: process.env.REACT_APP_CHAIN_ID
+  })
+}
+
 export const getAccountFrom = async (scatter, network) => {
   if (!scatter) {
     console.error('No scatter available.')
