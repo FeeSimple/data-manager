@@ -4,12 +4,12 @@ export const idFromPath = (pathname) => {
 }
 
 export const getAccountFrom = async (scatter, network) => {
-  if(!scatter){
+  if (!scatter) {
     console.error('No scatter available.')
     throw new Error(500)
   }
 
-  if(!scatter.identity || !scatter.identity.accounts[0]){
+  if (!scatter.identity || !scatter.identity.accounts[0]) {
     console.info('No identity available. Requesting...')
     await scatter.getIdentity({ accounts: [network] })
   }

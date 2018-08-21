@@ -11,5 +11,5 @@ export default function Footer () {
         <img src={logo} className='fsfooter-logo' alt='logo' href='/' />
       </Container>
     </div>
-  )  
+  )
 }

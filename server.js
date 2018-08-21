@@ -1,15 +1,22 @@
-const fs = require('fs');
-const https = require('https');
-const express = require('express');
-
-const app = express();
-app.use(express.static(process.env.SERVE_DIRECTORY || 'build'));
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
+const express = require('express')
+const app = express()
+app.use(express.static('build'))
+app.all('*', ensureSecure)
 
 const options = {
-  key: fs.readFileSync('key.pem', 'utf8'),
-  cert: fs.readFileSync('cert.pem', 'utf8'),
-  passphrase: process.env.HTTPS_PASSPHRASE || ''
-};
-const server = https.createServer(options, app);
+  key: fs.readFileSync('./sslcert/privkey.pem', 'utf8'),
+  cert: fs.readFileSync('./sslcert/fullchain.pem', 'utf8')
+}
 
-server.listen(process.env.SERVER_PORT || 80);
+http.createServer(app).listen(80)
+https.createServer(options, app).listen(443)
+
+function ensureSecure (req, res, next) {
+  if (req.secure) {
+    return next()
+  }
+  res.redirect('https://' + req.host + req.url)
+}

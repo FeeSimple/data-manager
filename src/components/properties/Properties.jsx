@@ -10,7 +10,6 @@ import {
   Row
 } from 'reactstrap'
 
-
 export default function Properties () {
   return (
     <div>
@@ -26,12 +25,12 @@ export default function Properties () {
               <Route exact path='/new'>
                 <PropertyDetailsContainer isCreating />
               </Route>
-              <Route 
-                exact 
-                path='/:id' 
+              <Route
+                exact
+                path='/:id'
                 render={({match}) => (
-                  <PropertyDetailsContainer id={match.params.id}/>
-              )}/>
+                  <PropertyDetailsContainer id={match.params.id} />
+                )} />
               <Route exact path='/' component={PropertyList} />
             </Switch>)
           : (
@@ -44,12 +43,12 @@ export default function Properties () {
                   <Route exact path='/new'>
                     <PropertyDetailsContainer isCreating />
                   </Route>
-                  <Route 
-                    exact 
-                    path='/:id' 
+                  <Route
+                    exact
+                    path='/:id'
                     render={({match}) => (
-                      <PropertyDetailsContainer id={match.params.id}/>
-                  )}/>
+                      <PropertyDetailsContainer id={match.params.id} />
+                    )} />
                   <Route exact path='/' component={NoSelection} />
                 </Switch>
               </Col>
