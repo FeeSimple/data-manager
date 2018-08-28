@@ -8,7 +8,7 @@ export function contracts (state = {}, action) {
     case SET_FSMGRCONTRACT: {
       return {
         ...state,
-        'fsmgrcode1': instance
+        'fsmgrcode111': instance
       }
     }
     default:
