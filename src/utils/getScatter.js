@@ -16,7 +16,7 @@ let getScatter = new Promise((resolve, reject) => {
       case 'dev': {
         console.info('Suggesting dev environment testnet.')
         network = {
-          protocol: 'http',
+          protocol: 'https',
           blockchain: 'eos',
           host: process.env.REACT_APP_NODEOS_ADDR,
           port: process.env.REACT_APP_NODEOS_PORT,
@@ -28,7 +28,7 @@ let getScatter = new Promise((resolve, reject) => {
       case 'staging': {
         console.info('Suggesting staging environment testnet.')
         network = {
-          protocol: 'http',
+          protocol: 'https',
           blockchain: 'eos',
           host: process.env.REACT_APP_NODEOS_ADDR,
           port: process.env.REACT_APP_NODEOS_PORT,

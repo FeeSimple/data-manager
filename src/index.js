@@ -6,7 +6,6 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reducer from './reducers'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import registerServiceWorker from './registerServiceWorker'
 import { setEosClient, addProperties, setScatter, setFsMgrContract, setNetwork } from './actions'
 import Eos from 'eosjs'
 import { PROPERTY } from './utils/tables'
@@ -27,7 +26,7 @@ const store = createStore(
 getScatter.then(async (results) => {
   const { scatter, network } = results
   console.info('Eos', Eos)
-  const eosClient = scatter.eos(network, Eos, {}, 'http')
+  const eosClient = scatter.eos(network, Eos, {}, 'https')
   store.dispatch(setScatter(scatter))
   store.dispatch(setNetwork(network))
   store.dispatch(setEosClient(eosClient))
@@ -55,4 +54,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 )
-registerServiceWorker()
