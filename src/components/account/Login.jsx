@@ -9,7 +9,8 @@ const LoginForm = props => {
     errors,
     handleChange,
     handleBlur,
-    handleSubmit
+    handleSubmit,
+    onScatterClick
   } = props
 
   return (
@@ -30,7 +31,8 @@ const LoginForm = props => {
         )}
       </FormGroup>
       
-      <Button type='submit' variant='contained' color='primary'>Submit</Button>
+      <Button type='submit' color='primary'>Submit</Button>{' '}
+      <Button type='button' outline color='primary' onClick={onScatterClick}>Scatter</Button>
     </Form>
   )
 }
