@@ -1,17 +1,10 @@
 import { SET_EOSCLIENT } from '../actions/types'
 
-const initialState = {
-  instance: null
-}
-
-export function eosClient (state = initialState, action) {
-  const { instance } = action
+export function eosClient (state = {}, action) {
+  const { eosClient } = action
   switch (action.type) {
     case SET_EOSCLIENT: {
-      return {
-        ...state,
-        instance
-      }
+      return eosClient
     }
     default:
       return state

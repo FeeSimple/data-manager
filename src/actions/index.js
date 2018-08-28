@@ -23,10 +23,10 @@ export function setFsMgrContract (instance) {
   }
 }
 
-export function setEosClient (instance) {
+export function setEosClient (eosClient) {
   return {
     type: SET_EOSCLIENT,
-    instance
+    eosClient
   }
 }
 
