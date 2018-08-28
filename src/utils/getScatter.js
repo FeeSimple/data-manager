@@ -12,17 +12,16 @@ let getScatter = new Promise((resolve, reject) => {
     scatter.requireVersion(4.0)
 
     let network
-    switch (process.env.REACT_APP_ENV) {
+    switch ('staging') {
       case 'dev': {
         console.info('Suggesting dev environment testnet.')
         network = {
           protocol: 'https',
           blockchain: 'eos',
-          host: process.env.REACT_APP_NODEOS_ADDR,
-          port: process.env.REACT_APP_NODEOS_PORT,
-          chainId: process.env.REACT_APP_CHAIN_ID
+          host: 'feesimpletracker.io',
+          port: '8878',
+          chainId: '1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32'
         }
-        console.info('network: ', network)
         break
       }
       case 'staging': {
@@ -30,11 +29,10 @@ let getScatter = new Promise((resolve, reject) => {
         network = {
           protocol: 'https',
           blockchain: 'eos',
-          host: process.env.REACT_APP_NODEOS_ADDR,
-          port: process.env.REACT_APP_NODEOS_PORT,
-          chainId: process.env.REACT_APP_CHAIN_ID
+          host: 'feesimpletracker.io',
+          port: '8878',
+          chainId: '1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32'
         }
-        console.info('network: ', network)
         break
       }
       default:

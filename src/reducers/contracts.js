@@ -8,7 +8,7 @@ export function contracts (state = {}, action) {
     case SET_FSMGRCONTRACT: {
       return {
         ...state,
-        [process.env.REACT_APP_FSMGR_ACC_NAME]: instance
+        'fsmgrcode111': instance
       }
     }
     default:
