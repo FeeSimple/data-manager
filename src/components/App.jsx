@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import { Container } from 'reactstrap'
-import Properties from './properties/Properties'
+// import Properties from './properties/Properties'
 import LoginContainer from './account/LoginContainer'
 import Navbar from './layout/Navbar'
 import { connect } from 'react-redux'
