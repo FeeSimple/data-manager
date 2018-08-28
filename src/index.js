@@ -6,7 +6,6 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reducer from './reducers'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import registerServiceWorker from './registerServiceWorker'
 import { setEosClient, addProperties, setScatter, setFsMgrContract, setNetwork } from './actions'
 import Eos from 'eosjs'
 import { PROPERTY } from './utils/tables'
@@ -27,7 +26,7 @@ const store = createStore(
 getScatter.then(async (results) => {
   const { scatter, network } = results
   console.info('Eos', Eos)
-  const eosClient = scatter.eos(network, Eos, {}, 'http')
+  const eosClient = scatter.eos(network, Eos, {}, 'https')
   store.dispatch(setScatter(scatter))
   store.dispatch(setNetwork(network))
   store.dispatch(setEosClient(eosClient))
@@ -36,12 +35,12 @@ getScatter.then(async (results) => {
 
   const { rows } = await eosClient.getTableRows(
     true,
-    process.env.REACT_APP_FSMGR_ACC_NAME,
+    'fsmgrcode111',
     account.name,
     PROPERTY
   )
   store.dispatch(addProperties(rows))
-  const contract = await eosClient.contract(process.env.REACT_APP_FSMGR_ACC_NAME)
+  const contract = await eosClient.contract('fsmgrcode111')
   store.dispatch(setFsMgrContract(contract))
 }).catch((error) => {
   console.error('Error setting up scatter.', error)
@@ -55,4 +54,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 )
-registerServiceWorker()

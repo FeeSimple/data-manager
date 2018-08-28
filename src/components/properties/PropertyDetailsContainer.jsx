@@ -41,7 +41,7 @@ class PropertyDetailsContainer extends Component {
 
     const { property } = this.state
     const { contracts } = this.props
-    const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]
+    const fsmgrcontract = contracts['fsmgrcode111']
     const scatter = this.props.scatter.instance
     const { network } = this.props.scatter
 
@@ -75,7 +75,7 @@ class PropertyDetailsContainer extends Component {
     const scatter = this.props.scatter.instance
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
-    const fsmgrcontract = contracts[process.env.REACT_APP_FSMGR_ACC_NAME]
+    const fsmgrcontract = contracts['fsmgrcode111']
     
     const account = await getAccountFrom(scatter,network)
     const options = {
@@ -98,7 +98,7 @@ class PropertyDetailsContainer extends Component {
 
     const { rows } = await eosClient.getTableRows(
       true,
-      process.env.REACT_APP_FSMGR_ACC_NAME,
+      'fsmgrcode111',
       account.name,
       PROPERTY
     )
