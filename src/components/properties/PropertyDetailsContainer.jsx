@@ -69,19 +69,18 @@ class PropertyDetailsContainer extends Component {
   create = async (e) => {
     e.preventDefault()
     this.setState({ loading: true })
-    const { addProperties, contracts, network, scatter, eosClient } = this.props    
+    const { addProperties, contracts, eosClient, accountData } = this.props    
     const { property } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
     
-    const account = await getAccountFrom(scatter,network)
     const options = {
-      authorization: `${account.name}@${account.authority}`,
+      authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
     }
 
     await fsmgrcontract.addproperty(
-      account.name,
+      accountData.active,
       property.name,
       property.address_1,
       property.address_2,
@@ -95,7 +94,7 @@ class PropertyDetailsContainer extends Component {
     const { rows } = await eosClient.getTableRows(
       true,
       FSMGRCONTRACT,
-      account.name,
+      accountData.active,
       PROPERTY
     )
     
