@@ -9,7 +9,6 @@ import { setScatter, addProperties, setEosClient } from '../actions'
 
 class AppContainer extends React.Component {
   render () {
-    console.info('locked? ',this.props.eosClient.locked === true)
     return (
       <div className='fsapp'>
         <Navbar />

@@ -41,19 +41,17 @@ class PropertyDetailsContainer extends Component {
     this.setState({ loading: true })
 
     const { property } = this.state
-    const { contracts, scatter } = this.props
-    const fsmgrcontract = contracts[FSMGRCONTRACT]    
-    const { network } = scatter
-
-    const account = await getAccountFrom(scatter,network)
+    const { contracts, accountData } = this.props
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+    
     const options = {
-      authorization: `${account.name}@${account.authority}`,
+      authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
     }
 
     await fsmgrcontract.modproperty(
-      account.name,
+      accountData.active,
       property.id,
       property.name,
       property.address_1,
@@ -166,8 +164,8 @@ const newProperty = () => ({
   unit_count: 0
 })
 
-function mapStateToProps({ properties, eosClient, scatter, contracts }){
-  return { properties, eosClient, scatter, contracts }
+function mapStateToProps({ properties, eosClient, scatter, contracts, accountData }){
+  return { properties, eosClient, scatter, contracts, accountData }
 }
 
 export default withRouter(connect(

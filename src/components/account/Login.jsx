@@ -14,8 +14,6 @@ const LoginForm = props => {
     scatterDetected
   } = props
 
-  console.info('scatter Detected',scatterDetected)
-
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup>

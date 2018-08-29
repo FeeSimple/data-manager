@@ -14,6 +14,7 @@ export const idFromPath = (pathname) => {
 }
 
 export const getImportedKeyEos = (Eos,privKey) => {  
+  console.info('privKey',privKey)
   return Eos({
     httpEndpoint: `http://${process.env.REACT_APP_NODEOS_ADDR}:${process.env.REACT_APP_NODEOS_PORT}`,    
     chainId: process.env.REACT_APP_CHAIN_ID,

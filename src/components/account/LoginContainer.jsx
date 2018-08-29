@@ -42,7 +42,8 @@ class LoginContainer extends Component {
       setScatter,
       setEosClient, 
       addProperties, 
-      setFsMgrContract
+      setFsMgrContract,
+      setActive
     } = this.props
     if(!scatter){
       console.info('no scatter detected.')
@@ -52,6 +53,7 @@ class LoginContainer extends Component {
     const network = getNetworkData()
     const identity = await scatter.getIdentity({ accounts: [network] })
     const account = identity.accounts.find(account => account.blockchain === 'eos')
+    setActive(account.name)
     
     const eosClient = scatter.eos(network, Eos, {}, 'https')
     setScatter(scatter)
@@ -70,16 +72,17 @@ class LoginContainer extends Component {
   handleSelectAcc = (account) => {
     const { 
       setActive, 
-      setInfo, 
-      eosClient, 
+      setInfo,
       addProperties, 
       setFsMgrContract,
       setEosClient 
     } = this.props
 
     const { privKey } = this.state
-
+    const eosClient = getImportedKeyEos(Eos,privKey)
+    
     setActive(account)
+    setEosClient(eosClient)
     eosClient.getAccount(account).then(async result => {
       const created = result.created
       const ram = result.ram_quota
@@ -104,7 +107,7 @@ class LoginContainer extends Component {
       
       addProperties(rows)      
       setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
-      setEosClient(getImportedKeyEos(Eos,privKey))
+      
     })
     this.handleToggleSelAcc()
   }
