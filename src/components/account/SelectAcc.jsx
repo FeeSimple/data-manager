@@ -1,5 +1,16 @@
 import React from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { 
+    Button, 
+    Modal,
+    ModalHeader, 
+    ModalBody, 
+    ModalFooter,
+    ListGroup,
+    ListGroupItem,
+    InputGroup,
+    InputGroupAddon,
+    Input
+} from 'reactstrap'
 
 export default function SelectAcc (props) {
     const { accounts, handleToggle, onAccountSelect, isOpen} = props
@@ -7,12 +18,24 @@ export default function SelectAcc (props) {
         <Modal isOpen={isOpen} toggle={handleToggle} >
             <ModalHeader toggle={handleToggle}>Please select an account</ModalHeader>
             <ModalBody>
-                {accounts.map(account => 
-                    <div key={account}>
-                        <p >{account}</p>
-                        <Button onClick={onAccountSelect}>Select this account</Button>
-                    </div>)
-                }
+                <ListGroup>
+                    {
+                        accounts.map(account => 
+                            (
+                                <ListGroupItem key={account}>
+                                    <InputGroup>                                        
+                                        <Input disabled value={account}/>
+                                        <InputGroupAddon addonType="append">
+                                            <Button onClick={() => onAccountSelect(account)}>
+                                                Select this account
+                                            </Button>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </ListGroupItem>
+                            )
+                        )
+                    }
+                </ListGroup>
             </ModalBody>
             <ModalFooter>
             </ModalFooter>

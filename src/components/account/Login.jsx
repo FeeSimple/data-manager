@@ -31,7 +31,7 @@ const LoginForm = props => {
         )}
       </FormGroup>
       
-      <Button type='submit' color='primary'>Submit</Button>{' '}
+      <Button type='submit' color='primary'>Unlock</Button>{' '}
       <Button type='button' outline color='primary' onClick={onScatterClick}>Scatter</Button>
     </Form>
   )

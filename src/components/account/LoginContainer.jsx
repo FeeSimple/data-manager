@@ -37,7 +37,8 @@ class LoginContainer extends Component {
   }
 
   render () {
-    const accounts = this.state.availableAccounts
+    // const accounts = this.state.availableAccounts
+    const accounts = ['asdf','asfff']
     return (
       <div>
         <Login 
@@ -45,7 +46,8 @@ class LoginContainer extends Component {
           onScatterClick={this.handleScatterClick}
         />
         <SelectAcc 
-          isOpen={this.state.showSelectAccModal}  
+          // isOpen={this.state.showSelectAccModal}
+          isOpen={true}
           handleToggle={this.handleToggleSelAcc}
           onAccountSelect={this.handleSelectAcc}
           accounts={accounts}
