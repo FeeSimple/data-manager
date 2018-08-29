@@ -14,17 +14,19 @@ export const idFromPath = (pathname) => {
 }
 
 export const getImportedKeyEos = (Eos,privKey) => {
+  const network = getNetworkData()
   return Eos({
-    httpEndpoint: `http://${process.env.REACT_APP_NODEOS_ADDR}:${process.env.REACT_APP_NODEOS_PORT}`,    
-    chainId: process.env.REACT_APP_CHAIN_ID,
+    httpEndpoint: `${network.protocol}//${network.host}:${network.port}`,    
+    chainId: network.chainId,
     keyProvider: privKey
   })
 }
 
 export const getFallbackEos = (Eos) => {  
+  const network = getNetworkData()
   return Eos({
-    httpEndpoint: `http://${process.env.REACT_APP_NODEOS_ADDR}:${process.env.REACT_APP_NODEOS_PORT}`,    
-    chainId: process.env.REACT_APP_CHAIN_ID
+    httpEndpoint: `${network.protocol}//${network.host}:${network.port}`,    
+    chainId: network.chainId
   })
 }
 
