@@ -71,8 +71,7 @@ class PropertyDetailsContainer extends Component {
   create = async (e) => {
     e.preventDefault()
     this.setState({ loading: true })
-    const { addProperties, contracts, network, scatter } = this.props
-    const eosClient = this.props.eosClient.instance
+    const { addProperties, contracts, network, scatter, eosClient } = this.props    
     const { property } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
     
