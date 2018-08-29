@@ -1,6 +1,24 @@
+export const getNetworkData = () => {
+  return {
+    protocol: 'https',
+    blockchain: 'eos',
+    host: 'feesimpletracker.io',
+    port: '8878',
+    chainId: '1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32'
+  }
+}
+
 export const idFromPath = (pathname) => {
   const result = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.length)
   return result === '' ? '-1' : result
+}
+
+export const getImportedKeyEos = (Eos,privKey) => {  
+  return Eos({
+    httpEndpoint: `http://${process.env.REACT_APP_NODEOS_ADDR}:${process.env.REACT_APP_NODEOS_PORT}`,    
+    chainId: process.env.REACT_APP_CHAIN_ID,
+    keyProvider: privKey
+  })
 }
 
 export const getFallbackEos = (Eos) => {  

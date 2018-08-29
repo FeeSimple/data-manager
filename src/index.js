@@ -5,11 +5,10 @@ import { createStore } from 'redux'
 import reducer from './reducers'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { setEosClient, addProperties, setScatter, setFsMgrContract, setNetwork } from './actions'
+import { setEosClient, setScatter } from './actions'
 import Eos from 'eosjs'
-import { PROPERTY } from './utils/tables'
 import getScatter from './utils/getScatter'
-import { getAccountFrom, getFallbackEos } from './utils'
+import { getFallbackEos } from './utils'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 // import logger from 'redux-logger'
@@ -24,32 +23,17 @@ const store = createStore(
   // )
 )
 
-getScatter.then(async (results) => {
-  const { scatter, network } = results
-  const eosClient = scatter.eos(network, Eos, {}, 'https')
-
-  store.dispatch(setScatter(scatter))
-  store.dispatch(setNetwork(network))
-  store.dispatch(setEosClient(eosClient))
-
-  const account = await getAccountFrom(scatter, network)
-
-  const { rows } = await eosClient.getTableRows(
-    true,
-    'fsmgrcode111',
-    account.name,
-    PROPERTY
-  )
-  store.dispatch(addProperties(rows))
-  const contract = await eosClient.contract('fsmgrcode111')
-  store.dispatch(setFsMgrContract(contract))
-}).catch((error) => {
-  console.error('Error setting up scatter.', error)
-})
 
 // Fallback eosjs
 const eos = getFallbackEos(Eos)
-store.dispatch(setEosClient(eos))
+store.dispatch(setEosClient({...eos,locked:true}))
+
+getScatter.then(async (results) => {
+  const { scatter } = results
+  store.dispatch(setScatter(scatter))
+}).catch((error) => {
+  console.error('Error setting up scatter.', error)
+})
 
 ReactDOM.render(
   <BrowserRouter>

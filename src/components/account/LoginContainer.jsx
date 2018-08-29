@@ -4,32 +4,77 @@ import ecc from 'eosjs-ecc'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import SelectAcc from './SelectAcc'
-import { setActive, setInfo } from '../../actions/index'
+import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
+import { getImportedKeyEos, getNetworkData } from '../../utils/index'
+import Eos from 'eosjs'
+import { 
+  setActive, 
+  setInfo, 
+  addProperties, 
+  setFsMgrContract, 
+  setEosClient ,
+  setScatter
+} from '../../actions/index'
 
 class LoginContainer extends Component {
   state={
     showSelectAccModal: false,
-    availableAccounts: []
+    availableAccounts: [],
+    privKey: null
   }
 
   handleImportPrivKey = (privKey) => {
     const pubKey = ecc.privateToPublic(privKey)
-    const  { eosClient }  = this.props
+    const  { eosClient }  = this.props    
+
     eosClient.getKeyAccounts(pubKey).then(result => {
-      this.setState({availableAccounts: result.account_names})
+      this.setState({
+        availableAccounts: result.account_names,
+        privKey
+      })
       this.handleToggleSelAcc()
-    })
-    
+    })    
   }
 
-  handleScatterClick = () => {
-    console.info('scatter clicked')
+  handleScatterClick = async () => {
+    const { scatter, setScatter, setEosClient, addProperties, setFsMgrContract } = this.props
+    if(!scatter){
+      console.info('no scatter detected.')
+      return
+    }
+
+    const network = getNetworkData()
+    const identity = await scatter.getIdentity({ accounts: [network] })
+    const account = identity.accounts.find(account => account.blockchain === 'eos')
+    
+    const eosClient = scatter.eos(network, Eos, {}, 'https')
+    setScatter(scatter)
+    setEosClient(eosClient)
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      account.name,
+      PROPERTY
+    )
+    addProperties(rows)
+    setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
   }
 
   handleSelectAcc = (account) => {
-    const { setActive, setInfo, eosClient } = this.props
+    const { 
+      setActive, 
+      setInfo, 
+      eosClient, 
+      addProperties, 
+      setFsMgrContract,
+      setEosClient 
+    } = this.props
+
+    const { privKey } = this.state
+
     setActive(account)
-    eosClient.getAccount(account).then(result => {
+    eosClient.getAccount(account).then(async result => {
       const created = result.created
       const ram = result.ram_quota
       const bandwidth = result.delegated_bandwidth
@@ -43,6 +88,17 @@ class LoginContainer extends Component {
       }
 
       setInfo(info)
+      
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        info.account,
+        PROPERTY
+      )
+      
+      addProperties(rows)      
+      setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
+      setEosClient(getImportedKeyEos(Eos,privKey))
     })
     this.handleToggleSelAcc()
   }
@@ -71,11 +127,11 @@ class LoginContainer extends Component {
   }
 }
 
-function mapStateToProps({ eosClient }){
-  return { eosClient }
+function mapStateToProps({ eosClient, scatter }){
+  return { eosClient, scatter }
 }
 
 export default withRouter(connect(
   mapStateToProps,
-  { setActive, setInfo }
+  { setActive, setInfo, addProperties, setFsMgrContract, setEosClient, setScatter }
 )(LoginContainer))

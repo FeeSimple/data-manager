@@ -1,27 +1,10 @@
-import {
-  SET_SCATTER,
-  SET_NETWORK
-} from '../actions/types'
+import { SET_SCATTER } from '../actions/types'
 
-const initialState = {
-  instance: null,
-  network: null
-}
-
-export function scatter (state = initialState, action) {
-  const { instance, network } = action
+export function scatter (state = {}, action) {
+  const { instance } = action
   switch (action.type) {
     case SET_SCATTER: {
-      return {
-        ...state,
-        instance
-      }
-    }
-    case SET_NETWORK: {
-      return {
-        ...state,
-        network
-      }
+      return instance
     }
     default:
       return state

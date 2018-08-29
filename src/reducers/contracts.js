@@ -1,6 +1,5 @@
-import {
-  SET_FSMGRCONTRACT
-} from '../actions/types'
+import { SET_FSMGRCONTRACT } from '../actions/types'
+import { FSMGRCONTRACT } from '../utils/consts'
 
 export function contracts (state = {}, action) {
   const { instance } = action
@@ -8,7 +7,7 @@ export function contracts (state = {}, action) {
     case SET_FSMGRCONTRACT: {
       return {
         ...state,
-        'fsmgrcode111': instance
+        [FSMGRCONTRACT]: instance
       }
     }
     default:

@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { addProperty, removeProperty, editProperty, addProperties } from '../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
-import { PROPERTY } from '../../utils/tables'
+import { FSMGRCONTRACT } from '../../utils/consts'
+import { PROPERTY } from '../../utils/consts'
 import { getAccountFrom } from '../../utils'
 
 class PropertyDetailsContainer extends Component {
@@ -40,10 +41,9 @@ class PropertyDetailsContainer extends Component {
     this.setState({ loading: true })
 
     const { property } = this.state
-    const { contracts } = this.props
-    const fsmgrcontract = contracts['fsmgrcode111']
-    const scatter = this.props.scatter.instance
-    const { network } = this.props.scatter
+    const { contracts, scatter } = this.props
+    const fsmgrcontract = contracts[FSMGRCONTRACT]    
+    const { network } = scatter
 
     const account = await getAccountFrom(scatter,network)
     const options = {
@@ -71,11 +71,10 @@ class PropertyDetailsContainer extends Component {
   create = async (e) => {
     e.preventDefault()
     this.setState({ loading: true })
-    const { addProperties, contracts, network } = this.props
-    const scatter = this.props.scatter.instance
+    const { addProperties, contracts, network, scatter } = this.props
     const eosClient = this.props.eosClient.instance
     const { property } = this.state
-    const fsmgrcontract = contracts['fsmgrcode111']
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
     
     const account = await getAccountFrom(scatter,network)
     const options = {
@@ -98,7 +97,7 @@ class PropertyDetailsContainer extends Component {
 
     const { rows } = await eosClient.getTableRows(
       true,
-      'fsmgrcode111',
+      FSMGRCONTRACT,
       account.name,
       PROPERTY
     )
