@@ -5,7 +5,6 @@ import { addProperty, removeProperty, editProperty, addProperties } from '../../
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { FSMGRCONTRACT } from '../../utils/consts'
 import { PROPERTY } from '../../utils/consts'
-import { getAccountFrom } from '../../utils'
 
 class PropertyDetailsContainer extends Component {
   state = {
