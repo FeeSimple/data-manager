@@ -16,7 +16,6 @@ class LoginContainer extends Component {
     const pubKey = ecc.privateToPublic(privKey)
     const  { eosClient }  = this.props
     eosClient.getKeyAccounts(pubKey).then(result => {
-      console.info(result)
       this.setState({availableAccounts: result.account_names})
       this.handleToggleSelAcc()
     })
@@ -45,6 +44,7 @@ class LoginContainer extends Component {
 
       setInfo(info)
     })
+    this.handleToggleSelAcc()
   }
 
   handleToggleSelAcc = () => {
