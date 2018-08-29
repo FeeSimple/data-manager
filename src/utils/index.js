@@ -16,7 +16,7 @@ export const idFromPath = (pathname) => {
 export const getImportedKeyEos = (Eos,privKey) => {
   const network = getNetworkData()
   return Eos({
-    httpEndpoint: `${network.protocol}//${network.host}:${network.port}`,    
+    httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,    
     chainId: network.chainId,
     keyProvider: privKey
   })
@@ -25,7 +25,7 @@ export const getImportedKeyEos = (Eos,privKey) => {
 export const getFallbackEos = (Eos) => {  
   const network = getNetworkData()
   return Eos({
-    httpEndpoint: `${network.protocol}//${network.host}:${network.port}`,    
+    httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,    
     chainId: network.chainId
   })
 }
