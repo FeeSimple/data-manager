@@ -10,8 +10,11 @@ const LoginForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    onScatterClick
+    onScatterClick,
+    scatterDetected
   } = props
+
+  console.info('scatter Detected',scatterDetected)
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -32,7 +35,9 @@ const LoginForm = props => {
       </FormGroup>
       
       <Button type='submit' color='primary'>Unlock</Button>{' '}
-      <Button type='button' outline color='primary' onClick={onScatterClick}>Scatter</Button>
+      {scatterDetected && 
+        <Button type='button' outline color='primary' onClick={onScatterClick}>Scatter</Button>
+      }
     </Form>
   )
 }

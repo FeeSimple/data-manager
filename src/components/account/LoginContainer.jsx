@@ -37,7 +37,13 @@ class LoginContainer extends Component {
   }
 
   handleScatterClick = async () => {
-    const { scatter, setScatter, setEosClient, addProperties, setFsMgrContract } = this.props
+    const { 
+      scatter,
+      setScatter,
+      setEosClient, 
+      addProperties, 
+      setFsMgrContract
+    } = this.props
     if(!scatter){
       console.info('no scatter detected.')
       return
@@ -109,12 +115,14 @@ class LoginContainer extends Component {
   }
 
   render () {
-    const accounts = this.state.availableAccounts    
+    const accounts = this.state.availableAccounts
+    const { scatter } = this.props    
     return (
       <div>
         <Login 
           handleImportPrivKey={this.handleImportPrivKey} 
           onScatterClick={this.handleScatterClick}
+          scatterDetected={Object.keys(scatter).length > 0}
         />
         <SelectAcc 
           isOpen={this.state.showSelectAccModal}
