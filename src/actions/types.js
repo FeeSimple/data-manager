@@ -7,3 +7,6 @@ export const ADD_PROPERTIES = 'ADD_PROPERTIES'
 export const ADD_PROPERTY = 'ADD_PROPERTY'
 export const EDIT_PROPERTY = 'EDIT_PROPERTY'
 export const REMOVE_PROPERTY = 'REMOVE_PROPERTY'
+
+export const SET_ACTIVE = 'SET_ACTIVE'
+export const SET_INFO = 'SET_INFO'

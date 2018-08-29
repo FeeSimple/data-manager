@@ -4,6 +4,7 @@ import ecc from 'eosjs-ecc'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import SelectAcc from './SelectAcc'
+import { setActive, setInfo } from '../../actions/index'
 
 class LoginContainer extends Component {
   state={
@@ -27,8 +28,23 @@ class LoginContainer extends Component {
   }
 
   handleSelectAcc = (account) => {
-    console.info('selected account: ',account)
-    //https://github.com/FeeSimple/wallet-web-eoswalletpro/blob/a58c4562865336a8ba3bcedc98078e0a88ab9364/app.js#L64
+    const { setActive, setInfo, eosClient } = this.props
+    setActive(account)
+    eosClient.getAccount(account).then(result => {
+      const created = result.created
+      const ram = result.ram_quota
+      const bandwidth = result.delegated_bandwidth
+      const pubkey = result.permissions[0].required_auth.keys[0].key
+      const info = {
+        account, 
+        created, 
+        ram, 
+        bandwidth,
+        pubkey
+      }
+
+      setInfo(info)
+    })
   }
 
   handleToggleSelAcc = () => {
@@ -60,5 +76,6 @@ function mapStateToProps({ eosClient }){
 }
 
 export default withRouter(connect(
-  mapStateToProps
+  mapStateToProps,
+  { setActive, setInfo }
 )(LoginContainer))

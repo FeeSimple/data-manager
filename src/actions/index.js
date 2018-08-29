@@ -6,8 +6,24 @@ import {
   SET_SCATTER,
   SET_EOSCLIENT,
   SET_FSMGRCONTRACT,
-  SET_NETWORK
+  SET_NETWORK,
+  SET_ACTIVE,
+  SET_INFO
 } from '../actions/types'
+
+export function setInfo (accountInfo) {
+  return {
+    type: SET_INFO,
+    payload: accountInfo
+  }
+}
+
+export function setActive (activeAccount) {
+  return {
+    type: SET_ACTIVE,
+    payload: activeAccount
+  }
+}
 
 export function setNetwork (network) {
   return {
