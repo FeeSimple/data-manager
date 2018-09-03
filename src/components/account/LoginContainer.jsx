@@ -37,49 +37,57 @@ class LoginContainer extends Component {
   }
 
   handleScatterClick = async () => {
-    const { 
-      scatter,
-      setScatter,
-      setEosClient, 
-      addProperties, 
-      setFsMgrContract,
-      setActive
-    } = this.props
+    const { scatter } = this.props
     if(!scatter){
       console.info('no scatter detected.')
       return
     }
-
-    const network = getNetworkData()
+    const network = getNetworkData() 
     const identity = await scatter.getIdentity({ accounts: [network] })
-    const account = identity.accounts.find(account => account.blockchain === 'eos')
-    setActive(account.name)
-    
-    const eosClient = scatter.eos(network, Eos, {}, 'https')
-    setScatter(scatter)
-    setEosClient(eosClient)
+    const availableAccounts = identity
+      .accounts
+      .filter(account => account.blockchain === 'eos')
+      .map(account => account.name)
 
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      account.name,
-      PROPERTY
-    )
-    addProperties(rows)
-    setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
+    this.setState({
+      availableAccounts,
+      usingScatter: true
+    })
+    this.handleToggleSelAcc()    
   }
 
-  handleSelectAcc = (account) => {
+  handleSelectAcc = async (account) => {
     const { 
       setActive, 
       setInfo,
       addProperties, 
       setFsMgrContract,
-      setEosClient 
+      setEosClient,
+      scatter
     } = this.props
 
+    let { eosClient } = this.props
+
+    if(this.state.usingScatter){
+      const network = getNetworkData()    
+      eosClient = scatter.eos(network, Eos, {}, 'https')
+      setActive(account)
+      setScatter(scatter)
+      setEosClient(eosClient)
+      
+      setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        account,
+        PROPERTY
+      )
+      addProperties(rows)      
+      return
+    }
+
     const { privKey } = this.state
-    const eosClient = getImportedKeyEos(Eos,privKey)
+    eosClient = getImportedKeyEos(Eos,privKey)
     
     setActive(account)
     setEosClient(eosClient)
