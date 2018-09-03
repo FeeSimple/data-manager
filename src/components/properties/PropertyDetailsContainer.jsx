@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { addProperty, removeProperty, editProperty, addProperties } from '../../actions'
+import { setProperty, addProperties, setLoading } from '../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { FSMGRCONTRACT } from '../../utils/consts'
 import { PROPERTY } from '../../utils/consts'
 
 class PropertyDetailsContainer extends Component {
   state = {
-    mode: READING,
-    loading: false,
+    mode: READING,    
     prevProperty: {},
     property: newProperty()
   }
@@ -37,10 +36,9 @@ class PropertyDetailsContainer extends Component {
 
   save = async (e) => {    
     e.preventDefault()
-    this.setState({ loading: true })
 
     const { property } = this.state
-    const { contracts, accountData } = this.props
+    const { contracts, accountData, setLoading, setProperty } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
     
     const options = {
@@ -49,6 +47,7 @@ class PropertyDetailsContainer extends Component {
       sign: true
     }
 
+    setLoading(true)
     await fsmgrcontract.modproperty(
       accountData.active,
       property.id,
@@ -61,14 +60,13 @@ class PropertyDetailsContainer extends Component {
       property.unit_count,
       options
     )
-        
-    window.location.reload()
+    setProperty(property)
+    setLoading(false)
   }
 
   create = async (e) => {
-    e.preventDefault()
-    this.setState({ loading: true })
-    const { addProperties, contracts, eosClient, accountData } = this.props    
+    e.preventDefault()    
+    const { addProperties, contracts, eosClient, accountData, setLoading } = this.props    
     const { property } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
     
@@ -77,6 +75,9 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
+    this.setState({ mode: READING })
+    
+    setLoading(true)
 
     await fsmgrcontract.addproperty(
       accountData.active,
@@ -96,9 +97,8 @@ class PropertyDetailsContainer extends Component {
       accountData.active,
       PROPERTY
     )
-    
     addProperties(rows)
-    this.setState({ mode: READING, loading: false })
+    setLoading(false)
   }
 
   handleChange(event) {    
@@ -168,5 +168,5 @@ function mapStateToProps({ properties, eosClient, scatter, contracts, accountDat
 
 export default withRouter(connect(
   mapStateToProps,
-  { addProperty, editProperty, removeProperty, addProperties }
+  { setProperty, addProperties, setLoading }
 )(PropertyDetailsContainer))

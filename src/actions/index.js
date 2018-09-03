@@ -1,8 +1,6 @@
 import {
   ADD_PROPERTIES,
-  ADD_PROPERTY,
-  EDIT_PROPERTY,
-  REMOVE_PROPERTY,
+  SET_PROPERTY,
   SET_SCATTER,
   SET_EOSCLIENT,
   SET_FSMGRCONTRACT,
@@ -68,24 +66,12 @@ export function addProperties (properties) {
   }
 }
 
-export function addProperty (property) {
+export function setProperty (property) {
   console.info('creating action')
   return {
-    type: ADD_PROPERTY,
+    type: SET_PROPERTY,
     property
   }
 }
 
-export function editProperty (property) {
-  return {
-    type: EDIT_PROPERTY,
-    property
-  }
-}
 
-export function removeProperty (id) {
-  return {
-    type: REMOVE_PROPERTY,
-    id
-  }
-}
