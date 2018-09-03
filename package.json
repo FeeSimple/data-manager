@@ -13,9 +13,9 @@
     "bootstrap": "^4.1.1",
     "eosjs": "15.0.0",
     "eosjs-ecc": "^4.0.3",
-    "formik": "^1.0.3",
     "express": "^4.16.3",
     "express-http-to-https": "^1.1.4",
+    "formik": "^1.0.3",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-icons": "^2.2.7",
@@ -23,6 +23,7 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
+    "react-spinkit": "^3.0.0",
     "reactstrap": "^6.0.1",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6"

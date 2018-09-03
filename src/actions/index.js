@@ -8,8 +8,16 @@ import {
   SET_FSMGRCONTRACT,
   SET_NETWORK,
   SET_ACTIVE,
-  SET_INFO
+  SET_INFO,
+  SET_LOADING
 } from '../actions/types'
+
+export function setLoading (isLoading) {
+  return {
+    type: SET_LOADING,
+    payload: isLoading
+  }
+}
 
 export function setInfo (accountInfo) {
   return {

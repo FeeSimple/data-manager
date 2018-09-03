@@ -12,8 +12,9 @@ import {
   setInfo, 
   addProperties, 
   setFsMgrContract, 
-  setEosClient ,
-  setScatter
+  setEosClient,
+  setScatter,
+  setLoading
 } from '../../actions/index'
 
 class LoginContainer extends Component {
@@ -63,10 +64,12 @@ class LoginContainer extends Component {
       addProperties, 
       setFsMgrContract,
       setEosClient,
+      setLoading,
       scatter
     } = this.props
 
     let { eosClient } = this.props
+    setLoading(true)
 
     if(this.state.usingScatter){
       const network = getNetworkData()    
@@ -82,7 +85,8 @@ class LoginContainer extends Component {
         account,
         PROPERTY
       )
-      addProperties(rows)      
+      addProperties(rows)
+      setLoading(false)
       return
     }
 
@@ -115,7 +119,7 @@ class LoginContainer extends Component {
       
       addProperties(rows)      
       setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
-      
+      setLoading(false)
     })
     this.handleToggleSelAcc()
   }
@@ -152,5 +156,13 @@ function mapStateToProps({ eosClient, scatter }){
 
 export default withRouter(connect(
   mapStateToProps,
-  { setActive, setInfo, addProperties, setFsMgrContract, setEosClient, setScatter }
+  { 
+    setActive, 
+    setInfo, 
+    addProperties, 
+    setFsMgrContract, 
+    setEosClient, 
+    setScatter,
+    setLoading 
+  }
 )(LoginContainer))

@@ -5,28 +5,31 @@ import Properties from './properties/Properties'
 import LoginContainer from './account/LoginContainer'
 import Navbar from './layout/Navbar'
 import { connect } from 'react-redux'
-import { setScatter, addProperties, setEosClient } from '../actions'
+import LoadingView from './layout/LoadingView'
 
 class AppContainer extends React.Component {
   render () {
+    const { isLoading, eosClient } = this.props
+    
     return (
       <div className='fsapp'>
         <Navbar />
         <Container>
-          {this.props.eosClient.locked === true && <LoginContainer />}
-          {this.props.eosClient.locked !== true && <Properties />}
-          
+          {isLoading && <LoadingView />}
+          {!isLoading && (
+          <div>
+            {eosClient.locked === true && <LoginContainer />}
+            {eosClient.locked !== true && <Properties />}
+          </div>
+        )}
         </Container>
       </div>
     )
   }
 }
 
-function mapStateToProps ({ scatter, eosClient }) {
-  return { scatter, eosClient }
+function mapStateToProps ({ isLoading, eosClient }) {
+  return { isLoading, eosClient }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  { setScatter, addProperties, setEosClient }
-)(AppContainer))
+export default withRouter(connect(mapStateToProps)(AppContainer))
