@@ -17,16 +17,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(
-  reducer,
+  reducer
   // composeEnhancers(
   //   applyMiddleware(logger)
   // )
 )
 
-
 // Fallback eosjs
 const eos = getFallbackEos(Eos)
-store.dispatch(setEosClient({...eos,locked:true}))
+store.dispatch(setEosClient({...eos, locked: true}))
 
 getScatter.then(async (results) => {
   const { scatter } = results

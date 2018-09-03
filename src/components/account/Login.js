@@ -28,12 +28,12 @@ const LoginForm = props => {
         />
         {errors.privKey &&
         touched.privKey && (
-          <FormFeedback>{errors.privKey}</FormFeedback>
-        )}
+        <FormFeedback>{errors.privKey}</FormFeedback>
+          )}
       </FormGroup>
-      
+
       <Button type='submit' color='primary'>Unlock</Button>{' '}
-      {scatterDetected && 
+      {scatterDetected &&
         <Button type='button' outline color='primary' onClick={onScatterClick}>Scatter</Button>
       }
     </Form>
@@ -43,20 +43,20 @@ const LoginForm = props => {
 const EnhancedLoginForm = withFormik({
   mapPropsToValues: () => ({ privKey: '' }),
   validate: values => {
-    let errors = {};
+    let errors = {}
     if (!values.privKey) {
-      errors.privKey = 'Required';
+      errors.privKey = 'Required'
     } else if (values.privKey.length !== 51) {
-      errors.privKey = 'Invalid private key';
+      errors.privKey = 'Invalid private key'
     }
-    return errors;
+    return errors
   },
 
   handleSubmit: ({ privKey }, { props }) => {
     props.handleImportPrivKey(privKey)
   },
 
-  displayName: 'LoginForm', // helps with React DevTools
+  displayName: 'LoginForm' // helps with React DevTools
 })(LoginForm)
 
 export default EnhancedLoginForm

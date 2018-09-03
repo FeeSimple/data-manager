@@ -1,5 +1,5 @@
 let getScatter = new Promise((resolve, reject) => {
-  document.addEventListener('scatterLoaded', scatterExtension => {    
+  document.addEventListener('scatterLoaded', scatterExtension => {
     let scatter = window.scatter
     window.scatter = null
     if (typeof scatter === 'undefined') {

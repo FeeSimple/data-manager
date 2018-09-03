@@ -1,6 +1,6 @@
 import {
   ADD_PROPERTIES,
-  SET_PROPERTY  
+  SET_PROPERTY
 } from '../actions/types'
 
 export function properties (state = {}, action) {

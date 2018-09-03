@@ -13,19 +13,19 @@ export const idFromPath = (pathname) => {
   return result === '' ? '-1' : result
 }
 
-export const getImportedKeyEos = (Eos,privKey) => {
+export const getImportedKeyEos = (Eos, privKey) => {
   const network = getNetworkData()
   return Eos({
-    httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,    
+    httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
     chainId: network.chainId,
     keyProvider: privKey
   })
 }
 
-export const getFallbackEos = (Eos) => {  
+export const getFallbackEos = (Eos) => {
   const network = getNetworkData()
   return Eos({
-    httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,    
+    httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
     chainId: network.chainId
   })
 }

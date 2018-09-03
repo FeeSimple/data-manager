@@ -7,7 +7,7 @@ import { accountData } from './accountData'
 import { SET_LOADING } from '../actions/types'
 
 function isLoading (state = false, action) {
-  switch (action.type) {          
+  switch (action.type) {
     case SET_LOADING: {
       return action.payload
     }

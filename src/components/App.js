@@ -10,18 +10,18 @@ import LoadingView from './layout/LoadingView'
 class AppContainer extends React.Component {
   render () {
     const { isLoading, eosClient } = this.props
-    
+
     return (
       <div className='fsapp'>
         <Navbar />
         <Container>
           {isLoading && <LoadingView />}
           {!isLoading && (
-          <div>
-            {eosClient.locked === true && <LoginContainer />}
-            {eosClient.locked !== true && <Properties />}
-          </div>
-        )}
+            <div>
+              {eosClient.locked === true && <LoginContainer />}
+              {eosClient.locked !== true && <Properties />}
+            </div>
+          )}
         </Container>
       </div>
     )

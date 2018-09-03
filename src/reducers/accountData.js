@@ -3,7 +3,7 @@ import {
   SET_INFO
 } from '../actions/types'
 
-export function accountData (state = {}, action) {  
+export function accountData (state = {}, action) {
   switch (action.type) {
     case SET_ACTIVE: {
       return {
@@ -16,7 +16,7 @@ export function accountData (state = {}, action) {
         ...state,
         info: action.payload
       }
-    }    
+    }
     default:
       return state
   }
