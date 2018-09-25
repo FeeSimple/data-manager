@@ -8,12 +8,12 @@ import { PROPERTY } from '../../utils/consts'
 
 class PropertyDetailsContainer extends Component {
   state = {
-    mode: READING,    
+    mode: READING,
     prevProperty: {},
     property: newProperty()
   }
 
-  edit = (e,property) => {    
+  edit = (e,property) => {
     this.setState({
       mode: EDITING,
       property,
@@ -34,13 +34,13 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  save = async (e) => {    
+  save = async (e) => {
     e.preventDefault()
 
     const { property } = this.state
     const { contracts, accountData, setLoading, setProperty } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    
+
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -48,7 +48,7 @@ class PropertyDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modproperty(
+    const res = await fsmgrcontract.modproperty(
       accountData.active,
       property.id,
       property.name,
@@ -65,18 +65,18 @@ class PropertyDetailsContainer extends Component {
   }
 
   create = async (e) => {
-    e.preventDefault()    
-    const { addProperties, contracts, eosClient, accountData, setLoading } = this.props    
+    e.preventDefault()
+    const { addProperties, contracts, eosClient, accountData, setLoading } = this.props
     const { property } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    
+
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
     }
     this.setState({ mode: READING })
-    
+
     setLoading(true)
 
     await fsmgrcontract.addproperty(
@@ -101,10 +101,10 @@ class PropertyDetailsContainer extends Component {
     setLoading(false)
   }
 
-  handleChange(event) {    
+  handleChange(event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name    
+    const name = target.name
 
     this.setState(prevState => {
       let state = {
@@ -119,14 +119,14 @@ class PropertyDetailsContainer extends Component {
   }
 
   render() {
-    const { isCreating, properties, id } = this.props    
-    const mode = isCreating ? CREATING : this.state.mode    
+    const { isCreating, properties, id } = this.props
+    const mode = isCreating ? CREATING : this.state.mode
     let property = mode === EDITING || mode === CREATING  ? this.state.property : properties[id]
     return (
       <div>
         {typeof property === 'undefined' && <h1>404 - Property not found</h1>}
         {isCreating
-          ? typeof property !== 'undefined' && 
+          ? typeof property !== 'undefined' &&
             <PropertyDetails
               property={property}
               mode={mode}
@@ -136,7 +136,7 @@ class PropertyDetailsContainer extends Component {
               onCancelClick={this.cancel}
               onChange={(e) => this.handleChange(e)}
             />
-          : typeof property !== 'undefined' && 
+          : typeof property !== 'undefined' &&
             <PropertyDetails
               property={property}
               mode={mode}
