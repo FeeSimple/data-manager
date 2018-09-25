@@ -10,6 +10,7 @@ import Eos from 'eosjs'
 import getScatter from './utils/getScatter'
 import { getFallbackEos } from './utils'
 import './css/style.css'
+import './css/main.css'
 
 // import logger from 'redux-logger'
 // import { applyMiddleware, compose } from 'redux'
@@ -44,6 +45,7 @@ ReactDOM.render(
     <script src="js/vendor/jquery-3.3.1.min.js"></script>
     <script src="js/plugins/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+
   </div>,
   document.getElementById('root')
 )
