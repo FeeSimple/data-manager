@@ -35,10 +35,15 @@ getScatter.then(async (results) => {
 })
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>,
+  <div>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
+    <script src="js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="js/plugins/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+  </div>,
   document.getElementById('root')
 )
