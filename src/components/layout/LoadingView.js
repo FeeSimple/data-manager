@@ -1,10 +1,9 @@
 import React from 'react'
 import Spinner from 'react-spinkit'
-import { Container } from 'reactstrap'
 
 export default function LoadingView () {
   return (
-    <Container className='justify-content-center align-items-center' >
+    <div className='justify-content-center align-items-center' >
       <Spinner
         className='justify-content-center align-items-center mx-auto'
         name='line-scale'
@@ -14,6 +13,6 @@ export default function LoadingView () {
           marginTop: 270
         }}
       />
-    </Container>
+    </div>
   )
 }

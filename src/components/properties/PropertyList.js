@@ -9,7 +9,7 @@ import {
     ListGroupItem,
     Col,
     Row
-} from 'reactstrap'
+} from 'react-bootstrap'
 
 class PropertyListContainer extends Component {
 

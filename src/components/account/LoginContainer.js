@@ -7,11 +7,11 @@ import SelectAcc from './SelectAcc'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
 import { getImportedKeyEos, getNetworkData } from '../../utils/index'
 import Eos from 'eosjs'
-import { 
-  setActive, 
-  setInfo, 
-  addProperties, 
-  setFsMgrContract, 
+import {
+  setActive,
+  setInfo,
+  addProperties,
+  setFsMgrContract,
   setEosClient,
   setScatter,
   setLoading
@@ -26,7 +26,7 @@ class LoginContainer extends Component {
 
   handleImportPrivKey = (privKey) => {
     const pubKey = ecc.privateToPublic(privKey)
-    const  { eosClient }  = this.props    
+    const  { eosClient }  = this.props
 
     eosClient.getKeyAccounts(pubKey).then(result => {
       this.setState({
@@ -34,7 +34,7 @@ class LoginContainer extends Component {
         privKey
       })
       this.handleToggleSelAcc()
-    })    
+    })
   }
 
   handleScatterClick = async () => {
@@ -43,7 +43,7 @@ class LoginContainer extends Component {
       console.info('no scatter detected.')
       return
     }
-    const network = getNetworkData() 
+    const network = getNetworkData()
     const identity = await scatter.getIdentity({ accounts: [network] })
     const availableAccounts = identity
       .accounts
@@ -54,14 +54,14 @@ class LoginContainer extends Component {
       availableAccounts,
       usingScatter: true
     })
-    this.handleToggleSelAcc()    
+    this.handleToggleSelAcc()
   }
 
   handleSelectAcc = async (account) => {
-    const { 
-      setActive, 
+    const {
+      setActive,
       setInfo,
-      addProperties, 
+      addProperties,
       setFsMgrContract,
       setEosClient,
       setLoading,
@@ -72,12 +72,12 @@ class LoginContainer extends Component {
     setLoading(true)
 
     if(this.state.usingScatter){
-      const network = getNetworkData()    
+      const network = getNetworkData()
       eosClient = scatter.eos(network, Eos, {}, 'https')
       setActive(account)
       setScatter(scatter)
       setEosClient(eosClient)
-      
+
       setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
       const { rows } = await eosClient.getTableRows(
         true,
@@ -92,7 +92,7 @@ class LoginContainer extends Component {
 
     const { privKey } = this.state
     eosClient = getImportedKeyEos(Eos,privKey)
-    
+
     setActive(account)
     setEosClient(eosClient)
     eosClient.getAccount(account).then(async result => {
@@ -101,23 +101,23 @@ class LoginContainer extends Component {
       const bandwidth = result.delegated_bandwidth
       const pubkey = result.permissions[0].required_auth.keys[0].key
       const info = {
-        account, 
-        created, 
-        ram, 
+        account,
+        created,
+        ram,
         bandwidth,
         pubkey
       }
 
       setInfo(info)
-      
+
       const { rows } = await eosClient.getTableRows(
         true,
         FSMGRCONTRACT,
         info.account,
         PROPERTY
       )
-      
-      addProperties(rows)      
+
+      addProperties(rows)
       setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
       setLoading(false)
     })
@@ -131,15 +131,15 @@ class LoginContainer extends Component {
 
   render () {
     const accounts = this.state.availableAccounts
-    const { scatter } = this.props    
+    const { scatter } = this.props
     return (
       <div>
-        <Login 
-          handleImportPrivKey={this.handleImportPrivKey} 
+        <Login
+          handleImportPrivKey={this.handleImportPrivKey}
           onScatterClick={this.handleScatterClick}
           scatterDetected={Object.keys(scatter).length > 0}
         />
-        <SelectAcc 
+        <SelectAcc
           isOpen={this.state.showSelectAccModal}
           handleToggle={this.handleToggleSelAcc}
           onAccountSelect={this.handleSelectAcc}
@@ -156,13 +156,13 @@ function mapStateToProps({ eosClient, scatter }){
 
 export default withRouter(connect(
   mapStateToProps,
-  { 
-    setActive, 
-    setInfo, 
-    addProperties, 
-    setFsMgrContract, 
-    setEosClient, 
+  {
+    setActive,
+    setInfo,
+    addProperties,
+    setFsMgrContract,
+    setEosClient,
     setScatter,
-    setLoading 
+    setLoading
   }
 )(LoginContainer))

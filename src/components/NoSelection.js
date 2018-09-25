@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row } from 'reactstrap'
+import { Row } from 'react-bootstrap'
 
 export default function NoSelection () {
   return (

@@ -7,10 +7,10 @@ import {
   ModalFooter,
   ListGroup,
   ListGroupItem,
+  FormGroup,
   InputGroup,
-  InputGroupAddon,
-  Input
-} from 'reactstrap'
+  FormControl
+} from 'react-bootstrap'
 
 export default function SelectAcc (props) {
   const { accounts, handleToggle, onAccountSelect, isOpen} = props
@@ -23,14 +23,14 @@ export default function SelectAcc (props) {
             accounts.map(account =>
               (
                 <ListGroupItem key={account}>
-                  <InputGroup>
-                    <Input disabled value={account} />
-                    <InputGroupAddon addonType='append'>
-                      <Button onClick={() => onAccountSelect(account)}>
-                                                Select this account
-                      </Button>
-                    </InputGroupAddon>
-                  </InputGroup>
+                  <FormGroup>
+                    <FormControl disabled value={account} />
+                    <InputGroup>
+                      <InputGroup.Addon addonType='append'>
+                        <Button onClick={() => onAccountSelect(account)}>Select this account</Button>
+                      </InputGroup.Addon>
+                    </InputGroup>
+                  </FormGroup>
                 </ListGroupItem>
               )
             )

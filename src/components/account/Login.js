@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap'
+import { Button, Form, FormGroup, Label, FormControl } from 'react-bootstrap'
 import { withFormik } from 'formik'
 
 const LoginForm = props => {
@@ -18,7 +18,7 @@ const LoginForm = props => {
     <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Label for='privKey'>Unlock Wallet</Label>
-        <Input
+        <FormControl
           id='privKey'
           placeholder="Enter your 'active' private key"
           onBlur={handleBlur}
@@ -26,10 +26,10 @@ const LoginForm = props => {
           onChange={handleChange}
           invalid={errors.privKey && touched.privKey}
         />
-        {errors.privKey &&
+        {/* {errors.privKey &&
         touched.privKey && (
         <FormFeedback>{errors.privKey}</FormFeedback>
-          )}
+          )} */}
       </FormGroup>
 
       <Button type='submit' color='primary'>Unlock</Button>{' '}

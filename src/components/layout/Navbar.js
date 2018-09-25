@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Navbar as BSNavbar } from 'reactstrap'
 import logo from '../../feesimple-logo.svg'
 import {
     Collapse,
-    NavbarToggler,
+    // NavbarToggler,
     Nav,
     NavItem,
-    NavLink
-} from 'reactstrap'
+    // NavLink,
+    Navbar as BSNavbar
+} from 'react-bootstrap'
 
 class NavbarContainer extends Component {
   state = {
@@ -40,17 +40,17 @@ const Navbar = ({isOpen,logo,onToggleClick}) => (
       <a href="/">
         <img src={logo} className="fsnavbar-logo" alt="logo"/>
       </a>
-      <NavbarToggler onClick={onToggleClick} />
+      {/* <NavbarToggler onClick={onToggleClick} /> */}
       <Collapse isOpen={isOpen} navbar>
         <Nav className="ml-auto" navbar>
           <NavItem>
-            <NavLink href="http://feesimple.io">FeeSimple Home</NavLink>
+            {/* <NavLink href="http://feesimple.io">FeeSimple Home</NavLink> */}
           </NavItem>
           <NavItem>
-            <NavLink href="https://github.com/feesimple">Github</NavLink>
+            {/* <NavLink href="https://github.com/feesimple">Github</NavLink> */}
           </NavItem>
           <NavItem>
-            <NavLink href="http://feesimple.io/pdf/FeeSimple-Whitepaper-v0.8.0.pdf">Whitepaper</NavLink>
+            {/* <NavLink href="http://feesimple.io/pdf/FeeSimple-Whitepaper-v0.8.0.pdf">Whitepaper</NavLink> */}
           </NavItem>
         </Nav>
       </Collapse>

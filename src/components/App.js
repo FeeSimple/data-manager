@@ -1,6 +1,5 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Container } from 'reactstrap'
 import Properties from './properties/Properties'
 import LoginContainer from './account/LoginContainer'
 import Navbar from './layout/Navbar'
@@ -14,7 +13,7 @@ class AppContainer extends React.Component {
     return (
       <div className='fsapp'>
         <Navbar />
-        <Container>
+        <div>
           {isLoading && <LoadingView />}
           {!isLoading && (
             <div>
@@ -22,7 +21,7 @@ class AppContainer extends React.Component {
               {eosClient.locked !== true && <Properties />}
             </div>
           )}
-        </Container>
+        </div>
       </div>
     )
   }

@@ -10,6 +10,7 @@ import Eos from 'eosjs'
 import getScatter from './utils/getScatter'
 import { getFallbackEos } from './utils'
 import './css/style.css'
+
 // import logger from 'redux-logger'
 // import { applyMiddleware, compose } from 'redux'
 
