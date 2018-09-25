@@ -38,28 +38,9 @@ class PropertyDetailsContainer extends Component {
     e.preventDefault()
 
     const { property } = this.state
-    const { contracts, accountData, setLoading, setProperty } = this.props
-    const fsmgrcontract = contracts[FSMGRCONTRACT]
-
-    const options = {
-      authorization: `${accountData.active}@active`,
-      broadcast: true,
-      sign: true
-    }
+    const { setLoading, setProperty } = this.props
 
     setLoading(true)
-    const res = await fsmgrcontract.modproperty(
-      accountData.active,
-      property.id,
-      property.name,
-      property.address_1,
-      property.address_2,
-      property.city,
-      property.region,
-      property.postal_code,
-      property.unit_count,
-      options
-    )
     setProperty(property)
     setLoading(false)
   }
