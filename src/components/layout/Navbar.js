@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
-import logo from '../../feesimple-logo.svg'
-import {
-    Collapse,
-    // NavbarToggler,
-    Nav,
-    NavItem,
-    // NavLink,
-    Navbar as BSNavbar
-} from 'reactstrap'
+import Logo from '../../img/logo.svg'
+import IconProperties from '../../img/icon-properties.svg'
+import IconUser from '../../img/icon-user.svg'
+import IconLogout from '../../img/icon-logout.svg'
+
 
 class NavbarContainer extends Component {
   state = {
@@ -29,33 +25,32 @@ class NavbarContainer extends Component {
     const {isOpen} = this.state
 
     return (
-      <Navbar isOpen={isOpen} logo={logo} onToggleClick={this.toggle}/>
+      <div className="menu-holder">
+        <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <a href="" className="logo">
+                  <img src={Logo} alt="Logo"/>
+                </a>
+                <div className="storage">
+                  <span className="badge badge-pill">15.06 GB</span>
+                  <span className="storage-text">
+                      {' '}Available Storage
+                      {/* <small>(Purchase RAM)</small> */}
+                  </span>
+                </div>
+
+                <ul id="main-menu">
+                  <li><a href=""><img src={IconProperties} alt=""/> <span>Properties</span></a></li>
+                  <li><a href=""><img src={IconUser} alt=""/> <span>team_open_re</span></a></li>
+                  <li><a href=""><img src={IconLogout} alt=""/></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      </div>
     )
   }
 }
-
-const Navbar = ({isOpen,logo,onToggleClick}) => (
-  <div className="fsnavbar">
-    <BSNavbar color="light" light fixed="top" expand="md">
-      <a href="/">
-        <img src={logo} className="fsnavbar-logo" alt="logo"/>
-      </a>
-      {/* <NavbarToggler onClick={onToggleClick} /> */}
-      <Collapse isOpen={isOpen} navbar>
-        <Nav className="ml-auto" navbar>
-          <NavItem>
-            {/* <NavLink href="http://feesimple.io">FeeSimple Home</NavLink> */}
-          </NavItem>
-          <NavItem>
-            {/* <NavLink href="https://github.com/feesimple">Github</NavLink> */}
-          </NavItem>
-          <NavItem>
-            {/* <NavLink href="http://feesimple.io/pdf/FeeSimple-Whitepaper-v0.8.0.pdf">Whitepaper</NavLink> */}
-          </NavItem>
-        </Nav>
-      </Collapse>
-    </BSNavbar>
-  </div>
-)
 
 export default NavbarContainer
