@@ -8,7 +8,8 @@
     "build": "npm-run-all -s build-css build-react",
     "build-react": "react-scripts build",
     "build-css": "node-sass-chokidar ./src/scss -o ./src/css",
-    "watch-css": "npm run build-css && node-sass-chokidar ./src/scss -o ./src/css --watch"
+    "watch-css": "npm run build-css && node-sass-chokidar ./src/scss -o ./src/css --watch",
+    "prod": "node server.js"
   },
   "dependencies": {
     "eosjs": "15.0.0",
