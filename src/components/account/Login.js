@@ -8,7 +8,6 @@ import {
   Container,
   Row,
   Col,
-  FormGroup,
   Form
 } from 'reactstrap'
 
@@ -28,16 +27,16 @@ const LoginForm = props => {
     <div className="main-wrapper home">
       <Container>
         <Row>
-          <Col sm={{ size: 10, offset: 1 }} md={{ size: 8, offset: 2 }} xs={12}>
-            <Form onSubmit={handleSubmit} className="form-horizontal home-form" >
-              <FormGroup>
+          <Col md={{ size: 10, offset: 1 }} lg={{ size: 8, offset: 2}}>
+            <Form onSubmit={handleSubmit} className="home-form" >
+              <div className="form-group row">
                 <Col xs={12} className="text-center">
                   <a href="" className="logo-container">
                     <img src={LogoLarge} width="370" alt="Logo"/>
                   </a>
                 </Col>
-              </FormGroup>
-              <FormGroup className="form-group">
+              </div>
+              <div className="form-group row">
                 <Col xs={12} sm={6}>
                   <Button
                     onClick={onScatterClick}
@@ -50,9 +49,9 @@ const LoginForm = props => {
                 <Col xs={12} sm={6}>
                   <a href="" className="btn btn-base btn-home">Create a New Account</a>
                 </Col>
-              </FormGroup>
-              <FormGroup className="form-group">
-                <Col xs={12} sm={8} md={9}>
+              </div>
+              <div className="form-group row">
+                <Col md={8} lg={9}>
                   <Input
                     id='privKey'
                     onBlur={handleBlur}
@@ -63,10 +62,10 @@ const LoginForm = props => {
                     placeholder="Enter Private key"
                     className="form-control input-home"/>
                 </Col>
-                <Col xs={12} sm={4} md={3}>
+                <Col md={4} lg={3}>
                   <Button type="submit" color='secondary' className="btn-home">Unlock</Button>
                 </Col>
-              </FormGroup>
+              </div>
             </Form>
           </Col>
         </Row>
@@ -74,7 +73,7 @@ const LoginForm = props => {
 
       <div className="fs-footer">
           <span className="badge badge-fs bold">v0.01</span> Part of the FeeSimple network.
-          <span className="created-by">Crafted by <a href="" className="p-l-10"><img src={OpenReLogoLarge} alt="logo" width="110"/></a></span>
+          <span className="created-by">{' '}Crafted by <a href="" className="p-l-10"><img src={OpenReLogoLarge} alt="logo" width="110"/></a></span>
       </div>
     </div>
   )

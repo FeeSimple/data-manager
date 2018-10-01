@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
 import { getImportedKeyEos, getNetworkData } from '../../utils/index'
 import Eos from 'eosjs'
-import SelectAcc from './SelectAcc'
+// import SelectAcc from './SelectAcc'
 import {
   setActive,
   setInfo,
@@ -130,7 +130,7 @@ class LoginContainer extends Component {
   }
 
   render () {
-    const accounts = this.state.availableAccounts
+    // const accounts = this.state.availableAccounts
     const { scatter } = this.props
     return (
       <div>

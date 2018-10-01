@@ -6,9 +6,14 @@ import LoginContainer from './account/LoginContainer'
 class AppContainer extends Component {
   render () {
     const { eosClient } = this.props
+
+    if(eosClient.locked === true){
+      return <LoginContainer />
+    }
+
     return (
       <div>
-        {eosClient.locked === true && <LoginContainer />}
+        eosClient unlocked.
       </div>
     )
   }

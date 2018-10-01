@@ -8,6 +8,7 @@ import {
   ListGroupItem,
   FormGroup,
   InputGroup,
+  InputGroupAddon,
   Input,
   Button
 } from 'reactstrap'
@@ -17,7 +18,7 @@ export default function SelectAcc (props) {
   return (
     <Modal isOpen={isOpen} toggle={handleToggle} >
       <ModalHeader toggle={handleToggle}>Please select an account</ModalHeader>
-      <ModalBody>
+      <ModalBody> hello
         <ListGroup>
           {
             accounts.map(account =>
@@ -26,11 +27,11 @@ export default function SelectAcc (props) {
                   <FormGroup>
                     <Input disabled value={account} />
                     <InputGroup>
-                      <InputGroup.Addon addonType='append'>
+                      <InputGroupAddon addonType='append'>
                         <Button onClick={() => onAccountSelect(account)}>
                           Select this account
                         </Button>
-                      </InputGroup.Addon>
+                      </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
                 </ListGroupItem>
