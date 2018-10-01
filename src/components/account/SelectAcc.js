@@ -6,7 +6,6 @@ import {
   ModalBody,
   ListGroup,
   ListGroupItem,
-  FormGroup,
   InputGroup,
   InputGroupAddon,
   Input,
@@ -18,22 +17,20 @@ export default function SelectAcc (props) {
   return (
     <Modal isOpen={isOpen} toggle={handleToggle} >
       <ModalHeader toggle={handleToggle}>Please select an account</ModalHeader>
-      <ModalBody> hello
+      <ModalBody>
         <ListGroup>
           {
             accounts.map(account =>
               (
                 <ListGroupItem key={account}>
-                  <FormGroup>
-                    <Input disabled value={account} />
                     <InputGroup>
+                      <Input disabled value={account} />
                       <InputGroupAddon addonType='append'>
                         <Button onClick={() => onAccountSelect(account)}>
                           Select this account
                         </Button>
                       </InputGroupAddon>
                     </InputGroup>
-                  </FormGroup>
                 </ListGroupItem>
               )
             )
