@@ -3,6 +3,8 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import LoginContainer from './account/LoginContainer'
 import Properties from './properties/Properties'
+import Navbar from './layout/Navbar'
+import Footer from './layout/Footer'
 
 class AppContainer extends Component {
   render () {
@@ -12,7 +14,13 @@ class AppContainer extends Component {
       return <LoginContainer />
     }
 
-    return <Properties />
+    return (
+      <div>
+        <Navbar />
+        <Properties />
+        <Footer />
+      </div>
+    )
   }
 }
 

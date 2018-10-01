@@ -6,24 +6,7 @@ import IconLogout from '../../img/icon-logout.svg'
 
 
 class NavbarContainer extends Component {
-  state = {
-    isOpen: false
-  }
-
-  constructor(props) {
-    super(props)
-    this.toggle = this.toggle.bind(this)
-  }
-
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    })
-  }
-
   render() {
-    const {isOpen} = this.state
-
     return (
       <div className="menu-holder">
         <div className="container">

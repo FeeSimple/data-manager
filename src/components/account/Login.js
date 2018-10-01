@@ -1,6 +1,6 @@
 import React from 'react'
 import LogoLarge from '../../img/logo-large.svg'
-import OpenReLogoLarge from '../../img/openre-logo-white.svg'
+import OpenReLogoWhite from '../../img/openre-logo-white.svg'
 import { withFormik } from 'formik'
 import {
   Button,
@@ -73,7 +73,7 @@ const LoginForm = props => {
 
       <div className="fs-footer">
           <span className="badge badge-fs bold">v0.01</span> Part of the FeeSimple network.
-          <span className="created-by">{' '}Crafted by <a href="" className="p-l-10"><img src={OpenReLogoLarge} alt="logo" width="110"/></a></span>
+          <span className="created-by">{' '}Crafted by <a href="" className="p-l-10"><img src={OpenReLogoWhite} alt="logo" width="110"/></a></span>
       </div>
     </div>
   )

@@ -16,13 +16,13 @@ class PropertyListContainer extends Component {
   propertyClick = (e,id) => {
     e.preventDefault()
     this.props.history.push('/'+id);
-  }  
+  }
 
   render() {
 
     const { properties } = this.props
     const { pathname } = this.props.location
-    const selectedId = idFromPath(pathname)    
+    const selectedId = idFromPath(pathname)
 
     return (
       <PropertyList
