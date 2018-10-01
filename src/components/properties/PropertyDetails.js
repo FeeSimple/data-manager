@@ -3,10 +3,10 @@ import {
   Form,
   FormGroup,
   Label,
-  FormControl,
+  Input,
   Col,
   Button
-} from 'react-bootstrap'
+} from 'reactstrap'
 
 export const READING = 'reading'
 export const EDITING = 'editing'
@@ -28,7 +28,7 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for='name' sm={2}>Name</Label>
         <Col sm={10}>
-          <FormControl
+          <Input
             name='name'
             id='name'
             value={property.name}
@@ -39,7 +39,7 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for='address_1' sm={2}>Address 1</Label>
         <Col sm={10}>
-          <FormControl
+          <Input
             id='address_1'
             name='address_1'
             type='textarea'
@@ -51,7 +51,7 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for='address_2' sm={2}>Address 2</Label>
         <Col sm={10}>
-          <FormControl
+          <Input
             id='address_2'
             name='address_2'
             type='textarea'
@@ -63,7 +63,7 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for='city' sm={2}>City</Label>
         <Col sm={10}>
-          <FormControl
+          <Input
             id='city'
             name='city'
             disabled={mode === READING}
@@ -74,7 +74,7 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for='region' sm={2}>Region</Label>
         <Col sm={10}>
-          <FormControl
+          <Input
             id='region'
             name='region'
             disabled={mode === READING}
@@ -85,7 +85,7 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for='postal_code' sm={2}>Postal Code</Label>
         <Col sm={10}>
-          <FormControl
+          <Input
             id='postal_code'
             name='postal_code'
             disabled={mode === READING}
@@ -96,7 +96,7 @@ const PropertyDetails = ({
       <FormGroup row>
         <Label for='unit_count' sm={2}>Unit Count</Label>
         <Col sm={10}>
-          <FormControl
+          <Input
             id='unit_count'
             type='number'
             name='unit_count'

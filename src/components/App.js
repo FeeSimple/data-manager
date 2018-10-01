@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import LoginContainer from './account/LoginContainer'
+import Properties from './properties/Properties'
 
 class AppContainer extends Component {
   render () {
@@ -11,11 +12,7 @@ class AppContainer extends Component {
       return <LoginContainer />
     }
 
-    return (
-      <div>
-        eosClient unlocked.
-      </div>
-    )
+    return <Properties />
   }
 }
 

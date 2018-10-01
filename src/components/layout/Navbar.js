@@ -7,7 +7,7 @@ import {
     NavItem,
     // NavLink,
     Navbar as BSNavbar
-} from 'react-bootstrap'
+} from 'reactstrap'
 
 class NavbarContainer extends Component {
   state = {

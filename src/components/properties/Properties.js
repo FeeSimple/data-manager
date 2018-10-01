@@ -8,7 +8,7 @@ import {
   Button,
   Col,
   Row
-} from 'react-bootstrap'
+} from 'reactstrap'
 
 export default function Properties () {
   return (
