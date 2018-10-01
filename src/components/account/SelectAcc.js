@@ -1,16 +1,16 @@
 import React from 'react'
 import {
-  Button,
   Modal,
   ModalHeader,
-  ModalBody,
   ModalFooter,
+  ModalBody,
   ListGroup,
   ListGroupItem,
   FormGroup,
   InputGroup,
-  FormControl
-} from 'react-bootstrap'
+  Input,
+  Button
+} from 'reactstrap'
 
 export default function SelectAcc (props) {
   const { accounts, handleToggle, onAccountSelect, isOpen} = props
@@ -24,10 +24,12 @@ export default function SelectAcc (props) {
               (
                 <ListGroupItem key={account}>
                   <FormGroup>
-                    <FormControl disabled value={account} />
+                    <Input disabled value={account} />
                     <InputGroup>
                       <InputGroup.Addon addonType='append'>
-                        <Button onClick={() => onAccountSelect(account)}>Select this account</Button>
+                        <Button onClick={() => onAccountSelect(account)}>
+                          Select this account
+                        </Button>
                       </InputGroup.Addon>
                     </InputGroup>
                   </FormGroup>

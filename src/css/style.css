@@ -2,5 +2,5 @@
     External Font and load CSS Files
 --------------------------------------------*/
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600");
-@import url(bootstrap.min.css);
-@import url(ms-setting.css);
+@import url("bootstrap.min.css");
+@import url("ms-setting.css");

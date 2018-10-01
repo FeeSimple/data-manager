@@ -3,10 +3,10 @@ import Login from './Login'
 import ecc from 'eosjs-ecc'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import SelectAcc from './SelectAcc'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
 import { getImportedKeyEos, getNetworkData } from '../../utils/index'
 import Eos from 'eosjs'
+import SelectAcc from './SelectAcc'
 import {
   setActive,
   setInfo,
@@ -139,12 +139,12 @@ class LoginContainer extends Component {
           onScatterClick={this.handleScatterClick}
           scatterDetected={Object.keys(scatter).length > 0}
         />
-        <SelectAcc
+        {/* <SelectAcc
           isOpen={this.state.showSelectAccModal}
           handleToggle={this.handleToggleSelAcc}
           onAccountSelect={this.handleSelectAcc}
           accounts={accounts}
-        />
+        /> */}
       </div>
     )
   }
