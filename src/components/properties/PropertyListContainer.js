@@ -7,7 +7,7 @@ import { addProperties } from '../../actions'
 import {
     ListGroup,
     ListGroupItem,
-    Col,
+    Col,    const { properties } = this.props
     Row
 } from 'reactstrap'
 
