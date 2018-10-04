@@ -1,15 +1,26 @@
 import React, { Component } from 'react'
 import { withRouter, Switch, Route } from 'react-router'
 import { connect } from 'react-redux'
-import PropertiesContainer from './properties'
+import GridContainer from './properties/grid'
+import PropertyDetails from './properties/details'
 
 class AppContainer extends Component {
   render () {
     return (
       <Switch>
         <Route exact path='/'>
-          <PropertiesContainer />
+          <GridContainer />
         </Route>
+        <Route exact path='/new'>
+          <PropertyDetails isCreating/>
+        </Route>
+        <Route
+          exact
+          path='/:id'
+          render={({match}) => (
+            <PropertyDetails id={match.params.id} />
+          )}
+        />
       </Switch>
     )
   }
