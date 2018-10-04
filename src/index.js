@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './components/App'
+import Root from './components/Root'
 import { createStore } from 'redux'
 import reducer from './reducers'
 import { Provider } from 'react-redux'
@@ -39,7 +39,7 @@ ReactDOM.render(
   <div>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <Root />
       </Provider>
     </BrowserRouter>
     <script src="js/vendor/jquery-3.3.1.min.js"></script>

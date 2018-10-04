@@ -1,25 +1,16 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
+import { withRouter, Switch, Route } from 'react-router'
 import { connect } from 'react-redux'
-import LoginContainer from './account/LoginContainer'
-import Properties from './properties/Properties'
-import Navbar from './layout/Navbar'
-import Footer from './layout/Footer'
+import PropertiesContainer from './properties'
 
 class AppContainer extends Component {
   render () {
-    const { eosClient } = this.props
-
-    if(eosClient.locked === true){
-      return <LoginContainer />
-    }
-
     return (
-      <div>
-        <Navbar />
-        <Properties />
-        <Footer />
-      </div>
+      <Switch>
+        <Route exact path='/'>
+          <PropertiesContainer />
+        </Route>
+      </Switch>
     )
   }
 }

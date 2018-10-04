@@ -1,5 +1,5 @@
 import React from 'react'
-import Background from '../../img/300x300.png'
+import Background from '../../../img/300x300.png'
 
 export default function (props) {
   const { property } = props

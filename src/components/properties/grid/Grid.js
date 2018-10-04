@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
-import PropertyMedia from './PropertyMedia'
+import Item from './Item'
 
 export default function (props) {
   const { properties } = props
@@ -11,7 +11,7 @@ export default function (props) {
           <ul className="properties-ul">
             {Object.keys(properties).map(id => {
               const property = properties[id]
-              return <li key={id}><PropertyMedia property={property} /></li>
+              return <li key={id}><Item property={property} /></li>
             })}
           </ul>
         </Col>

@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import IconAdd from '../../img/icon-add.svg'
-import PropertyGrid from './PropertyGrid'
+import IconAdd from '../../../img/icon-add.svg'
+import Grid from './Grid'
 import {
   Col,
   Row,
   Container
 } from 'reactstrap'
 
-class Properties extends Component {
+class GridContainer extends Component {
   render() {
     const { properties } = this.props
     return (
@@ -33,7 +33,7 @@ class Properties extends Component {
           </Container>
         </div>
         <Container>
-          <PropertyGrid properties={properties}/>
+          <Grid properties={properties}/>
         </Container>
       </div>
     )
@@ -47,4 +47,4 @@ function mapStateToProps({ properties, scatter, eosjs }){
 
 export default withRouter(connect(
   mapStateToProps
-)(Properties))
+)(GridContainer))
