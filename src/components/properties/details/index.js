@@ -14,6 +14,8 @@ class PropertyDetailsContainer extends Component {
   }
 
   edit = (e,property) => {
+    e.preventDefault()
+
     this.setState({
       mode: EDITING,
       property,
@@ -27,16 +29,37 @@ class PropertyDetailsContainer extends Component {
     e.preventDefault()
 
     const { property } = this.state
-    const { setLoading, setProperty } = this.props
+
+    const { contracts, accountData, setLoading, setProperty } = this.props
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
 
     setLoading(true)
+    await fsmgrcontract.modproperty(
+      accountData.active,
+      property.id,
+      property.name,
+      property.address_1,
+      property.address_2,
+      property.city,
+      property.region,
+      property.postal_code,
+      property.unit_count,
+      options
+    )
+
     setProperty(property)
     setLoading(false)
   }
 
   create = async (e) => {
     e.preventDefault()
-    const { addProperties, contracts, eosClient, accountData, setLoading } = this.props
+
+    const { addProperties, contracts, eosClient, accountData, setLoading, history } = this.props
     const { property } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -69,6 +92,7 @@ class PropertyDetailsContainer extends Component {
     )
     addProperties(rows)
     setLoading(false)
+    history.push('/')
   }
 
   handleChange(event) {
@@ -94,7 +118,7 @@ class PropertyDetailsContainer extends Component {
     let property = mode === EDITING || mode === CREATING  ? this.state.property : properties[id]
     return (
       <div>
-        {typeof property === 'undefined' && <h1>404 - Property not found</h1>}
+        {typeof property === 'undefined' && <h1 className="text-center my-5 py-5">404 - Property not found</h1>}
         {isCreating
           ? typeof property !== 'undefined' &&
             <PropertyDetails

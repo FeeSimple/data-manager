@@ -62,7 +62,7 @@ const PropertyDetails = ({
         </div>
         <div className="form-group row">
           <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">Address 1</label>
+            <label className="form-label">Address 2</label>
             <input
               id='address_2'
               className="form-control"
@@ -104,7 +104,7 @@ const PropertyDetails = ({
         </div>
         <div className="form-group row">
           <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">Postal Code</label>
+            <label className="form-label">Unit Count</label>
             <input
               id='unit_count'
               name='unit_count'
@@ -119,6 +119,7 @@ const PropertyDetails = ({
         <div className="form-group m-t-50 row">
           <div className="col-md-5 col-lg-4 offset-md-1 offset-lg-2 col-6">
             <button
+              type="button"
               className="btn btn-base w100 form-btn"
               hidden={mode !== READING}
               onClick={(e) => onEditClick(e, property)}
@@ -126,6 +127,7 @@ const PropertyDetails = ({
               Edit
             </button>
             <button
+              type="button"
               className="btn btn-base w100 form-btn"
               hidden={mode !== EDITING}
               onClick={(e) => onSaveClick(e)} style={{marginRight: '0.5em'}}
@@ -133,6 +135,7 @@ const PropertyDetails = ({
               Save
             </button>
             <button
+              type="button"
               className="btn btn-base w100 form-btn"
               hidden={mode !== CREATING}
               onClick={(e) => onCreateClick(e, property)}
@@ -141,8 +144,9 @@ const PropertyDetails = ({
             </button>
           </div>
           <div className="col-md-5 col-lg-4 col-6">
-            <Link to="/" hidden={mode === READING }>
+            <Link to="/">
               <button
+                type="button"
                 className="btn btn-gray-o w100 form-btn"
               >
                 Cancel

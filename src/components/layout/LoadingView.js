@@ -6,11 +6,11 @@ export default function LoadingView () {
     <div className='justify-content-center align-items-center' >
       <Spinner
         className='justify-content-center align-items-center mx-auto'
-        name='line-scale'
+        name='three-bounce'
         color='#00B1EF'
         style={{
-          width: 50,
-          marginTop: 270
+          width: 100,
+          margin: 250
         }}
       />
     </div>

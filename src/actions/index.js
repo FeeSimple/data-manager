@@ -67,7 +67,6 @@ export function addProperties (properties) {
 }
 
 export function setProperty (property) {
-  console.info('creating action')
   return {
     type: SET_PROPERTY,
     property

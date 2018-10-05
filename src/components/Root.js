@@ -5,10 +5,11 @@ import LoginContainer from './account/LoginContainer'
 import App from './App'
 import Navbar from './layout/Navbar'
 import Footer from './layout/Footer'
+import LoadingView from './layout/LoadingView'
 
 class RootContainer extends Component {
   render () {
-    const { eosClient } = this.props
+    const { eosClient, isLoading } = this.props
 
     if(eosClient.locked === true){
       return <LoginContainer />
@@ -17,7 +18,8 @@ class RootContainer extends Component {
     return (
       <div>
         <Navbar />
-        <App />
+        {!isLoading && <App />}
+        {isLoading && <LoadingView />}
         <Footer />
       </div>
     )
