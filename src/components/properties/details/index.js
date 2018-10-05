@@ -23,17 +23,6 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  cancel = (e) => {
-    const { prevProperty } = this.state
-    this.setState({
-      mode: READING,
-      property: {
-        ...prevProperty
-      },
-      prevProperty: {}
-    })
-  }
-
   save = async (e) => {
     e.preventDefault()
 

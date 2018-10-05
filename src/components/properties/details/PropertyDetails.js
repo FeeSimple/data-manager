@@ -1,14 +1,6 @@
 import React from 'react'
-import {
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Col,
-  Button,
-  Container,
-  Row
-} from 'reactstrap'
+import { Link } from 'react-router-dom'
+import { Col, Container, Row } from 'reactstrap'
 
 export const READING = 'reading'
 export const EDITING = 'editing'
@@ -18,7 +10,6 @@ const PropertyDetails = ({
   property,
   mode,
   onEditClick,
-  onCancelClick,
   onCreateClick,
   onSaveClick,
   onChange
@@ -35,104 +26,131 @@ const PropertyDetails = ({
     </div>
     <br />
     <Container>
-      <Form>
-        <FormGroup row>
-          <Label for='name' sm={2}>Name</Label>
-          <Col sm={10}>
-            <Input
-              name='name'
+      <form className="">
+        <div className="form-group row">
+          <div className="col-12">
+            <h3 className="bar-header">Details</h3>
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">Name</label>
+            <input
               id='name'
+              type="text"
+              className="form-control"
+              name='name'
               value={property.name}
               onChange={onChange}
               disabled={mode === READING} />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Label for='address_1' sm={2}>Address 1</Label>
-          <Col sm={10}>
-            <Input
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">Address 1</label>
+            <input
               id='address_1'
+              className="form-control"
+              placeholder=""
               name='address_1'
               type='textarea'
               onChange={onChange}
               value={property.address_1}
-              disabled={mode === READING} />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Label for='address_2' sm={2}>Address 2</Label>
-          <Col sm={10}>
-            <Input
+              disabled={mode === READING}
+              />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">Address 1</label>
+            <input
               id='address_2'
+              className="form-control"
               name='address_2'
               type='textarea'
               value={property.address_2}
               onChange={onChange}
-              disabled={mode === READING} />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Label for='city' sm={2}>City</Label>
-          <Col sm={10}>
-            <Input
+              disabled={mode === READING}
+              />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">City</label>
+            <input
               id='city'
+              className="form-control"
               name='city'
+              type="text"
               disabled={mode === READING}
               onChange={onChange}
-              value={property.city} />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Label for='region' sm={2}>Region</Label>
-          <Col sm={10}>
-            <Input
-              id='region'
-              name='region'
-              disabled={mode === READING}
-              onChange={onChange}
-              value={property.region} />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Label for='postal_code' sm={2}>Postal Code</Label>
-          <Col sm={10}>
-            <Input
+              value={property.city}
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">Postal Code</label>
+            <input
               id='postal_code'
               name='postal_code'
+              className="form-control"
+              type="text"
               disabled={mode === READING}
               onChange={onChange}
-              value={property.postal_code} />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Label for='unit_count' sm={2}>Unit Count</Label>
-          <Col sm={10}>
-            <Input
+              value={property.postal_code}
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">Postal Code</label>
+            <input
               id='unit_count'
-              type='number'
               name='unit_count'
-              onChange={onChange}
+              className="form-control"
+              type="text"
               disabled={mode === READING}
-              value={property.unit_count} />
-          </Col>
-        </FormGroup>
-        <Button color='primary' hidden={mode !== READING}
-          onClick={(e) => onEditClick(e, property)}>
-            Edit
-        </Button>
-        <Button color='primary' hidden={mode !== EDITING}
-          onClick={(e) => onSaveClick(e)} style={{marginRight: '0.5em'}}>
-            Save
-        </Button>
-        <Button color='primary' hidden={mode !== CREATING}
-          onClick={(e) => onCreateClick(e, property)} style={{marginRight: '0.5em'}}>
-            Create
-        </Button>
-        <Button outline hidden={mode !== EDITING}
-          onClick={(e) => onCancelClick(e)}>
-            Cancel
-        </Button>
-      </Form>
+              onChange={onChange}
+              value={property.unit_count}
+            />
+          </div>
+        </div>
+        <div className="form-group m-t-50 row">
+          <div className="col-md-5 col-lg-4 offset-md-1 offset-lg-2 col-6">
+            <button
+              className="btn btn-base w100 form-btn"
+              hidden={mode !== READING}
+              onClick={(e) => onEditClick(e, property)}
+            >
+              Edit
+            </button>
+            <button
+              className="btn btn-base w100 form-btn"
+              hidden={mode !== EDITING}
+              onClick={(e) => onSaveClick(e)} style={{marginRight: '0.5em'}}
+            >
+              Save
+            </button>
+            <button
+              className="btn btn-base w100 form-btn"
+              hidden={mode !== CREATING}
+              onClick={(e) => onCreateClick(e, property)}
+            >
+              Create
+            </button>
+          </div>
+          <div className="col-md-5 col-lg-4 col-6">
+            <Link to="/" hidden={mode === READING }>
+              <button
+                className="btn btn-gray-o w100 form-btn"
+              >
+                Cancel
+              </button>
+            </Link>
+          </div>
+        </div>
+      </form>
     </Container>
   </div>
 )
