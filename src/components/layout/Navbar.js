@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Logo from '../../img/logo.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconUser from '../../img/icon-user.svg'
@@ -12,19 +13,18 @@ class NavbarContainer extends Component {
         <div className="container">
             <div className="row">
               <div className="col-12">
-                <a href="" className="logo">
+                <Link to="/" className="logo">
                   <img src={Logo} alt="Logo"/>
-                </a>
+                </Link>
                 <div className="storage">
                   <span className="badge badge-pill">15.06 GB</span>
                   <span className="storage-text">
                       {' '}Available Storage
-                      {/* <small>(Purchase RAM)</small> */}
                   </span>
                 </div>
 
                 <ul id="main-menu">
-                  <li><a href=""><img src={IconProperties} alt=""/> <span>Properties</span></a></li>
+                  <li><Link to="/"><img src={IconProperties} alt=""/> <span>Properties</span></Link></li>
                   <li><a href=""><img src={IconUser} alt=""/> <span>team_open_re</span></a></li>
                   <li><a href=""><img src={IconLogout} alt=""/></a></li>
                 </ul>
