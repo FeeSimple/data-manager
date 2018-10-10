@@ -144,7 +144,7 @@ const PropertyDetails = ({
             </button>
           </div>
           <div className="col-md-5 col-lg-4 col-6">
-            <Link to="/">
+            <Link to={mode === CREATING ? '/' : `/${property.id}`}>
               <button
                 type="button"
                 className="btn btn-gray-o w100 form-btn"

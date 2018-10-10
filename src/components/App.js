@@ -3,6 +3,7 @@ import { withRouter, Switch, Route } from 'react-router'
 import { connect } from 'react-redux'
 import GridContainer from './properties/grid'
 import PropertyDetails from './properties/details'
+import Floorplans from './properties/floorplans'
 
 class AppContainer extends Component {
   render () {
@@ -17,6 +18,13 @@ class AppContainer extends Component {
         <Route
           exact
           path='/:id'
+          render={({match}) => (
+            <Floorplans id={match.params.id} />
+          )}
+        />
+        <Route
+          exact
+          path='/:id/edit'
           render={({match}) => (
             <PropertyDetails id={match.params.id} />
           )}
