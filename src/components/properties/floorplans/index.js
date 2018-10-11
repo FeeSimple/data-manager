@@ -6,8 +6,10 @@ import Table from './Table'
 
 class FloorplansContainer extends Component {
   render() {
+    const { properties, id } = this.props
+    const property = properties[id]
     return (
-      <Table propertyId={0}/>
+      <Table propertyId={property.id} property={property}/>
     )
   }
 }
