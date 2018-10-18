@@ -83,7 +83,7 @@ class NavbarContainer extends Component {
 
                 <ul id="main-menu">
                   <li><Link to="/"><img src={IconProperties} alt=""/> <span>Properties</span></Link></li>
-                  <li><a href=""><img src={IconUser} alt=""/> <span>team_open_re</span></a></li>
+                  <li><Link to="/user"><img src={IconUser} alt=""/></Link></li>
                   <li><a href=""><img src={IconLogout} alt=""/></a></li>
                 </ul>
               </div>
