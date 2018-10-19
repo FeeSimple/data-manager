@@ -138,6 +138,12 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
   padding-bottom: 5px; }
 
+.user-detail-label {
+  font-weight: 400;
+  font-size: 20px;
+  padding-bottom: 5px;
+  color: #2b8acb; }
+
 .drop-down-input {
   -webkit-appearance: none;
   -moz-appearance: none;
