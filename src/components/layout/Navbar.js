@@ -7,7 +7,8 @@ import IconProperties from '../../img/icon-properties.svg'
 import IconUser from '../../img/icon-user.svg'
 import IconLogout from '../../img/icon-logout.svg'
 import {
-  setInfo
+  setInfo,
+  beautifyRam
 } from '../../actions/index'
 
 class NavbarContainer extends Component {
@@ -23,7 +24,7 @@ class NavbarContainer extends Component {
       console.log('getAccount: ', result)
       const created = result.created
       const ram = result.ram_quota
-      const ramAvailable = this.beautifyRam(result.ram_quota - result.ram_usage)
+      const ramAvailable = beautifyRam(result.ram_quota - result.ram_usage)
       const bandwidth = result.delegated_bandwidth
       const pubkey = result.permissions[0].required_auth.keys[0].key
       const info = {
@@ -40,29 +41,6 @@ class NavbarContainer extends Component {
 
       this.setState({ data: info })
     })
-  }
-
-  beautifyRam(ram) {
-    let cnt=0;
-    while (cnt < 3 && ram >= 1024) {
-      ram = ram/1024;
-      cnt++;
-    }
-    ram = new Intl.NumberFormat().format(ram);
-    if (cnt == 0) {
-      ram = ram.toString() + " Byte";
-    }
-    else if (cnt == 1) {
-      ram = ram.toString() + " KB";
-    }
-    else if (cnt == 2) {
-      ram = ram.toString() + " MB";
-    }
-    else if (cnt == 3) {
-      ram = ram.toString() + " GB";
-    }
-  
-    return ram;
   }
 
   render() {
@@ -83,7 +61,7 @@ class NavbarContainer extends Component {
 
                 <ul id="main-menu">
                   <li><Link to="/"><img src={IconProperties} alt=""/> <span>Properties</span></Link></li>
-                  <li><a href=""><img src={IconUser} alt=""/> <span>team_open_re</span></a></li>
+                  <li><Link to="/user"><img src={IconUser} alt=""/></Link></li>
                   <li><a href=""><img src={IconLogout} alt=""/></a></li>
                 </ul>
               </div>
