@@ -72,3 +72,26 @@ export function setProperty (property) {
     property
   }
 }
+
+export function beautifyRam(ram) {
+  let cnt=0;
+  while (cnt < 3 && ram >= 1024) {
+    ram = ram/1024;
+    cnt++;
+  }
+  ram = new Intl.NumberFormat().format(ram);
+  if (cnt == 0) {
+    ram = ram.toString() + " Byte";
+  }
+  else if (cnt == 1) {
+    ram = ram.toString() + " KB";
+  }
+  else if (cnt == 2) {
+    ram = ram.toString() + " MB";
+  }
+  else if (cnt == 3) {
+    ram = ram.toString() + " GB";
+  }
+
+  return ram;
+}
