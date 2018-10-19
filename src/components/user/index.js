@@ -1,144 +1,57 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { setProperty, addProperties, setLoading } from '../../actions'
-import UserDetails, { READING, EDITING, CREATING } from './UserDetails'
-import { FSMGRCONTRACT, PROPERTY } from '../../utils/consts'
-
+import { beautifyRam, getResourceStr } from '../../actions'
+import UserDetails from './UserDetails'
 
 class UserDetailsContainer extends Component {
-  state = {
-    mode: READING,
-    prevProperty: {},
-    property: newProperty()
+  constructor() {
+    super();
+    this.state = {data: []};
   }
 
-  edit = (e,property) => {
-    e.preventDefault()
+  componentDidMount() {
+    const { eosClient, accountData } = this.props
+    let account = accountData.active
+    eosClient.getAccount(account).then(result => {
+      const ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota});
+      const ramMeter = (new Intl.NumberFormat().format(result.ram_usage / result.ram_quota).toString());
+      
+      const bandwidthStr = getResourceStr(result.net_limit);
+      const bandwidthMeter = (new Intl.NumberFormat().format(result.net_limit.used / result.net_limit.max).toString());
+      
+      const cpuStr = getResourceStr(result.cpu_limit, true);
+      const cpuMeter = (new Intl.NumberFormat().format(result.cpu_limit.used / result.cpu_limit.max).toString());
 
-    this.setState({
-      mode: EDITING,
-      property,
-      prevProperty: {
-        ...property
+      const balance = result.core_liquid_balance
+      const created = result.created
+      const pubkey = result.permissions[0].required_auth.keys[0].key
+      
+      const info = {
+        account,
+        created,
+        balance,
+        ramStr,
+        ramMeter,
+        bandwidthStr,
+        bandwidthMeter,
+        cpuStr,
+        cpuMeter,
+        pubkey
       }
-    })
-  }
-
-  save = async (e) => {
-    e.preventDefault()
-
-    const { property } = this.state
-
-    const { contracts, accountData, setLoading, setProperty } = this.props
-    const fsmgrcontract = contracts[FSMGRCONTRACT]
-    const options = {
-      authorization: `${accountData.active}@active`,
-      broadcast: true,
-      sign: true
-    }
-
-    setLoading(true)
-    await fsmgrcontract.modproperty(
-      accountData.active,
-      property.id,
-      property.name,
-      property.address_1,
-      property.address_2,
-      property.city,
-      property.region,
-      property.postal_code,
-      property.unit_count,
-      options
-    )
-
-    setProperty(property)
-    setLoading(false)
-  }
-
-  create = async (e) => {
-    e.preventDefault()
-
-    const { addProperties, contracts, eosClient, accountData, setLoading, history } = this.props
-    const { property } = this.state
-    const fsmgrcontract = contracts[FSMGRCONTRACT]
-
-    const options = {
-      authorization: `${accountData.active}@active`,
-      broadcast: true,
-      sign: true
-    }
-    this.setState({ mode: READING })
-
-    setLoading(true)
-
-    await fsmgrcontract.addproperty(
-      accountData.active,
-      property.name,
-      property.address_1,
-      property.address_2,
-      property.city,
-      property.region,
-      property.postal_code,
-      property.unit_count,
-      options
-    )
-
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      PROPERTY
-    )
-    addProperties(rows)
-    setLoading(false)
-    history.push('/')
-  }
-
-  handleChange(event) {
-    const target = event.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name
-
-    this.setState(prevState => {
-      let state = {
-        ...prevState
-      }
-      state.property = {
-        ...prevState.property,
-        [name]: value
-      }
-      return state
+      this.setState({ data: info })
     })
   }
 
   render() {
-    const { isCreating, properties, id } = this.props
-    const mode = isCreating ? CREATING : this.state.mode
-    let property = mode === EDITING || mode === CREATING  ? this.state.property : properties[id]
+    const user = this.state.data
     return (
       <div>
-        {typeof property === 'undefined' && <h1 className="text-center my-5 py-5">404 - Property not found</h1>}
-        {isCreating
-          ? typeof property !== 'undefined' &&
+        {typeof user === 'undefined' && <h1 className="text-center my-5 py-5">404 - Property not found</h1>}
+        {
+          typeof user !== 'undefined' &&
             <UserDetails
-              property={property}
-              mode={mode}
-              onEditClick={this.edit}
-              onSaveClick={this.save}
-              onCreateClick={this.create}
-              onCancelClick={this.cancel}
-              onChange={(e) => this.handleChange(e)}
-            />
-          : typeof property !== 'undefined' &&
-            <UserDetails
-              property={property}
-              mode={mode}
-              onEditClick={this.edit}
-              onSaveClick={this.save}
-              onCreateClick={this.create}
-              onCancelClick={this.cancel}
-              onChange={(e) => this.handleChange(e)}
+              user={user}
             />
         }
       </div>
@@ -146,21 +59,10 @@ class UserDetailsContainer extends Component {
   }
 }
 
-const newProperty = () => ({
-  name: '',
-  address_1: '',
-  address_2: '',
-  city: '',
-  region: '',
-  postal_code: '',
-  unit_count: 0
-})
-
-function mapStateToProps({ properties, eosClient, scatter, contracts, accountData }){
-  return { properties, eosClient, scatter, contracts, accountData }
+function mapStateToProps({ eosClient, accountData }){
+  return { eosClient, accountData }
 }
 
 export default withRouter(connect(
-  mapStateToProps,
-  { setProperty, addProperties, setLoading }
+  mapStateToProps
 )(UserDetailsContainer))

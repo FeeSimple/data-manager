@@ -95,3 +95,23 @@ export function beautifyRam(ram) {
 
   return ram;
 }
+
+// Applicable for RAM and Bandwidth
+export function getResourceStr(resource, cpu) {
+  let resourceStr = new Intl.NumberFormat().format((resource.used/resource.max) * 100).toString();
+  resourceStr += ' % ';
+  if (cpu) {
+    resourceStr += '(' + new Intl.NumberFormat().format(resource.used).toString() + ' µs';
+  }
+  else {
+    resourceStr += '(' + beautifyRam(resource.used);
+  }
+  if (cpu) {
+    resourceStr += ' / ' + new Intl.NumberFormat().format(resource.max).toString() + ' µs';
+  }
+  else {
+    resourceStr += ' / ' + beautifyRam(resource.max);
+  }
+  resourceStr += ')';
+  return resourceStr;
+}

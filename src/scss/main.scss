@@ -175,6 +175,13 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   color: $clr-seconday;
 }
 
+.user-detail-label-small{
+  font-weight:  400;
+  font-size: 12px;
+  padding-bottom: 5px;
+  color: $clr-seconday;
+}
+
 .drop-down-input{-webkit-appearance: none;  -moz-appearance: none; appearance: none; background: #fff url("../img/arrow-1-down.svg") no-repeat right 10px center; background-size: auto 7px;}
 /* CAUTION: IE hackery ahead */
 .ie-fix select::-ms-expand { display: none; /* remove default arrow on ie10 and ie11 */}
