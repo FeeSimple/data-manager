@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
 
+const meterControl = 'low="0.5" optimum="0.6" high="0.3"'
+
 const UserDetails = ({
   user
 }) => (
@@ -46,28 +48,28 @@ const UserDetails = ({
         </Row>
         <Row>
           <Col>
-            <h3 className="user-detail-label">RAM</h3>
+            <h3 className="user-detail-label">Available RAM</h3>
           </Col>
           <Col width="200">
-            <meter style={{width: 200}} low="0.5" optimum="0.4" high="0.7" value={user.ramMeter}></meter>
+            <meter style={{width: 200}} {... meterControl} value={user.ramMeter}></meter>
             <div className="user-detail-label-small">{user.ramStr}</div>
           </Col>
         </Row>
         <Row>
           <Col>
-            <h3 className="user-detail-label">CPU</h3>
+            <h3 className="user-detail-label">Available CPU</h3>
           </Col>
           <Col>
-            <meter style={{width: 200}} low="0.5" optimum="0.4" high="0.7" value={user.cpuMeter}></meter>
+            <meter style={{width: 200}} {... meterControl} value={user.cpuMeter}></meter>
             <div className="user-detail-label-small">{user.cpuStr}</div>
           </Col>
         </Row>
         <Row>
             <Col>
-              <h3 className="user-detail-label">Bandwidth</h3>
+              <h3 className="user-detail-label">Available Bandwidth</h3>
             </Col>
             <Col>
-              <meter style={{width: 200}} low="0.5" optimum="0.4" high="0.7" value={user.bandwidthMeter}></meter>
+              <meter style={{width: 200}} {... meterControl} value={user.bandwidthMeter}></meter>
               <div className="user-detail-label-small">{user.bandwidthStr}</div>
             </Col>
           </Row>

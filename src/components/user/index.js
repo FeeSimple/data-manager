@@ -15,13 +15,13 @@ class UserDetailsContainer extends Component {
     let account = accountData.active
     eosClient.getAccount(account).then(result => {
       const ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota});
-      const ramMeter = (new Intl.NumberFormat().format(result.ram_usage / result.ram_quota).toString());
+      const ramMeter = (new Intl.NumberFormat().format(1-(result.ram_usage / result.ram_quota)).toString());
       
       const bandwidthStr = getResourceStr(result.net_limit);
-      const bandwidthMeter = (new Intl.NumberFormat().format(result.net_limit.used / result.net_limit.max).toString());
+      const bandwidthMeter = (new Intl.NumberFormat().format(1-(result.net_limit.used / result.net_limit.max)).toString());
       
       const cpuStr = getResourceStr(result.cpu_limit, true);
-      const cpuMeter = (new Intl.NumberFormat().format(result.cpu_limit.used / result.cpu_limit.max).toString());
+      const cpuMeter = (new Intl.NumberFormat().format(1-(result.cpu_limit.used / result.cpu_limit.max)).toString());
 
       const balance = result.core_liquid_balance
       const created = result.created
