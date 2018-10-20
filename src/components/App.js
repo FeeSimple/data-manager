@@ -37,7 +37,7 @@ class AppContainer extends Component {
           exact
           path='/:id/floorplan/:floorplanId'
           render={({match}) => (
-            <PropertyDetails id={match.params.floorplanId} />
+            <FloorplanDetails id={match.params.floorplanId} />
           )}
         />
       </Switch>
