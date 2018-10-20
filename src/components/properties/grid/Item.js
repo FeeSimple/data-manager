@@ -21,7 +21,7 @@ export default function (props) {
         <div className="ms-row">
           <div className="ms-col">
             <div className="panel-fs-footer">
-              <Link to="/" className="btn btn-base">Floor Plans</Link>
+              <Link to={`/${property.id}`} className="btn btn-base">Floor Plans</Link>
               <Link to="/" className="btn btn-base">Units</Link>
             </div>
           </div>
