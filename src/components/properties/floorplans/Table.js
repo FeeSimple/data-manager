@@ -34,7 +34,12 @@ export default (props) => {
               <Link to="/" className="btn btn-gray-o prop-btn">Units</Link>
             </div>
             <div className="col-2 col-md-4">
-              <h3 className="float-right"><Link to="/"><img src={IconAdd} alt="" /><span className="hide-xs">New Floor Plan</span></Link></h3>
+              <h3 className="float-right">
+                <Link to={`/${props.propertyId}/floorplan/new`}>
+                  <img src={IconAdd} alt="" />
+                  <span className="hide-xs">New Floor Plan</span>
+                </Link>
+              </h3>
             </div>
           </Row>
         </Container>

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import GridContainer from './properties/grid'
 import PropertyDetails from './properties/details'
 import Floorplans from './properties/floorplans'
+import FloorplanDetails from './properties/floorplans/details'
 
 class AppContainer extends Component {
   render () {
@@ -27,6 +28,16 @@ class AppContainer extends Component {
           path='/:id/edit'
           render={({match}) => (
             <PropertyDetails id={match.params.id} />
+          )}
+        />
+        <Route exact path='/:id/floorplan/new'>
+          <FloorplanDetails isCreating />
+        </Route>
+        <Route
+          exact
+          path='/:id/floorplan/:floorplanId'
+          render={({match}) => (
+            <PropertyDetails id={match.params.floorplanId} />
           )}
         />
       </Switch>

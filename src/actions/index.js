@@ -8,13 +8,13 @@ import {
   SET_ACTIVE,
   SET_INFO,
   SET_LOADING,
-  SET_FLOORPLANS
+  SET_FLOORPLAN
 } from '../actions/types'
 
-export function setFloorplans (propertyId, floorplans) {
+export function setFloorplan (propertyId, floorplan) {
   return {
-    type: SET_FLOORPLANS,
-    payload: { propertyId, floorplans }
+    type: SET_FLOORPLAN,
+    payload: { propertyId, floorplan }
   }
 }
 

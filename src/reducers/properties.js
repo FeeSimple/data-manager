@@ -1,7 +1,7 @@
 import {
   ADD_PROPERTIES,
   SET_PROPERTY,
-  SET_FLOORPLANS
+  SET_FLOORPLAN
 } from '../actions/types'
 
 export function properties (state = {}, action) {
@@ -23,16 +23,16 @@ export function properties (state = {}, action) {
         [property.id]: property
       }
     }
-    case SET_FLOORPLANS: {
-      const { propertyId, floorplans } = action.payload
+    case SET_FLOORPLAN: {
+      const { propertyId, floorplan } = action.payload
       const newState = {...state}
-      Object.keys(floorplans).map(floorplanId => {
-        newState[propertyId] = {
-          ...newState[propertyId],
-          [floorplanId]: floorplans[floorplanId]
+      newState[propertyId] = {
+        ...newState[propertyId],
+        floorplans: {
+          ...newState[propertyId].floorplans,
+          [floorplan.id]: floorplan
         }
-        return floorplanId // No need to return. OOnly added to avoid warnings.
-      })
+      }
       return newState
     }
     default:
