@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Background from '../../../img/300x300.png'
+import Background from '../../../img/property-no-image.svg'
 
 export default function (props) {
   const { property } = props
@@ -9,7 +9,14 @@ export default function (props) {
       <div className="card-header text-center"><Link to={`/${property.id}`}>{property.name}</Link></div>
       <div className="card-body">
         <Link to={`/${property.id}`}>
-          <div className="panel-fs-div" style={{backgroundImage: `url(${Background})`}}/>
+          <div
+            className="panel-fs-div property-grid-item"
+            style={{
+              backgroundImage: `url(${Background})`,
+              backgroundSize: '50%',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center'
+            }}/>
         </Link>
         <div className="ms-row">
           <div className="ms-col">
