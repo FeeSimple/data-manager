@@ -73,6 +73,28 @@ export function setProperty (property) {
   }
 }
 
+export function beautifyCpu(cpuAmount) {
+  let cpu = cpuAmount;
+
+  let cnt=0;
+  while (cnt < 2 && cpu >= 1000) {
+    cpu = cpu/1000;
+    cnt++;
+  }
+  cpu = new Intl.NumberFormat().format(cpu);
+  if (cnt == 0) {
+    cpu = cpu.toString() + " µs";
+  }
+  else if (cnt == 1) {
+    cpu = cpu.toString() + " ms";
+  }
+  else if (cnt == 2) {
+    cpu = cpu.toString() + " s";
+  }
+
+  return cpu;
+}
+
 export function beautifyRam(ram) {
   let cnt=0;
   while (cnt < 3 && ram >= 1024) {
@@ -102,13 +124,13 @@ export function getResourceStr(resource, cpu) {
   let resourceStr = new Intl.NumberFormat().format((resourceAvailable/resource.max) * 100).toString();
   resourceStr += ' % ';
   if (cpu) {
-    resourceStr += '(' + new Intl.NumberFormat().format(resourceAvailable).toString() + ' µs';
+    resourceStr += '(' + beautifyCpu(resourceAvailable);
   }
   else {
     resourceStr += '(' + beautifyRam(resourceAvailable);
   }
   if (cpu) {
-    resourceStr += ' / ' + new Intl.NumberFormat().format(resource.max).toString() + ' µs';
+    resourceStr += ' / ' + beautifyCpu(resourceAvailable);
   }
   else {
     resourceStr += ' / ' + beautifyRam(resource.max);
