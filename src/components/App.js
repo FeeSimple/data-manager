@@ -16,7 +16,7 @@ class AppContainer extends Component {
           <PropertyDetails isCreating/>
         </Route>
         <Route exact path='/account'>
-          <UserDetails isCreating/>
+          <UserDetails/>
         </Route>
         <Route
           exact
