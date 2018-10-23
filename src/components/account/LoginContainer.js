@@ -22,6 +22,7 @@ class LoginContainer extends Component {
   state={
     showSelectAccModal: false,
     showNewAccModal: false,
+    showNewAccKeyModal: false,
     availableAccounts: [],
     privKey: null
   }
@@ -141,6 +142,11 @@ class LoginContainer extends Component {
     this.setState({showNewAccModal: !showNewAccModal})
   }
 
+  handleToggleNewAccKey = () => {
+    const { showNewAccKeyModal } = this.state
+    this.setState({showNewAccKeyModal: !showNewAccKeyModal})
+  }
+
   render () {
     const accounts = this.state.availableAccounts
     const { scatter } = this.props
@@ -161,6 +167,8 @@ class LoginContainer extends Component {
         <NewAcc
           isOpen={this.state.showNewAccModal}
           handleToggle={this.handleToggleNewAcc}
+          isOpenKey={this.state.showNewAccKeyModal}
+          handleToggleKey={this.handleToggleNewAccKey}
         />
       </div>
     )

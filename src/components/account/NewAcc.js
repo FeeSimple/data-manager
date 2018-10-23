@@ -4,32 +4,35 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  InputGroup,
-  InputGroupAddon,
-  Input,
-  Button
+  Button, Form, FormGroup, Label, Input, FormText, Alert, Collapse
 } from 'reactstrap'
 
 export default function NewAcc (props) {
-  const { isOpen, handleToggle } = props
+  const { isOpen, handleToggle, isOpenKey, handleToggleKey } = props
   return (
     <Modal isOpen={isOpen} toggle={handleToggle} >
-      <ModalHeader toggle={handleToggle}>Please enter account name</ModalHeader>
+      <ModalHeader toggle={handleToggle}>Create a New Account</ModalHeader>
       <ModalBody>
-        <div class="create-box hide">
-          <div id="pubkey-create" class="keydiv">
-            <script src="https://unpkg.com/xregexp/xregexp-all.js"></script>
-            <h3 id="pubkeytit">Account Name</h3>
-            <h3 class="keydisplay" id="pubkeydis"></h3>
-          </div>
-          <div id="privkey-create" class="keydiv">
-            <h3 id="privkeytit">Account Private Key</h3>
-            <h3 class="keydisplay" id="privkeydis"></h3>
-            <h3 id="warning">Please make sure you store your private key somewhere safe</h3>
-          </div>
-          <button id="generate-but" onclick="">GENERATE ACCOUNT</button>
-          <h1 id="cross">X</h1>
-        </div>
+        <Form>
+          <FormGroup>
+            <Label for="accountName">Please enter account name</Label>
+            <Input type="account" name="account" id="accountName" placeholder="must be 12 symbols long and include symbols a-z 1-5"/>
+          </FormGroup>
+          <Button color="primary" onClick={handleToggleKey} style={{ marginBottom: '1rem' }}>Submit</Button>
+          <Collapse isOpen={isOpenKey}>
+            <FormGroup>
+              <Label for="accountPubKey">Public key</Label>
+              <Input type="pubkey" name="pubkey" id="accountPubKey"/>
+            </FormGroup>
+            <FormGroup>
+              <Label for="accountPrivKey">Private key</Label>
+              <Input type="privkey" name="privkey" id="accountPrivKey"/>
+            </FormGroup>
+            <Alert color="danger">
+              Please make sure to store your private key somewhere safe
+            </Alert>
+          </Collapse>
+        </Form>
       </ModalBody>
       <ModalFooter />
     </Modal>
