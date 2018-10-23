@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { setFloorplan, setLoading } from '../../../../actions'
 import FloorplanDetails, { READING, EDITING, CREATING } from './FloorplanDetails'
+import { FSMGRCONTRACT } from '../../../../utils/consts'
 
 
 class FloorplanDetailsContainer extends Component {
@@ -35,7 +36,38 @@ class FloorplanDetailsContainer extends Component {
 
   create = async (e) => {
     e.preventDefault()
-    console.info('create clicked')
+
+    const { contracts, accountData, setLoading, history } = this.props
+    const propertyId = this.props.match.params.id
+    const { floorplan } = this.state
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+    this.setState({ mode: READING })
+
+    setLoading(true)
+
+    await fsmgrcontract.addfloorplan(
+      accountData.active,
+      propertyId,
+      floorplan.name,
+      floorplan.bedrooms,
+      floorplan.bathrooms,
+      floorplan.sq_ft_min,
+      floorplan.sq_ft_max,
+      floorplan.rent_min,
+      floorplan.rent_max,
+      floorplan.deposit,
+      options
+    )
+
+    setFloorplan(propertyId, floorplan)
+    setLoading(false)
+    history.push(`/${propertyId}`)
 
   }
 

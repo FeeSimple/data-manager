@@ -10,10 +10,10 @@ export default (props) => {
       <td><input type="checkbox" /></td>
       <td>{floorplan.id}</td>
       <td>{floorplan.name}</td>
-      <td>{floorplan.bedrooms} beds / {floorplan.baths} baths</td>
-      <td>{floorplan.sqftMin} - {floorplan.sqftMax}</td>
-      <td>${floorplan.rentMin} - ${floorplan.rentMax}</td>
-      <td>{floorplan.numUnits}</td>
+      <td>{floorplan.bedrooms} beds / {floorplan.bathrooms} baths</td>
+      <td>{floorplan.sq_ft_min} - {floorplan.sq_ft_max}</td>
+      <td>${floorplan.rent_min} - ${floorplan.rent_max}</td>
+      <td>{floorplan.num_units}</td>
       <td><Link to="/" className="table-edit"><img src={IconEditBlue} alt="" /></Link></td>
       <td><Link to="/" className="table-del"><img src={IconDelete} alt="" /></Link></td>
     </tr>
