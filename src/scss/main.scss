@@ -295,6 +295,35 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .input-home{background-color: transparent; color: $clr-white;margin-bottom: 15px;font-size: 16px;height: 44px;}
 .form-btn{padding: 8px 10px; border-width: 2px;font-size: 14px;}
 .table-striped{border: 2px solid $clr-gray; margin: 15px 0;}
+
+/*---------------
+  Dropzone
+----------------*/
+.dpz-active {
+  border-style: solid;
+  background-color: #ffffff;
+}
+.dpz-accepted {
+  border-style: solid;
+  border-color: #66cc66;
+  background-color: #bdffc0;
+}
+.dpz-rejected {
+  border-style: solid;
+  border-color: #cc6666;
+  background-color: #ddcccc;
+}
+.dpz-default {
+  min-height: 200px;
+  border-width: 2px;
+  border-color: #666666;
+  border-style: dashed;
+  border-radius: 5px;
+}
+.dpz-disabled {
+  opacity: 0.5;
+}
+
 /*-----------------------------------------
   Various fixes and overwrites
 -------------------------------------------*/

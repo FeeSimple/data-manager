@@ -1,6 +1,7 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
 
 export const READING = 'reading'
 export const EDITING = 'editing'
@@ -12,14 +13,15 @@ const FloorplanDetails = ({
   onEditClick,
   onCreateClick,
   onSaveClick,
-  onChange
+  onChange,
+  onImageDrop
 }) => (
   <div>
     <div className="top-bar">
       <Container>
         <Row>
           <Col>
-            <h3 className="float-left">New Floorplan</h3>
+            <h3 className="float-left">{' '}New Floorplan</h3>
           </Col>
         </Row>
       </Container>
@@ -137,6 +139,22 @@ const FloorplanDetails = ({
               onChange={onChange}
               value={floorplan.deposit}
             />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <Dropzone
+              multiple={false}
+              accept="image/*"
+              onDrop={onImageDrop}
+              className='dpz-default d-flex justify-content-center align-items-center'
+              acceptClassName='dpz-accepted'
+              activeClassName='dpc-active'
+              disabledClassName='dpz-disabled'
+              rejectClassName='dpz-rejected'
+            >
+              <p>Drag and drop a property image, such as a floorplan.</p>
+            </Dropzone>
           </div>
         </div>
         <div className="form-group m-t-50 row">

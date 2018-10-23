@@ -12,6 +12,10 @@ class FloorplanDetailsContainer extends Component {
     floorplan: newFloorplan()
   }
 
+  onImageDrop = (files) => {
+    console.info('got file')
+  }
+
   edit = (e,floorplan) => {
     e.preventDefault()
 
@@ -69,6 +73,7 @@ class FloorplanDetailsContainer extends Component {
               onCreateClick={this.create}
               onCancelClick={this.cancel}
               onChange={(e) => this.handleChange(e)}
+              onImageDrop={this.onImageDrop}
             />
           : typeof floorplan !== 'undefined' &&
             <FloorplanDetails
@@ -78,6 +83,7 @@ class FloorplanDetailsContainer extends Component {
               onSaveClick={this.save}
               onCreateClick={this.create}
               onCancelClick={this.cancel}
+              onImageDrop={this.onImageDrop}
               onChange={(e) => this.handleChange(e)}
             />
         }

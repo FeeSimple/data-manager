@@ -20,7 +20,6 @@ class NavbarContainer extends Component {
     const { eosClient, accountData } = this.props
     let account = accountData.active
     eosClient.getAccount(account).then(result => {
-      console.log('getAccount: ', result)
       const created = result.created
       const ram = result.ram_quota
       const ramAvailable = this.beautifyRam(result.ram_quota - result.ram_usage)
