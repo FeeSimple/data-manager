@@ -20,6 +20,7 @@ import {
 class LoginContainer extends Component {
   state={
     showSelectAccModal: false,
+    showNewAccModal: false,
     availableAccounts: [],
     privKey: null
   }
@@ -55,6 +56,11 @@ class LoginContainer extends Component {
       usingScatter: true
     })
     this.handleToggleSelAcc()
+  }
+
+  handleNewAccountClick = async () => {
+    
+    this.handleToggleNewAcc()
   }
 
   handleSelectAcc = async (account) => {
@@ -129,6 +135,12 @@ class LoginContainer extends Component {
     this.setState({showSelectAccModal: !showSelectAccModal})
   }
 
+  handleToggleNewAcc = () => {
+    const { showNewAccModal } = this.state
+    this.setState({showNewAccModal: !showNewAccModal})
+    console.log('handleToggleNewAcc: ', showNewAccModal)
+  }
+
   render () {
     const accounts = this.state.availableAccounts
     const { scatter } = this.props
@@ -138,6 +150,7 @@ class LoginContainer extends Component {
           handleImportPrivKey={this.handleImportPrivKey}
           onScatterClick={this.handleScatterClick}
           scatterDetected={Object.keys(scatter).length > 0}
+          onNewAccountClick={this.handleNewAccountClick}
         />
         <SelectAcc
           isOpen={this.state.showSelectAccModal}

@@ -20,6 +20,7 @@ const LoginForm = props => {
     handleBlur,
     handleSubmit,
     onScatterClick,
+    onNewAccountClick,
     scatterDetected
   } = props
 
@@ -48,7 +49,7 @@ const LoginForm = props => {
                 </Col>
                 <Col xs={12} sm={6}>
                   <Button 
-                    onClick="" 
+                    onClick={onNewAccountClick} 
                     className="btn-base btn-home"
                   >
                     Create a New Account
