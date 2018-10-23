@@ -7,6 +7,7 @@ import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
 import { getImportedKeyEos, getNetworkData } from '../../utils/index'
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
+import NewAcc from './NewAcc'
 import {
   setActive,
   setInfo,
@@ -138,7 +139,6 @@ class LoginContainer extends Component {
   handleToggleNewAcc = () => {
     const { showNewAccModal } = this.state
     this.setState({showNewAccModal: !showNewAccModal})
-    console.log('handleToggleNewAcc: ', showNewAccModal)
   }
 
   render () {
@@ -157,6 +157,10 @@ class LoginContainer extends Component {
           handleToggle={this.handleToggleSelAcc}
           onAccountSelect={this.handleSelectAcc}
           accounts={accounts}
+        />
+        <NewAcc
+          isOpen={this.state.showNewAccModal}
+          handleToggle={this.handleToggleNewAcc}
         />
       </div>
     )
