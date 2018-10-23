@@ -3,7 +3,7 @@ import { withRouter, Switch, Route } from 'react-router'
 import { connect } from 'react-redux'
 import GridContainer from './properties/grid'
 import PropertyDetails from './properties/details'
-import UserDetails from './user'
+import UserDetails from './user/detail'
 
 class AppContainer extends Component {
   render () {
