@@ -68,7 +68,6 @@ class FloorplanDetailsContainer extends Component {
     setFloorplan(propertyId, floorplan)
     setLoading(false)
     history.push(`/${propertyId}`)
-
   }
 
   handleChange(event) {

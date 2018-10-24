@@ -5,18 +5,6 @@ import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
 import FloorplanRow from './Row'
 
-const staticFloorplans = [{
-  id: 1,
-  name: 'Congressional',
-  bedrooms: 4,
-  baths: 2,
-  sqftMin: 515,
-  sqftMax: 556,
-  rentMin: 1852,
-  rentMax: 2150,
-  numUnits: 32
-}]
-
 export default (props) => {
   const { property } = props
   return (
@@ -82,7 +70,12 @@ export default (props) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {staticFloorplans.map(floorplan => <FloorplanRow key={floorplan.id} floorplan={floorplan} />)}
+                        {property.floorplans && Object.keys(property.floorplans).length > 0  &&
+                          Object.keys(property.floorplans).map(floorplanId => (
+                              <FloorplanRow key={floorplanId} floorplan={property.floorplans[floorplanId]} />
+                            )
+                          )
+                        }
                       </tbody>
                     </table>
                   </div>

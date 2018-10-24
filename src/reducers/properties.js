@@ -1,7 +1,8 @@
 import {
   ADD_PROPERTIES,
   SET_PROPERTY,
-  SET_FLOORPLAN
+  SET_FLOORPLAN,
+  ADD_FLOORPLANS
 } from '../actions/types'
 
 export function properties (state = {}, action) {
@@ -11,8 +12,11 @@ export function properties (state = {}, action) {
       let newState = {
         ...state
       }
-      properties.forEach(p => {
-        newState[p.id] = p
+      properties.forEach(property => {
+        newState[property.id] = {
+          ...property,
+          floorplans: {}
+        }
       })
       return newState
     }
@@ -20,19 +24,25 @@ export function properties (state = {}, action) {
       const { property } = action
       return {
         ...state,
-        [property.id]: property
+        [property.id]: {
+          ...property,
+          floorplans: {}
+        }
       }
     }
     case SET_FLOORPLAN: {
       const { propertyId, floorplan } = action.payload
+      const newState = { ...state }
+      newState[propertyId].floorplans[floorplan.id] = floorplan
+      return newState
+    }
+    case ADD_FLOORPLANS: {
+      const { propertyId, floorplans } = action.payload
       const newState = {...state}
-      newState[propertyId] = {
-        ...newState[propertyId],
-        floorplans: {
-          ...newState[propertyId].floorplans,
-          [floorplan.id]: floorplan
-        }
-      }
+      floorplans.map(floorplan => {
+        newState[propertyId].floorplans[floorplan.id] = floorplan
+        return floorplan // Only returning to resolve react warning.
+      })
       return newState
     }
     default:

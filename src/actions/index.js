@@ -8,8 +8,16 @@ import {
   SET_ACTIVE,
   SET_INFO,
   SET_LOADING,
-  SET_FLOORPLAN
+  SET_FLOORPLAN,
+  ADD_FLOORPLANS,
 } from '../actions/types'
+
+export function addFloorplans (propertyId, floorplans) {
+  return {
+    type: ADD_FLOORPLANS,
+    payload: { propertyId, floorplans }
+  }
+}
 
 export function setFloorplan (propertyId, floorplan) {
   return {
