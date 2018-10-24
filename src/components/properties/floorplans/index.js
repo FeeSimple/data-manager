@@ -8,12 +8,7 @@ import { addFloorplans } from '../../../actions/index'
 
 class FloorplansContainer extends Component {
   async componentDidMount () {
-    const { eosClient, accountData, addFloorplans, properties } = this.props
-    const propertyId = this.props.match.params.id
-    const property = properties[propertyId]
-
-    if(property.floorplans && Object.keys(property.floorplans).length > 0)
-      return // Don't fetch data again if we already have it.
+    const { eosClient, accountData, addFloorplans } = this.props
 
     const { rows } = await eosClient.getTableRows(
       true,
