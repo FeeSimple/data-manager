@@ -40,6 +40,11 @@ class LoginContainer extends Component {
     })
   }
 
+  handleCreateNewAccount = (accountName) => {
+    console.log('handleCreateNewAccount: ', accountName)
+    const  { eosClient }  = this.props
+  }
+
   handleScatterClick = async () => {
     const { scatter } = this.props
     if(!scatter){
@@ -170,6 +175,7 @@ class LoginContainer extends Component {
           handleToggle={this.handleToggleNewAcc}
           isOpenSubmit={this.state.showNewAccSubmitModal}
           handleToggleSubmit={this.handleToggleNewAccSubmit}
+          handleCreateNewAccount={this.handleCreateNewAccount}
         />
       </div>
     )
