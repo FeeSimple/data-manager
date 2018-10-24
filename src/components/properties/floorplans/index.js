@@ -10,8 +10,9 @@ class FloorplansContainer extends Component {
   async componentDidMount () {
     const { eosClient, accountData, addFloorplans, properties } = this.props
     const propertyId = this.props.match.params.id
+    const property = properties[propertyId]
 
-    if(properties.floorplans && Object.keys(properties.floorplans).length > 0)
+    if(property.floorplans && Object.keys(property.floorplans).length > 0)
       return // Don't fetch data again if we already have it.
 
     const { rows } = await eosClient.getTableRows(
@@ -24,7 +25,8 @@ class FloorplansContainer extends Component {
   }
 
   render() {
-    const { properties, id } = this.props
+    const { properties } = this.props
+    const { id } = this.props.match.params
     const property = properties[id]
     return (
       <Table propertyId={property.id} property={property}/>

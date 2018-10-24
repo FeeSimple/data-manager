@@ -29,7 +29,6 @@ class PropertyDetailsContainer extends Component {
     e.preventDefault()
 
     const { property } = this.state
-
     const { contracts, accountData, setLoading, setProperty } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
     const options = {

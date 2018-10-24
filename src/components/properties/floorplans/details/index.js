@@ -31,7 +31,37 @@ class FloorplanDetailsContainer extends Component {
 
   save = async (e) => {
     e.preventDefault()
-    console.info('save clicked')
+
+    const { floorplan } = this.state
+    const { contracts, accountData, setLoading } = this.props
+    const propertyId = this.props.match.params.id
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    await fsmgrcontract.modfloorplan(
+      accountData.active,
+      floorplan.id,
+      propertyId,
+      floorplan.name,
+      floorplan.bedrooms,
+      floorplan.bathrooms,
+      floorplan.sq_ft_min,
+      floorplan.sq_ft_max,
+      floorplan.rent_min,
+      floorplan.rent_max,
+      floorplan.deposit,
+      options
+    )
+
+    setFloorplan(propertyId, floorplan)
+    setLoading(false)
   }
 
   create = async (e) => {
