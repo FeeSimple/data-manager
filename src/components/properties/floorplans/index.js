@@ -21,7 +21,7 @@ class FloorplansContainer extends Component {
       accountData.active,
       FLOORPLAN
     )
-    addFloorplans(propertyId, rows)
+    addFloorplans(rows)
   }
 
   render() {

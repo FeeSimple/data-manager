@@ -12,10 +12,10 @@ import {
   ADD_FLOORPLANS,
 } from '../actions/types'
 
-export function addFloorplans (propertyId, floorplans) {
+export function addFloorplans (floorplans) {
   return {
     type: ADD_FLOORPLANS,
-    payload: { propertyId, floorplans }
+    payload: { floorplans }
   }
 }
 

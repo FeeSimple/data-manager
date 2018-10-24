@@ -37,10 +37,10 @@ export function properties (state = {}, action) {
       return newState
     }
     case ADD_FLOORPLANS: {
-      const { propertyId, floorplans } = action.payload
+      const { floorplans } = action.payload
       const newState = {...state}
       floorplans.map(floorplan => {
-        newState[propertyId].floorplans[floorplan.id] = floorplan
+        newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
         return floorplan // Only returning to resolve react warning.
       })
       return newState
