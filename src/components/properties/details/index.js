@@ -31,6 +31,7 @@ class PropertyDetailsContainer extends Component {
     const { property } = this.state
     const { contracts, accountData, setLoading, setProperty } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
+
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -118,27 +119,16 @@ class PropertyDetailsContainer extends Component {
     return (
       <div>
         {typeof property === 'undefined' && <h1 className="text-center my-5 py-5">404 - Property not found</h1>}
-        {isCreating
-          ? typeof property !== 'undefined' &&
-            <PropertyDetails
-              property={property}
-              mode={mode}
-              onEditClick={this.edit}
-              onSaveClick={this.save}
-              onCreateClick={this.create}
-              onCancelClick={this.cancel}
-              onChange={(e) => this.handleChange(e)}
-            />
-          : typeof property !== 'undefined' &&
-            <PropertyDetails
-              property={property}
-              mode={mode}
-              onEditClick={this.edit}
-              onSaveClick={this.save}
-              onCreateClick={this.create}
-              onCancelClick={this.cancel}
-              onChange={(e) => this.handleChange(e)}
-            />
+        {typeof property !== 'undefined' &&
+          <PropertyDetails
+            property={property}
+            mode={mode}
+            onEditClick={this.edit}
+            onSaveClick={this.save}
+            onCreateClick={this.create}
+            onCancelClick={this.cancel}
+            onChange={(e) => this.handleChange(e)}
+          />
         }
       </div>
     )

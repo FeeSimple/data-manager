@@ -32,9 +32,9 @@ class FloorplanDetailsContainer extends Component {
   save = async (e) => {
     e.preventDefault()
 
-    const { floorplan } = this.state
-    const { contracts, accountData, setLoading } = this.props
     const propertyId = this.props.match.params.id
+    const { floorplan } = this.state
+    const { contracts, accountData, setLoading, setFloorplan } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -44,7 +44,6 @@ class FloorplanDetailsContainer extends Component {
     }
 
     setLoading(true)
-
     await fsmgrcontract.modfloorplan(
       accountData.active,
       floorplan.id,
@@ -127,29 +126,17 @@ class FloorplanDetailsContainer extends Component {
     return (
       <div>
         {typeof floorplan === 'undefined' && <h1 className="text-center my-5 py-5">404 - Floorplan not found</h1>}
-        {isCreating
-          ? typeof floorplan !== 'undefined' &&
-            <FloorplanDetails
-              floorplan={floorplan}
-              mode={mode}
-              onEditClick={this.edit}
-              onSaveClick={this.save}
-              onCreateClick={this.create}
-              onCancelClick={this.cancel}
-              onChange={(e) => this.handleChange(e)}
-              onImageDrop={this.onImageDrop}
-            />
-          : typeof floorplan !== 'undefined' &&
-            <FloorplanDetails
-              floorplan={floorplan}
-              mode={mode}
-              onEditClick={this.edit}
-              onSaveClick={this.save}
-              onCreateClick={this.create}
-              onCancelClick={this.cancel}
-              onImageDrop={this.onImageDrop}
-              onChange={(e) => this.handleChange(e)}
-            />
+        {typeof floorplan !== 'undefined' &&
+          <FloorplanDetails
+            floorplan={floorplan}
+            mode={mode}
+            onEditClick={this.edit}
+            onSaveClick={this.save}
+            onCreateClick={this.create}
+            onCancelClick={this.cancel}
+            onChange={(e) => this.handleChange(e)}
+            onImageDrop={this.onImageDrop}
+          />
         }
       </div>
     )
