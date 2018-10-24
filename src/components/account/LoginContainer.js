@@ -22,7 +22,7 @@ class LoginContainer extends Component {
   state={
     showSelectAccModal: false,
     showNewAccModal: false,
-    showNewAccKeyModal: false,
+    showNewAccSubmitModal: false,
     availableAccounts: [],
     privKey: null
   }
@@ -142,9 +142,10 @@ class LoginContainer extends Component {
     this.setState({showNewAccModal: !showNewAccModal})
   }
 
-  handleToggleNewAccKey = () => {
-    const { showNewAccKeyModal } = this.state
-    this.setState({showNewAccKeyModal: !showNewAccKeyModal})
+  handleToggleNewAccSubmit = () => {
+    const { showNewAccSubmitModal } = this.state
+    let { eosClient } = this.props
+    this.setState({showNewAccSubmitModal: !showNewAccSubmitModal})
   }
 
   render () {
@@ -167,8 +168,8 @@ class LoginContainer extends Component {
         <NewAcc
           isOpen={this.state.showNewAccModal}
           handleToggle={this.handleToggleNewAcc}
-          isOpenKey={this.state.showNewAccKeyModal}
-          handleToggleKey={this.handleToggleNewAccKey}
+          isOpenSubmit={this.state.showNewAccSubmitModal}
+          handleToggleSubmit={this.handleToggleNewAccSubmit}
         />
       </div>
     )

@@ -8,7 +8,7 @@ import {
 } from 'reactstrap'
 
 export default function NewAcc (props) {
-  const { isOpen, handleToggle, isOpenKey, handleToggleKey } = props
+  const { isOpen, handleToggle, isOpenSubmit, handleToggleSubmit } = props
   return (
     <Modal isOpen={isOpen} toggle={handleToggle} >
       <ModalHeader toggle={handleToggle}>Create a New Account</ModalHeader>
@@ -18,8 +18,8 @@ export default function NewAcc (props) {
             <Label for="accountName">Please enter account name</Label>
             <Input type="account" name="account" id="accountName" placeholder="must be 12 symbols long and include symbols a-z 1-5"/>
           </FormGroup>
-          <Button color="primary" onClick={handleToggleKey} style={{ marginBottom: '1rem' }}>Submit</Button>
-          <Collapse isOpen={isOpenKey}>
+          <Button color="primary" onClick={handleToggleSubmit} style={{ marginBottom: '1rem' }}>Submit</Button>
+          <Collapse isOpen={isOpenSubmit}>
             <FormGroup>
               <Label for="accountPubKey">Public key</Label>
               <Input type="pubkey" name="pubkey" id="accountPubKey"/>
