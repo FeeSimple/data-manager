@@ -21,7 +21,7 @@ const FloorplanDetails = ({
       <Container>
         <Row>
           <Col>
-            <h3 className="float-left">{' '}New Floorplan</h3>
+            <h3 className="float-left">{' '}Floorplan</h3>
           </Col>
         </Row>
       </Container>
@@ -141,22 +141,24 @@ const FloorplanDetails = ({
             />
           </div>
         </div>
-        <div className="form-group row">
-          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <Dropzone
-              multiple={false}
-              accept="image/*"
-              onDrop={onImageDrop}
-              className='dpz-default d-flex justify-content-center align-items-center'
-              acceptClassName='dpz-accepted'
-              activeClassName='dpc-active'
-              disabledClassName='dpz-disabled'
-              rejectClassName='dpz-rejected'
-            >
-              <p>Drag and drop a property image, such as a floorplan.</p>
-            </Dropzone>
+        { mode === EDITING &&
+          <div className="form-group row">
+            <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+              <Dropzone
+                multiple={false}
+                accept="image/*"
+                onDrop={onImageDrop}
+                className='dpz-default d-flex justify-content-center align-items-center'
+                acceptClassName='dpz-accepted'
+                activeClassName='dpc-active'
+                disabledClassName='dpz-disabled'
+                rejectClassName='dpz-rejected'
+              >
+                <p>Drag and drop a property image, such as a floorplan.</p>
+              </Dropzone>
+            </div>
           </div>
-        </div>
+        }
         <div className="form-group m-t-50 row">
           <div className="col-md-5 col-lg-4 offset-md-1 offset-lg-2 col-6">
             <button

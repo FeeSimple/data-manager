@@ -3,18 +3,17 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Table from './Table'
 import { FLOORPLAN, FSMGRCONTRACT } from '../../../utils/consts'
-import {
-  addFloorplans,
-  setLoading
-} from '../../../actions/index'
+import { addFloorplans } from '../../../actions/index'
 
 
 class FloorplansContainer extends Component {
   async componentDidMount () {
-    const { eosClient, accountData, addFloorplans } = this.props
+    const { eosClient, accountData, addFloorplans, properties } = this.props
     const propertyId = this.props.match.params.id
 
-    setLoading(true)
+    if(properties.floorplans && Object.keys(properties.floorplans).length > 0)
+      return // Don't fetch data again if we already have it.
+
     const { rows } = await eosClient.getTableRows(
       true,
       FSMGRCONTRACT,
@@ -22,7 +21,6 @@ class FloorplansContainer extends Component {
       FLOORPLAN
     )
     addFloorplans(propertyId, rows)
-    setLoading(false)
   }
 
   render() {

@@ -88,9 +88,12 @@ class FloorplanDetailsContainer extends Component {
   }
 
   render() {
-    const { isCreating, floorplans, id } = this.props
+    const { isCreating, properties } = this.props
+    const { id, floorplanId } = this.props.match.params
+    const { floorplans } = properties[id]
+
     const mode = isCreating ? CREATING : this.state.mode
-    let floorplan = mode === EDITING || mode === CREATING  ? this.state.floorplan : floorplans[id]
+    let floorplan = mode === EDITING || mode === CREATING  ? this.state.floorplan : floorplans[floorplanId]
     return (
       <div>
         {typeof floorplan === 'undefined' && <h1 className="text-center my-5 py-5">404 - Floorplan not found</h1>}
@@ -134,8 +137,8 @@ const newFloorplan = () => ({
   deposit: 0
 })
 
-function mapStateToProps({ floorplans, eosClient, scatter, contracts, accountData }){
-  return { floorplans, eosClient, scatter, contracts, accountData }
+function mapStateToProps({ eosClient, scatter, contracts, accountData, properties }){
+  return { properties, eosClient, scatter, contracts, accountData }
 }
 
 export default withRouter(connect(

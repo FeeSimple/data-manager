@@ -72,7 +72,7 @@ export default (props) => {
                       <tbody>
                         {property.floorplans && Object.keys(property.floorplans).length > 0  &&
                           Object.keys(property.floorplans).map(floorplanId => (
-                              <FloorplanRow key={floorplanId} floorplan={property.floorplans[floorplanId]} />
+                              <FloorplanRow key={floorplanId} floorplan={property.floorplans[floorplanId]} property={property} />
                             )
                           )
                         }
