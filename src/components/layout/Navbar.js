@@ -21,7 +21,6 @@ class NavbarContainer extends Component {
     const { eosClient, accountData } = this.props
     let account = accountData.active
     eosClient.getAccount(account).then(result => {
-      console.log('getAccount: ', result)
       const created = result.created
       const ram = result.ram_quota
       const ramAvailable = beautifyRam(result.ram_quota - result.ram_usage)
@@ -41,6 +40,29 @@ class NavbarContainer extends Component {
 
       this.setState({ data: info })
     })
+  }
+
+  beautifyRam(ram) {
+    let cnt = 0;
+    while (cnt < 3 && ram >= 1024) {
+      ram = ram/1024;
+      cnt++;
+    }
+    ram = new Intl.NumberFormat().format(ram);
+    if (cnt === 0) {
+      ram = ram.toString() + " Byte";
+    }
+    else if (cnt === 1) {
+      ram = ram.toString() + " KB";
+    }
+    else if (cnt === 2) {
+      ram = ram.toString() + " MB";
+    }
+    else if (cnt === 3) {
+      ram = ram.toString() + " GB";
+    }
+
+    return ram;
   }
 
   render() {

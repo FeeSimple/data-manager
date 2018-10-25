@@ -7,8 +7,24 @@ import {
   SET_NETWORK,
   SET_ACTIVE,
   SET_INFO,
-  SET_LOADING
+  SET_LOADING,
+  SET_FLOORPLAN,
+  ADD_FLOORPLANS,
 } from '../actions/types'
+
+export function addFloorplans (floorplans) {
+  return {
+    type: ADD_FLOORPLANS,
+    payload: { floorplans }
+  }
+}
+
+export function setFloorplan (propertyId, floorplan) {
+  return {
+    type: SET_FLOORPLAN,
+    payload: { propertyId, floorplan }
+  }
+}
 
 export function setLoading (isLoading) {
   return {

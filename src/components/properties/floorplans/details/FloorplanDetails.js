@@ -1,32 +1,34 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
 
 export const READING = 'reading'
 export const EDITING = 'editing'
 export const CREATING = 'creating'
 
-const PropertyDetails = ({
-  property,
+const FloorplanDetails = ({
+  floorplan,
   mode,
   onEditClick,
   onCreateClick,
   onSaveClick,
-  onChange
+  onChange,
+  onImageDrop
 }) => (
   <div>
     <div className="top-bar">
       <Container>
         <Row>
           <Col>
-            <h3 className="float-left">New Property</h3>
+            <h3 className="float-left">{' '}Floorplan</h3>
           </Col>
         </Row>
       </Container>
     </div>
     <br />
     <Container>
-      <form className="">
+    <form className="">
         <div className="form-group row">
           <div className="col-12">
             <h3 className="bar-header">Details</h3>
@@ -40,89 +42,130 @@ const PropertyDetails = ({
               type="text"
               className="form-control"
               name='name'
-              value={property.name}
+              value={floorplan.name}
               onChange={onChange}
               disabled={mode === READING} />
           </div>
         </div>
         <div className="form-group row">
           <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">Address 1</label>
+            <label className="form-label">Bedrooms</label>
             <input
-              id='address_1'
+              id='bedrooms'
+              name='bedrooms'
               className="form-control"
-              placeholder=""
-              name='address_1'
-              type='textarea'
-              onChange={onChange}
-              value={property.address_1}
-              disabled={mode === READING}
-              />
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">Address 2</label>
-            <input
-              id='address_2'
-              className="form-control"
-              name='address_2'
-              type='textarea'
-              value={property.address_2}
-              onChange={onChange}
-              disabled={mode === READING}
-              />
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">City</label>
-            <input
-              id='city'
-              className="form-control"
-              name='city'
-              type="text"
+              type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={property.city}
+              value={floorplan.bedrooms}
             />
           </div>
         </div>
         <div className="form-group row">
           <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">Postal Code</label>
+            <label className="form-label">Bathrooms</label>
             <input
-              id='postal_code'
-              name='postal_code'
+              id='bathrooms'
+              name='bathrooms'
               className="form-control"
-              type="text"
+              type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={property.postal_code}
+              value={floorplan.bathrooms}
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-5 col-lg-4 offset-md-1 offset-lg-2">
+            <label className="form-label">Sq. Ft. Min</label>
+            <input
+              id='sq_ft_min'
+              name='sq_ft_min'
+              className="form-control"
+              type="number"
+              disabled={mode === READING}
+              onChange={onChange}
+              value={floorplan.sq_ft_min}
+            />
+          </div>
+          <div className="col-12 col-md-5 col-lg-4">
+            <label className="form-label">Sq. Ft. Max</label>
+            <input
+              id='sq_ft_max'
+              name='sq_ft_max'
+              className="form-control"
+              type="number"
+              disabled={mode === READING}
+              onChange={onChange}
+              value={floorplan.sq_ft_max}
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-5 col-lg-4 offset-md-1 offset-lg-2">
+            <label className="form-label">Rent Min</label>
+            <input
+              id='rent_min'
+              name='rent_min'
+              className="form-control"
+              type="number"
+              disabled={mode === READING}
+              onChange={onChange}
+              value={floorplan.rent_min}
+            />
+          </div>
+          <div className="col-12 col-md-5 col-lg-4">
+            <label className="form-label">Rent Max</label>
+            <input
+              id='rent_max'
+              name='rent_max'
+              className="form-control"
+              type="number"
+              disabled={mode === READING}
+              onChange={onChange}
+              value={floorplan.rent_max}
             />
           </div>
         </div>
         <div className="form-group row">
           <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">Unit Count</label>
+            <label className="form-label">Deposit</label>
             <input
-              id='unit_count'
-              name='unit_count'
+              id='deposit'
+              name='deposit'
               className="form-control"
-              type="text"
+              type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={property.unit_count}
+              value={floorplan.deposit}
             />
           </div>
         </div>
+        { mode === EDITING &&
+          <div className="form-group row">
+            <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+              <Dropzone
+                multiple={false}
+                accept="image/*"
+                onDrop={onImageDrop}
+                className='dpz-default d-flex justify-content-center align-items-center'
+                acceptClassName='dpz-accepted'
+                activeClassName='dpc-active'
+                disabledClassName='dpz-disabled'
+                rejectClassName='dpz-rejected'
+              >
+                <p>Drag and drop a property image, such as a floorplan.</p>
+              </Dropzone>
+            </div>
+          </div>
+        }
         <div className="form-group m-t-50 row">
           <div className="col-md-5 col-lg-4 offset-md-1 offset-lg-2 col-6">
             <button
               type="button"
               className="btn btn-base w100 form-btn"
               hidden={mode !== READING}
-              onClick={(e) => onEditClick(e, property)}
+              onClick={(e) => onEditClick(e, floorplan)}
             >
               Edit
             </button>
@@ -138,13 +181,13 @@ const PropertyDetails = ({
               type="button"
               className="btn btn-base w100 form-btn"
               hidden={mode !== CREATING}
-              onClick={(e) => onCreateClick(e, property)}
+              onClick={(e) => onCreateClick(e, floorplan)}
             >
               Create
             </button>
           </div>
           <div className="col-md-5 col-lg-4 col-6">
-            <Link to={mode === CREATING ? '/' : `/${property.id}`}>
+            <Link to={mode === CREATING ? '/' : `/${floorplan.id}`}>
               <button
                 type="button"
                 className="btn btn-gray-o w100 form-btn"
@@ -159,4 +202,4 @@ const PropertyDetails = ({
   </div>
 )
 
-export default PropertyDetails
+export default FloorplanDetails
