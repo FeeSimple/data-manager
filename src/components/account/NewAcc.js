@@ -38,11 +38,11 @@ const NewAccForm = props => {
           </FormGroup>
           <Button 
             type="submit" color='secondary' className="btn-base btn-home"
-            onClick={handleToggleSubmit}
+            active={!errors.buttonSubmitActive}
           >
             Submit
           </Button>
-          <Collapse isOpen={isOpenSubmit}>
+          <Collapse isOpen={!(errors.accountName && touched.accountName) && isOpenSubmit}>
             <FormGroup>
               <Label for="accountPubKey">Public key</Label>
               <Input type="pubkey" name="pubkey" id="accountPubKey"/>
@@ -66,11 +66,18 @@ const EnhancedNewAccForm = withFormik({
   mapPropsToValues: () => ({ accountName: '' }),
   validate: values => {
     let errors = {}
+    errors.buttonSubmitActive = false
+    const accountRegex = /^[a-z1-5]*$/
     if (!values.accountName) {
       errors.accountName = 'Required'
     } else if (values.accountName.length !== 12) {
-      errors.accountName = 'Invalid account name'
+      errors.accountName = 'Must be 12 symbols long'
+    } else if (!accountRegex.test(values.accountName)) {
+      errors.accountName = 'Must include symbols a-z 1-5'
+    } else {
+      errors.buttonSubmitActive = true
     }
+    console.log('account validation error: ', errors)
     return errors
   },
 
