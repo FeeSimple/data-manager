@@ -14,7 +14,7 @@ class FloorplanDetailsContainer extends Component {
   }
 
   onImageDrop = (files) => {
-    console.info('got file')
+    console.info('user selected a file to upload')
   }
 
   edit = (e,floorplan) => {
