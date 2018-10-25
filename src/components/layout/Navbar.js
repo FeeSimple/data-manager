@@ -13,8 +13,8 @@ import {
 
 class NavbarContainer extends Component {
   constructor() {
-    super();
-    this.state = {data: []};
+    super()
+    this.state = {data: []}
   }
 
   componentDidMount() {
@@ -43,26 +43,26 @@ class NavbarContainer extends Component {
   }
 
   beautifyRam(ram) {
-    let cnt = 0;
+    let cnt = 0
     while (cnt < 3 && ram >= 1024) {
-      ram = ram/1024;
-      cnt++;
+      ram = ram/1024
+      cnt++
     }
-    ram = new Intl.NumberFormat().format(ram);
+    ram = new Intl.NumberFormat().format(ram)
     if (cnt === 0) {
-      ram = ram.toString() + " Byte";
+      ram = ram.toString() + " Byte"
     }
     else if (cnt === 1) {
-      ram = ram.toString() + " KB";
+      ram = ram.toString() + " KB"
     }
     else if (cnt === 2) {
-      ram = ram.toString() + " MB";
+      ram = ram.toString() + " MB"
     }
     else if (cnt === 3) {
-      ram = ram.toString() + " GB";
+      ram = ram.toString() + " GB"
     }
 
-    return ram;
+    return ram
   }
 
   render() {

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
 
 const meterControl = 'low="0.5" optimum="0.6" high="0.3"'
@@ -33,7 +32,7 @@ const UserDetails = ({
             <h3 className="user-detail-label">Creation date</h3>
           </Col>
           <Col>
-            <h3 
+            <h3
               className="user-detail-label">{user.created}</h3>
           </Col>
         </Row>
@@ -42,7 +41,7 @@ const UserDetails = ({
             <h3 className="user-detail-label">Balance</h3>
           </Col>
           <Col>
-            <h3 
+            <h3
               className="user-detail-label">{user.balance}</h3>
           </Col>
         </Row>
