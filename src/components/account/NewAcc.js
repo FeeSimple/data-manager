@@ -7,6 +7,7 @@ import {
   Button, Form, FormGroup, Label, Input, FormText, Alert, Collapse
 } from 'reactstrap'
 import { withFormik } from 'formik'
+import getKeyPair from '../../utils/getKeyPair'
 
 const NewAccForm = props => {
   const { 
@@ -16,7 +17,9 @@ const NewAccForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    isOpen, handleToggle, isOpenSubmit, handleToggleSubmit, handleCreateNewAccount 
+    isOpen, handleToggle, isOpenAccountKey, 
+    handleToggleAccountKey, handleCreateNewAccount ,
+    accountPubKey, accountPrivKey
   } = props
 
   return (
@@ -36,20 +39,17 @@ const NewAccForm = props => {
               placeholder="must be 12 symbols long and include symbols a-z 1-5"
             />
           </FormGroup>
-          <Button 
-            type="submit" color='secondary' className="btn-base btn-home"
-            active={!errors.buttonSubmitActive}
-          >
+          <Button type="submit" color='secondary' className="btn-base btn-home">
             Submit
           </Button>
-          <Collapse isOpen={!(errors.accountName && touched.accountName) && isOpenSubmit}>
+          <Collapse isOpen={isOpenAccountKey}>
             <FormGroup>
-              <Label for="accountPubKey">Public key</Label>
-              <Input type="pubkey" name="pubkey" id="accountPubKey"/>
+              <Label>Public key</Label>
+              <Input type="text" id="accountPubKey" value={accountPubKey} readOnly/>
             </FormGroup>
             <FormGroup>
-              <Label for="accountPrivKey">Private key</Label>
-              <Input type="privkey" name="privkey" id="accountPrivKey"/>
+              <Label>Private key</Label>
+              <Input type="text" id="accountPrivKey" value={accountPrivKey} readOnly/>
             </FormGroup>
             <Alert color="danger">
               Please make sure to store your private key somewhere safe
@@ -66,7 +66,7 @@ const EnhancedNewAccForm = withFormik({
   mapPropsToValues: () => ({ accountName: '' }),
   validate: values => {
     let errors = {}
-    errors.buttonSubmitActive = false
+    // errors.buttonSubmitActive = false
     const accountRegex = /^[a-z1-5]*$/
     if (!values.accountName) {
       errors.accountName = 'Required'
@@ -75,14 +75,23 @@ const EnhancedNewAccForm = withFormik({
     } else if (!accountRegex.test(values.accountName)) {
       errors.accountName = 'Must include symbols a-z 1-5'
     } else {
-      errors.buttonSubmitActive = true
+      // errors.buttonSubmitActive = true
     }
-    console.log('account validation error: ', errors)
+    // console.log('account validation error: ', errors)
     return errors
   },
 
-  handleSubmit: ({ accountName }, { props }) => {
-    props.handleCreateNewAccount(accountName)
+  handleSubmit: async({ accountName }, { props }) => {
+    let keyPair = await getKeyPair()
+    console.log('handleSubmit: pub: ', keyPair.pub, ', private: ', keyPair.priv)
+
+    const err = await props.handleCreateNewAccount(accountName, keyPair.priv, keyPair.pub)
+    if (err) {
+      console.log('handleSubmit - err:', err)
+    } else {
+      console.log('handleSubmit - ok')
+    }
+    
   },
 
   displayName: 'NewAccForm' // helps with React DevTools

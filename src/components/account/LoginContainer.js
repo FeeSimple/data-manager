@@ -4,7 +4,10 @@ import ecc from 'eosjs-ecc'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
-import { getImportedKeyEos, getNetworkData } from '../../utils/index'
+import { 
+  getImportedKeyEos, getNetworkData, 
+  eosAdminAccount, getEosAdmin 
+} from '../../utils/index'
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
 import NewAcc from './NewAcc'
@@ -24,7 +27,9 @@ class LoginContainer extends Component {
     showNewAccModal: false,
     showNewAccSubmitModal: false,
     availableAccounts: [],
-    privKey: null
+    privKey: null,
+    accountPubKey: '',
+    accountPrivKey: ''
   }
 
   handleImportPrivKey = (privKey) => {
@@ -40,9 +45,42 @@ class LoginContainer extends Component {
     })
   }
 
-  handleCreateNewAccount = (accountName) => {
-    console.log('handleCreateNewAccount: ', accountName)
-    const  { eosClient }  = this.props
+  handleCreateNewAccount = async (accountName, accountPrivKey, accountPubKey) => {
+    const eosAdmin = getEosAdmin(Eos)
+    try {
+      const result = await eosAdmin.transaction(tr => {
+        tr.newaccount({
+            creator: eosAdminAccount.name,
+            name: accountName,
+            owner: accountPubKey,
+            active: accountPubKey
+        });
+    
+        tr.buyrambytes({
+            payer: eosAdminAccount.name,
+            receiver: accountName,
+            bytes: 10240
+        });
+    
+        tr.delegatebw({
+            from: eosAdminAccount.name,
+            receiver: accountName,
+            stake_net_quantity: '10.0000 XFS',
+            stake_cpu_quantity: '10.0000 XFS',
+            transfer: 0
+        });
+      })
+
+      this.setState({showNewAccSubmitModal: true})
+      this.setState({accountPubKey: accountPubKey, accountPrivKey: accountPrivKey})
+      return null
+    } catch (err) {
+      this.setState({showNewAccSubmitModal: true})
+      this.setState({accountPubKey: accountPubKey, accountPrivKey: accountPrivKey})
+      // Without JSON.parse(), it never works!
+      err = JSON.parse(err)
+      return (err.error.what || "Account creation failed")
+    }
   }
 
   handleScatterClick = async () => {
@@ -173,9 +211,11 @@ class LoginContainer extends Component {
         <NewAcc
           isOpen={this.state.showNewAccModal}
           handleToggle={this.handleToggleNewAcc}
-          isOpenSubmit={this.state.showNewAccSubmitModal}
-          handleToggleSubmit={this.handleToggleNewAccSubmit}
+          isOpenAccountKey={this.state.showNewAccSubmitModal}
+          handleToggleAccountKey={this.handleToggleNewAccSubmit}
           handleCreateNewAccount={this.handleCreateNewAccount}
+          accountPubKey = {this.state.accountPubKey}
+          accountPrivKey = {this.state.accountPrivKey}
         />
       </div>
     )
