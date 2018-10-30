@@ -56,11 +56,12 @@ class LoginContainer extends Component {
   }
 
   handleCreateNewAccount = async (accountName, accountPrivKey, accountPubKey) => {
-    this.setState({isOpenKeyPair: false})
+    // Reset state
     this.setState({
+      isOpenKeyPair: false,
       accountPubKey: '', 
       accountPrivKey: '',
-      newAccountCreationErr: ''
+      newAccountCreationErr: false
     })
 
     const eosAdmin = getEosAdmin(Eos)
@@ -88,20 +89,19 @@ class LoginContainer extends Component {
         });
       })
 
-      this.setState({isOpenKeyPair: true})
       this.setState({
+        isOpenKeyPair: true,
         accountPubKey: accountPubKey, 
         accountPrivKey: accountPrivKey,
-        newAccountCreationErr: ''
+        newAccountCreationErr: false
       })
-      return null
     } catch (err) {
       // Without JSON.parse(), it never works!
       err = JSON.parse(err)
       const errMsg = (err.error.what || "Account creation failed")
       
-      this.setState({isOpenKeyPair: false})
       this.setState({
+        isOpenKeyPair: false,
         accountPubKey: '', 
         accountPrivKey: '',
         newAccountCreationErr: errMsg

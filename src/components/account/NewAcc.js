@@ -54,11 +54,14 @@ const NewAccForm = props => {
               <Label>Private key</Label>
               <Input type="text" id="accountPrivKey" value={accountPrivKey} readOnly/>
             </FormGroup>
-            <Alert color="danger">
-              Please make sure to store your private key somewhere safe
+            <Alert color="success">
+              <h4 className="alert-heading">Account created!</h4>
+              <p>
+                Please make sure to store your private key somewhere safe
+              </p>
             </Alert>
           </Collapse>
-          <Collapse isOpen={touched.accountName && !errors.accountName && newAccountCreationErr}>
+          <Collapse isOpen={newAccountCreationErr}>
             <Alert color="danger">
               {newAccountCreationErr}
             </Alert>
