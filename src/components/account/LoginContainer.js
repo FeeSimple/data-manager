@@ -25,11 +25,12 @@ class LoginContainer extends Component {
   state={
     showSelectAccModal: false,
     showNewAccModal: false,
-    showNewAccSubmitModal: false,
+    isOpenKeyPair: false,
     availableAccounts: [],
     privKey: null,
     accountPubKey: '',
-    accountPrivKey: ''
+    accountPrivKey: '',
+    newAccountCreationErr: ''
   }
 
   handleImportPrivKey = (privKey) => {
@@ -45,7 +46,23 @@ class LoginContainer extends Component {
     })
   }
 
+  handleCleanup = () => {
+    this.setState({
+      accountPubKey: '', 
+      accountPrivKey: '',
+      newAccountCreationErr: ''
+    })
+    console.log('handleCleanup:', this.state.newAccountCreationErr)
+  }
+
   handleCreateNewAccount = async (accountName, accountPrivKey, accountPubKey) => {
+    this.setState({isOpenKeyPair: false})
+    this.setState({
+      accountPubKey: '', 
+      accountPrivKey: '',
+      newAccountCreationErr: ''
+    })
+
     const eosAdmin = getEosAdmin(Eos)
     try {
       const result = await eosAdmin.transaction(tr => {
@@ -71,15 +88,24 @@ class LoginContainer extends Component {
         });
       })
 
-      this.setState({showNewAccSubmitModal: true})
-      this.setState({accountPubKey: accountPubKey, accountPrivKey: accountPrivKey})
+      this.setState({isOpenKeyPair: true})
+      this.setState({
+        accountPubKey: accountPubKey, 
+        accountPrivKey: accountPrivKey,
+        newAccountCreationErr: ''
+      })
       return null
     } catch (err) {
-      this.setState({showNewAccSubmitModal: true})
-      this.setState({accountPubKey: accountPubKey, accountPrivKey: accountPrivKey})
       // Without JSON.parse(), it never works!
       err = JSON.parse(err)
-      return (err.error.what || "Account creation failed")
+      const errMsg = (err.error.what || "Account creation failed")
+      
+      this.setState({isOpenKeyPair: false})
+      this.setState({
+        accountPubKey: '', 
+        accountPrivKey: '',
+        newAccountCreationErr: errMsg
+      })
     }
   }
 
@@ -185,12 +211,6 @@ class LoginContainer extends Component {
     this.setState({showNewAccModal: !showNewAccModal})
   }
 
-  handleToggleNewAccSubmit = () => {
-    const { showNewAccSubmitModal } = this.state
-    let { eosClient } = this.props
-    this.setState({showNewAccSubmitModal: !showNewAccSubmitModal})
-  }
-
   render () {
     const accounts = this.state.availableAccounts
     const { scatter } = this.props
@@ -211,11 +231,12 @@ class LoginContainer extends Component {
         <NewAcc
           isOpen={this.state.showNewAccModal}
           handleToggle={this.handleToggleNewAcc}
-          isOpenAccountKey={this.state.showNewAccSubmitModal}
-          handleToggleAccountKey={this.handleToggleNewAccSubmit}
+          isOpenKeyPair={this.state.isOpenKeyPair}
           handleCreateNewAccount={this.handleCreateNewAccount}
+          handleCleanup={this.handleCleanup}
           accountPubKey = {this.state.accountPubKey}
           accountPrivKey = {this.state.accountPrivKey}
+          newAccountCreationErr = {this.state.newAccountCreationErr}
         />
       </div>
     )

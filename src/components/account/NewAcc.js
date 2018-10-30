@@ -17,9 +17,9 @@ const NewAccForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    isOpen, handleToggle, isOpenAccountKey, 
-    handleToggleAccountKey, handleCreateNewAccount ,
-    accountPubKey, accountPrivKey
+    isOpen, handleToggle, 
+    isOpenKeyPair, handleCreateNewAccount ,
+    accountPubKey, accountPrivKey, newAccountCreationErr
   } = props
 
   return (
@@ -39,10 +39,13 @@ const NewAccForm = props => {
               placeholder="must be 12 symbols long and include symbols a-z 1-5"
             />
           </FormGroup>
-          <Button type="submit" color='secondary' className="btn-base btn-home">
+          <Button 
+            type="submit" color='secondary' className="btn-base btn-home"
+            disabled={touched.accountName && errors.accountName}
+          >
             Submit
           </Button>
-          <Collapse isOpen={isOpenAccountKey}>
+          <Collapse isOpen={isOpenKeyPair}>
             <FormGroup>
               <Label>Public key</Label>
               <Input type="text" id="accountPubKey" value={accountPubKey} readOnly/>
@@ -53,6 +56,11 @@ const NewAccForm = props => {
             </FormGroup>
             <Alert color="danger">
               Please make sure to store your private key somewhere safe
+            </Alert>
+          </Collapse>
+          <Collapse isOpen={touched.accountName && !errors.accountName && newAccountCreationErr}>
+            <Alert color="danger">
+              {newAccountCreationErr}
             </Alert>
           </Collapse>
         </Form>
