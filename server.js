@@ -1,28 +1,25 @@
-const http = require('http')
-const https = require('https')
 const express = require('express')
-const redirectHttps = require('redirect-https')
 
-const PROD = false
-const lex = require('greenlock-express').create({
+const environment = process.env.ENVIRONMENT
+if(environment !== 'PRODUCTION' && environment !== 'TESTING') {
+  console.error('Error: .env variable ENVIRONMENT should be either PRODUCTION or TESTING')
+  process.exit()
+}
+
+const PROD = environment === 'PRODUCTION'? true : false
+const app = express()
+app.use(express.static('build'))
+
+require('greenlock-express').create({
   version: 'draft-11',
   server: PROD
     ? 'https://acme-v02.api.letsencrypt.org/directory'
     : 'https://acme-staging-v02.api.letsencrypt.org/directory',
-  approveDomains: (opts, certs, cb) => {
-    if (certs) {
-      opts.domains = ['feesimple.io', 'www.feesimple.io']
-    } else {
-      opts.email = 'mtsalenc@feesimple.io'
-      opts.agreeTos = true
-    }
-    cb(null, { options: opts, certs: certs })
-  }
-})
+  configDir: '~/.config/acme/',
+  email: 'mtsalenc@gmail.com',
+  approveDomains: [ 'fsmanager.io', 'www.fsmanager.io' ],
+  agreeTos: true,
+  app,
+  debug: true
+}).listen(80, 443)
 
-const middlewareWrapper = lex.middleware
-const app = express()
-app.use(express.static('build'))
-
-http.createServer(lex.middleware(redirectHttps())).listen(80)
-https.createServer(middlewareWrapper(app)).listen(443)
