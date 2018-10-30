@@ -5,8 +5,9 @@ For development, we need a testnet and node with http api endpoint enabled. You 
 On the project root:
 
 1. `yarn`
-2. `yarn start`
+2. Duplicate `.env.example` and rename it to `.env`. Set variables, if any.
+3. `yarn start`
 
 # Production instructions
 
-For production use, run the `build` with either `npm build` or `yarn build` and start the server by running `node server.js`. You may use a package manager such as `pm2`.
+For production use, run the `build` script with `yarn build` and start the server by running the `prod` script with `yarn run prod`.
