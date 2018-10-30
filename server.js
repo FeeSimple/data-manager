@@ -19,7 +19,6 @@ require('greenlock-express').create({
   email: 'mtsalenc@gmail.com',
   approveDomains: [ 'fsmanager.io', 'www.fsmanager.io' ],
   agreeTos: true,
-  app,
-  debug: true
+  app
 }).listen(80, 443)
 
