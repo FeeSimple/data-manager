@@ -8,6 +8,7 @@ import {
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import getKeyPair from '../../utils/getKeyPair'
+import Spinner from 'react-spinkit'
 
 const NewAccForm = props => {
   const { 
@@ -19,7 +20,8 @@ const NewAccForm = props => {
     handleSubmit,
     isOpen, handleToggle, 
     isOpenKeyPair, handleCreateNewAccount ,
-    accountPubKey, accountPrivKey, newAccountCreationErr
+    accountPubKey, accountPrivKey, newAccountCreationErr,
+    isProcessing
   } = props
 
   return (
@@ -43,7 +45,12 @@ const NewAccForm = props => {
             type="submit" color='secondary' className="btn-base btn-home"
             disabled={touched.accountName && errors.accountName}
           >
-            Submit
+            {isProcessing ?
+              <Spinner name="three-bounce" color="red"/>
+            :
+              <span>Submit</span>
+            }
+            
           </Button>
           <Collapse isOpen={isOpenKeyPair}>
             <FormGroup>
@@ -94,8 +101,6 @@ const EnhancedNewAccForm = withFormik({
 
   handleSubmit: async({ accountName }, { props }) => {
     let keyPair = await getKeyPair()
-    console.log('handleSubmit: pub: ', keyPair.pub, ', private: ', keyPair.priv)
-
     const err = await props.handleCreateNewAccount(accountName, keyPair.priv, keyPair.pub)
     if (err) {
       console.log('handleSubmit - err:', err)

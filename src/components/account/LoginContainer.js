@@ -30,7 +30,8 @@ class LoginContainer extends Component {
     privKey: null,
     accountPubKey: '',
     accountPrivKey: '',
-    newAccountCreationErr: ''
+    newAccountCreationErr: false,
+    isProcessing: false
   }
 
   handleImportPrivKey = (privKey) => {
@@ -61,7 +62,8 @@ class LoginContainer extends Component {
       isOpenKeyPair: false,
       accountPubKey: '', 
       accountPrivKey: '',
-      newAccountCreationErr: false
+      newAccountCreationErr: false,
+      isProcessing: true
     })
 
     const eosAdmin = getEosAdmin(Eos)
@@ -93,7 +95,8 @@ class LoginContainer extends Component {
         isOpenKeyPair: true,
         accountPubKey: accountPubKey, 
         accountPrivKey: accountPrivKey,
-        newAccountCreationErr: false
+        newAccountCreationErr: false,
+        isProcessing: false
       })
     } catch (err) {
       // Without JSON.parse(), it never works!
@@ -104,7 +107,8 @@ class LoginContainer extends Component {
         isOpenKeyPair: false,
         accountPubKey: '', 
         accountPrivKey: '',
-        newAccountCreationErr: errMsg
+        newAccountCreationErr: errMsg,
+        isProcessing: false
       })
     }
   }
@@ -237,6 +241,7 @@ class LoginContainer extends Component {
           accountPubKey = {this.state.accountPubKey}
           accountPrivKey = {this.state.accountPrivKey}
           newAccountCreationErr = {this.state.newAccountCreationErr}
+          isProcessing = {this.state.isProcessing}
         />
       </div>
     )
