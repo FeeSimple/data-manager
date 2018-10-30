@@ -16,7 +16,7 @@ require('greenlock-express').create({
     ? 'https://acme-v02.api.letsencrypt.org/directory'
     : 'https://acme-staging-v02.api.letsencrypt.org/directory',
   configDir: '~/.config/acme/',
-  email: 'mtsalenc@gmail.com',
+  email: 'tim@feesimple.io',
   approveDomains: [ 'fsmanager.io', 'www.fsmanager.io' ],
   agreeTos: true,
   app
