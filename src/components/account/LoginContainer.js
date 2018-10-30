@@ -4,9 +4,14 @@ import ecc from 'eosjs-ecc'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
-import { getImportedKeyEos, getNetworkData } from '../../utils/index'
+import { 
+  getImportedKeyEos, getNetworkData, 
+  eosAdminAccount, getEosAdmin 
+} from '../../utils/index'
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
+import NewAcc from './NewAcc'
+import getKeyPair from '../../utils/getKeyPair'
 import {
   setActive,
   setInfo,
@@ -20,8 +25,14 @@ import {
 class LoginContainer extends Component {
   state={
     showSelectAccModal: false,
+    showNewAccModal: false,
+    isOpenKeyPair: false,
     availableAccounts: [],
-    privKey: null
+    privKey: null,
+    accountPubKey: '',
+    accountPrivKey: '',
+    newAccountCreationErr: false,
+    isProcessing: false
   }
 
   handleImportPrivKey = (privKey) => {
@@ -35,6 +46,76 @@ class LoginContainer extends Component {
       })
       this.handleToggleSelAcc()
     })
+  }
+
+  handleCleanup = () => {
+    this.setState({
+      accountPubKey: '', 
+      accountPrivKey: '',
+      newAccountCreationErr: ''
+    })
+    console.log('handleCleanup:', this.state.newAccountCreationErr)
+  }
+
+  handleCreateNewAccount = async (accountName) => {
+    // Reset state
+    this.setState({
+      isOpenKeyPair: false,
+      accountPubKey: '', 
+      accountPrivKey: '',
+      newAccountCreationErr: false,
+      isProcessing: true
+    })
+    
+    const keyPair = await getKeyPair()
+    const accountPubKey = keyPair.pub
+    const accountPrivKey = keyPair.priv
+    console.log('key pair:', keyPair)
+    const eosAdmin = getEosAdmin(Eos)
+    try {
+      const result = await eosAdmin.transaction(tr => {
+        tr.newaccount({
+            creator: eosAdminAccount.name,
+            name: accountName,
+            owner: accountPubKey,
+            active: accountPubKey
+        });
+    
+        tr.buyrambytes({
+            payer: eosAdminAccount.name,
+            receiver: accountName,
+            bytes: 10240
+        });
+    
+        tr.delegatebw({
+            from: eosAdminAccount.name,
+            receiver: accountName,
+            stake_net_quantity: '10.0000 XFS',
+            stake_cpu_quantity: '10.0000 XFS',
+            transfer: 0
+        });
+      })
+
+      this.setState({
+        isOpenKeyPair: true,
+        accountPubKey: accountPubKey, 
+        accountPrivKey: accountPrivKey,
+        newAccountCreationErr: false,
+        isProcessing: false
+      })
+    } catch (err) {
+      // Without JSON.parse(), it never works!
+      err = JSON.parse(err)
+      const errMsg = (err.error.what || "Account creation failed")
+      
+      this.setState({
+        isOpenKeyPair: false,
+        accountPubKey: '', 
+        accountPrivKey: '',
+        newAccountCreationErr: errMsg,
+        isProcessing: false
+      })
+    }
   }
 
   handleScatterClick = async () => {
@@ -55,6 +136,11 @@ class LoginContainer extends Component {
       usingScatter: true
     })
     this.handleToggleSelAcc()
+  }
+
+  handleNewAccountClick = async () => {
+    
+    this.handleToggleNewAcc()
   }
 
   handleSelectAcc = async (account) => {
@@ -129,6 +215,11 @@ class LoginContainer extends Component {
     this.setState({showSelectAccModal: !showSelectAccModal})
   }
 
+  handleToggleNewAcc = () => {
+    const { showNewAccModal } = this.state
+    this.setState({showNewAccModal: !showNewAccModal})
+  }
+
   render () {
     const accounts = this.state.availableAccounts
     const { scatter } = this.props
@@ -138,12 +229,24 @@ class LoginContainer extends Component {
           handleImportPrivKey={this.handleImportPrivKey}
           onScatterClick={this.handleScatterClick}
           scatterDetected={Object.keys(scatter).length > 0}
+          onNewAccountClick={this.handleNewAccountClick}
         />
         <SelectAcc
           isOpen={this.state.showSelectAccModal}
           handleToggle={this.handleToggleSelAcc}
           onAccountSelect={this.handleSelectAcc}
           accounts={accounts}
+        />
+        <NewAcc
+          isOpen={this.state.showNewAccModal}
+          handleToggle={this.handleToggleNewAcc}
+          isOpenKeyPair={this.state.isOpenKeyPair}
+          handleCreateNewAccount={this.handleCreateNewAccount}
+          handleCleanup={this.handleCleanup}
+          accountPubKey = {this.state.accountPubKey}
+          accountPrivKey = {this.state.accountPrivKey}
+          newAccountCreationErr = {this.state.newAccountCreationErr}
+          isProcessing = {this.state.isProcessing}
         />
       </div>
     )

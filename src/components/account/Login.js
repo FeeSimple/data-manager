@@ -20,6 +20,7 @@ const LoginForm = props => {
     handleBlur,
     handleSubmit,
     onScatterClick,
+    onNewAccountClick,
     scatterDetected
   } = props
 
@@ -47,7 +48,12 @@ const LoginForm = props => {
                   </Button>
                 </Col>
                 <Col xs={12} sm={6}>
-                  <a href="" className="btn btn-base btn-home">Create a New Account</a>
+                  <Button 
+                    onClick={onNewAccountClick} 
+                    className="btn-base btn-home"
+                  >
+                    Create a New Account
+                  </Button>
                 </Col>
               </div>
               <div className="form-group row">

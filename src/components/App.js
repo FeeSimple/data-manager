@@ -3,7 +3,7 @@ import { withRouter, Switch, Route } from 'react-router'
 import { connect } from 'react-redux'
 import GridContainer from './properties/grid'
 import PropertyDetails from './properties/details'
-import UserDetails from './user'
+import UserDetails from './user/detail'
 import Floorplans from './properties/floorplans'
 import FloorplanDetails from './properties/floorplans/details'
 
@@ -18,7 +18,7 @@ class AppContainer extends Component {
           <PropertyDetails isCreating/>
         </Route>
         <Route exact path='/account'>
-          <UserDetails isCreating/>
+          <UserDetails/>
         </Route>
         <Route
           exact

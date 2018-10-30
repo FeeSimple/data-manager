@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getResourceStr } from '../../actions'
+import { getResourceStr } from '../../../actions'
 import UserDetails from './UserDetails'
 
 class UserDetailsContainer extends Component {
