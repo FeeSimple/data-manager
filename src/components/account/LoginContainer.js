@@ -11,6 +11,7 @@ import {
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
 import NewAcc from './NewAcc'
+import getKeyPair from '../../utils/getKeyPair'
 import {
   setActive,
   setInfo,
@@ -56,7 +57,7 @@ class LoginContainer extends Component {
     console.log('handleCleanup:', this.state.newAccountCreationErr)
   }
 
-  handleCreateNewAccount = async (accountName, accountPrivKey, accountPubKey) => {
+  handleCreateNewAccount = async (accountName) => {
     // Reset state
     this.setState({
       isOpenKeyPair: false,
@@ -65,7 +66,11 @@ class LoginContainer extends Component {
       newAccountCreationErr: false,
       isProcessing: true
     })
-
+    
+    const keyPair = await getKeyPair()
+    const accountPubKey = keyPair.pub
+    const accountPrivKey = keyPair.priv
+    console.log('key pair:', keyPair)
     const eosAdmin = getEosAdmin(Eos)
     try {
       const result = await eosAdmin.transaction(tr => {

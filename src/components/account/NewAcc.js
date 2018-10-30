@@ -7,7 +7,6 @@ import {
   Button, Form, FormGroup, Label, Input, FormText, Alert, Collapse
 } from 'reactstrap'
 import { withFormik } from 'formik'
-import getKeyPair from '../../utils/getKeyPair'
 import Spinner from 'react-spinkit'
 
 const NewAccForm = props => {
@@ -100,14 +99,7 @@ const EnhancedNewAccForm = withFormik({
   },
 
   handleSubmit: async({ accountName }, { props }) => {
-    let keyPair = await getKeyPair()
-    const err = await props.handleCreateNewAccount(accountName, keyPair.priv, keyPair.pub)
-    if (err) {
-      console.log('handleSubmit - err:', err)
-    } else {
-      console.log('handleSubmit - ok')
-    }
-    
+    await props.handleCreateNewAccount(accountName)
   },
 
   displayName: 'NewAccForm' // helps with React DevTools
