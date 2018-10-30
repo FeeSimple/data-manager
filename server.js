@@ -1,25 +1,28 @@
-const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const express = require('express')
+const redirectHttps = require('redirect-https')
+
+const PROD = false
+const lex = require('greenlock-express').create({
+  version: 'draft-11',
+  server: PROD
+    ? 'https://acme-v02.api.letsencrypt.org/directory'
+    : 'https://acme-staging-v02.api.letsencrypt.org/directory',
+  approveDomains: (opts, certs, cb) => {
+    if (certs) {
+      opts.domains = ['feesimple.io', 'www.feesimple.io']
+    } else {
+      opts.email = 'mtsalenc@feesimple.io'
+      opts.agreeTos = true
+    }
+    cb(null, { options: opts, certs: certs })
+  }
+})
+
+const middlewareWrapper = lex.middleware
 const app = express()
-app.use('*', ensureSecure)
 app.use(express.static('build'))
 
-const options = {
-  key: fs.readFileSync('./sslcert/privkey.pem', 'utf8'),
-  cert: fs.readFileSync('./sslcert/fullchain.pem', 'utf8')
-}
-
-http.createServer(app).listen(80)
-https.createServer(options, app).listen(443)
-
-function ensureSecure (req, res, next) {
-  if (req.secure) {
-    // OK, continue
-    return next()
-  }
-  // handle port numbers if you need non defaults
-  // res.redirect('https://' + req.host + req.url) // express 3.x
-  res.redirect('https://' + req.hostname + req.url) // express 4.x
-}
+http.createServer(lex.middleware(redirectHttps())).listen(80)
+https.createServer(middlewareWrapper(app)).listen(443)
