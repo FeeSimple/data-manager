@@ -22,6 +22,21 @@ export const getImportedKeyEos = (Eos, privKey) => {
   })
 }
 
+export const eosAdminAccount = {
+	name: process.env.REACT_APP_ADMIN_ACCOUNT_NAME,
+	pubKey: process.env.REACT_APP_ADMIN_ACCOUNT_PUB,
+	privKey: process.env.REACT_APP_ADMIN_ACCOUNT_PRIV
+}
+
+export const getEosAdmin= (Eos) => {
+  const network = getNetworkData()
+  return Eos({
+    httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
+    chainId: network.chainId,
+    keyProvider: process.env.REACT_APP_ADMIN_ACCOUNT_PRIV
+  })
+}
+
 export const getFallbackEos = (Eos) => {
   const network = getNetworkData()
   return Eos({
