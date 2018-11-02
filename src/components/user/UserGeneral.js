@@ -58,11 +58,9 @@ const UserGeneral = ({
     </Nav>
     <TabContent activeTab={activeTab}>
       <TabPane tabId="1">
-        <Row>
-          <Col sm="12">
-            <h4>Tab 1 Contents</h4>
-          </Col>
-        </Row>
+        <UserAccount
+          user={user}
+        />
       </TabPane>
       <TabPane tabId="2">
         <Row>

@@ -140,14 +140,15 @@ h1, h2, h3, h4, h5, h6 {
 
 .user-detail-label {
   font-weight: 400;
-  font-size: 20px;
-  padding-bottom: 5px;
+  font-size: 18px;
+  padding: 0;
+  margin: 20px -1% 3px;
   color: #2b8acb; }
 
 .user-detail-label-small {
   font-weight: 400;
   font-size: 12px;
-  padding-bottom: 5px;
+  margin: 0;
   color: #2b8acb; }
 
 .drop-down-input {
