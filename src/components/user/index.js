@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getResourceStr } from '../../../actions'
-import UserDetails from './UserDetails'
+import { getResourceStr } from '../../actions'
+import UserGeneral from './UserGeneral'
 
-class UserDetailsContainer extends Component {
+class UserGeneralContainer extends Component {
   constructor() {
     super()
     this.state = {data: []}
@@ -47,10 +47,10 @@ class UserDetailsContainer extends Component {
     const user = this.state.data
     return (
       <div>
-        {typeof user === 'undefined' && <h1 className="text-center my-5 py-5">404 - Property not found</h1>}
+        {typeof user === 'undefined' && <h1 className="text-center my-5 py-5">404 - User not found</h1>}
         {
           typeof user !== 'undefined' &&
-            <UserDetails
+            <UserGeneral
               user={user}
             />
         }
@@ -65,4 +65,4 @@ function mapStateToProps({ eosClient, accountData }){
 
 export default withRouter(connect(
   mapStateToProps
-)(UserDetailsContainer))
+)(UserGeneralContainer))

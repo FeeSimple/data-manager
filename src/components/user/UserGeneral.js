@@ -2,8 +2,9 @@ import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import UserAccount from './UserAccount'
+import UserResource from './UserResource'
 
-const UserDetails = ({
+const UserGeneral = ({
   user
 }) => (
   <div>
@@ -39,10 +40,17 @@ const UserDetails = ({
       </Container>
     </div>
     <br />
-    <UserAccount
-      user={user}
-    />
+    <div>
+      <UserAccount
+        user={user}
+      />
+    </div>
+    <div className='hidden'>
+      <UserResource
+        user={user}
+      />
+    </div>
   </div>
 )
 
-export default UserDetails
+export default UserGeneral
