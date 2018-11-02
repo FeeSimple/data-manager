@@ -1,55 +1,88 @@
 import React from 'react'
-import { Col, Container, Row } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import { 
+  TabContent, TabPane, Nav, NavItem, NavLink, Card, 
+  Button, CardTitle, CardText, 
+  Row, Col, Container, Label
+} from 'reactstrap'
+import classnames from 'classnames'
 import UserAccount from './UserAccount'
 import UserResource from './UserResource'
 
 const UserGeneral = ({
-  user
+  user,
+  activeTab,
+  toggle
 }) => (
   <div>
-    <div className="top-bar">
-      <Container>
+    <Nav tabs>
+      <NavItem>
+        <NavLink
+          className={classnames({ active: activeTab === '1' })}
+          onClick={() => { toggle('1'); }}
+        >
+					Account
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          className={classnames({ active: activeTab === '2' })}
+          onClick={() => { toggle('2'); }}
+        >
+          Resource Management
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          className={classnames({ active: activeTab === '3' })}
+          onClick={() => { toggle('3'); }}
+        >
+          Send
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          className={classnames({ active: activeTab === '4' })}
+          onClick={() => { toggle('4'); }}
+        >
+          Receive
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          className={classnames({ active: activeTab === '5' })}
+          onClick={() => { toggle('5'); }}
+        >
+          Activity
+        </NavLink>
+      </NavItem>
+    </Nav>
+    <TabContent activeTab={activeTab}>
+      <TabPane tabId="1">
         <Row>
-          <Col>
-            <span className="float-left">
-              <Link to="/account" className="btn btn-base-o prop-btn">Account</Link>
-            </span>
-          </Col>
-          <Col>
-            <span className="float-left">
-              <Link to="/account/resrc" className="btn btn-base-o prop-btn">Resource Management</Link>
-            </span>
-          </Col>
-          <Col>
-            <span className="float-right">
-              <Link to="/account/send" className="btn btn-base-o prop-btn">Send</Link>
-            </span>
-          </Col>
-          <Col>
-            <span className="float-right">
-              <Link to="/account/receive" className="btn btn-base-o prop-btn">Receive</Link>
-            </span>
-          </Col>
-          <Col>
-            <span className="float-right">
-              <Link to="/account/activity" className="btn btn-base-o prop-btn">Activity</Link>
-            </span>
+          <Col sm="12">
+            <h4>Tab 1 Contents</h4>
           </Col>
         </Row>
-      </Container>
-    </div>
-    <br />
-    <div>
-      <UserAccount
-        user={user}
-      />
-    </div>
-    <div className='hidden'>
-      <UserResource
-        user={user}
-      />
-    </div>
+      </TabPane>
+      <TabPane tabId="2">
+        <Row>
+          <Col sm="6">
+            <Card body>
+              <CardTitle>Special Title Treatment</CardTitle>
+              <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+              <Button>Go somewhere</Button>
+            </Card>
+          </Col>
+          <Col sm="6">
+            <Card body>
+              <CardTitle>Special Title Treatment</CardTitle>
+              <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+              <Button>Go somewhere</Button>
+            </Card>
+          </Col>
+        </Row>
+      </TabPane>
+    </TabContent>
   </div>
 )
 

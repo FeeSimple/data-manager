@@ -5,9 +5,22 @@ import { getResourceStr } from '../../actions'
 import UserGeneral from './UserGeneral'
 
 class UserGeneralContainer extends Component {
-  constructor() {
-    super()
-    this.state = {data: []}
+  constructor(props) {
+    super(props)
+    
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      data: [],
+      activeTab: '1'
+    }
+  }
+
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
   }
 
   componentDidMount() {
@@ -46,15 +59,11 @@ class UserGeneralContainer extends Component {
   render() {
     const user = this.state.data
     return (
-      <div>
-        {typeof user === 'undefined' && <h1 className="text-center my-5 py-5">404 - User not found</h1>}
-        {
-          typeof user !== 'undefined' &&
-            <UserGeneral
-              user={user}
-            />
-        }
-      </div>
+      <UserGeneral
+        user={user}
+        activeTab={this.state.activeTab}
+        toggle={this.toggle}
+      />
     )
   }
 }
