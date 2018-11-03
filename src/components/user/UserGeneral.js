@@ -1,93 +1,106 @@
 import React from 'react'
-import { 
-  TabContent, TabPane, Nav, NavItem, NavLink, Card, 
-  Button, CardTitle, CardText, 
-  Row, Col, Container, Label
-} from 'reactstrap'
-import classnames from 'classnames'
-import UserAccount from './UserAccount'
-import UserResource from './UserResource'
+import { Col, Container, Row, Progress } from 'reactstrap'
 
-export const USERTAB = {
-  GENERAL: '1',
-  RESOURCE: '2',
-  SEND: '3',
-  RECEIVE: '4',
-  ACTIVITY: '5'
+const progressColor = (valueStr) => {
+  let val = parseInt(valueStr)
+  if (val >= 50) {
+    return null // blue color
+  } else if (val >= 20) {
+    return "warning"
+  } else {
+    return "danger"
+  }
 }
 
-export const UserGeneral = ({
-  user,
-  activeTab,
-  toggle
+const UserGeneral = ({
+  user
 }) => (
   <div>
-    <Nav tabs>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.GENERAL })}
-          onClick={() => { toggle(USERTAB.GENERAL); }}
-        >
-					<Button>General</Button>
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.RESOURCE })}
-          onClick={() => { toggle(USERTAB.RESOURCE); }}
-        >
-          <Button>Resource Management</Button>
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.SEND })}
-          onClick={() => { toggle(USERTAB.SEND); }}
-        >
-          <Button>Send</Button>
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.RECEIVE })}
-          onClick={() => { toggle(USERTAB.RECEIVE); }}
-        >
-          <Button>Receive</Button>
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.ACTIVITY })}
-          onClick={() => { toggle(USERTAB.ACTIVITY); }}
-        >
-          <Button>Activity</Button>
-        </NavLink>
-      </NavItem>
-    </Nav>
-    <TabContent activeTab={activeTab}>
-      <TabPane tabId="1">
-        <UserAccount
-          user={user}
-        />
-      </TabPane>
-      <TabPane tabId="2">
+    <Container>
+      <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
         <Row>
-          <Col sm="6">
-            <Card body>
-              <CardTitle>Special Title Treatment</CardTitle>
-              <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-              <Button>Go somewhere</Button>
-            </Card>
+          <Col>
+            <h3 className="user-detail-label">Name</h3>
           </Col>
-          <Col sm="6">
-            <Card body>
-              <CardTitle>Special Title Treatment</CardTitle>
-              <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-              <Button>Go somewhere</Button>
-            </Card>
+          <Col>
+            <h3 className="user-detail-label">{user.account}</h3>
           </Col>
         </Row>
-      </TabPane>
-    </TabContent>
+        <Row>
+          <Col>
+            <h3 className="user-detail-label">Creation date</h3>
+          </Col>
+          <Col>
+            <h3
+              className="user-detail-label">{user.created}</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h3 className="user-detail-label">Balance</h3>
+          </Col>
+          <Col>
+            <h3
+              className="user-detail-label">{user.balance}</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h3 className="user-detail-label">RAM</h3>
+          </Col>
+          <Col width="200">
+            <Progress 
+              className="user-detail-label" 
+              value={user.ramMeter} 
+              color={progressColor(user.ramMeter)}
+              animated
+            >
+              {user.ramMeter + ' %'}
+            </Progress>
+            <div className="user-detail-label-small">
+              Available / Max &nbsp; &nbsp; &nbsp; {user.ramStr}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h3 className="user-detail-label">CPU</h3>
+          </Col>
+          <Col>
+            <Progress 
+              className="user-detail-label" 
+              value={user.cpuMeter}
+              color={progressColor(user.cpuMeter)}
+              animated
+            >
+              {user.cpuMeter + ' %'}
+            </Progress>
+            <div className="user-detail-label-small">
+              Available / Max &nbsp; &nbsp; &nbsp; {user.cpuStr}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+            <Col>
+              <h3 className="user-detail-label">Bandwidth</h3>
+            </Col>
+            <Col>
+              <Progress 
+                className="user-detail-label" 
+                value={user.bandwidthMeter} 
+                color={progressColor(user.bandwidthMeter)}
+                animated
+              >
+                {user.bandwidthMeter + ' %'}
+              </Progress>
+              <div className="user-detail-label-small">
+                Available / Max &nbsp; &nbsp; &nbsp; {user.bandwidthStr}
+              </div>
+            </Col>
+          </Row>
+        </div>
+    </Container>
   </div>
 )
+
+export default UserGeneral

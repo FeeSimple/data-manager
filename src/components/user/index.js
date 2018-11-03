@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getResourceStr } from '../../actions'
-import { UserGeneral, USERTAB } from './UserGeneral'
+import { User, USERTAB } from './User'
 
-class UserGeneralContainer extends Component {
+class UserContainer extends Component {
   constructor(props) {
     super(props)
     
@@ -69,7 +69,7 @@ class UserGeneralContainer extends Component {
   render() {
     const user = this.state.data
     return (
-      <UserGeneral
+      <User
         user={user}
         activeTab={this.state.activeTab}
         toggle={this.toggle}
@@ -84,4 +84,4 @@ function mapStateToProps({ eosClient, accountData }){
 
 export default withRouter(connect(
   mapStateToProps
-)(UserGeneralContainer))
+)(UserContainer))
