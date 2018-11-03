@@ -8,7 +8,15 @@ import classnames from 'classnames'
 import UserAccount from './UserAccount'
 import UserResource from './UserResource'
 
-const UserGeneral = ({
+export const USERTAB = {
+  GENERAL: '1',
+  RESOURCE: '2',
+  SEND: '3',
+  RECEIVE: '4',
+  ACTIVITY: '5'
+}
+
+export const UserGeneral = ({
   user,
   activeTab,
   toggle
@@ -17,42 +25,42 @@ const UserGeneral = ({
     <Nav tabs>
       <NavItem>
         <NavLink
-          className={classnames({ active: activeTab === '1' })}
-          onClick={() => { toggle('1'); }}
+          className={classnames({ active: activeTab === USERTAB.GENERAL })}
+          onClick={() => { toggle(USERTAB.GENERAL); }}
         >
-					Account
+					<Button>General</Button>
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink
-          className={classnames({ active: activeTab === '2' })}
-          onClick={() => { toggle('2'); }}
+          className={classnames({ active: activeTab === USERTAB.RESOURCE })}
+          onClick={() => { toggle(USERTAB.RESOURCE); }}
         >
-          Resource Management
+          <Button>Resource Management</Button>
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink
-          className={classnames({ active: activeTab === '3' })}
-          onClick={() => { toggle('3'); }}
+          className={classnames({ active: activeTab === USERTAB.SEND })}
+          onClick={() => { toggle(USERTAB.SEND); }}
         >
-          Send
+          <Button>Send</Button>
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink
-          className={classnames({ active: activeTab === '4' })}
-          onClick={() => { toggle('4'); }}
+          className={classnames({ active: activeTab === USERTAB.RECEIVE })}
+          onClick={() => { toggle(USERTAB.RECEIVE); }}
         >
-          Receive
+          <Button>Receive</Button>
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink
-          className={classnames({ active: activeTab === '5' })}
-          onClick={() => { toggle('5'); }}
+          className={classnames({ active: activeTab === USERTAB.ACTIVITY })}
+          onClick={() => { toggle(USERTAB.ACTIVITY); }}
         >
-          Activity
+          <Button>Activity</Button>
         </NavLink>
       </NavItem>
     </Nav>
@@ -83,5 +91,3 @@ const UserGeneral = ({
     </TabContent>
   </div>
 )
-
-export default UserGeneral

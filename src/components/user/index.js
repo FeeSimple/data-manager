@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getResourceStr } from '../../actions'
-import UserGeneral from './UserGeneral'
+import { UserGeneral, USERTAB } from './UserGeneral'
 
 class UserGeneralContainer extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class UserGeneralContainer extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       data: [],
-      activeTab: '1'
+      activeTab: USERTAB.GENERAL
     }
   }
 
