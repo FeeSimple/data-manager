@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col, Container, Row, Progress } from 'reactstrap'
+import { Col, Container, Row, Progress, UncontrolledTooltip, Label } from 'reactstrap'
 
 const progressColor = (valueStr) => {
   let val = parseInt(valueStr)
@@ -44,11 +44,11 @@ const UserGeneral = ({
               className="user-detail-label">{user.balance}</h3>
           </Col>
         </Row>
-        <Row>
+        <Row id="TooltipRam">
           <Col>
             <h3 className="user-detail-label">RAM</h3>
           </Col>
-          <Col width="200">
+          <Col>
             <Progress 
               className="user-detail-label" 
               value={user.ramMeter} 
@@ -61,8 +61,14 @@ const UserGeneral = ({
               Available / Max &nbsp; &nbsp; &nbsp; {user.ramStr}
             </div>
           </Col>
+          <UncontrolledTooltip placement="left" target="TooltipRam" styleName="tooltip">
+            <p>
+              RAM is required to store, send, and receive data on the blockchain 
+              such as creating/updating/deleting property
+            </p>
+          </UncontrolledTooltip>
         </Row>
-        <Row>
+        <Row id="TooltipCpu">
           <Col>
             <h3 className="user-detail-label">CPU</h3>
           </Col>
@@ -79,24 +85,36 @@ const UserGeneral = ({
               Available / Max &nbsp; &nbsp; &nbsp; {user.cpuStr}
             </div>
           </Col>
+          <UncontrolledTooltip placement="left" target="TooltipCpu" styleName="tooltip">
+            <p>
+              CPU is for ...
+              ..............
+            </p>
+          </UncontrolledTooltip>
         </Row>
-        <Row>
-            <Col>
-              <h3 className="user-detail-label">Bandwidth</h3>
-            </Col>
-            <Col>
-              <Progress 
-                className="user-detail-label" 
-                value={user.bandwidthMeter} 
-                color={progressColor(user.bandwidthMeter)}
-                animated
-              >
-                {user.bandwidthMeter + ' %'}
-              </Progress>
-              <div className="user-detail-label-small">
-                Available / Max &nbsp; &nbsp; &nbsp; {user.bandwidthStr}
-              </div>
-            </Col>
+        <Row id="TooltipBandwidth">
+          <Col>
+            <h3 className="user-detail-label">Bandwidth</h3>
+          </Col>
+          <Col>
+            <Progress 
+              className="user-detail-label" 
+              value={user.bandwidthMeter} 
+              color={progressColor(user.bandwidthMeter)}
+              animated
+            >
+              {user.bandwidthMeter + ' %'}
+            </Progress>
+            <div className="user-detail-label-small">
+              Available / Max &nbsp; &nbsp; &nbsp; {user.bandwidthStr}
+            </div>
+          </Col>
+          <UncontrolledTooltip placement="left" target="TooltipBandwidth" styleName="tooltip">
+            <p>
+              Bandwidth is for ...
+              .................
+            </p>
+          </UncontrolledTooltip>
           </Row>
         </div>
     </Container>

@@ -151,6 +151,15 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   color: #2b8acb; }
 
+.tooltip [class$="inner"] {
+  background-color: #104378;
+  border: 1px solid background-color;
+  color: #dbe3eb;
+  font-size: 12px; }
+
+.tooltip [class$="arrow"] {
+  border-top: 5px solid background-color; }
+
 .drop-down-input {
   -webkit-appearance: none;
   -moz-appearance: none;
