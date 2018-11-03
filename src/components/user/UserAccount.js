@@ -1,6 +1,16 @@
 import React from 'react'
 import { Col, Container, Row, Progress } from 'reactstrap'
-const meterControl = 'low="0.5" optimum="0.6" high="0.3"'
+
+const progressColor = (valueStr) => {
+  let val = parseInt(valueStr)
+  if (val >= 50) {
+    return null // blue color
+  } else if (val >= 20) {
+    return "warning"
+  } else {
+    return "danger"
+  }
+}
 
 const UserAccount = ({
   user
@@ -36,29 +46,56 @@ const UserAccount = ({
         </Row>
         <Row>
           <Col>
-            <h3 className="user-detail-label">Available RAM</h3>
+            <h3 className="user-detail-label">RAM</h3>
           </Col>
           <Col width="200">
-            <Progress className="user-detail-label" value={user.ramMeter} />
-            <div className="user-detail-label-small">{user.ramStr}</div>
+            <Progress 
+              className="user-detail-label" 
+              value={user.ramMeter} 
+              color={progressColor(user.ramMeter)}
+              animated
+            >
+              {user.ramMeter + ' %'}
+            </Progress>
+            <div className="user-detail-label-small">
+              Available / Max &nbsp; &nbsp; &nbsp; {user.ramStr}
+            </div>
           </Col>
         </Row>
         <Row>
           <Col>
-            <h3 className="user-detail-label">Available CPU</h3>
+            <h3 className="user-detail-label">CPU</h3>
           </Col>
           <Col>
-            <Progress className="user-detail-label" value={user.cpuMeter} />
-            <div className="user-detail-label-small">{user.cpuStr}</div>
+            <Progress 
+              className="user-detail-label" 
+              value={user.cpuMeter}
+              color={progressColor(user.cpuMeter)}
+              animated
+            >
+              {user.cpuMeter + ' %'}
+            </Progress>
+            <div className="user-detail-label-small">
+              Available / Max &nbsp; &nbsp; &nbsp; {user.cpuStr}
+            </div>
           </Col>
         </Row>
         <Row>
             <Col>
-              <h3 className="user-detail-label">Available Bandwidth</h3>
+              <h3 className="user-detail-label">Bandwidth</h3>
             </Col>
             <Col>
-              <Progress className="user-detail-label" value={user.bandwidthMeter} />
-              <div className="user-detail-label-small">{user.bandwidthStr}</div>
+              <Progress 
+                className="user-detail-label" 
+                value={user.bandwidthMeter} 
+                color={progressColor(user.bandwidthMeter)}
+                animated
+              >
+                {user.bandwidthMeter + ' %'}
+              </Progress>
+              <div className="user-detail-label-small">
+                Available / Max &nbsp; &nbsp; &nbsp; {user.bandwidthStr}
+              </div>
             </Col>
           </Row>
         </div>

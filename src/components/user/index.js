@@ -19,7 +19,7 @@ class UserGeneralContainer extends Component {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
-      });
+      })
     }
   }
 
