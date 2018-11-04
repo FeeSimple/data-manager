@@ -75,8 +75,10 @@ const UserGeneral = ({
             </Col>
             <UncontrolledTooltip placement="left" target="TooltipRam" styleName="tooltip">
               <p>
-                RAM is required to store, send, and receive data on the blockchain 
-                such as creating/updating/deleting property
+                RAM needs to be staked (with XFS coins)
+              </p>
+              <p>
+                for creating/editing/deleting the property.
               </p>
             </UncontrolledTooltip>
           </Row>
@@ -103,8 +105,10 @@ const UserGeneral = ({
             </Col>
             <UncontrolledTooltip placement="left" target="TooltipCpu" styleName="tooltip">
               <p>
-                CPU is for ...
-                ..............
+                CPU needs to be staked (with XFS coins)
+              </p>
+              <p>
+                for creating/editing/deleting the property.
               </p>
             </UncontrolledTooltip>
           </Row>
@@ -131,8 +135,10 @@ const UserGeneral = ({
         </Col>
         <UncontrolledTooltip placement="left" target="TooltipBandwidth" styleName="tooltip">
           <p>
-            Bandwidth is for ...
-            .................
+            Bandwidth needs to be staked (with XFS coins)
+          </p>
+          <p>
+            for viewing the property.
           </p>
         </UncontrolledTooltip>
         </Row>
