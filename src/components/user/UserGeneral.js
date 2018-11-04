@@ -60,7 +60,7 @@ const UserGeneral = ({
             </Col>
             <Col>
               <div className="user-detail-label-small">
-                Staked:
+                Staked: {user.stakedRam}
               </div>
               <Progress 
                 className="user-detail-label" 

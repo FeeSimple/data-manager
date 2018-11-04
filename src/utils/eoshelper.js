@@ -1,5 +1,5 @@
 import ecc from 'eosjs-ecc'
-import { getResourceStr, beautifyBalance } from './beautify'
+import { getResourceStr, beautifyBalance, fetchBalanceNumber } from './beautify'
 
 export const getKeyPair = async () => {
   let promises = [], keys = [], keyPairs = []
@@ -15,12 +15,32 @@ export const getKeyPair = async () => {
   return {pub, priv}
 }
 
-export const getRamPrice = async (eosClient, account) => {
+export const getRamPrice = async (eosClient) => {
   try {
-
+    let result = await eosClient.getTableRows(true, 'eosio', 'eosio', 'rammarket')
+    
+    if (!result || !result.rows[0]) return null
+    
+    let ramMarketRow = result.rows[0]
+    console.log('ramMarketRow:', ramMarketRow)
+    let quoteBalance = fetchBalanceNumber(ramMarketRow.quote.balance)
+    let baseBalance = fetchBalanceNumber(ramMarketRow.base.balance)
+    if (!quoteBalance || !baseBalance) return null
+    let ramPrice = quoteBalance / baseBalance
+    return ramPrice // XFS/KB
   } catch (err) {
-
+    return null
   }
+}
+
+export const calcStakedRam = (ramPrice, ramQuota) => {
+  let stakedRam = (ramQuota * ramPrice) / 1024
+  if (stakedRam > 1) {  
+    stakedRam = Intl.NumberFormat().format(stakedRam).toString() + ' XFS'
+  } else {
+    stakedRam = stakedRam.toPrecision(1).toString() + ' XFS'
+  }
+  return stakedRam
 }
 
 const remainingPercent = (used, max) => {
@@ -51,7 +71,7 @@ export const getAccountInfo = async (eosClient, account) => {
     const stakedCpu = beautifyBalance(result.total_resources.cpu_weight)
     const stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
 
-    const info = {
+    let info = {
       account,
       created,
       balance,
@@ -66,8 +86,19 @@ export const getAccountInfo = async (eosClient, account) => {
       pubkey
     }
 
+    let ramPrice = await getRamPrice(eosClient)
+    let stakedRam = ''
+    if (ramPrice) {
+      stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+    }
+
+    info.stakedRam = stakedRam
+    console.log('info: ', info)
+    
     return info
+
   } catch (err) {
+
     return null
   }
 }

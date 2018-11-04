@@ -21,7 +21,7 @@ export const User = ({
   activeTab,
   toggle
 }) => (
-  <div>
+  <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
     <Nav tabs>
       <NavItem>
         <NavLink
@@ -45,14 +45,6 @@ export const User = ({
           onClick={() => { toggle(USERTAB.SEND); }}
         >
           <Button>Send</Button>
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.RECEIVE })}
-          onClick={() => { toggle(USERTAB.RECEIVE); }}
-        >
-          <Button>Receive</Button>
         </NavLink>
       </NavItem>
       <NavItem>

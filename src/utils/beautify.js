@@ -62,6 +62,17 @@ export function getResourceStr(resource, cpu) {
   return resourceStr
 }
 
+export function fetchBalanceNumber(balance) {
+  let res = ''
+  let idx = balance.indexOf(' ') // 100000 XFS
+  if (idx != -1) {
+    let balanceNum = balance.substring(0, idx);
+    return parseFloat(balanceNum)
+  } else {
+    return null
+  }
+}
+
 export function beautifyBalance(balance) {
   let res = ''
   let idx = balance.indexOf(' ') // 100000 XFS
