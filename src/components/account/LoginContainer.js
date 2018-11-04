@@ -11,7 +11,7 @@ import {
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
 import NewAcc from './NewAcc'
-import getKeyPair from '../../utils/getKeyPair'
+import { getKeyPair } from '../../utils/eoshelper'
 import {
   setActive,
   setInfo,

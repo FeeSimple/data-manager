@@ -6,10 +6,8 @@ import Logo from '../../img/logo.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconUser from '../../img/icon-user.svg'
 import IconLogout from '../../img/icon-logout.svg'
-import {
-  setInfo,
-  beautifyRam
-} from '../../actions/index'
+import { setInfo } from '../../actions/index'
+import { beautifyRam } from '../../utils/beautify'
 
 class NavbarContainer extends Component {
   constructor() {
