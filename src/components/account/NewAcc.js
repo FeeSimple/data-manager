@@ -8,6 +8,7 @@ import {
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
+import { checkAccountNameError } from '../../utils/eoshelper'
 
 const NewAccForm = props => {
   const { 
@@ -82,20 +83,7 @@ const NewAccForm = props => {
 const EnhancedNewAccForm = withFormik({
   mapPropsToValues: () => ({ accountName: '' }),
   validate: values => {
-    let errors = {}
-    // errors.buttonSubmitActive = false
-    const accountRegex = /^[a-z1-5]*$/
-    if (!values.accountName) {
-      errors.accountName = 'Required'
-    } else if (values.accountName.length !== 12) {
-      errors.accountName = 'Must be 12 symbols long'
-    } else if (!accountRegex.test(values.accountName)) {
-      errors.accountName = 'Must include symbols a-z 1-5'
-    } else {
-      // errors.buttonSubmitActive = true
-    }
-    // console.log('account validation error: ', errors)
-    return errors
+    return checkAccountNameError(values.accountName)
   },
 
   handleSubmit: async({ accountName }, { props }) => {

@@ -102,3 +102,18 @@ export const getAccountInfo = async (eosClient, account) => {
     return null
   }
 }
+
+export const checkAccountNameError = (accountName) => {
+  let errors = {}
+  const accountRegex = /^[a-z1-5]*$/
+  if (!accountName) {
+    errors.accountName = 'Required'
+  } else if (accountName.length !== 12) {
+    errors.accountName = 'Must be 12 symbols long'
+  } else if (!accountRegex.test(accountName)) {
+    errors.accountName = 'Must include symbols a-z 1-5'
+  } else {
+  }
+  // console.log('account validation error: ', errors)
+  return errors
+}
