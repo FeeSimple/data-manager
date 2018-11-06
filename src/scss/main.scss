@@ -170,16 +170,28 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 
 .user-detail-label{
   font-weight: 400;
-  font-size: 20px;
-  padding-bottom: 5px;
+  font-size: 15px;
+  padding: 0;
+  margin: 12px -1% 3px;
   color: $clr-seconday;
 }
 
 .user-detail-label-small{
   font-weight:  400;
   font-size: 12px;
-  padding-bottom: 5px;
+  margin: 0;
   color: $clr-seconday;
+}
+
+.tooltip [class$="inner"] {
+  background-color: $clr-bg;
+  border: 1px solid background-color;
+  color: #dbe3eb;
+  font-size: 12px;
+}
+
+.tooltip [class$="arrow"] {
+  border-top: 5px solid background-color;
 }
 
 .drop-down-input{-webkit-appearance: none;  -moz-appearance: none; appearance: none; background: #fff url("../img/arrow-1-down.svg") no-repeat right 10px center; background-size: auto 7px;}
