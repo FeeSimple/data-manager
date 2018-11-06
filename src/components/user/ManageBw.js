@@ -10,7 +10,7 @@ import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
 import { checkAccountNameError } from '../../utils/eoshelper'
 
-const ManageRamForm = props => {
+const ManageBwForm = props => {
   const { 
     values,
     touched,
@@ -18,13 +18,13 @@ const ManageRamForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    showModalRam, handleToggleModalRam,
+    showModalBw, handleToggleModalBw,
     isProcessing, resourceHandleErr
   } = props
 
   return (
-    <Modal isOpen={showModalRam} toggle={handleToggleModalRam} >
-      <ModalHeader toggle={handleToggleModalRam}>Buy/Sell RAM</ModalHeader>
+    <Modal isOpen={showModalBw} toggle={handleToggleModalBw} >
+      <ModalHeader toggle={handleToggleModalBw}>Stake/unstake Bandwidth</ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
@@ -70,7 +70,7 @@ const ManageRamForm = props => {
   )
 }
 
-const EnhancedManageRamForm = withFormik({
+const EnhancedManageBwForm = withFormik({
   mapPropsToValues: () => ({ accountName: '' }),
   validate: values => {
     return checkAccountNameError(values.accountName)
@@ -80,7 +80,7 @@ const EnhancedManageRamForm = withFormik({
     await props.handleCreateNewAccount(accountName)
   },
 
-  displayName: 'ManageRamForm' // helps with React DevTools
-})(ManageRamForm)
+  displayName: 'ManageBwForm' // helps with React DevTools
+})(ManageBwForm)
 
-export default EnhancedManageRamForm
+export default EnhancedManageBwForm

@@ -17,7 +17,9 @@ const progressColor = (valueStr) => {
 
 const UserInfo = ({
   user,
-  toggleModalDialog
+  handleToggleModalRam,
+  handleToggleModalCpu,
+  handleToggleModalBw
 }) => (
   <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
     <Card>
@@ -58,7 +60,7 @@ const UserInfo = ({
           <Row id="TooltipRam">
             <Col>
               <h3 className="user-detail-label">RAM</h3>
-              <Button size="sm" onClick={toggleModalDialog}>Buy/Sell</Button>
+              <Button size="sm" onClick={handleToggleModalRam}>Buy/Sell</Button>
             </Col>
             <Col>
               <div className="user-detail-label-small">
@@ -89,7 +91,7 @@ const UserInfo = ({
           <Row id="TooltipCpu">
             <Col>
               <h3 className="user-detail-label">CPU</h3>
-              <Button size="sm">Stake/Unstake</Button>
+              <Button size="sm" onClick={handleToggleModalCpu}>Stake/Unstake</Button>
             </Col>
             <Col>
               <div className="user-detail-label-small">
@@ -120,7 +122,7 @@ const UserInfo = ({
           <Row id="TooltipBandwidth">
         <Col>
           <h3 className="user-detail-label">Bandwidth</h3>
-          <Button size="sm">Stake/Unstake</Button>
+          <Button size="sm" onClick={handleToggleModalBw}>Stake/Unstake</Button>
         </Col>
         <Col>
           <div className="user-detail-label-small">

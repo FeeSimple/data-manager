@@ -7,6 +7,8 @@ import {
 import classnames from 'classnames'
 import UserInfo from './UserInfo'
 import ManageRam from './ManageRam'
+import ManageCpu from './ManageCpu'
+import ManageBw from './ManageBw'
 
 export const USERTAB = {
   INFO: '1',
@@ -21,8 +23,17 @@ export const User = ({
   activeTab,
   toggleTab,
 
-  showModalDialog,
-  toggleModalDialog
+  showModalRam,
+  handleToggleModalRam,
+
+  showModalCpu,
+  handleToggleModalCpu,
+
+  showModalBw,
+  handleToggleModalBw,
+
+  isProcessing,
+  resourceHandleErr
 }) => (
   <div>
     <Nav tabs>
@@ -55,12 +66,30 @@ export const User = ({
       <TabPane tabId={USERTAB.INFO}>
         <UserInfo
           user={user}
-          toggleModalDialog={toggleModalDialog}
+          handleToggleModalRam={handleToggleModalRam}
+          handleToggleModalCpu={handleToggleModalCpu}
+          handleToggleModalBw={handleToggleModalBw}
         />
+        
         <ManageRam
-          showModalDialog={showModalDialog}
-          toggleModalDialog={toggleModalDialog}
-          
+          showModalRam={showModalRam}
+          handleToggleModalRam={handleToggleModalRam}
+          isProcessing={isProcessing}
+          resourceHandleErr={resourceHandleErr}
+        />
+
+        <ManageCpu
+          showModalCpu={showModalCpu}
+          handleToggleModalCpu={handleToggleModalCpu}
+          isProcessing={isProcessing}
+          resourceHandleErr={resourceHandleErr}
+        />
+
+        <ManageBw
+          showModalBw={showModalBw}
+          handleToggleModalBw={handleToggleModalBw}
+          isProcessing={isProcessing}
+          resourceHandleErr={resourceHandleErr}
         />
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
