@@ -26,44 +26,6 @@ const ManageCpuForm = props => {
     <Modal isOpen={showModalCpu} toggle={handleToggleModalCpu} >
       <ModalHeader toggle={handleToggleModalCpu}>Stake/unstake CPU</ModalHeader>
       <ModalBody>
-        <Form onSubmit={handleSubmit}>
-          <FormGroup>
-            <Input
-              id='accountName'
-              onBlur={handleBlur}
-              value={values.accountName}
-              onChange={handleChange}
-              invalid={errors.accountName && touched.accountName}
-              type="text"
-              placeholder="must be 12 symbols long and include symbols a-z 1-5"
-            />
-            <Input
-              id='ramAmount'
-              onBlur={handleBlur}
-              value={values.ramAmount}
-              onChange={handleChange}
-              invalid={errors.ramAmount && touched.ramAmount}
-              type="text"
-              placeholder="RAM amount (in bytes)"
-            />
-          </FormGroup>
-          <Button 
-            type="submit" color='secondary' className="btn-base btn-home"
-            disabled={(touched.accountName && errors.accountName)}
-          >
-            {isProcessing ?
-              <Spinner name="three-bounce" color="red"/>
-            :
-              <span>Submit</span>
-            }
-            
-          </Button>
-          <Collapse isOpen={resourceHandleErr}>
-            <Alert color="danger">
-              {resourceHandleErr}
-            </Alert>
-          </Collapse>
-        </Form>
       </ModalBody>
       <ModalFooter />
     </Modal>

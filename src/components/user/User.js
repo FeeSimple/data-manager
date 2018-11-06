@@ -25,6 +25,7 @@ export const User = ({
 
   showModalRam,
   handleToggleModalRam,
+  handleManageRam,
 
   showModalCpu,
   handleToggleModalCpu,
@@ -74,6 +75,7 @@ export const User = ({
         <ManageRam
           showModalRam={showModalRam}
           handleToggleModalRam={handleToggleModalRam}
+          handleManageRam={handleManageRam}
           isProcessing={isProcessing}
           resourceHandleErr={resourceHandleErr}
         />

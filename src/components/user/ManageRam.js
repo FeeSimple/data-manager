@@ -18,14 +18,14 @@ const ManageRamForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    showModalRam, handleToggleModalRam,
+    showModalRam, handleToggleModalRam, handleManageRam,
     isProcessing, resourceHandleErr
   } = props
 
   return (
-    <Modal isOpen={showModalRam} toggle={handleToggleModalRam} >
+    <Modal isOpen={showModalRam} toggle={handleToggleModalRam} size='lg'>
       <ModalHeader toggle={handleToggleModalRam}>Buy/Sell RAM</ModalHeader>
-      <ModalBody>
+      <ModalBody size='lg'>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Input
@@ -35,8 +35,10 @@ const ManageRamForm = props => {
               onChange={handleChange}
               invalid={errors.accountName && touched.accountName}
               type="text"
-              placeholder="must be 12 symbols long and include symbols a-z 1-5"
+              placeholder="Enter your own account for buying more RAM or enter another account for selling your RAM"
             />
+          </FormGroup>
+          <FormGroup>
             <Input
               id='ramAmount'
               onBlur={handleBlur}
@@ -59,7 +61,7 @@ const ManageRamForm = props => {
             
           </Button>
           <Collapse isOpen={resourceHandleErr}>
-            <Alert color="danger">
+            <Alert color={resourceHandleErr === 'Success'? 'success':'danger'}>
               {resourceHandleErr}
             </Alert>
           </Collapse>
@@ -71,13 +73,13 @@ const ManageRamForm = props => {
 }
 
 const EnhancedManageRamForm = withFormik({
-  mapPropsToValues: () => ({ accountName: '' }),
+  mapPropsToValues: () => ({ accountName: '', ramAmount: '' }),
   validate: values => {
     return checkAccountNameError(values.accountName)
   },
 
-  handleSubmit: async({ accountName }, { props }) => {
-    await props.handleCreateNewAccount(accountName)
+  handleSubmit: async({ accountName, ramAmount }, { props }) => {
+    await props.handleManageRam(accountName, ramAmount)
   },
 
   displayName: 'ManageRamForm' // helps with React DevTools

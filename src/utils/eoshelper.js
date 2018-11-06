@@ -48,6 +48,76 @@ const remainingPercent = (used, max) => {
   return new Intl.NumberFormat().format(100 * (remaining / max))
 }
 
+export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountName) => {
+  const keyPair = await getKeyPair()
+  const accountPubKey = keyPair.pub
+  const accountPrivKey = keyPair.priv
+  try {
+    const result = await eosAdmin.transaction(tr => {
+      tr.newaccount({
+          creator: eosAdminAccountName,
+          name: accountName,
+          owner: accountPubKey,
+          active: accountPubKey
+      });
+  
+      tr.buyrambytes({
+          payer: eosAdminAccountName,
+          receiver: accountName,
+          bytes: 10240
+      });
+  
+      tr.delegatebw({
+          from: eosAdminAccountName,
+          receiver: accountName,
+          stake_net_quantity: '10.0000 XFS',
+          stake_cpu_quantity: '10.0000 XFS',
+          transfer: 0
+      });
+    })
+
+    return {accountPubKey, accountPrivKey}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    err = JSON.parse(err)
+    const errMsg = (err.error.what || "Account creation failed")
+    
+    return {errMsg}
+  }
+}
+
+export const manageRam = async (eosAdmin, accountName, eosAdminAccountName, ramAmount) => {
+  try {
+    const result = await eosAdmin.transaction(tr => {
+      tr.buyrambytes({
+          payer: eosAdminAccountName,
+          receiver: accountName,
+          bytes: parseInt(ramAmount)
+      });
+    })
+
+    return {}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    err = JSON.parse(err)
+    const errMsg = (err.error.what || "RAM management failed")
+    
+    return {errMsg}
+  }
+}
+
+export const checkAccount = async (eosClient, account) => {
+  try {
+    await eosClient.getAccount(account)
+    
+    return true
+
+  } catch (err) {
+
+    return false
+  }
+}
+
 export const getAccountInfo = async (eosClient, account) => {
   try {
     let result = await eosClient.getAccount(account)

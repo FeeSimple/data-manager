@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getResourceStr, beautifyBalance } from '../../utils/beautify'
-import { getAccountInfo } from '../../utils/eoshelper'
+import { getAccountInfo, manageRam, checkAccount } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
+import { 
+  eosAdminAccount, getEosAdmin 
+} from '../../utils/index'
+import Eos from 'eosjs'
 
 class UserContainer extends Component {
   constructor(props) {
@@ -46,6 +50,39 @@ class UserContainer extends Component {
     }
   }
 
+  handleManageRam = async (accountName, ramAmount) => {
+    // Reset state
+    this.setState({
+      resourceHandleErr: false,
+      isProcessing: true
+    })
+
+    const eosAdmin = getEosAdmin(Eos)
+
+    // First, check if account exists
+    let accountExist = await checkAccount(eosAdmin, accountName)
+    if (!accountExist) {
+      this.setState({
+        resourceHandleErr: 'The enterted account: ' + accountName + ' does not exist',
+        isProcessing: false
+      })
+    } else {
+      let res = await manageRam(eosAdmin, accountName, eosAdminAccount.name, ramAmount)
+      console.log('handleManageRam:', res)
+      if (res.errMsg) {
+        this.setState({
+          resourceHandleErr: res.errMsg,
+          isProcessing: false
+        })
+      } else {
+        this.setState({
+          resourceHandleErr: 'Success',
+          isProcessing: false
+        })
+      }
+    }
+  }
+
   async componentDidMount() {
     const { eosClient, accountData } = this.props
     let account = accountData.active
@@ -63,6 +100,7 @@ class UserContainer extends Component {
 
         showModalRam={this.state.showModalRam}
         handleToggleModalRam={this.handleToggleModalRam}
+        handleManageRam={this.handleManageRam}
 
         showModalCpu={this.state.showModalCpu}
         handleToggleModalCpu={this.handleToggleModalCpu}
@@ -70,8 +108,8 @@ class UserContainer extends Component {
         showModalBw={this.state.showModalBw}
         handleToggleModalBw={this.handleToggleModalBw}
 
-        isProcessing={this.isProcessing}
-        resourceHandleErr={this.resourceHandleErr}
+        isProcessing={this.state.isProcessing}
+        resourceHandleErr={this.state.resourceHandleErr}
 
       />
     )
