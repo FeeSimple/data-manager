@@ -9,14 +9,23 @@ class UserContainer extends Component {
   constructor(props) {
     super(props)
     
-    this.toggle = this.toggle.bind(this);
+    this.toggleTab = this.toggleTab.bind(this);
     this.state = {
       data: [],
-      activeTab: USERTAB.GENERAL
+      activeTab: USERTAB.INFO,
+
+      showModalDialog: false, 
+      ramManagementErr: false, 
+      isProcessing: false
     }
   }
 
-  toggle(tab) {
+  handleToggleModalDialog = () => {
+    const { showModalDialog } = this.state
+    this.setState({showModalDialog: !showModalDialog})
+  }
+
+  toggleTab(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
@@ -37,7 +46,11 @@ class UserContainer extends Component {
       <User
         user={user}
         activeTab={this.state.activeTab}
-        toggle={this.toggle}
+        toggleTab={this.toggleTab}
+
+        showModalDialog={this.state.showModalDialog}
+        toggleModalDialog={this.handleToggleModalDialog}
+
       />
     )
   }

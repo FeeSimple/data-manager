@@ -5,11 +5,11 @@ import {
   Row, Col, Container, Label
 } from 'reactstrap'
 import classnames from 'classnames'
-import UserGeneral from './UserGeneral'
-import UserResource from './UserResource'
+import UserInfo from './UserInfo'
+import ManageRam from './ManageRam'
 
 export const USERTAB = {
-  GENERAL: '1',
+  INFO: '1',
   RESOURCE: '2',
   SEND: '3',
   RECEIVE: '4',
@@ -19,30 +19,25 @@ export const USERTAB = {
 export const User = ({
   user,
   activeTab,
-  toggle
+  toggleTab,
+
+  showModalDialog,
+  toggleModalDialog
 }) => (
-  <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+  <div>
     <Nav tabs>
       <NavItem>
         <NavLink
-          className={classnames({ active: activeTab === USERTAB.GENERAL })}
-          onClick={() => { toggle(USERTAB.GENERAL); }}
+          className={classnames({ active: activeTab === USERTAB.INFO })}
+          onClick={() => { toggleTab(USERTAB.INFO); }}
         >
-					<Button>General</Button>
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.RESOURCE })}
-          onClick={() => { toggle(USERTAB.RESOURCE); }}
-        >
-          <Button>Resource Management</Button>
+					<Button>Information</Button>
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink
           className={classnames({ active: activeTab === USERTAB.SEND })}
-          onClick={() => { toggle(USERTAB.SEND); }}
+          onClick={() => { toggleTab(USERTAB.SEND); }}
         >
           <Button>Send</Button>
         </NavLink>
@@ -50,35 +45,27 @@ export const User = ({
       <NavItem>
         <NavLink
           className={classnames({ active: activeTab === USERTAB.ACTIVITY })}
-          onClick={() => { toggle(USERTAB.ACTIVITY); }}
+          onClick={() => { toggleTab(USERTAB.ACTIVITY); }}
         >
           <Button>Activity</Button>
         </NavLink>
       </NavItem>
     </Nav>
     <TabContent activeTab={activeTab}>
-      <TabPane tabId="1">
-        <UserGeneral
+      <TabPane tabId={USERTAB.INFO}>
+        <UserInfo
           user={user}
+          toggleModalDialog={toggleModalDialog}
+        />
+        <ManageRam
+          showModalDialog={showModalDialog}
+          toggleModalDialog={toggleModalDialog}
+          
         />
       </TabPane>
-      <TabPane tabId="2">
-        <Row>
-          <Col sm="6">
-            <Card body>
-              <CardTitle>Special Title Treatment</CardTitle>
-              <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-              <Button>Go somewhere</Button>
-            </Card>
-          </Col>
-          <Col sm="6">
-            <Card body>
-              <CardTitle>Special Title Treatment</CardTitle>
-              <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-              <Button>Go somewhere</Button>
-            </Card>
-          </Col>
-        </Row>
+      <TabPane tabId={USERTAB.SEND}>
+      </TabPane>
+      <TabPane tabId={USERTAB.ACTIVITY}>
       </TabPane>
     </TabContent>
   </div>

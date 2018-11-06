@@ -1,7 +1,7 @@
 import React from 'react'
 import { 
   Col, Card, Row, Progress, UncontrolledTooltip,
-  ListGroup, ListGroupItem
+  ListGroup, ListGroupItem, Button
 } from 'reactstrap'
 
 const progressColor = (valueStr) => {
@@ -15,8 +15,9 @@ const progressColor = (valueStr) => {
   }
 }
 
-const UserGeneral = ({
-  user
+const UserInfo = ({
+  user,
+  toggleModalDialog
 }) => (
   <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
     <Card>
@@ -57,6 +58,7 @@ const UserGeneral = ({
           <Row id="TooltipRam">
             <Col>
               <h3 className="user-detail-label">RAM</h3>
+              <Button size="sm" onClick={toggleModalDialog}>Buy/Sell</Button>
             </Col>
             <Col>
               <div className="user-detail-label-small">
@@ -87,6 +89,7 @@ const UserGeneral = ({
           <Row id="TooltipCpu">
             <Col>
               <h3 className="user-detail-label">CPU</h3>
+              <Button size="sm">Stake/Unstake</Button>
             </Col>
             <Col>
               <div className="user-detail-label-small">
@@ -117,6 +120,7 @@ const UserGeneral = ({
           <Row id="TooltipBandwidth">
         <Col>
           <h3 className="user-detail-label">Bandwidth</h3>
+          <Button size="sm">Stake/Unstake</Button>
         </Col>
         <Col>
           <div className="user-detail-label-small">
@@ -148,4 +152,4 @@ const UserGeneral = ({
   </div>
 )
 
-export default UserGeneral
+export default UserInfo
