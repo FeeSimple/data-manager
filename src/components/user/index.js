@@ -63,7 +63,7 @@ class UserContainer extends Component {
     let accountExist = await checkAccount(eosAdmin, accountName)
     if (!accountExist) {
       this.setState({
-        resourceHandleErr: 'The enterted account: ' + accountName + ' does not exist',
+        resourceHandleErr: 'The entered account: ' + accountName + ' does not exist',
         isProcessing: false
       })
     } else {

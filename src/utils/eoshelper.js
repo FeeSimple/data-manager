@@ -174,16 +174,28 @@ export const getAccountInfo = async (eosClient, account) => {
 }
 
 export const checkAccountNameError = (accountName) => {
-  let errors = {}
+  let errMsg = null
   const accountRegex = /^[a-z1-5]*$/
   if (!accountName) {
-    errors.accountName = 'Required'
+    errMsg = 'Required'
   } else if (accountName.length !== 12) {
-    errors.accountName = 'Must be 12 symbols long'
+    errMsg = 'Must be 12 symbols long'
   } else if (!accountRegex.test(accountName)) {
-    errors.accountName = 'Must include symbols a-z 1-5'
+    errMsg = 'Must include symbols a-z 1-5'
   } else {
   }
-  // console.log('account validation error: ', errors)
-  return errors
+  return errMsg
+}
+
+export const checkRamAmountError = (ramAmount) => {
+  let errMsg = null
+  const ramRegex = /^[1-9]*$/
+  if (!ramAmount) {
+    errMsg = 'Required'
+  } else if (!ramRegex.test(ramAmount)) {
+    errMsg = 'Must be integer'
+  } else if (parseInt(ramAmount) <= 10) {
+    errMsg = 'Must be above 10'
+  }
+  return errMsg
 }
