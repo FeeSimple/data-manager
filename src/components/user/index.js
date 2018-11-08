@@ -57,17 +57,18 @@ class UserContainer extends Component {
       isProcessing: true
     })
 
-    const eosAdmin = getEosAdmin(Eos)
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
 
     // First, check if account exists
-    let accountExist = await checkAccount(eosAdmin, accountName)
+    let accountExist = await checkAccount(eosClient, accountName)
     if (!accountExist) {
       this.setState({
         resourceHandleErr: 'The entered account: ' + accountName + ' does not exist',
         isProcessing: false
       })
     } else {
-      let res = await manageRam(eosAdmin, accountName, eosAdminAccount.name, ramAmount)
+      let res = await manageRam(eosClient, accountName, activeAccount, ramAmount)
       console.log('handleManageRam:', res)
       if (res.errMsg) {
         this.setState({

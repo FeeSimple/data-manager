@@ -86,11 +86,11 @@ export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountNam
   }
 }
 
-export const manageRam = async (eosAdmin, accountName, eosAdminAccountName, ramAmount) => {
+export const manageRam = async (eosClient, accountName, activeAccount, ramAmount) => {
   try {
-    const result = await eosAdmin.transaction(tr => {
+    const result = await eosClient.transaction(tr => {
       tr.buyrambytes({
-          payer: eosAdminAccountName,
+          payer: activeAccount,
           receiver: accountName,
           bytes: parseInt(ramAmount)
       });
@@ -189,13 +189,17 @@ export const checkAccountNameError = (accountName) => {
 
 export const checkRamAmountError = (ramAmount) => {
   let errMsg = null
-  const ramRegex = /^[1-9]*$/
   if (!ramAmount) {
     errMsg = 'Required'
-  } else if (!ramRegex.test(ramAmount)) {
-    errMsg = 'Must be integer'
-  } else if (parseInt(ramAmount) <= 10) {
-    errMsg = 'Must be above 10'
+  } else {
+    try {
+      ramAmount = parseInt(ramAmount)
+      if (ramAmount <= 10) {
+        errMsg = 'Must be above 10'
+      }
+    } catch (err) {
+      errMsg = 'Must be integer'
+    }
   }
   return errMsg
 }
