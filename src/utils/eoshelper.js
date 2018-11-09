@@ -1,5 +1,6 @@
 import ecc from 'eosjs-ecc'
 import { getResourceStr, beautifyBalance, fetchBalanceNumber } from './beautify'
+import { NO_BALANCE } from './consts'
 
 export const getKeyPair = async () => {
   let promises = [], keys = [], keyPairs = []
@@ -45,7 +46,7 @@ export const calcStakedRam = (ramPrice, ramQuota) => {
 
 const remainingPercent = (used, max) => {
   const remaining = max - used
-  return new Intl.NumberFormat().format(100 * (remaining / max))
+  return new Intl.NumberFormat().format(100 * (remaining / max)).toString()
 }
 
 export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountName) => {
@@ -121,25 +122,43 @@ export const checkAccount = async (eosClient, account) => {
 export const getAccountInfo = async (eosClient, account) => {
   try {
     let result = await eosClient.getAccount(account)
-    const ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota})
-    const ramMeter = remainingPercent(result.ram_usage, result.ram_quota).toString()
+    console.log('getAccountInfo - result: ', result)
+    let ramStr = ''
+    let ramMeter = '0'
+    if (result.ram_usage && result.ram_quota) {
+      ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota})
+      ramMeter = remainingPercent(result.ram_usage, result.ram_quota).toString()
+    }
+    
+    let bandwidthStr = ''
+    let bandwidthMeter = '0'
+    if (result.net_limit) {
+      bandwidthStr = getResourceStr(result.net_limit)
+      bandwidthMeter = remainingPercent(result.net_limit.used, result.net_limit.max).toString()
+    }
+    
+    let cpuStr = ''
+    let cpuMeter = '0'
+    if (result.cpu_limit) {
+      cpuStr = getResourceStr(result.cpu_limit, true)
+      cpuMeter = remainingPercent(result.cpu_limit.used, result.cpu_limit.max).toString()
+    }
 
-    const bandwidthStr = getResourceStr(result.net_limit)
-    const bandwidthMeter = remainingPercent(result.net_limit.used, result.net_limit.max).toString()
-
-    const cpuStr = getResourceStr(result.cpu_limit, true)
-    const cpuMeter = remainingPercent(result.cpu_limit.used, result.cpu_limit.max).toString()
-
-    const balance = beautifyBalance(result.core_liquid_balance)
+    // If user has no balance, the field "core_liquid_balance" won't exist!
+    let balance = beautifyBalance(result.core_liquid_balance)
 
     let created = result.created
     let idx = created.indexOf('T') // cut away the time trailing
     created = created.substring(0, idx != -1 ? idx : created.length);
     
-    const pubkey = result.permissions[0].required_auth.keys[0].key
+    let pubkey = result.permissions[0].required_auth.keys[0].key
 
-    const stakedCpu = beautifyBalance(result.total_resources.cpu_weight)
-    const stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
+    let stakedCpu = NO_BALANCE
+    let stakedBandwidth = NO_BALANCE
+    if (result.total_resources) {
+      stakedCpu = beautifyBalance(result.total_resources.cpu_weight)
+      stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
+    }
 
     let info = {
       account,
@@ -156,18 +175,22 @@ export const getAccountInfo = async (eosClient, account) => {
       pubkey
     }
 
-    let ramPrice = await getRamPrice(eosClient)
-    let stakedRam = ''
-    if (ramPrice) {
-      stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+    let stakedRam = NO_BALANCE
+
+    if (result.ram_quota) {
+      let ramPrice = await getRamPrice(eosClient)
+      if (ramPrice) {  
+        stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+      }
     }
 
     info.stakedRam = stakedRam
-    console.log('info: ', info)
     
     return info
 
   } catch (err) {
+
+    console.log('getAccountInfo (' + account + ') error: ', err)
 
     return null
   }

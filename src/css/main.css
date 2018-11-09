@@ -157,6 +157,11 @@ h1, h2, h3, h4, h5, h6 {
   color: #0000cc;
   font-size: 12px; }
 
+.error-message {
+  background-color: #ff7272;
+  color: white;
+  padding: 1em; }
+
 .tooltip [class$="arrow"] {
   border-top: 5px solid background-color; }
 

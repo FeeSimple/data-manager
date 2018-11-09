@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getResourceStr, beautifyBalance } from '../../utils/beautify'
+import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
 import { getAccountInfo, manageRam, checkAccount } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
 import { 
@@ -93,6 +94,10 @@ class UserContainer extends Component {
 
   render() {
     const user = this.state.data
+    if (!user) {
+      // You can render any custom fallback UI
+      return <h1 className="error-message">{ERR_DATA_LOADING_FAILED}</h1>;
+    }
     return (
       <User
         user={user}
