@@ -23,8 +23,8 @@ class UserContainer extends Component {
       resourceHandleErr: false, 
       isProcessing: false,
 
-      showModalCpu: false,
-      showModalBw: false
+      showModalCpuBw: false,
+      isCpu: false
     }
   }
 
@@ -33,14 +33,19 @@ class UserContainer extends Component {
     this.setState({showModalRam: !showModalRam})
   }
 
+  handleToggleModalCpuBw = () => {
+    const { showModalCpuBw } = this.state
+    this.setState({showModalCpuBw: !showModalCpuBw})
+  }
+
   handleToggleModalCpu = () => {
-    const { showModalCpu } = this.state
-    this.setState({showModalCpu: !showModalCpu})
+    this.handleToggleModalCpuBw()
+    this.state.isCpu = true
   }
 
   handleToggleModalBw = () => {
-    const { showModalBw } = this.state
-    this.setState({showModalBw: !showModalBw})
+    this.handleToggleModalCpuBw()
+    this.state.isCpu = false
   }
 
   toggleTab(tab) {
@@ -108,11 +113,11 @@ class UserContainer extends Component {
         handleToggleModalRam={this.handleToggleModalRam}
         handleManageRam={this.handleManageRam}
 
-        showModalCpu={this.state.showModalCpu}
+        showModalCpuBw={this.state.showModalCpuBw}
+        handleToggleModalCpuBw={this.handleToggleModalCpuBw}
         handleToggleModalCpu={this.handleToggleModalCpu}
-
-        showModalBw={this.state.showModalBw}
         handleToggleModalBw={this.handleToggleModalBw}
+        isCpu={this.state.isCpu}
 
         isProcessing={this.state.isProcessing}
         resourceHandleErr={this.state.resourceHandleErr}

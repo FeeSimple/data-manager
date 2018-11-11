@@ -226,3 +226,20 @@ export const checkRamAmountError = (ramAmount) => {
   }
   return errMsg
 }
+
+export const checkBwAmountError = (bwAmount) => {
+  let errMsg = null
+  if (!bwAmount) {
+    errMsg = 'Required'
+  } else {
+    try {
+      bwAmount = parseInt(bwAmount)
+      if (bwAmount <= 10) {
+        errMsg = 'Must be above 10'
+      }
+    } catch (err) {
+      errMsg = 'Must be integer'
+    }
+  }
+  return errMsg
+}

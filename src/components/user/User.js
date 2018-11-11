@@ -7,8 +7,7 @@ import {
 import classnames from 'classnames'
 import UserInfo from './UserInfo'
 import ManageRam from './ManageRam'
-import ManageCpu from './ManageCpu'
-import ManageBw from './ManageBw'
+import ManageCpuBw from './ManageCpuBw'
 
 export const USERTAB = {
   INFO: '1',
@@ -27,11 +26,11 @@ export const User = ({
   handleToggleModalRam,
   handleManageRam,
 
-  showModalCpu,
+  showModalCpuBw,
   handleToggleModalCpu,
-
-  showModalBw,
   handleToggleModalBw,
+  handleToggleModalCpuBw,
+  isCpu,
 
   isProcessing,
   resourceHandleErr
@@ -80,18 +79,12 @@ export const User = ({
           resourceHandleErr={resourceHandleErr}
         />
 
-        <ManageCpu
-          showModalCpu={showModalCpu}
-          handleToggleModalCpu={handleToggleModalCpu}
+        <ManageCpuBw
+          showModalCpuBw={showModalCpuBw}
+          handleToggleModalCpuBw={handleToggleModalCpuBw}
           isProcessing={isProcessing}
           resourceHandleErr={resourceHandleErr}
-        />
-
-        <ManageBw
-          showModalBw={showModalBw}
-          handleToggleModalBw={handleToggleModalBw}
-          isProcessing={isProcessing}
-          resourceHandleErr={resourceHandleErr}
+          isCpu={isCpu}
         />
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
