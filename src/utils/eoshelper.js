@@ -151,8 +151,9 @@ export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, is
     return {}
   } catch (err) {
     // Without JSON.parse(), it never works!
-    err = JSON.parse(err)
-    const errMsg = (err.error.what || "Resource management failed")
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "Resource management failed")
+    const errMsg = "Resource management failed"
     
     return {errMsg}
   }

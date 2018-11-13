@@ -165,6 +165,12 @@ h1, h2, h3, h4, h5, h6 {
 .tooltip [class$="arrow"] {
   border-top: 5px solid background-color; }
 
+.modal-dialog-resource {
+  position: absolute;
+  top: 30%;
+  left: 20%;
+  transform: translate(-50%, -50%) !important; }
+
 .drop-down-input {
   -webkit-appearance: none;
   -moz-appearance: none;
