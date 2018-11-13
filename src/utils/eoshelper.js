@@ -23,7 +23,7 @@ export const getRamPrice = async (eosClient) => {
     if (!result || !result.rows[0]) return null
     
     let ramMarketRow = result.rows[0]
-    console.log('ramMarketRow:', ramMarketRow)
+    // console.log('ramMarketRow:', ramMarketRow)
     let quoteBalance = fetchBalanceNumber(ramMarketRow.quote.balance)
     let baseBalance = fetchBalanceNumber(ramMarketRow.base.balance)
     if (!quoteBalance || !baseBalance) return null
@@ -71,9 +71,9 @@ export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountNam
       tr.delegatebw({
           from: eosAdminAccountName,
           receiver: accountName,
-          stake_net_quantity: '10.0000 XFS',
-          stake_cpu_quantity: '10.0000 XFS',
-          transfer: 0
+          stake_net_quantity: '10.0000 XFS', // for "delegatebw", there must be exactly 4 decimal places
+          stake_cpu_quantity: '10.0000 XFS', // Otherwise, it will never work
+          transfer: 1
       });
     })
 
@@ -82,6 +82,77 @@ export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountNam
     // Without JSON.parse(), it never works!
     err = JSON.parse(err)
     const errMsg = (err.error.what || "Account creation failed")
+    
+    return {errMsg}
+  }
+}
+
+export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, isStake) => {
+  try {
+    let result = null
+
+    // For "delegatebw", there must be exactly 4 decimal places
+    // Otherwise, it won't work
+    xfsAmount = parseFloat(xfsAmount).toFixed(4).toString() + ' XFS'
+    const zeroAmount = '0.0000 XFS'
+    console.log('xfsAmount:', xfsAmount);
+
+    // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
+    if (isCpu) {
+      if (isStake) {
+        // Stake CPU
+        result = await eosClient.transaction(tr => {
+          tr.delegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            stake_cpu_quantity: xfsAmount,
+            stake_net_quantity: zeroAmount,
+            transfer: 0 // for staking, "transfer" must be 0
+          });
+        })
+      } else {
+        // Unstake CPU
+        result = await eosClient.transaction(tr => {
+          tr.undelegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            unstake_cpu_quantity: xfsAmount,
+            unstake_net_quantity: zeroAmount,
+            transfer: 1 // for unstaking, "transfer" can be 0
+          });
+        })
+      }
+    } else {
+      if (isStake) {
+        // Stake Bw
+        result = await eosClient.transaction(tr => {
+          tr.delegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            stake_cpu_quantity: zeroAmount,
+            stake_net_quantity: xfsAmount,
+            transfer: 0 // for staking, "transfer" must be 0
+          });
+        })
+      } else {
+        // Unstake Bw
+        result = await eosClient.transaction(tr => {
+          tr.undelegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            unstake_cpu_quantity: zeroAmount,
+            unstake_net_quantity: xfsAmount,
+            transfer: 1 // for unstaking, "transfer" can be 0
+          });
+        })
+      }
+    }
+    
+    return {}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    err = JSON.parse(err)
+    const errMsg = (err.error.what || "Resource management failed")
     
     return {errMsg}
   }
@@ -227,19 +298,12 @@ export const checkRamAmountError = (ramAmount) => {
   return errMsg
 }
 
-export const checkBwAmountError = (bwAmount) => {
+export const checkResourceAmountError = (xfsAmount) => {
   let errMsg = null
-  if (!bwAmount) {
+  if (!xfsAmount) {
     errMsg = 'Required'
-  } else {
-    try {
-      bwAmount = parseInt(bwAmount)
-      if (bwAmount <= 10) {
-        errMsg = 'Must be above 10'
-      }
-    } catch (err) {
-      errMsg = 'Must be integer'
-    }
+  } else if (xfsAmount <= 0) {
+      errMsg = 'Must be positive'
   }
   return errMsg
 }

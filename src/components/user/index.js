@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getResourceStr, beautifyBalance } from '../../utils/beautify'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { getAccountInfo, manageRam, checkAccount } from '../../utils/eoshelper'
+import { getAccountInfo, manageRam, checkAccount, manageCpuBw } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
 import { 
   eosAdminAccount, getEosAdmin 
@@ -24,18 +24,46 @@ class UserContainer extends Component {
       isProcessing: false,
 
       showModalCpuBw: false,
-      isCpu: false
+      isCpu: false,
+      isStake: false,
     }
+  }
+
+  setStake = () => {
+    this.setState({
+      isStake: true,
+      resourceHandleErr: false, 
+      isProcessing: false
+    })
+  }
+
+  setUnstake = () => {
+    this.setState({
+      isStake: false,
+      resourceHandleErr: false, 
+      isProcessing: false
+    })
   }
 
   handleToggleModalRam = () => {
     const { showModalRam } = this.state
-    this.setState({showModalRam: !showModalRam})
+    this.setState({
+      showModalRam: !showModalRam,
+      resourceHandleErr: false, 
+      isProcessing: false
+    })
   }
 
-  handleToggleModalCpuBw = () => {
+  handleToggleModalCpuBw = async () => {
     const { showModalCpuBw } = this.state
-    this.setState({showModalCpuBw: !showModalCpuBw})
+    this.setState({
+      showModalCpuBw: !showModalCpuBw,
+      resourceHandleErr: false, 
+      isProcessing: false
+    })
+
+    // Update account info
+    this.updateAccountInfo()
   }
 
   handleToggleModalCpu = () => {
@@ -54,6 +82,32 @@ class UserContainer extends Component {
         activeTab: tab
       })
     }
+  }
+
+  handleManageCpuBw = async (xfsAmount) => {
+    // Reset state
+    this.setState({
+      resourceHandleErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+
+    const { isCpu, isStake } = this.state
+    let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, isCpu, isStake)
+      console.log('manageCpuBw:', res)
+      if (res.errMsg) {
+        this.setState({
+          resourceHandleErr: res.errMsg,
+          isProcessing: false
+        })
+      } else {
+        this.setState({
+          resourceHandleErr: 'Success',
+          isProcessing: false
+        })
+      }
   }
 
   handleManageRam = async (accountName, ramAmount) => {
@@ -90,11 +144,15 @@ class UserContainer extends Component {
     }
   }
 
-  async componentDidMount() {
+  updateAccountInfo = async () => {
     const { eosClient, accountData } = this.props
     let account = accountData.active
     let info = await getAccountInfo(eosClient, account)
     this.setState({ data: info })
+  }
+
+  async componentDidMount() {
+    this.updateAccountInfo()
   }
 
   render() {
@@ -118,6 +176,10 @@ class UserContainer extends Component {
         handleToggleModalCpu={this.handleToggleModalCpu}
         handleToggleModalBw={this.handleToggleModalBw}
         isCpu={this.state.isCpu}
+        isStake={this.state.isStake}
+        setStake={this.setStake}
+        setUnstake={this.setUnstake}
+        handleManageCpuBw={this.handleManageCpuBw}
 
         isProcessing={this.state.isProcessing}
         resourceHandleErr={this.state.resourceHandleErr}

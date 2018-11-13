@@ -4,11 +4,11 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  Button, Form, FormGroup, Input, Alert, Collapse, UncontrolledTooltip, Label
+  Button, Form, FormGroup, Input, Alert, Collapse, UncontrolledTooltip, Label, Col
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
-import { checkAccountNameError, checkBwAmountError } from '../../utils/eoshelper'
+import { checkResourceAmountError } from '../../utils/eoshelper'
 
 const ManageCpuBwForm = props => {
   const { 
@@ -18,57 +18,53 @@ const ManageCpuBwForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    showModalCpuBw, handleToggleModalCpuBw, isCpu,
+    showModalCpuBw, handleToggleModalCpuBw, isCpu, 
+    isStake, setStake, setUnstake, handleManageCpuBw,
     isProcessing, resourceHandleErr
   } = props
 
   return (
     <Modal isOpen={showModalCpuBw} toggle={handleToggleModalCpuBw}>
       <ModalHeader toggle={handleToggleModalCpuBw}>
-        { isCpu ? <span>Stake/unstake CPU</span> : <span>Stake/unstake Bandwidth</span> }
+        { isCpu ? <span>Manage CPU</span> : <span>Manage Bandwidth</span> }
       </ModalHeader>
       <ModalBody>
+        <div className="form-group row">
+          <Col xs={12} sm={6}>
+            <Button 
+              className="btn-base btn-home btn btn-secondary"
+              onClick={ setStake }
+            >
+              Stake
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button 
+              className="btn-base btn-home btn btn-secondary"
+              onClick={ setUnstake }
+            >
+              Unstake
+            </Button>
+          </Col>
+        </div>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <Label>CPU stake</Label>
+            <Label>
+              { isCpu ? <span>CPU</span> : <span>Bandwidth</span>} &nbsp;
+              { isStake ? <span>stake</span> : <span>unstake</span>} (in XFS)
+            </Label>
             <Input
-              id='accountName'
+              id='xfsAmount'
               onBlur={handleBlur}
-              value={values.accountName}
+              value={values.xfsAmount}
               onChange={handleChange}
-              invalid={errors.accountName && touched.accountName}
+              invalid={errors.xfsAmount && touched.xfsAmount}
               type="text"
-              placeholder="must be 12 symbols long and include symbols a-z 1-5"
             />
-            <UncontrolledTooltip placement="right" target="accountName" styleName="tooltip">
-              <p>
-                Enter your own account for buying more Bw
-              </p>
-              <p>
-                or enter another account for selling your Bw
-              </p>
-            </UncontrolledTooltip>
-          </FormGroup>
-          <FormGroup>
-            <Input
-              id='BwAmount'
-              onBlur={handleBlur}
-              value={values.BwAmount}
-              onChange={handleChange}
-              invalid={errors.BwAmount && touched.BwAmount}
-              type="text"
-              placeholder="Bw amount (in bytes)"
-            />
-            <UncontrolledTooltip placement="right" target="BwAmount" styleName="tooltip">
-              <p>
-                Must be above 10 bytes
-              </p>
-            </UncontrolledTooltip>
           </FormGroup>
           <Button 
             type="submit" color='secondary' className="btn-base btn-home"
-            disabled={(touched.accountName && errors.accountName) ||
-                      (touched.BwAmount && errors.BwAmount)}
+            disabled={ touched.xfsAmount && errors.xfsAmount }
           >
             {isProcessing ?
               <Spinner name="three-bounce" color="red"/>
@@ -78,9 +74,27 @@ const ManageCpuBwForm = props => {
             
           </Button>
           <Collapse isOpen={resourceHandleErr}>
-            <Alert color={resourceHandleErr === 'Success'? 'success':'danger'}>
-              {resourceHandleErr}
-            </Alert>
+            {resourceHandleErr === 'Success'?
+              <Alert color='success'>
+                {
+                  isStake?
+                    <div>
+                      <div><b>Successful staking!</b></div>
+                      <div>{values.xfsAmount} XFS has been deducted from your balance</div>
+                    </div>
+                  :
+                    <div>
+                      <div><b>Successful unstaking!</b></div>
+                      <div>{values.xfsAmount} XFS will be transferred back to your balance after 3 days</div>
+                    </div>
+                }
+              </Alert>
+            :
+              <Alert color='danger'>
+                {resourceHandleErr}
+              </Alert>  
+            }
+            
           </Collapse>
         </Form>
       </ModalBody>
@@ -90,23 +104,18 @@ const ManageCpuBwForm = props => {
 }
 
 const EnhancedManageCpuBwForm = withFormik({
-  mapPropsToValues: () => ({ accountName: '', BwAmount: '' }),
+  mapPropsToValues: () => ({ xfsAmount: ''}),
   validate: values => {
-    let errMsg = checkAccountNameError(values.accountName)
+    let errMsg = checkResourceAmountError(values.xfsAmount)
     if (errMsg) {
-      return {accountName: errMsg}
+      return {xfsAmount: errMsg}
+    } else {
+      return {}
     }
-    
-    errMsg = checkBwAmountError(values.BwAmount)
-    if (errMsg) {
-      return {BwAmount: errMsg}
-    }
-
-    return {}
   },
 
-  handleSubmit: async({ accountName, BwAmount }, { props }) => {
-    await props.handleManageCpuBw(accountName, BwAmount)
+  handleSubmit: async({ xfsAmount }, { props }) => {
+    await props.handleManageCpuBw(xfsAmount)
   },
 
   displayName: 'ManageCpuBwForm' // helps with React DevTools

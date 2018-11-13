@@ -31,6 +31,8 @@ export const User = ({
   handleToggleModalBw,
   handleToggleModalCpuBw,
   isCpu,
+  isStake, setStake, setUnstake,
+  handleManageCpuBw,
 
   isProcessing,
   resourceHandleErr
@@ -85,6 +87,10 @@ export const User = ({
           isProcessing={isProcessing}
           resourceHandleErr={resourceHandleErr}
           isCpu={isCpu}
+          isStake={isStake}
+          setStake={setStake}
+          setUnstake={setUnstake}
+          handleManageCpuBw={handleManageCpuBw}
         />
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
