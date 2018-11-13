@@ -45,6 +45,11 @@ export function beautifyRam(ram) {
 
 // Applicable for RAM and Bandwidth
 export function getResourceStr(resource, cpu) {
+
+  if (!resource) {
+    return ''
+  }
+
   let resourceAvailable = resource.max - resource.used
   let resourceStr = ''
   if (cpu) {
@@ -74,6 +79,7 @@ export function fetchBalanceNumber(balance) {
 }
 
 export function beautifyBalance(balance) {
+  if (!balance) return '0 XFS'
   let res = ''
   let idx = balance.indexOf(' ') // 100000 XFS
   if (idx != -1) {

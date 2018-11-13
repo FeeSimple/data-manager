@@ -4,11 +4,11 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  Button, Form, FormGroup, Input, Alert, Collapse
+  Button, Form, FormGroup, Input, Alert, Collapse, UncontrolledTooltip
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
-import { checkAccountNameError } from '../../utils/eoshelper'
+import { checkAccountNameError, checkRamAmountError } from '../../utils/eoshelper'
 
 const ManageRamForm = props => {
   const { 
@@ -23,9 +23,9 @@ const ManageRamForm = props => {
   } = props
 
   return (
-    <Modal isOpen={showModalRam} toggle={handleToggleModalRam} size='lg'>
+    <Modal isOpen={showModalRam} toggle={handleToggleModalRam}>
       <ModalHeader toggle={handleToggleModalRam}>Buy/Sell RAM</ModalHeader>
-      <ModalBody size='lg'>
+      <ModalBody>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Input
@@ -35,8 +35,16 @@ const ManageRamForm = props => {
               onChange={handleChange}
               invalid={errors.accountName && touched.accountName}
               type="text"
-              placeholder="Enter your own account for buying more RAM or enter another account for selling your RAM"
+              placeholder="must be 12 symbols long and include symbols a-z 1-5"
             />
+            <UncontrolledTooltip placement="right" target="accountName" styleName="tooltip">
+              <p>
+                Enter your own account for buying more RAM
+              </p>
+              <p>
+                or enter another account for selling your RAM
+              </p>
+            </UncontrolledTooltip>
           </FormGroup>
           <FormGroup>
             <Input
@@ -48,10 +56,16 @@ const ManageRamForm = props => {
               type="text"
               placeholder="RAM amount (in bytes)"
             />
+            <UncontrolledTooltip placement="right" target="ramAmount" styleName="tooltip">
+              <p>
+                Must be above 10 bytes
+              </p>
+            </UncontrolledTooltip>
           </FormGroup>
           <Button 
             type="submit" color='secondary' className="btn-base btn-home"
-            disabled={(touched.accountName && errors.accountName)}
+            disabled={(touched.accountName && errors.accountName) ||
+                      (touched.ramAmount && errors.ramAmount)}
           >
             {isProcessing ?
               <Spinner name="three-bounce" color="red"/>
@@ -75,7 +89,17 @@ const ManageRamForm = props => {
 const EnhancedManageRamForm = withFormik({
   mapPropsToValues: () => ({ accountName: '', ramAmount: '' }),
   validate: values => {
-    return checkAccountNameError(values.accountName)
+    let errMsg = checkAccountNameError(values.accountName)
+    if (errMsg) {
+      return {accountName: errMsg}
+    }
+    
+    errMsg = checkRamAmountError(values.ramAmount)
+    if (errMsg) {
+      return {ramAmount: errMsg}
+    }
+
+    return {}
   },
 
   handleSubmit: async({ accountName, ramAmount }, { props }) => {

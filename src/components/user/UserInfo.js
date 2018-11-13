@@ -37,7 +37,7 @@ const UserInfo = ({
         <ListGroupItem>
           <Row>
             <Col>
-              <h3 className="user-detail-label">Creation date</h3>
+              <h3 className="user-detail-label">Creation Date</h3>
             </Col>
             <Col>
               <h3
@@ -48,7 +48,7 @@ const UserInfo = ({
         <ListGroupItem>
           <Row>
             <Col>
-              <h3 className="user-detail-label">Balance</h3>
+              <h3 className="user-detail-label">Spendable Balance</h3>
             </Col>
             <Col>
               <h3

@@ -83,7 +83,10 @@ const NewAccForm = props => {
 const EnhancedNewAccForm = withFormik({
   mapPropsToValues: () => ({ accountName: '' }),
   validate: values => {
-    return checkAccountNameError(values.accountName)
+    let errMsg = checkAccountNameError(values.accountName)
+    if (errMsg) {
+      return {accountName: errMsg}
+    }
   },
 
   handleSubmit: async({ accountName }, { props }) => {
