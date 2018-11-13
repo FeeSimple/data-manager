@@ -1,5 +1,6 @@
 import ecc from 'eosjs-ecc'
 import { getResourceStr, beautifyBalance, fetchBalanceNumber } from './beautify'
+import { NO_BALANCE } from './consts'
 
 export const getKeyPair = async () => {
   let promises = [], keys = [], keyPairs = []
@@ -22,7 +23,7 @@ export const getRamPrice = async (eosClient) => {
     if (!result || !result.rows[0]) return null
     
     let ramMarketRow = result.rows[0]
-    console.log('ramMarketRow:', ramMarketRow)
+    // console.log('ramMarketRow:', ramMarketRow)
     let quoteBalance = fetchBalanceNumber(ramMarketRow.quote.balance)
     let baseBalance = fetchBalanceNumber(ramMarketRow.base.balance)
     if (!quoteBalance || !baseBalance) return null
@@ -45,7 +46,7 @@ export const calcStakedRam = (ramPrice, ramQuota) => {
 
 const remainingPercent = (used, max) => {
   const remaining = max - used
-  return new Intl.NumberFormat().format(100 * (remaining / max))
+  return new Intl.NumberFormat().format(100 * (remaining / max)).toString()
 }
 
 export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountName) => {
@@ -70,9 +71,9 @@ export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountNam
       tr.delegatebw({
           from: eosAdminAccountName,
           receiver: accountName,
-          stake_net_quantity: '10.0000 XFS',
-          stake_cpu_quantity: '10.0000 XFS',
-          transfer: 0
+          stake_net_quantity: '10.0000 XFS', // for "delegatebw", there must be exactly 4 decimal places
+          stake_cpu_quantity: '10.0000 XFS', // Otherwise, it will never work
+          transfer: 1
       });
     })
 
@@ -86,11 +87,82 @@ export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountNam
   }
 }
 
-export const manageRam = async (eosAdmin, accountName, eosAdminAccountName, ramAmount) => {
+export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, isStake) => {
   try {
-    const result = await eosAdmin.transaction(tr => {
+    let result = null
+
+    // For "delegatebw", there must be exactly 4 decimal places
+    // Otherwise, it won't work
+    xfsAmount = parseFloat(xfsAmount).toFixed(4).toString() + ' XFS'
+    const zeroAmount = '0.0000 XFS'
+    console.log('xfsAmount:', xfsAmount);
+
+    // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
+    if (isCpu) {
+      if (isStake) {
+        // Stake CPU
+        result = await eosClient.transaction(tr => {
+          tr.delegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            stake_cpu_quantity: xfsAmount,
+            stake_net_quantity: zeroAmount,
+            transfer: 0 // for staking, "transfer" must be 0
+          });
+        })
+      } else {
+        // Unstake CPU
+        result = await eosClient.transaction(tr => {
+          tr.undelegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            unstake_cpu_quantity: xfsAmount,
+            unstake_net_quantity: zeroAmount,
+            transfer: 1 // for unstaking, "transfer" can be 0
+          });
+        })
+      }
+    } else {
+      if (isStake) {
+        // Stake Bw
+        result = await eosClient.transaction(tr => {
+          tr.delegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            stake_cpu_quantity: zeroAmount,
+            stake_net_quantity: xfsAmount,
+            transfer: 0 // for staking, "transfer" must be 0
+          });
+        })
+      } else {
+        // Unstake Bw
+        result = await eosClient.transaction(tr => {
+          tr.undelegatebw({
+            from: activeAccount,
+            receiver: activeAccount,
+            unstake_cpu_quantity: zeroAmount,
+            unstake_net_quantity: xfsAmount,
+            transfer: 1 // for unstaking, "transfer" can be 0
+          });
+        })
+      }
+    }
+    
+    return {}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    err = JSON.parse(err)
+    const errMsg = (err.error.what || "Resource management failed")
+    
+    return {errMsg}
+  }
+}
+
+export const manageRam = async (eosClient, accountName, activeAccount, ramAmount) => {
+  try {
+    const result = await eosClient.transaction(tr => {
       tr.buyrambytes({
-          payer: eosAdminAccountName,
+          payer: activeAccount,
           receiver: accountName,
           bytes: parseInt(ramAmount)
       });
@@ -121,25 +193,43 @@ export const checkAccount = async (eosClient, account) => {
 export const getAccountInfo = async (eosClient, account) => {
   try {
     let result = await eosClient.getAccount(account)
-    const ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota})
-    const ramMeter = remainingPercent(result.ram_usage, result.ram_quota).toString()
+    console.log('getAccountInfo - result: ', result)
+    let ramStr = ''
+    let ramMeter = '0'
+    if (result.ram_usage && result.ram_quota) {
+      ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota})
+      ramMeter = remainingPercent(result.ram_usage, result.ram_quota).toString()
+    }
+    
+    let bandwidthStr = ''
+    let bandwidthMeter = '0'
+    if (result.net_limit) {
+      bandwidthStr = getResourceStr(result.net_limit)
+      bandwidthMeter = remainingPercent(result.net_limit.used, result.net_limit.max).toString()
+    }
+    
+    let cpuStr = ''
+    let cpuMeter = '0'
+    if (result.cpu_limit) {
+      cpuStr = getResourceStr(result.cpu_limit, true)
+      cpuMeter = remainingPercent(result.cpu_limit.used, result.cpu_limit.max).toString()
+    }
 
-    const bandwidthStr = getResourceStr(result.net_limit)
-    const bandwidthMeter = remainingPercent(result.net_limit.used, result.net_limit.max).toString()
-
-    const cpuStr = getResourceStr(result.cpu_limit, true)
-    const cpuMeter = remainingPercent(result.cpu_limit.used, result.cpu_limit.max).toString()
-
-    const balance = beautifyBalance(result.core_liquid_balance)
+    // If user has no balance, the field "core_liquid_balance" won't exist!
+    let balance = beautifyBalance(result.core_liquid_balance)
 
     let created = result.created
     let idx = created.indexOf('T') // cut away the time trailing
     created = created.substring(0, idx != -1 ? idx : created.length);
     
-    const pubkey = result.permissions[0].required_auth.keys[0].key
+    let pubkey = result.permissions[0].required_auth.keys[0].key
 
-    const stakedCpu = beautifyBalance(result.total_resources.cpu_weight)
-    const stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
+    let stakedCpu = NO_BALANCE
+    let stakedBandwidth = NO_BALANCE
+    if (result.total_resources) {
+      stakedCpu = beautifyBalance(result.total_resources.cpu_weight)
+      stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
+    }
 
     let info = {
       account,
@@ -156,34 +246,64 @@ export const getAccountInfo = async (eosClient, account) => {
       pubkey
     }
 
-    let ramPrice = await getRamPrice(eosClient)
-    let stakedRam = ''
-    if (ramPrice) {
-      stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+    let stakedRam = NO_BALANCE
+
+    if (result.ram_quota) {
+      let ramPrice = await getRamPrice(eosClient)
+      if (ramPrice) {  
+        stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+      }
     }
 
     info.stakedRam = stakedRam
-    console.log('info: ', info)
     
     return info
 
   } catch (err) {
+
+    console.log('getAccountInfo (' + account + ') error: ', err)
 
     return null
   }
 }
 
 export const checkAccountNameError = (accountName) => {
-  let errors = {}
+  let errMsg = null
   const accountRegex = /^[a-z1-5]*$/
   if (!accountName) {
-    errors.accountName = 'Required'
+    errMsg = 'Required'
   } else if (accountName.length !== 12) {
-    errors.accountName = 'Must be 12 symbols long'
+    errMsg = 'Must be 12 symbols long'
   } else if (!accountRegex.test(accountName)) {
-    errors.accountName = 'Must include symbols a-z 1-5'
+    errMsg = 'Must include symbols a-z 1-5'
   } else {
   }
-  // console.log('account validation error: ', errors)
-  return errors
+  return errMsg
+}
+
+export const checkRamAmountError = (ramAmount) => {
+  let errMsg = null
+  if (!ramAmount) {
+    errMsg = 'Required'
+  } else {
+    try {
+      ramAmount = parseInt(ramAmount)
+      if (ramAmount <= 10) {
+        errMsg = 'Must be above 10'
+      }
+    } catch (err) {
+      errMsg = 'Must be integer'
+    }
+  }
+  return errMsg
+}
+
+export const checkResourceAmountError = (xfsAmount) => {
+  let errMsg = null
+  if (!xfsAmount) {
+    errMsg = 'Required'
+  } else if (xfsAmount <= 0) {
+      errMsg = 'Must be positive'
+  }
+  return errMsg
 }
