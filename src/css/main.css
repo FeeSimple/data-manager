@@ -140,15 +140,30 @@ h1, h2, h3, h4, h5, h6 {
 
 .user-detail-label {
   font-weight: 400;
-  font-size: 20px;
-  padding-bottom: 5px;
+  font-size: 15px;
+  padding: 0;
+  margin: 12px -1% 3px;
   color: #2b8acb; }
 
 .user-detail-label-small {
   font-weight: 400;
   font-size: 12px;
-  padding-bottom: 5px;
+  margin: 0;
   color: #2b8acb; }
+
+.tooltip [class$="inner"] {
+  background-color: rgba(222, 222, 223, 0.75);
+  border: 1px solid background-color;
+  color: #0000cc;
+  font-size: 12px; }
+
+.error-message {
+  background-color: #ff7272;
+  color: white;
+  padding: 1em; }
+
+.tooltip [class$="arrow"] {
+  border-top: 5px solid background-color; }
 
 .drop-down-input {
   -webkit-appearance: none;

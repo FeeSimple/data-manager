@@ -4,9 +4,14 @@ import ecc from 'eosjs-ecc'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
-import { getImportedKeyEos, getNetworkData } from '../../utils/index'
+import { 
+  getImportedKeyEos, getNetworkData, 
+  eosAdminAccount, getEosAdmin 
+} from '../../utils/index'
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
+import NewAcc from './NewAcc'
+import { getKeyPair, createNewAccount } from '../../utils/eoshelper'
 import {
   setActive,
   setInfo,
@@ -20,8 +25,14 @@ import {
 class LoginContainer extends Component {
   state={
     showSelectAccModal: false,
+    showNewAccModal: false,
+    isOpenKeyPair: false,
     availableAccounts: [],
-    privKey: null
+    privKey: null,
+    accountPubKey: '',
+    accountPrivKey: '',
+    newAccountCreationErr: false,
+    isProcessing: false
   }
 
   handleImportPrivKey = (privKey) => {
@@ -35,6 +46,47 @@ class LoginContainer extends Component {
       })
       this.handleToggleSelAcc()
     })
+  }
+
+  handleCleanup = () => {
+    this.setState({
+      accountPubKey: '', 
+      accountPrivKey: '',
+      newAccountCreationErr: ''
+    })
+    console.log('handleCleanup:', this.state.newAccountCreationErr)
+  }
+
+  handleCreateNewAccount = async (accountName) => {
+    // Reset state
+    this.setState({
+      isOpenKeyPair: false,
+      accountPubKey: '', 
+      accountPrivKey: '',
+      newAccountCreationErr: false,
+      isProcessing: true
+    })
+
+    const eosAdmin = getEosAdmin(Eos)
+    let res = await createNewAccount(eosAdmin, accountName, eosAdminAccount.name)
+
+    if (res.errMsg) {
+      this.setState({
+        isOpenKeyPair: false,
+        accountPubKey: '', 
+        accountPrivKey: '',
+        newAccountCreationErr: res.errMsg,
+        isProcessing: false
+      })
+    } else {
+      this.setState({
+        isOpenKeyPair: true,
+        accountPubKey: res.accountPubKey, 
+        accountPrivKey: res.accountPrivKey,
+        newAccountCreationErr: false,
+        isProcessing: false
+      })
+    }
   }
 
   handleScatterClick = async () => {
@@ -55,6 +107,11 @@ class LoginContainer extends Component {
       usingScatter: true
     })
     this.handleToggleSelAcc()
+  }
+
+  handleNewAccountClick = async () => {
+    
+    this.handleToggleNewAcc()
   }
 
   handleSelectAcc = async (account) => {
@@ -129,6 +186,11 @@ class LoginContainer extends Component {
     this.setState({showSelectAccModal: !showSelectAccModal})
   }
 
+  handleToggleNewAcc = () => {
+    const { showNewAccModal } = this.state
+    this.setState({showNewAccModal: !showNewAccModal})
+  }
+
   render () {
     const accounts = this.state.availableAccounts
     const { scatter } = this.props
@@ -138,12 +200,24 @@ class LoginContainer extends Component {
           handleImportPrivKey={this.handleImportPrivKey}
           onScatterClick={this.handleScatterClick}
           scatterDetected={Object.keys(scatter).length > 0}
+          onNewAccountClick={this.handleNewAccountClick}
         />
         <SelectAcc
           isOpen={this.state.showSelectAccModal}
           handleToggle={this.handleToggleSelAcc}
           onAccountSelect={this.handleSelectAcc}
           accounts={accounts}
+        />
+        <NewAcc
+          isOpen={this.state.showNewAccModal}
+          handleToggle={this.handleToggleNewAcc}
+          isOpenKeyPair={this.state.isOpenKeyPair}
+          handleCreateNewAccount={this.handleCreateNewAccount}
+          handleCleanup={this.handleCleanup}
+          accountPubKey = {this.state.accountPubKey}
+          accountPrivKey = {this.state.accountPrivKey}
+          newAccountCreationErr = {this.state.newAccountCreationErr}
+          isProcessing = {this.state.isProcessing}
         />
       </div>
     )
