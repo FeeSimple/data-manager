@@ -24,7 +24,8 @@ const ManageCpuBwForm = props => {
   } = props
 
   return (
-    <Modal className="modal-dialog-resource" size="lg" isOpen={showModalCpuBw} toggle={handleToggleModalCpuBw}>
+    <Modal className="modal-dialog-resource" size="sm" isOpen={showModalCpuBw} toggle={handleToggleModalCpuBw}>
+      <ModalHeader toggle={handleToggleModalCpuBw}>Manage Stake</ModalHeader>
       <ModalBody>
         <div className="form-group row">
           <Col xs={12} sm={6}>
@@ -70,7 +71,7 @@ const ManageCpuBwForm = props => {
             }
           </Button>
         </Form>
-        <Collapse isOpen={resourceHandleErr} size='lg'>
+        <Collapse isOpen={resourceHandleErr} size='sm'>
           {resourceHandleErr === 'Success'?
             <Alert color='success'>
               {

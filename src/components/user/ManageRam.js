@@ -23,7 +23,7 @@ const ManageRamForm = props => {
   } = props
 
   return (
-    <Modal isOpen={showModalRam} toggle={handleToggleModalRam}>
+    <Modal className="modal-dialog-resource" isOpen={showModalRam} toggle={handleToggleModalRam}>
       <ModalHeader toggle={handleToggleModalRam}>Buy/Sell RAM</ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit}>
@@ -35,7 +35,7 @@ const ManageRamForm = props => {
               onChange={handleChange}
               invalid={errors.accountName && touched.accountName}
               type="text"
-              placeholder="must be 12 symbols long and include symbols a-z 1-5"
+              placeholder="12 symbols long (a-z 1-5)"
             />
             <UncontrolledTooltip placement="right" target="accountName" styleName="tooltip">
               <p>

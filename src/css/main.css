@@ -167,7 +167,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .modal-dialog-resource {
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 20%;
   transform: translate(-50%, -50%) !important; }
 

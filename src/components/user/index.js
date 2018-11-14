@@ -52,6 +52,9 @@ class UserContainer extends Component {
       resourceHandleErr: false, 
       isProcessing: false
     })
+
+    // Update account info
+    this.updateAccountInfo()
   }
 
   handleToggleModalCpuBw = async () => {

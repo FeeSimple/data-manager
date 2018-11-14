@@ -165,7 +165,7 @@ export const manageRam = async (eosClient, accountName, activeAccount, ramAmount
       tr.buyrambytes({
           payer: activeAccount,
           receiver: accountName,
-          bytes: parseInt(ramAmount)
+          bytes: parseInt(ramAmount) // must be an int (should not use Number())
       });
     })
 
