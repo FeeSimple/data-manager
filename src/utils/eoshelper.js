@@ -158,7 +158,17 @@ export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, is
         })
       }
     }
-    
+
+    // refund still doesn't work
+    // if (!isStake) {
+    //   let res = await refundStake(eosClient, activeAccount)
+    //   if (res.errMsg) {
+    //     console.log('manageCpuBw - error:', res.errMsg);
+    //   } else {
+    //     console.log('manageCpuBw - OK');
+    //   }
+    // }
+
     return {}
   } catch (err) {
     // Without JSON.parse(), it never works!
@@ -174,6 +184,27 @@ export const xfs2RamBytes = (xfsAmount, ramPrice) => {
   let res = parseFloat(xfsAmount) / parseFloat(ramPrice)
   res = res * 1024 // bytes
   return parseInt(res).toString()
+}
+
+export const refundStake = async (eosClient, activeAccount) => {
+  try {
+    await eosClient.transaction(tr => {
+      tr.refund({
+        cpu_amount: "0.2000 XFS",
+        net_amount: "0.2000 XFS",
+        owner: activeAccount  
+      });
+    })
+    
+    return {}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "RAM management failed")
+    const errMsg = "Refund failed"
+    
+    return {errMsg}
+  }
 }
 
 export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, isBuy) => {
