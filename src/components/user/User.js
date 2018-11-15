@@ -25,6 +25,7 @@ export const User = ({
   showModalRam,
   handleToggleModalRam,
   handleManageRam,
+  isBuy, setBuy, setSell,
 
   showModalCpuBw,
   handleToggleModalCpu,
@@ -77,6 +78,9 @@ export const User = ({
           showModalRam={showModalRam}
           handleToggleModalRam={handleToggleModalRam}
           handleManageRam={handleManageRam}
+          isBuy={isBuy}
+          setBuy={setBuy}
+          setSell={setSell}
           isProcessing={isProcessing}
           resourceHandleErr={resourceHandleErr}
         />

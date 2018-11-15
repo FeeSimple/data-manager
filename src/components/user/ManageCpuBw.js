@@ -8,7 +8,7 @@ import {
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
-import { checkResourceAmountError } from '../../utils/eoshelper'
+import { checkXfsAmountError } from '../../utils/eoshelper'
 
 const ManageCpuBwForm = props => {
   const { 
@@ -103,7 +103,7 @@ const ManageCpuBwForm = props => {
 const EnhancedManageCpuBwForm = withFormik({
   mapPropsToValues: () => ({ xfsAmount: ''}),
   validate: values => {
-    let errMsg = checkResourceAmountError(values.xfsAmount)
+    let errMsg = checkXfsAmountError(values.xfsAmount)
     if (errMsg) {
       return {xfsAmount: errMsg}
     } else {
