@@ -200,6 +200,13 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   border-top: 5px solid background-color;
 }
 
+.modal-dialog-resource {
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  transform: translate(-50%, -50%) !important;
+}
+
 .drop-down-input{-webkit-appearance: none;  -moz-appearance: none; appearance: none; background: #fff url("../img/arrow-1-down.svg") no-repeat right 10px center; background-size: auto 7px;}
 /* CAUTION: IE hackery ahead */
 .ie-fix select::-ms-expand { display: none; /* remove default arrow on ie10 and ie11 */}
