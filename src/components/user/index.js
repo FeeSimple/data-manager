@@ -19,7 +19,9 @@ class UserContainer extends Component {
       data: [],
       activeTab: USERTAB.INFO,
 
-      showModalRam: false, 
+      showModalRam: false,
+      isBuy: false,
+      
       resourceHandleErr: false, 
       isProcessing: false,
 
@@ -29,38 +31,76 @@ class UserContainer extends Component {
     }
   }
 
-  setStake = () => {
+  resetState = () => {
     this.setState({
-      isStake: true,
+      isBuy: false,
+      isCpu: false,
+      isStake: false,
+      showModalRam: false,
+      showModalCpuBw: false
+    })
+    
+    this.resetProcessing()
+  }
+
+  resetProcessing = () => {
+    this.setState({
       resourceHandleErr: false, 
       isProcessing: false
     })
   }
 
+  setBuy = () => {
+    this.setState({
+      isBuy: true
+    })
+
+    this.resetProcessing()
+  }
+
+  setSell = () => {
+    this.setState({
+      isBuy: false
+    })
+
+    this.resetProcessing()
+  }
+
+  setStake = () => {
+    this.setState({
+      isStake: true
+    })
+
+    this.resetProcessing()
+  }
+
   setUnstake = () => {
     this.setState({
-      isStake: false,
-      resourceHandleErr: false, 
-      isProcessing: false
+      isStake: false
     })
+
+    this.resetProcessing()
   }
 
   handleToggleModalRam = () => {
     const { showModalRam } = this.state
     this.setState({
-      showModalRam: !showModalRam,
-      resourceHandleErr: false, 
-      isProcessing: false
+      showModalRam: !showModalRam
     })
+
+    this.resetProcessing()
+
+    // Update account info
+    this.updateAccountInfo()
   }
 
   handleToggleModalCpuBw = async () => {
     const { showModalCpuBw } = this.state
     this.setState({
-      showModalCpuBw: !showModalCpuBw,
-      resourceHandleErr: false, 
-      isProcessing: false
+      showModalCpuBw: !showModalCpuBw
     })
+
+    this.resetProcessing()
 
     // Update account info
     this.updateAccountInfo()
@@ -110,7 +150,7 @@ class UserContainer extends Component {
       }
   }
 
-  handleManageRam = async (accountName, ramAmount) => {
+  handleManageRam = async (xfsAmount) => {
     // Reset state
     this.setState({
       resourceHandleErr: false,
@@ -119,28 +159,19 @@ class UserContainer extends Component {
 
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
-
-    // First, check if account exists
-    let accountExist = await checkAccount(eosClient, accountName)
-    if (!accountExist) {
+    let ramPrice = this.state.data.ramPrice
+    let isBuy = this.state.isBuy
+    let res = await manageRam(eosClient, activeAccount, xfsAmount, ramPrice, isBuy)
+    if (res.errMsg) {
       this.setState({
-        resourceHandleErr: 'The entered account: ' + accountName + ' does not exist',
+        resourceHandleErr: res.errMsg,
         isProcessing: false
       })
     } else {
-      let res = await manageRam(eosClient, accountName, activeAccount, ramAmount)
-      console.log('handleManageRam:', res)
-      if (res.errMsg) {
-        this.setState({
-          resourceHandleErr: res.errMsg,
-          isProcessing: false
-        })
-      } else {
-        this.setState({
-          resourceHandleErr: 'Success',
-          isProcessing: false
-        })
-      }
+      this.setState({
+        resourceHandleErr: 'Success',
+        isProcessing: false
+      })
     }
   }
 
@@ -170,6 +201,9 @@ class UserContainer extends Component {
         showModalRam={this.state.showModalRam}
         handleToggleModalRam={this.handleToggleModalRam}
         handleManageRam={this.handleManageRam}
+        isBuy={this.state.isBuy}
+        setBuy={this.setBuy}
+        setSell={this.setSell}
 
         showModalCpuBw={this.state.showModalCpuBw}
         handleToggleModalCpuBw={this.handleToggleModalCpuBw}

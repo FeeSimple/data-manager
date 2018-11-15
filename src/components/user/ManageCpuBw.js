@@ -8,7 +8,7 @@ import {
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
-import { checkResourceAmountError } from '../../utils/eoshelper'
+import { checkXfsAmountError } from '../../utils/eoshelper'
 
 const ManageCpuBwForm = props => {
   const { 
@@ -24,14 +24,12 @@ const ManageCpuBwForm = props => {
   } = props
 
   return (
-    <Modal isOpen={showModalCpuBw} toggle={handleToggleModalCpuBw}>
-      <ModalHeader toggle={handleToggleModalCpuBw}>
-        { isCpu ? <span>Manage CPU</span> : <span>Manage Bandwidth</span> }
-      </ModalHeader>
+    <Modal className="modal-dialog-resource" size="sm" isOpen={showModalCpuBw} toggle={handleToggleModalCpuBw}>
+      <ModalHeader toggle={handleToggleModalCpuBw}>Manage Stake</ModalHeader>
       <ModalBody>
         <div className="form-group row">
           <Col xs={12} sm={6}>
-            <Button 
+            <Button size="sm" outline color="danger"
               className="btn-base btn-home btn btn-secondary"
               onClick={ setStake }
             >
@@ -39,7 +37,7 @@ const ManageCpuBwForm = props => {
             </Button>
           </Col>
           <Col xs={12} sm={6}>
-            <Button 
+            <Button size="sm" outline color="primary"
               className="btn-base btn-home btn btn-secondary"
               onClick={ setUnstake }
             >
@@ -49,7 +47,7 @@ const ManageCpuBwForm = props => {
         </div>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <Label>
+            <Label className="user-detail-label">
               { isCpu ? <span>CPU</span> : <span>Bandwidth</span>} &nbsp;
               { isStake ? <span>stake</span> : <span>unstake</span>} (in XFS)
             </Label>
@@ -62,7 +60,7 @@ const ManageCpuBwForm = props => {
               type="text"
             />
           </FormGroup>
-          <Button 
+          <Button size="sm"
             type="submit" color='secondary' className="btn-base btn-home"
             disabled={ touched.xfsAmount && errors.xfsAmount }
           >
@@ -71,34 +69,33 @@ const ManageCpuBwForm = props => {
             :
               <span>Submit</span>
             }
-            
           </Button>
-          <Collapse isOpen={resourceHandleErr}>
-            {resourceHandleErr === 'Success'?
-              <Alert color='success'>
-                {
-                  isStake?
-                    <div>
-                      <div><b>Successful staking!</b></div>
-                      <div>{values.xfsAmount} XFS has been deducted from your balance</div>
-                    </div>
-                  :
-                    <div>
-                      <div><b>Successful unstaking!</b></div>
-                      <div>{values.xfsAmount} XFS will be transferred back to your balance after 3 days</div>
-                    </div>
-                }
-              </Alert>
-            :
-              <Alert color='danger'>
-                {resourceHandleErr}
-              </Alert>  
-            }
-            
-          </Collapse>
         </Form>
+        <Collapse isOpen={resourceHandleErr} size='sm'>
+          {resourceHandleErr === 'Success'?
+            <Alert color='success'>
+              {
+                isStake?
+                  <div>
+                    <div><b>Successful staking!</b></div>
+                    <div>{values.xfsAmount} XFS has been deducted</div>
+                    <div>from your balance</div>
+                  </div>
+                :
+                  <div>
+                    <div><b>Successful unstaking!</b></div>
+                    <div>{values.xfsAmount} XFS will be transferred back</div> 
+                    <div>to your balance after 3 days</div>
+                  </div>
+              }
+            </Alert>
+          :
+            <Alert color='danger'>
+              {resourceHandleErr}
+            </Alert>  
+          }
+        </Collapse>
       </ModalBody>
-      <ModalFooter />
     </Modal>
   )
 }
@@ -106,7 +103,7 @@ const ManageCpuBwForm = props => {
 const EnhancedManageCpuBwForm = withFormik({
   mapPropsToValues: () => ({ xfsAmount: ''}),
   validate: values => {
-    let errMsg = checkResourceAmountError(values.xfsAmount)
+    let errMsg = checkXfsAmountError(values.xfsAmount)
     if (errMsg) {
       return {xfsAmount: errMsg}
     } else {

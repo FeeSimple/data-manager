@@ -27,11 +27,17 @@ export const getRamPrice = async (eosClient) => {
     let quoteBalance = fetchBalanceNumber(ramMarketRow.quote.balance)
     let baseBalance = fetchBalanceNumber(ramMarketRow.base.balance)
     if (!quoteBalance || !baseBalance) return null
-    let ramPrice = quoteBalance / baseBalance
+    let ramPrice = (quoteBalance / baseBalance) * 1000 // must be multiplied by 1000
     return ramPrice // XFS/KB
   } catch (err) {
     return null
   }
+}
+
+export const addRamPriceToRamStake = (stakedRam, ramPrice) => {
+  ramPrice = ramPrice.toPrecision(1).toString()
+  let res = stakedRam + ' ' + '(price: 1 KB costs ' + ramPrice + ' XFS)'
+  return res
 }
 
 export const calcStakedRam = (ramPrice, ramQuota) => {
@@ -41,7 +47,8 @@ export const calcStakedRam = (ramPrice, ramQuota) => {
   } else {
     stakedRam = stakedRam.toPrecision(1).toString() + ' XFS'
   }
-  return stakedRam
+  //return stakedRam
+  return addRamPriceToRamStake(stakedRam, ramPrice)
 }
 
 const remainingPercent = (used, max) => {
@@ -87,14 +94,18 @@ export const createNewAccount = async (eosAdmin, accountName, eosAdminAccountNam
   }
 }
 
+// For managing resource, the XFS amount must have exactly 4 decimal places
+// Otherwise, it won't work
+export const conformXfsAmount = (xfsAmount) => {
+  return parseFloat(xfsAmount).toFixed(4).toString() + ' XFS'
+}
+
 export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, isStake) => {
   try {
     let result = null
 
-    // For "delegatebw", there must be exactly 4 decimal places
-    // Otherwise, it won't work
-    xfsAmount = parseFloat(xfsAmount).toFixed(4).toString() + ' XFS'
-    const zeroAmount = '0.0000 XFS'
+    xfsAmount = conformXfsAmount(xfsAmount)
+    const zeroAmount = conformXfsAmount(0)
     console.log('xfsAmount:', xfsAmount);
 
     // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
@@ -147,32 +158,88 @@ export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, is
         })
       }
     }
-    
+
+    // refund still doesn't work
+    // if (!isStake) {
+    //   let res = await refundStake(eosClient, activeAccount)
+    //   if (res.errMsg) {
+    //     console.log('manageCpuBw - error:', res.errMsg);
+    //   } else {
+    //     console.log('manageCpuBw - OK');
+    //   }
+    // }
+
     return {}
   } catch (err) {
     // Without JSON.parse(), it never works!
-    err = JSON.parse(err)
-    const errMsg = (err.error.what || "Resource management failed")
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "Resource management failed")
+    const errMsg = "Resource management failed"
     
     return {errMsg}
   }
 }
 
-export const manageRam = async (eosClient, accountName, activeAccount, ramAmount) => {
+export const xfs2RamBytes = (xfsAmount, ramPrice) => {
+  let res = parseFloat(xfsAmount) / parseFloat(ramPrice)
+  res = res * 1024 // bytes
+  return parseInt(res).toString()
+}
+
+export const refundStake = async (eosClient, activeAccount) => {
   try {
-    const result = await eosClient.transaction(tr => {
-      tr.buyrambytes({
-          payer: activeAccount,
-          receiver: accountName,
-          bytes: parseInt(ramAmount)
+    await eosClient.transaction(tr => {
+      tr.refund({
+        cpu_amount: "0.2000 XFS",
+        net_amount: "0.2000 XFS",
+        owner: activeAccount  
       });
     })
-
+    
     return {}
   } catch (err) {
     // Without JSON.parse(), it never works!
-    err = JSON.parse(err)
-    const errMsg = (err.error.what || "RAM management failed")
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "RAM management failed")
+    const errMsg = "Refund failed"
+    
+    return {errMsg}
+  }
+}
+
+export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, isBuy) => {
+  try {
+    
+    if (isBuy) {
+      xfsAmount = conformXfsAmount(xfsAmount)
+      console.log('manageRam: xfsAmount:', xfsAmount);
+
+      await eosClient.transaction(tr => {
+        // "buyrambytes()" is used to buy RAM in bytes
+        // "buyram()" is used to buy RAM in XFS
+        tr.buyram({
+            payer: activeAccount,
+            receiver: activeAccount,
+            quant: xfsAmount
+        });
+      })
+    } else {
+      let ramBytes = xfs2RamBytes(xfsAmount, ramPrice)
+      await eosClient.transaction(tr => {
+        // "buyrambytes()" is used to buy RAM in bytes
+        // "buyram()" is used to buy RAM in XFS
+        tr.sellram({
+            account: activeAccount, // account selling RAM
+            bytes: ramBytes
+        });
+      })
+    }
+    return {}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "RAM management failed")
+    const errMsg = "RAM management failed"
     
     return {errMsg}
   }
@@ -252,6 +319,7 @@ export const getAccountInfo = async (eosClient, account) => {
       let ramPrice = await getRamPrice(eosClient)
       if (ramPrice) {  
         stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+        info.ramPrice = ramPrice
       }
     }
 
@@ -281,24 +349,7 @@ export const checkAccountNameError = (accountName) => {
   return errMsg
 }
 
-export const checkRamAmountError = (ramAmount) => {
-  let errMsg = null
-  if (!ramAmount) {
-    errMsg = 'Required'
-  } else {
-    try {
-      ramAmount = parseInt(ramAmount)
-      if (ramAmount <= 10) {
-        errMsg = 'Must be above 10'
-      }
-    } catch (err) {
-      errMsg = 'Must be integer'
-    }
-  }
-  return errMsg
-}
-
-export const checkResourceAmountError = (xfsAmount) => {
+export const checkXfsAmountError = (xfsAmount) => {
   let errMsg = null
   if (!xfsAmount) {
     errMsg = 'Required'
