@@ -34,10 +34,20 @@ export const getRamPrice = async (eosClient) => {
   }
 }
 
+// This is only for CPU and BW
+export const addUnstakedToStaked = (staked, unstaked) => {
+  let res = staked + ' ' + '(Unstaked: ' + unstaked + ')'
+  return res
+}
+
 export const addRamPriceToRamStake = (stakedRam, ramPrice) => {
   ramPrice = ramPrice.toPrecision(1).toString()
   let res = stakedRam + ' ' + '(price: 1 KB costs ' + ramPrice + ' XFS)'
   return res
+}
+
+export const getRamPriceStr = (ramPrice) => {
+  return '(price: 1 KB costs ' + ramPrice + ' XFS)'
 }
 
 export const calcStakedRam = (ramPrice, ramQuota) => {
@@ -47,8 +57,8 @@ export const calcStakedRam = (ramPrice, ramQuota) => {
   } else {
     stakedRam = stakedRam.toPrecision(1).toString() + ' XFS'
   }
-  //return stakedRam
-  return addRamPriceToRamStake(stakedRam, ramPrice)
+  return stakedRam
+  //return addRamPriceToRamStake(stakedRam, ramPrice)
 }
 
 const remainingPercent = (used, max) => {
@@ -298,6 +308,14 @@ export const getAccountInfo = async (eosClient, account) => {
       stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
     }
 
+    let unstakedCpu = null
+    let unstakedBandwidth = null
+    let refund = result.refund_request
+    if (refund) {
+      unstakedCpu = beautifyBalance(refund.cpu_amount) || null
+      unstakedBandwidth = beautifyBalance(refund.net_amount) || null
+    }
+
     let info = {
       account,
       created,
@@ -310,6 +328,8 @@ export const getAccountInfo = async (eosClient, account) => {
       cpuStr,
       cpuMeter,
       stakedCpu,
+      unstakedCpu,
+      unstakedBandwidth,
       pubkey
     }
 
@@ -318,13 +338,13 @@ export const getAccountInfo = async (eosClient, account) => {
     if (result.ram_quota) {
       let ramPrice = await getRamPrice(eosClient)
       if (ramPrice) {  
-        stakedRam = calcStakedRam(ramPrice, result.ram_quota)
-        info.ramPrice = ramPrice
+        info.stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+        
+        ramPrice = ramPrice.toPrecision(1).toString()
+        info.ramPriceStr = getRamPriceStr(ramPrice)
       }
     }
 
-    info.stakedRam = stakedRam
-    
     return info
 
   } catch (err) {
