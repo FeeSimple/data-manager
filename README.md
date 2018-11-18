@@ -8,6 +8,6 @@ On the project root:
 2. Duplicate `.env.example` and rename it to `.env`. Set variables, if any.
 3. `yarn start`
 
-# Production instructions
+# Production Instructions
 
 For production, run the `build` script with `yarn build` and start the server by running the `prod` script with `yarn run prod`.
