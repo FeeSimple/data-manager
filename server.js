@@ -1,25 +1,29 @@
-const fs = require('fs')
-const http = require('http')
-const https = require('https')
 const express = require('express')
+
+const environment = process.env.ENVIRONMENT
+if(environment !== 'PRODUCTION' && environment !== 'TESTING') {
+  console.error('Error: .env variable ENVIRONMENT should be either PRODUCTION or TESTING')
+  process.exit()
+}
+
+const PROD = environment === 'PRODUCTION'? true : false
 const app = express()
-app.use('*', ensureSecure)
 app.use(express.static('build'))
 
-const options = {
-  key: fs.readFileSync('./sslcert/privkey.pem', 'utf8'),
-  cert: fs.readFileSync('./sslcert/fullchain.pem', 'utf8')
-}
-
-http.createServer(app).listen(80)
-https.createServer(options, app).listen(443)
+require('greenlock-express').create({
+  version: 'draft-11',
+  server: PROD
+    ? 'https://acme-v02.api.letsencrypt.org/directory'
+    : 'https://acme-staging-v02.api.letsencrypt.org/directory',
+  configDir: '~/.config/acme/',
+  email: 'tim@feesimple.io',
+  approveDomains: [ 'fsmanager.io', 'www.fsmanager.io' ],
+  agreeTos: true,
+  app
+}).listen(80, 443)
 
 function ensureSecure (req, res, next) {
-  if (req.secure) {
-    // OK, continue
-    return next()
-  }
-  // handle port numbers if you need non defaults
-  // res.redirect('https://' + req.host + req.url) // express 3.x
-  res.redirect('https://' + req.hostname + req.url) // express 4.x
+  if (req.secure) return next()
+  res.redirect('https://' + req.hostname + req.url)
 }
+

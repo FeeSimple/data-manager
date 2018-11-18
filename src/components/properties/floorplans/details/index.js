@@ -4,17 +4,27 @@ import { withRouter } from 'react-router-dom'
 import { setFloorplan, setLoading } from '../../../../actions'
 import FloorplanDetails, { READING, EDITING, CREATING } from './FloorplanDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
+import ipfs from '../../../../ipfs'
 
 
 class FloorplanDetailsContainer extends Component {
   state = {
     mode: READING,
     prevFloorplan: {},
-    floorplan: newFloorplan()
+    floorplan: newFloorplan(),
+    buffer: null,
+    ipfsHash: null
   }
 
   onImageDrop = (files) => {
-    console.info('got file')
+    console.info('user selected a file to upload')
+    const file = files[0]
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onloadend = () => {
+      this.setState({ buffer: Buffer(reader.result) })
+      console.log('buffer', this.state.buffer)
+    }
   }
 
   edit = (e,floorplan) => {
@@ -31,6 +41,18 @@ class FloorplanDetailsContainer extends Component {
 
   save = async (e) => {
     e.preventDefault()
+
+    const { buffer } = this.state
+
+    try {
+      const result = await ipfs.files.add(buffer) 
+      this.setState({ ipfsHash: result[0].hash })
+      const res = await ipfs.files.cat(result[0].hash)
+      this.setState({ buffer: "data:image/png;base64," + Buffer(res).toString('base64') })
+    } catch (err) { 
+      console.error(err) 
+      return
+    }    
 
     const propertyId = this.props.match.params.id
     const { floorplan } = this.state
