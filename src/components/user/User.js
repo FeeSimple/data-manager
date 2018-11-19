@@ -8,6 +8,7 @@ import classnames from 'classnames'
 import UserInfo from './UserInfo'
 import ManageRam from './ManageRam'
 import ManageCpuBw from './ManageCpuBw'
+import UserSend from './UserSend'
 
 export const USERTAB = {
   INFO: '1',
@@ -98,6 +99,9 @@ export const User = ({
         />
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
+        <UserSend
+
+        />
       </TabPane>
       <TabPane tabId={USERTAB.ACTIVITY}>
       </TabPane>
