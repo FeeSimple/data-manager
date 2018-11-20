@@ -1,11 +1,11 @@
 import React from 'react'
 import {
   Card, InputGroupText, InputGroupAddon, InputGroup,
-  Button, Form, FormGroup, Input, Alert, Collapse
+  Button, Form, FormGroup, Input, Alert, Collapse, UncontrolledTooltip,
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
-import { checkAccountNameError } from '../../utils/eoshelper'
+import { checkAccountNameError, checkXfsAmountError } from '../../utils/eoshelper'
 
 const UserSendForm = props => {
   const { 
@@ -15,6 +15,7 @@ const UserSendForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
+    user,
     handleUserSend,
     userSendErr,
     isProcessing
@@ -25,6 +26,37 @@ const UserSendForm = props => {
       <Card>
         <Form onSubmit={handleSubmit}>
         <FormGroup>
+          <br />
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <InputGroupText className="user-send-text">
+                <i>Spendable Balance</i>
+              </InputGroupText>
+            </InputGroupAddon>
+            <Input
+              type="text"
+              disabled
+              placeholder={user.balance}
+            />
+          </InputGroup>
+          <br />
+          <InputGroup id='cpu'>
+            <InputGroupAddon addonType="prepend">
+              <InputGroupText className="user-send-text">
+                <i>CPU Availability</i>
+              </InputGroupText>
+            </InputGroupAddon>
+            <Input
+              type="text"
+              disabled
+              placeholder={user.cpuAvailableStr} µs
+            />
+            <UncontrolledTooltip placement="left" target="cpu" styleName="tooltip">
+              <p>
+                XFS sending will be charged with some CPU
+              </p>
+            </UncontrolledTooltip>
+          </InputGroup>
           <br />
           <InputGroup>
             <InputGroupAddon addonType="prepend">
@@ -72,26 +104,36 @@ const UserSendForm = props => {
               value={values.memo}
               onChange={handleChange}
               type="text"
-              placeholder="Attach some message"
+              placeholder="Attach some message (max 200 characters)" 
             />
           </InputGroup>
           <br />
         </FormGroup>
         <Button 
           type="submit" color='secondary' className="btn-base btn-home"
-          disabled={touched.accountName && errors.accountName}
+          disabled={(touched.accountName && errors.accountName) || 
+                    (touched.amount && errors.amount)}
         >
           {isProcessing ?
-            <Spinner name="three-bounce" color="red"/>
+            <Spinner name="three-bounce" color="white" noFadeIn/>
           :
             <span>Submit</span>
           }
           
         </Button>
-        <Collapse isOpen={userSendErr}>
-          <Alert color="danger">
-            {userSendErr}
-          </Alert>
+        <Collapse isOpen={userSendErr} size='sm'>
+          {userSendErr === 'Success'?
+            <Alert color='success'>
+              <div>
+                <div><b>Successful sending!</b></div>
+                <div>{values.amount} XFS will be deducted from your balance</div>
+              </div>
+            </Alert>
+          :
+            <Alert color='danger'>
+              {userSendErr}
+            </Alert>  
+          }
         </Collapse>
       </Form>
       </Card>
@@ -100,16 +142,23 @@ const UserSendForm = props => {
 }
 
 const EnhancedUserSendForm = withFormik({
-  mapPropsToValues: () => ({ accountName: '' }),
+  mapPropsToValues: () => ({ accountName: '', amount: '', memo: '' }),
   validate: values => {
     let errMsg = checkAccountNameError(values.accountName)
     if (errMsg) {
       return {accountName: errMsg}
     }
+
+    errMsg = checkXfsAmountError(values.amount)
+    if (errMsg) {
+      return {amount: errMsg}
+    }
+
+    return {}
   },
 
-  handleSubmit: async({ accountName }, { props }) => {
-    await props.handleCreateNewAccount(accountName)
+  handleSubmit: async({ accountName, amount, memo }, { props }) => {
+    await props.handleUserSend(accountName, amount, memo)
   },
 
   displayName: 'UserSendForm' // helps with React DevTools

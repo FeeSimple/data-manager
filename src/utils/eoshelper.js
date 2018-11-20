@@ -1,5 +1,5 @@
 import ecc from 'eosjs-ecc'
-import { getResourceStr, beautifyBalance, fetchBalanceNumber } from './beautify'
+import { getResourceStr, beautifyBalance, fetchBalanceNumber, beautifyCpu } from './beautify'
 import { NO_BALANCE } from './consts'
 
 export const getKeyPair = async () => {
@@ -255,7 +255,7 @@ export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, i
   }
 }
 
-export const checkAccount = async (eosClient, account) => {
+export const checkAccountExist = async (eosClient, account) => {
   try {
     await eosClient.getAccount(account)
     
@@ -264,6 +264,23 @@ export const checkAccount = async (eosClient, account) => {
   } catch (err) {
 
     return false
+  }
+}
+
+export const sendXFS = async (eosClient, activeAccount, receivingAccount, xfsAmount, memo) => {
+  try {
+    xfsAmount = conformXfsAmount(xfsAmount)
+    await eosClient.transfer(activeAccount, receivingAccount, xfsAmount, memo, 
+      {broadcast: true, sign: true})
+    
+    return {}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "RAM management failed")
+    const errMsg = "Failed to send"
+    
+    return {errMsg}
   }
 }
 
@@ -287,13 +304,18 @@ export const getAccountInfo = async (eosClient, account) => {
     
     let cpuStr = ''
     let cpuMeter = '0'
+    let cpuAvailable = 0
+    let cpuAvailableStr = ''
     if (result.cpu_limit) {
       cpuStr = getResourceStr(result.cpu_limit, true)
       cpuMeter = remainingPercent(result.cpu_limit.used, result.cpu_limit.max).toString()
+      cpuAvailable = result.cpu_limit.available
+      cpuAvailableStr = beautifyCpu(cpuAvailable)
     }
 
     // If user has no balance, the field "core_liquid_balance" won't exist!
     let balance = beautifyBalance(result.core_liquid_balance)
+    let balanceNumber = fetchBalanceNumber(result.core_liquid_balance)
 
     let created = result.created
     let idx = created.indexOf('T') // cut away the time trailing
@@ -320,6 +342,7 @@ export const getAccountInfo = async (eosClient, account) => {
       account,
       created,
       balance,
+      balanceNumber,
       ramStr,
       ramMeter,
       bandwidthStr,
@@ -327,6 +350,8 @@ export const getAccountInfo = async (eosClient, account) => {
       stakedBandwidth,
       cpuStr,
       cpuMeter,
+      cpuAvailable,
+      cpuAvailableStr,
       stakedCpu,
       unstakedCpu,
       unstakedBandwidth,

@@ -59,7 +59,7 @@ export function getResourceStr(resource, cpu) {
     resourceStr += beautifyRam(resourceAvailable)
   }
   if (cpu) {
-    resourceStr += ' / ' + beautifyCpu(resourceAvailable);
+    resourceStr += ' / ' + beautifyCpu(resource.max);
   }
   else {
     resourceStr += ' / ' + beautifyRam(resource.max)
@@ -67,7 +67,9 @@ export function getResourceStr(resource, cpu) {
   return resourceStr
 }
 
+// Get the numeric balance from the balance string (e.g. "123 XFS")
 export function fetchBalanceNumber(balance) {
+  if (!balance) return null
   let res = ''
   let idx = balance.indexOf(' ') // 100000 XFS
   if (idx != -1) {

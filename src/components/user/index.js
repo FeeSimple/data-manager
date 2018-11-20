@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getResourceStr, beautifyBalance } from '../../utils/beautify'
+import { fetchBalanceNumber, beautifyBalance } from '../../utils/beautify'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { getAccountInfo, manageRam, checkAccount, manageCpuBw } from '../../utils/eoshelper'
+import { MIN_STAKED_CPU, MAX_MEMO_LENGTH } from '../../utils/consts'
+import { getAccountInfo, manageRam, 
+         checkAccountExist, manageCpuBw, sendXFS } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
 import { 
   eosAdminAccount, getEosAdmin 
@@ -28,6 +30,8 @@ class UserContainer extends Component {
       showModalCpuBw: false,
       isCpu: false,
       isStake: false,
+
+      userSendErr: false
     }
   }
 
@@ -117,7 +121,7 @@ class UserContainer extends Component {
   }
 
   toggleTab(tab) {
-    if (this.state.activeTab !== tab) {
+    if (this.state.activeTab !== tab) {  
       this.setState({
         activeTab: tab
       })
@@ -175,6 +179,76 @@ class UserContainer extends Component {
     }
   }
 
+  handleUserSend = async (receivingAccount, xfsAmount, memo) => {
+    // Reset state
+    this.setState({
+      userSendErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+
+    // Check if account exists
+    let exist = await checkAccountExist(eosClient, receivingAccount)
+    if (!exist) {
+      this.setState({
+        userSendErr: 'Account "' + receivingAccount + '" does not exist',
+        isProcessing: false
+      })
+
+      return
+    }
+
+    // Check spendable balance
+    let balanceNum = this.state.data.balanceNumber
+    if (!balanceNum || balanceNum <= parseFloat(xfsAmount)) {
+      this.setState({
+        userSendErr: 'Not enough balance',
+        isProcessing: false
+      })
+
+      return
+    }
+
+    // Check CPU availability
+    let stakedCpu = this.state.data.cpuAvailable
+    if (this.state.data.cpuAvailable <= MIN_STAKED_CPU) {
+      this.setState({
+        userSendErr: 'Not enough CPU',
+        isProcessing: false
+      })
+
+      return
+    }
+
+    // Guarantee max memo length
+    if (memo) {
+      if (memo.length > MAX_MEMO_LENGTH) {
+        memo = memo.substring(0, MAX_MEMO_LENGTH-1)
+      }
+    } else {
+      memo = ''
+    }
+
+    let res = await sendXFS(eosClient, activeAccount, receivingAccount, xfsAmount, memo)
+
+    if (res.errMsg) {
+      this.setState({
+        userSendErr: res.errMsg,
+        isProcessing: false
+      })
+    } else {
+
+      this.updateAccountInfo()
+
+      this.setState({
+        userSendErr: 'Success',
+        isProcessing: false
+      })
+    }
+  }
+
   updateAccountInfo = async () => {
     const { eosClient, accountData } = this.props
     let account = accountData.active
@@ -217,6 +291,9 @@ class UserContainer extends Component {
 
         isProcessing={this.state.isProcessing}
         resourceHandleErr={this.state.resourceHandleErr}
+
+        handleUserSend={this.handleUserSend}
+        userSendErr={this.state.userSendErr}
 
       />
     )

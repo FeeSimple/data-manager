@@ -37,7 +37,10 @@ export const User = ({
   handleManageCpuBw,
 
   isProcessing,
-  resourceHandleErr
+  resourceHandleErr,
+
+  handleUserSend,
+  userSendErr
 }) => (
   <div>
     <Nav tabs>
@@ -100,7 +103,10 @@ export const User = ({
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
         <UserSend
-
+          user={user}
+          handleUserSend={handleUserSend}
+          userSendErr={userSendErr}
+          isProcessing={isProcessing}
         />
       </TabPane>
       <TabPane tabId={USERTAB.ACTIVITY}>
