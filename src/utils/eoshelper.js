@@ -1,6 +1,7 @@
 import ecc from 'eosjs-ecc'
-import { getResourceStr, beautifyBalance, fetchBalanceNumber } from './beautify'
-import { NO_BALANCE } from './consts'
+import { getResourceStr, beautifyBalance, 
+         fetchBalanceNumber, beautifyCpu, beautifyRam } from './beautify'
+import { NO_BALANCE, MIN_STAKED_BW, MIN_STAKED_CPU, MAX_MEMO_LENGTH } from './consts'
 
 export const getKeyPair = async () => {
   let promises = [], keys = [], keyPairs = []
@@ -34,10 +35,20 @@ export const getRamPrice = async (eosClient) => {
   }
 }
 
+// This is only for CPU and BW
+export const addUnstakedToStaked = (staked, unstaked) => {
+  let res = staked + ' ' + '(Unstaked: ' + unstaked + ')'
+  return res
+}
+
 export const addRamPriceToRamStake = (stakedRam, ramPrice) => {
   ramPrice = ramPrice.toPrecision(1).toString()
   let res = stakedRam + ' ' + '(price: 1 KB costs ' + ramPrice + ' XFS)'
   return res
+}
+
+export const getRamPriceStr = (ramPrice) => {
+  return '(price: 1 KB costs ' + ramPrice + ' XFS)'
 }
 
 export const calcStakedRam = (ramPrice, ramQuota) => {
@@ -47,8 +58,8 @@ export const calcStakedRam = (ramPrice, ramQuota) => {
   } else {
     stakedRam = stakedRam.toPrecision(1).toString() + ' XFS'
   }
-  //return stakedRam
-  return addRamPriceToRamStake(stakedRam, ramPrice)
+  return stakedRam
+  //return addRamPriceToRamStake(stakedRam, ramPrice)
 }
 
 const remainingPercent = (used, max) => {
@@ -245,7 +256,7 @@ export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, i
   }
 }
 
-export const checkAccount = async (eosClient, account) => {
+export const checkAccountExist = async (eosClient, account) => {
   try {
     await eosClient.getAccount(account)
     
@@ -254,6 +265,64 @@ export const checkAccount = async (eosClient, account) => {
   } catch (err) {
 
     return false
+  }
+}
+
+export const sendXFSWithCheck = async (eosClient, activeAccount, receivingAccount, xfsAmount, memo, userData) => {
+  
+  if (activeAccount == receivingAccount) {
+    return 'You sent to your self?'
+  }
+
+  // Check if account exists
+  let exist = await checkAccountExist(eosClient, receivingAccount)
+  if (!exist) {
+    return 'Account "' + receivingAccount + '" does not exist'
+  }
+
+  // Check spendable balance
+  let balanceNum = userData.balanceNumber
+  if (!balanceNum || balanceNum <= parseFloat(xfsAmount)) {
+    return 'Not enough balance'
+  }
+
+  let checkErr = checkMinCpuBw(userData.cpuAvailable, userData.bandwidthAvailable)
+  if (checkErr) {
+    return checkErr
+  }
+
+  // Guarantee max memo length
+  if (memo) {
+    if (memo.length > MAX_MEMO_LENGTH) {
+      memo = memo.substring(0, MAX_MEMO_LENGTH-1)
+    }
+  } else {
+    memo = ''
+  }
+
+  let err = await sendXFS(eosClient, activeAccount, receivingAccount, xfsAmount, memo)
+
+  if (err) {
+    return err
+  } else {
+    return null
+  }
+}
+
+export const sendXFS = async (eosClient, activeAccount, receivingAccount, xfsAmount, memo) => {
+  try {
+    xfsAmount = conformXfsAmount(xfsAmount)
+    await eosClient.transfer(activeAccount, receivingAccount, xfsAmount, memo, 
+      {broadcast: true, sign: true})
+    
+    return null
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "RAM management failed")
+    const errMsg = "Failed to send"
+    
+    return errMsg
   }
 }
 
@@ -270,20 +339,29 @@ export const getAccountInfo = async (eosClient, account) => {
     
     let bandwidthStr = ''
     let bandwidthMeter = '0'
+    let bandwidthAvailable = 0
+    let bandwidthAvailableStr = ''
     if (result.net_limit) {
       bandwidthStr = getResourceStr(result.net_limit)
       bandwidthMeter = remainingPercent(result.net_limit.used, result.net_limit.max).toString()
+      bandwidthAvailable = result.net_limit.available
+      bandwidthAvailableStr = beautifyRam(bandwidthAvailable)
     }
     
     let cpuStr = ''
     let cpuMeter = '0'
+    let cpuAvailable = 0
+    let cpuAvailableStr = ''
     if (result.cpu_limit) {
       cpuStr = getResourceStr(result.cpu_limit, true)
       cpuMeter = remainingPercent(result.cpu_limit.used, result.cpu_limit.max).toString()
+      cpuAvailable = result.cpu_limit.available
+      cpuAvailableStr = beautifyCpu(cpuAvailable)
     }
 
     // If user has no balance, the field "core_liquid_balance" won't exist!
     let balance = beautifyBalance(result.core_liquid_balance)
+    let balanceNumber = fetchBalanceNumber(result.core_liquid_balance)
 
     let created = result.created
     let idx = created.indexOf('T') // cut away the time trailing
@@ -298,18 +376,33 @@ export const getAccountInfo = async (eosClient, account) => {
       stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
     }
 
+    let unstakedCpu = null
+    let unstakedBandwidth = null
+    let refund = result.refund_request
+    if (refund) {
+      unstakedCpu = beautifyBalance(refund.cpu_amount) || null
+      unstakedBandwidth = beautifyBalance(refund.net_amount) || null
+    }
+
     let info = {
       account,
       created,
       balance,
+      balanceNumber,
       ramStr,
       ramMeter,
       bandwidthStr,
       bandwidthMeter,
+      bandwidthAvailable,
+      bandwidthAvailableStr,
       stakedBandwidth,
       cpuStr,
       cpuMeter,
+      cpuAvailable,
+      cpuAvailableStr,
       stakedCpu,
+      unstakedCpu,
+      unstakedBandwidth,
       pubkey
     }
 
@@ -318,13 +411,13 @@ export const getAccountInfo = async (eosClient, account) => {
     if (result.ram_quota) {
       let ramPrice = await getRamPrice(eosClient)
       if (ramPrice) {  
-        stakedRam = calcStakedRam(ramPrice, result.ram_quota)
-        info.ramPrice = ramPrice
+        info.stakedRam = calcStakedRam(ramPrice, result.ram_quota)
+        
+        ramPrice = ramPrice.toPrecision(1).toString()
+        info.ramPriceStr = getRamPriceStr(ramPrice)
       }
     }
 
-    info.stakedRam = stakedRam
-    
     return info
 
   } catch (err) {
@@ -358,3 +451,18 @@ export const checkXfsAmountError = (xfsAmount) => {
   }
   return errMsg
 }
+
+export const checkMinCpuBw = (cpuAmount, bwAmount) => {
+  // Check CPU availability
+  if (cpuAmount <= MIN_STAKED_CPU) {
+    return 'Not enough CPU (need at least ' + MIN_STAKED_CPU + ' µs)'
+  }
+
+  // Check Bandwidth availability
+  if (bwAmount <= MIN_STAKED_BW) {
+    return 'Not enough Bandwidth (need at least ' + MIN_STAKED_BW + ' byte)'
+  }
+
+  return null
+}
+

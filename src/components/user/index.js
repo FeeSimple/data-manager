@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getResourceStr, beautifyBalance } from '../../utils/beautify'
+import { fetchBalanceNumber, beautifyBalance } from '../../utils/beautify'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { getAccountInfo, manageRam, checkAccount, manageCpuBw } from '../../utils/eoshelper'
+import { MIN_STAKED_CPU, MIN_STAKED_BW, MAX_MEMO_LENGTH } from '../../utils/consts'
+import { getAccountInfo, manageRam, 
+         checkAccountExist, manageCpuBw, sendXFSWithCheck, checkMinCpuBw } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
 import { 
   eosAdminAccount, getEosAdmin 
@@ -28,6 +30,8 @@ class UserContainer extends Component {
       showModalCpuBw: false,
       isCpu: false,
       isStake: false,
+
+      userSendErr: false
     }
   }
 
@@ -117,7 +121,7 @@ class UserContainer extends Component {
   }
 
   toggleTab(tab) {
-    if (this.state.activeTab !== tab) {
+    if (this.state.activeTab !== tab) {  
       this.setState({
         activeTab: tab
       })
@@ -175,6 +179,35 @@ class UserContainer extends Component {
     }
   }
 
+  handleUserSend = async (receivingAccount, xfsAmount, memo) => {
+    // Reset state
+    this.setState({
+      userSendErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+    let userData = this.state.data
+
+    let err = await sendXFSWithCheck(eosClient, activeAccount, receivingAccount, xfsAmount, memo, userData)
+
+    if (err) {
+      this.setState({
+        userSendErr: err,
+        isProcessing: false
+      })
+    } else {
+
+      this.updateAccountInfo()
+
+      this.setState({
+        userSendErr: 'Success',
+        isProcessing: false
+      })
+    }
+  }
+
   updateAccountInfo = async () => {
     const { eosClient, accountData } = this.props
     let account = accountData.active
@@ -217,6 +250,9 @@ class UserContainer extends Component {
 
         isProcessing={this.state.isProcessing}
         resourceHandleErr={this.state.resourceHandleErr}
+
+        handleUserSend={this.handleUserSend}
+        userSendErr={this.state.userSendErr}
 
       />
     )
