@@ -195,6 +195,15 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   color: $clr-seconday;
   width: 200px;
   text-align: center;
+  font-size: 15px;
+}
+
+.user-send-text-small {
+  background-color: rgba(222, 222, 223, 0.75);
+  color: $clr-seconday;
+  width: 200px;
+  text-align: center;
+  font-size: 13px;
 }
 
 .error-message {

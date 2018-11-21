@@ -21,7 +21,7 @@ const UserInfo = ({
   handleToggleModalCpu,
   handleToggleModalBw
 }) => (
-  <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+  <div className="col-lg-8 offset-md-1 offset-lg-2">
     <Card>
       <ListGroup>
         <ListGroupItem>
@@ -64,7 +64,7 @@ const UserInfo = ({
             </Col>
             <Col>
               <div className="user-detail-label-small">
-                Staked: {user.stakedRam} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {user.ramPriceStr}
+                Staked: {user.stakedRam} &nbsp; &nbsp; {user.ramPriceStr}
               </div>
               <Progress 
                 className="user-detail-label" 
@@ -74,7 +74,7 @@ const UserInfo = ({
                 {user.ramMeter + ' %'}
               </Progress>
               <div className="user-detail-label-small">
-                Available / Max &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {user.ramStr}
+                Available / Max &nbsp; &nbsp; &nbsp;   {user.ramStr}
               </div>
             </Col>
             <UncontrolledTooltip placement="left" target="TooltipRam" styleName="tooltip">
@@ -97,7 +97,7 @@ const UserInfo = ({
               <div className="user-detail-label-small">
                 Staked: {user.stakedCpu} 
                 {user.unstakedCpu ?
-                  <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(Unstaked: {user.unstakedCpu})</span>
+                  <span>&nbsp; &nbsp; &nbsp;  (Unstaked: {user.unstakedCpu})</span>
                 :
                   <span></span>
                 }
@@ -110,7 +110,7 @@ const UserInfo = ({
                 {user.cpuMeter + ' %'}
               </Progress>
               <div className="user-detail-label-small">
-                Available / Max &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {user.cpuStr}
+                Available / Max &nbsp; &nbsp; &nbsp;   {user.cpuStr}
               </div>
             </Col>
             <UncontrolledTooltip placement="left" target="TooltipCpu" styleName="tooltip">
@@ -133,7 +133,7 @@ const UserInfo = ({
           <div className="user-detail-label-small">
             Staked: {user.stakedBandwidth}
             {user.unstakedBandwidth ?
-              <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(Unstaked: {user.unstakedBandwidth})</span>
+              <span>&nbsp; &nbsp; &nbsp;  (Unstaked: {user.unstakedBandwidth})</span>
             :
               <span></span>
             }
@@ -146,7 +146,7 @@ const UserInfo = ({
             {user.bandwidthMeter + ' %'}
           </Progress>
           <div className="user-detail-label-small">
-            Available / Max &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {user.bandwidthStr}
+            Available / Max &nbsp; &nbsp; &nbsp;   {user.bandwidthStr}
           </div>
         </Col>
         <UncontrolledTooltip placement="left" target="TooltipBandwidth" styleName="tooltip">

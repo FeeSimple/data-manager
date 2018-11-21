@@ -161,7 +161,15 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba(222, 222, 223, 0.75);
   color: #2b8acb;
   width: 200px;
-  text-align: center; }
+  text-align: center;
+  font-size: 15px; }
+
+.user-send-text-small {
+  background-color: rgba(222, 222, 223, 0.75);
+  color: #2b8acb;
+  width: 200px;
+  text-align: center;
+  font-size: 13px; }
 
 .error-message {
   background-color: #ff7272;

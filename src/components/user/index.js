@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { fetchBalanceNumber, beautifyBalance } from '../../utils/beautify'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { MIN_STAKED_CPU, MAX_MEMO_LENGTH } from '../../utils/consts'
+import { MIN_STAKED_CPU, MIN_STAKED_BW, MAX_MEMO_LENGTH } from '../../utils/consts'
 import { getAccountInfo, manageRam, 
-         checkAccountExist, manageCpuBw, sendXFS } from '../../utils/eoshelper'
+         checkAccountExist, manageCpuBw, sendXFSWithCheck, checkMinCpuBw } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
 import { 
   eosAdminAccount, getEosAdmin 
@@ -188,54 +188,13 @@ class UserContainer extends Component {
 
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
+    let userData = this.state.data
 
-    // Check if account exists
-    let exist = await checkAccountExist(eosClient, receivingAccount)
-    if (!exist) {
+    let err = await sendXFSWithCheck(eosClient, activeAccount, receivingAccount, xfsAmount, memo, userData)
+
+    if (err) {
       this.setState({
-        userSendErr: 'Account "' + receivingAccount + '" does not exist',
-        isProcessing: false
-      })
-
-      return
-    }
-
-    // Check spendable balance
-    let balanceNum = this.state.data.balanceNumber
-    if (!balanceNum || balanceNum <= parseFloat(xfsAmount)) {
-      this.setState({
-        userSendErr: 'Not enough balance',
-        isProcessing: false
-      })
-
-      return
-    }
-
-    // Check CPU availability
-    let stakedCpu = this.state.data.cpuAvailable
-    if (this.state.data.cpuAvailable <= MIN_STAKED_CPU) {
-      this.setState({
-        userSendErr: 'Not enough CPU',
-        isProcessing: false
-      })
-
-      return
-    }
-
-    // Guarantee max memo length
-    if (memo) {
-      if (memo.length > MAX_MEMO_LENGTH) {
-        memo = memo.substring(0, MAX_MEMO_LENGTH-1)
-      }
-    } else {
-      memo = ''
-    }
-
-    let res = await sendXFS(eosClient, activeAccount, receivingAccount, xfsAmount, memo)
-
-    if (res.errMsg) {
-      this.setState({
-        userSendErr: res.errMsg,
+        userSendErr: err,
         isProcessing: false
       })
     } else {

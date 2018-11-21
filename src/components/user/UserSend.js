@@ -1,11 +1,17 @@
 import React from 'react'
 import {
-  Card, InputGroupText, InputGroupAddon, InputGroup,
+  Card, InputGroupText, InputGroupAddon, InputGroup, Col,
   Button, Form, FormGroup, Input, Alert, Collapse, UncontrolledTooltip,
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
 import { checkAccountNameError, checkXfsAmountError } from '../../utils/eoshelper'
+
+const USER_SEND_TOOLTIP = 'XFS sending will be charged with some CPU and Bandwidth'
+
+const balanceStr = (balance) => {
+  return 'Balance: ' + balance
+}
 
 const UserSendForm = props => {
   const { 
@@ -22,39 +28,29 @@ const UserSendForm = props => {
   } = props
 
   return (
-    <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+    <div className="col-lg-8 offset-md-1 offset-lg-2">
       <Card>
         <Form onSubmit={handleSubmit}>
         <FormGroup>
           <br />
-          <InputGroup>
+          <InputGroup id='resource'>
             <InputGroupAddon addonType="prepend">
-              <InputGroupText className="user-send-text">
-                <i>Spendable Balance</i>
+              <InputGroupText className="user-send-text-small">
+                <i>CPU: {user.cpuAvailableStr}</i>
               </InputGroupText>
             </InputGroupAddon>
             <Input
               type="text"
               disabled
-              placeholder={user.balance}
+              placeholder= { balanceStr(user.balance) }
             />
-          </InputGroup>
-          <br />
-          <InputGroup id='cpu'>
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText className="user-send-text">
-                <i>CPU Availability</i>
+            <InputGroupAddon addonType="append">
+              <InputGroupText className="user-send-text-small">
+                <i>Bandwidth: {user.bandwidthAvailableStr}</i>
               </InputGroupText>
             </InputGroupAddon>
-            <Input
-              type="text"
-              disabled
-              placeholder={user.cpuAvailableStr} µs
-            />
-            <UncontrolledTooltip placement="left" target="cpu" styleName="tooltip">
-              <p>
-                XFS sending will be charged with some CPU
-              </p>
+            <UncontrolledTooltip placement="right" target="resource" styleName="tooltip">
+              {USER_SEND_TOOLTIP}
             </UncontrolledTooltip>
           </InputGroup>
           <br />
@@ -109,7 +105,7 @@ const UserSendForm = props => {
           </InputGroup>
           <br />
         </FormGroup>
-        <Button 
+        <Button id='butt'
           type="submit" color='secondary' className="btn-base btn-home"
           disabled={(touched.accountName && errors.accountName) || 
                     (touched.amount && errors.amount)}
@@ -121,6 +117,9 @@ const UserSendForm = props => {
           }
           
         </Button>
+        <UncontrolledTooltip placement="right" target="butt" styleName="tooltip">
+          {USER_SEND_TOOLTIP}
+        </UncontrolledTooltip>
         <Collapse isOpen={userSendErr} size='sm'>
           {userSendErr === 'Success'?
             <Alert color='success'>

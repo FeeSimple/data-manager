@@ -1,6 +1,7 @@
 import ecc from 'eosjs-ecc'
-import { getResourceStr, beautifyBalance, fetchBalanceNumber, beautifyCpu } from './beautify'
-import { NO_BALANCE } from './consts'
+import { getResourceStr, beautifyBalance, 
+         fetchBalanceNumber, beautifyCpu, beautifyRam } from './beautify'
+import { NO_BALANCE, MIN_STAKED_BW, MIN_STAKED_CPU, MAX_MEMO_LENGTH } from './consts'
 
 export const getKeyPair = async () => {
   let promises = [], keys = [], keyPairs = []
@@ -267,20 +268,61 @@ export const checkAccountExist = async (eosClient, account) => {
   }
 }
 
+export const sendXFSWithCheck = async (eosClient, activeAccount, receivingAccount, xfsAmount, memo, userData) => {
+  
+  if (activeAccount == receivingAccount) {
+    return 'You sent to your self?'
+  }
+
+  // Check if account exists
+  let exist = await checkAccountExist(eosClient, receivingAccount)
+  if (!exist) {
+    return 'Account "' + receivingAccount + '" does not exist'
+  }
+
+  // Check spendable balance
+  let balanceNum = userData.balanceNumber
+  if (!balanceNum || balanceNum <= parseFloat(xfsAmount)) {
+    return 'Not enough balance'
+  }
+
+  let checkErr = checkMinCpuBw(userData.cpuAvailable, userData.bandwidthAvailable)
+  if (checkErr) {
+    return checkErr
+  }
+
+  // Guarantee max memo length
+  if (memo) {
+    if (memo.length > MAX_MEMO_LENGTH) {
+      memo = memo.substring(0, MAX_MEMO_LENGTH-1)
+    }
+  } else {
+    memo = ''
+  }
+
+  let err = await sendXFS(eosClient, activeAccount, receivingAccount, xfsAmount, memo)
+
+  if (err) {
+    return err
+  } else {
+    return null
+  }
+}
+
 export const sendXFS = async (eosClient, activeAccount, receivingAccount, xfsAmount, memo) => {
   try {
     xfsAmount = conformXfsAmount(xfsAmount)
     await eosClient.transfer(activeAccount, receivingAccount, xfsAmount, memo, 
       {broadcast: true, sign: true})
     
-    return {}
+    return null
   } catch (err) {
     // Without JSON.parse(), it never works!
     // err = JSON.parse(err)
     // const errMsg = (err.error.what || "RAM management failed")
     const errMsg = "Failed to send"
     
-    return {errMsg}
+    return errMsg
   }
 }
 
@@ -297,9 +339,13 @@ export const getAccountInfo = async (eosClient, account) => {
     
     let bandwidthStr = ''
     let bandwidthMeter = '0'
+    let bandwidthAvailable = 0
+    let bandwidthAvailableStr = ''
     if (result.net_limit) {
       bandwidthStr = getResourceStr(result.net_limit)
       bandwidthMeter = remainingPercent(result.net_limit.used, result.net_limit.max).toString()
+      bandwidthAvailable = result.net_limit.available
+      bandwidthAvailableStr = beautifyRam(bandwidthAvailable)
     }
     
     let cpuStr = ''
@@ -347,6 +393,8 @@ export const getAccountInfo = async (eosClient, account) => {
       ramMeter,
       bandwidthStr,
       bandwidthMeter,
+      bandwidthAvailable,
+      bandwidthAvailableStr,
       stakedBandwidth,
       cpuStr,
       cpuMeter,
@@ -403,3 +451,18 @@ export const checkXfsAmountError = (xfsAmount) => {
   }
   return errMsg
 }
+
+export const checkMinCpuBw = (cpuAmount, bwAmount) => {
+  // Check CPU availability
+  if (cpuAmount <= MIN_STAKED_CPU) {
+    return 'Not enough CPU (need at least ' + MIN_STAKED_CPU + ' µs)'
+  }
+
+  // Check Bandwidth availability
+  if (bwAmount <= MIN_STAKED_BW) {
+    return 'Not enough Bandwidth (need at least ' + MIN_STAKED_BW + ' byte)'
+  }
+
+  return null
+}
+
