@@ -45,14 +45,14 @@ class FloorplanDetailsContainer extends Component {
     const { buffer } = this.state
 
     try {
-      const result = await ipfs.files.add(buffer) 
+      const result = await ipfs.files.add(buffer)
       this.setState({ ipfsHash: result[0].hash })
       const res = await ipfs.files.cat(result[0].hash)
       this.setState({ buffer: "data:image/png;base64," + Buffer(res).toString('base64') })
-    } catch (err) { 
-      console.error(err) 
+    } catch (err) {
+      console.error(err)
       return
-    }    
+    }
 
     const propertyId = this.props.match.params.id
     const { floorplan } = this.state
@@ -142,6 +142,20 @@ class FloorplanDetailsContainer extends Component {
     const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
+    const images = [
+      {
+        original: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/TheKenzieUpper-495x400.jpg',
+        thumbnail: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/TheKenzieUpper-495x400.jpg',
+      },
+      {
+        original: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/Bennett-Upper-495x400.png',
+        thumbnail: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/Bennett-Upper-495x400.png'
+      },
+      {
+        original: 'http://www.realestatephotosandfloorplans.com/wp-content/photos/Floorplansmall21.jpg',
+        thumbnail: 'http://www.realestatephotosandfloorplans.com/wp-content/photos/Floorplansmall21.jpg'
+      }
+    ]
 
     const mode = isCreating ? CREATING : this.state.mode
     let floorplan = mode === EDITING || mode === CREATING  ? this.state.floorplan : floorplans[floorplanId]
@@ -158,6 +172,7 @@ class FloorplanDetailsContainer extends Component {
             onCancelClick={this.cancel}
             onChange={(e) => this.handleChange(e)}
             onImageDrop={this.onImageDrop}
+            images={images}
           />
         }
       </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
+import ImageGallery from 'react-image-gallery'
 
 export const READING = 'reading'
 export const EDITING = 'editing'
@@ -14,7 +15,8 @@ const FloorplanDetails = ({
   onCreateClick,
   onSaveClick,
   onChange,
-  onImageDrop
+  onImageDrop,
+  images
 }) => (
   <div>
     <div className="top-bar">
@@ -139,6 +141,11 @@ const FloorplanDetails = ({
               onChange={onChange}
               value={floorplan.deposit}
             />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <ImageGallery items={images} />
           </div>
         </div>
         { mode === EDITING &&
