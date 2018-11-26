@@ -1,7 +1,9 @@
 import ecc from 'eosjs-ecc'
 import { getResourceStr, beautifyBalance, 
          fetchBalanceNumber, beautifyCpu, beautifyRam } from './beautify'
-import { NO_BALANCE, MIN_STAKED_BW, MIN_STAKED_CPU, MAX_MEMO_LENGTH } from './consts'
+import { NO_BALANCE, MIN_STAKED_BW, 
+  MIN_STAKED_CPU, MAX_MEMO_LENGTH,
+  TX_LINK_ROOT } from './consts'
 
 export const getKeyPair = async () => {
   let promises = [], keys = [], keyPairs = []
@@ -218,9 +220,47 @@ export const refundStake = async (eosClient, activeAccount) => {
   }
 }
 
+export const getActions = async (eosClient, account) => {
+  try {
+    let res = await eosClient.getActions(account)
+    console.log('getActions:', res);
+    return res.actions
+  } catch (err) {
+    const errMsg = "Get actions failed"
+    
+    return {errMsg}
+  }
+}
+
+export const getActionsProcessed = async (eosClient, account) => {
+  let res = await getActions(eosClient, account)
+  if (res.errMsg) {
+    return {errMsg: res.errMsg}
+  }
+
+  if (res.length == 0) {
+    return []
+  }
+
+  let actionActivity = []
+  
+  res.forEach((item) => {
+    actionActivity.push({
+      time:     item.block_time,
+      action:   item.action_trace.memo,
+      quantity: item.action_trace.quantity,
+      txLink:   TX_LINK_ROOT + item.block_num + '/' + item.action_trace.trx_id
+    }) 
+  })
+
+  return actionActivity.reverse()
+}
+
 export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, isBuy) => {
   try {
     
+    let actions = await getActions(eosClient, activeAccount)
+
     if (isBuy) {
       xfsAmount = conformXfsAmount(xfsAmount)
       console.log('manageRam: xfsAmount:', xfsAmount);

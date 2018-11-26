@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { fetchBalanceNumber, beautifyBalance } from '../../utils/beautify'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { MIN_STAKED_CPU, MIN_STAKED_BW, MAX_MEMO_LENGTH } from '../../utils/consts'
 import { getAccountInfo, manageRam, 
-         checkAccountExist, manageCpuBw, sendXFSWithCheck, checkMinCpuBw } from '../../utils/eoshelper'
+         manageCpuBw, sendXFSWithCheck, getActionsProcessed } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
-import { 
-  eosAdminAccount, getEosAdmin 
-} from '../../utils/index'
-import Eos from 'eosjs'
 
 class UserContainer extends Component {
   constructor(props) {
@@ -31,7 +25,9 @@ class UserContainer extends Component {
       isCpu: false,
       isStake: false,
 
-      userSendErr: false
+      userSendErr: false,
+
+      activityList: []
     }
   }
 
@@ -124,6 +120,24 @@ class UserContainer extends Component {
     if (this.state.activeTab !== tab) {  
       this.setState({
         activeTab: tab
+      })
+      if (tab == USERTAB.ACTIVITY) {
+        this.handleGetActions()
+      }
+    }
+  }
+
+  handleGetActions = async () => {
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+    let res = await getActionsProcessed(eosClient, activeAccount)
+    if (res.errMsg || res.length == 0) {
+      this.setState({
+        activityList: []
+      })
+    } else {
+      this.setState({
+        activityList: res
       })
     }
   }
@@ -253,6 +267,8 @@ class UserContainer extends Component {
 
         handleUserSend={this.handleUserSend}
         userSendErr={this.state.userSendErr}
+
+        activityList={this.state.activityList}
 
       />
     )
