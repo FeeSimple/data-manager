@@ -241,7 +241,7 @@ export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, i
         // "buyram()" is used to buy RAM in XFS
         tr.sellram({
             account: activeAccount, // account selling RAM
-            bytes: ramBytes
+            bytes: Number(ramBytes)
         });
       })
     }
@@ -415,6 +415,7 @@ export const getAccountInfo = async (eosClient, account) => {
         
         ramPrice = ramPrice.toPrecision(1).toString()
         info.ramPriceStr = getRamPriceStr(ramPrice)
+        info.ramPrice = ramPrice
       }
     }
 
