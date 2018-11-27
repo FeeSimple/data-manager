@@ -1,6 +1,7 @@
 import ecc from 'eosjs-ecc'
 import { getResourceStr, beautifyBalance, 
-         fetchBalanceNumber, beautifyCpu, beautifyRam } from './beautify'
+         fetchBalanceNumber, beautifyCpu, beautifyRam,
+         beautifyBlockTime } from './beautify'
 import { NO_BALANCE, MIN_STAKED_BW, 
   MIN_STAKED_CPU, MAX_MEMO_LENGTH,
   TX_LINK_ROOT } from './consts'
@@ -243,17 +244,20 @@ export const getActionsProcessed = async (eosClient, account) => {
   }
 
   let actionActivity = []
-  
+  let i = 1
+  res = res.reverse()
   res.forEach((item) => {
     actionActivity.push({
-      time:     item.block_time,
-      action:   item.action_trace.memo,
-      quantity: item.action_trace.quantity,
-      txLink:   TX_LINK_ROOT + item.block_num + '/' + item.action_trace.trx_id
+      index:    i++,
+      time:     beautifyBlockTime(item.block_time),
+      action:   item.action_trace.act.data.memo,
+      quantity: item.action_trace.act.data.quantity,
+      txLink:   TX_LINK_ROOT + item.block_num + '/' + item.action_trace.trx_id,
+      txId:     item.action_trace.trx_id.substring(0, 10) + '...'
     }) 
   })
 
-  return actionActivity.reverse()
+  return actionActivity
 }
 
 export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, isBuy) => {

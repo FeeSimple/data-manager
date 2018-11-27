@@ -80,6 +80,23 @@ export function fetchBalanceNumber(balance) {
   }
 }
 
+// Remove the trailing milli-sec digits after 'dot'
+export function beautifyBlockTime(blockTime) {
+  if (!blockTime) return ''
+  let res = ''
+  let idx = blockTime.indexOf('.') 
+  if (idx != -1) {
+    blockTime = blockTime.substring(0, idx)
+    idx = blockTime.indexOf('T')
+    if (idx != -1) {
+      blockTime = blockTime.substring(0, idx) + ' (' + blockTime.substring(idx+1) + ')'
+    }
+    return blockTime
+  } else {
+    return blockTime
+  }
+}
+
 export function beautifyBalance(balance) {
   if (!balance) return '0 XFS'
   let res = ''
