@@ -128,6 +128,9 @@ class UserContainer extends Component {
   }
 
   handleGetActions = async () => {
+    this.setState({
+      isProcessing: true
+    })
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
     let res = await getActionsProcessed(eosClient, activeAccount)
@@ -140,6 +143,10 @@ class UserContainer extends Component {
         activityList: res
       })
     }
+
+    this.setState({
+      isProcessing: false
+    })
   }
 
   handleManageCpuBw = async (xfsAmount) => {

@@ -233,6 +233,50 @@ export const getActions = async (eosClient, account) => {
   }
 }
 
+export const getTxData = async (eosClient, txid) => {
+  try {
+    let res = await eosClient.getTransaction(txid)
+    console.log('getTxData:', res);
+    return res
+  } catch (err) {
+    const errMsg = "Get transaction failed"
+    console.log('getTxData - err:', err);
+    return {errMsg}
+  }
+}
+
+// .traces[0].act.data.memo        "sell ram"
+// .traces[0].act.data.quantity    "0.9671 XFS"
+
+// .traces[1].act.data.memo        "sell ram fee"
+// .traces[1].act.data.quantity    "0.0049 XFS"
+export const getTxDataSellRam = async (eosClient, txid) => {
+  let res = await getTxData(eosClient, txid)
+  if (res.errMsg) {
+    return null
+  }
+
+  let action = res.traces[0].act.data.memo
+  let quantity = res.traces[0].act.data.quantity
+  
+  let ramUsage
+  try {
+    ramUsage = res.traces[1].act.data.quantity
+  } catch (err) {
+    ramUsage = '0 XFS'
+  }
+
+  let cpuBwUsage
+  try {
+    cpuBwUsage = res.trx.receipt.cpu_usage_us.toString() + ' µs'
+    cpuBwUsage += ' & ' + res.trx.receipt.net_usage_words.toString() + ' byte'
+  } catch (err) {
+    cpuBwUsage = '0 µs & O byte'
+  }
+
+  return {action, quantity, ramUsage, cpuBwUsage}
+}
+
 export const getActionsProcessed = async (eosClient, account) => {
   let res = await getActions(eosClient, account)
   if (res.errMsg) {
@@ -244,18 +288,46 @@ export const getActionsProcessed = async (eosClient, account) => {
   }
 
   let actionActivity = []
-  let i = 1
   res = res.reverse()
-  res.forEach((item) => {
+  for (let i=0; i < res.length; i++) {
+    let item = res[i]
+    let txid = item.action_trace.trx_id
+    let blockNum = item.block_num
+    let quantity = item.action_trace.act.data.quantity
+    let action = item.action_trace.act.data.memo.toLowerCase()
+    let ramUsage = '0 XFS'
+    let cpuBwUsage = '0 µs & O byte'
+    let txDat = await getTxDataSellRam(eosClient, txid)
+    
+    if (txDat) {
+      action = txDat.action
+      quantity = txDat.quantity
+      ramUsage = txDat.ramUsage,
+      cpuBwUsage = txDat.cpuBwUsage
+    }
+
+    action = action.toLowerCase()
+    // Special check for transfer
+    if (ramUsage == '0 XFS' &&
+        (action.indexOf('stake') == -1 && 
+         action.indexOf('unstake') == -1 &&
+         action.indexOf('bandwidth') == -1 &&
+         action.indexOf('cpu') == -1)) {
+      
+      action = 'transfer'
+    }
+
     actionActivity.push({
-      index:    i++,
+      index:    i+1,
       time:     beautifyBlockTime(item.block_time),
-      action:   item.action_trace.act.data.memo,
-      quantity: item.action_trace.act.data.quantity,
-      txLink:   TX_LINK_ROOT + item.block_num + '/' + item.action_trace.trx_id,
-      txId:     item.action_trace.trx_id.substring(0, 10) + '...'
-    }) 
-  })
+      action:   action,
+      quantity: quantity,
+      txLink:   TX_LINK_ROOT + blockNum + '/' + item.action_trace.trx_id,
+      txId:     txid.substring(0, 10) + '...', // reduce txid as it's too long,
+      ramUsage:   ramUsage,
+      cpuBwUsage: cpuBwUsage,
+    })
+  }
 
   return actionActivity
 }

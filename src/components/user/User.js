@@ -115,6 +115,7 @@ export const User = ({
       <TabPane tabId={USERTAB.ACTIVITY}>
         <UserActivity
           activityList={activityList}
+          isProcessing={isProcessing}
         />
       </TabPane>
     </TabContent>
