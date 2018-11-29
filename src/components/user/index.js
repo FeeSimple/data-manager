@@ -128,12 +128,9 @@ class UserContainer extends Component {
       if (tab == USERTAB.ACTIVITY) {
         if (!this.state.gettingActions) {
           console.log('handleGetActions is not running')
-          if (this.state.activityList.length == 0) {
-            console.log('activityList empty')
-            this.handleGetActions()
-          } else {
-            console.log('activityList not empty')
-          }
+          this._asyncRequest = this.handleGetActions().then(() => {
+            this._asyncRequest = null
+          })
           
         } else {
           console.log('handleGetActions is running')
@@ -143,14 +140,16 @@ class UserContainer extends Component {
   }
 
   handleGetActions = async () => {
+    let currActivityList = this.state.activityList
+
     this.setState({
       gettingActions: true
     })
 
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
-    let currActivityList = this.state.activityList
-    let res = await getActionsProcessed(eosClient, activeAccount, currActivityList)
+    
+    let res = await getActionsProcessed(eosClient, activeAccount)
     if (res.errMsg || res.length == 0) {
       if (currActivityList.length == 0) {
         this.setState({
@@ -259,7 +258,9 @@ class UserContainer extends Component {
     await this.updateAccountInfo()
 
     // Time-consuming handling
-    this.handleGetActions().then()
+    this._asyncRequest = this.handleGetActions().then(() => {
+      this._asyncRequest = null
+    })
   }
 
   componentWillUnmount() {

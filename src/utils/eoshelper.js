@@ -277,16 +277,17 @@ export const getTxDataSellRam = async (eosClient, txid) => {
   return {action, quantity, ramUsage, cpuBwUsage}
 }
 
-export const getActionsProcessed = async (eosClient, account, activityList) => {
+export const getActionsProcessed = async (eosClient, account) => {
   let res = await getActions(eosClient, account)
   if (res.errMsg) {
     return {errMsg: res.errMsg}
   }
 
   if (res.length == 0) {
-    return activityList
+    return []
   }
 
+  let activityList = []
   res = res.reverse()
   for (let i=0; i < res.length; i++) {
     let item = res[i]

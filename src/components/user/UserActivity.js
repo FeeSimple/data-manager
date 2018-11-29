@@ -9,7 +9,7 @@ const UserActivity = ({
   gettingActions
 }) => (
   <div className="col-lg-12">
-    {gettingActions ?
+    {activityList.length == 0 ?
       <LoadingView />
     :
       <Table striped>
