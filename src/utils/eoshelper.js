@@ -277,17 +277,16 @@ export const getTxDataSellRam = async (eosClient, txid) => {
   return {action, quantity, ramUsage, cpuBwUsage}
 }
 
-export const getActionsProcessed = async (eosClient, account) => {
+export const getActionsProcessed = async (eosClient, account, activityList) => {
   let res = await getActions(eosClient, account)
   if (res.errMsg) {
     return {errMsg: res.errMsg}
   }
 
   if (res.length == 0) {
-    return []
+    return activityList
   }
 
-  let actionActivity = []
   res = res.reverse()
   for (let i=0; i < res.length; i++) {
     let item = res[i]
@@ -317,7 +316,7 @@ export const getActionsProcessed = async (eosClient, account) => {
       action = 'transfer'
     }
 
-    actionActivity.push({
+    activityList.push({
       index:    i+1,
       time:     beautifyBlockTime(item.block_time),
       action:   action,
@@ -329,7 +328,7 @@ export const getActionsProcessed = async (eosClient, account) => {
     })
   }
 
-  return actionActivity
+  return activityList
 }
 
 export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, isBuy) => {

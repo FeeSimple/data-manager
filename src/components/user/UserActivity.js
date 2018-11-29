@@ -6,10 +6,10 @@ import LoadingView from '../layout/LoadingView'
 
 const UserActivity = ({
   activityList,
-  isProcessing
+  gettingActions
 }) => (
   <div className="col-lg-12">
-    {isProcessing ?
+    {gettingActions ?
       <LoadingView />
     :
       <Table striped>

@@ -27,7 +27,8 @@ class UserContainer extends Component {
 
       userSendErr: false,
 
-      activityList: []
+      activityList: [],
+      gettingActions: false
     }
   }
 
@@ -121,23 +122,41 @@ class UserContainer extends Component {
       this.setState({
         activeTab: tab
       })
+
+      // When entering the "Activity" view, only if the function handleGetActions() is
+      // being executed, we don't call it
       if (tab == USERTAB.ACTIVITY) {
-        this.handleGetActions()
+        if (!this.state.gettingActions) {
+          console.log('handleGetActions is not running')
+          if (this.state.activityList.length == 0) {
+            console.log('activityList empty')
+            this.handleGetActions()
+          } else {
+            console.log('activityList not empty')
+          }
+          
+        } else {
+          console.log('handleGetActions is running')
+        }
       }
     }
   }
 
   handleGetActions = async () => {
     this.setState({
-      isProcessing: true
+      gettingActions: true
     })
+
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
-    let res = await getActionsProcessed(eosClient, activeAccount)
+    let currActivityList = this.state.activityList
+    let res = await getActionsProcessed(eosClient, activeAccount, currActivityList)
     if (res.errMsg || res.length == 0) {
-      this.setState({
-        activityList: []
-      })
+      if (currActivityList.length == 0) {
+        this.setState({
+          activityList: []
+        })
+      }
     } else {
       this.setState({
         activityList: res
@@ -145,7 +164,7 @@ class UserContainer extends Component {
     }
 
     this.setState({
-      isProcessing: false
+      gettingActions: false
     })
   }
 
@@ -237,7 +256,16 @@ class UserContainer extends Component {
   }
 
   async componentDidMount() {
-    this.updateAccountInfo()
+    await this.updateAccountInfo()
+
+    // Time-consuming handling
+    this.handleGetActions().then()
+  }
+
+  componentWillUnmount() {
+    if (this.state.gettingActions) {
+      this._asyncRequest.cancel();
+    }
   }
 
   render() {
@@ -276,6 +304,7 @@ class UserContainer extends Component {
         userSendErr={this.state.userSendErr}
 
         activityList={this.state.activityList}
+        gettingActions={this.state.gettingActions}
 
       />
     )

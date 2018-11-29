@@ -43,7 +43,8 @@ export const User = ({
   handleUserSend,
   userSendErr,
 
-  activityList
+  activityList,
+  gettingActions
 }) => (
   <div>
     <Nav tabs>
@@ -115,7 +116,7 @@ export const User = ({
       <TabPane tabId={USERTAB.ACTIVITY}>
         <UserActivity
           activityList={activityList}
-          isProcessing={isProcessing}
+          gettingActions={gettingActions}
         />
       </TabPane>
     </TabContent>
