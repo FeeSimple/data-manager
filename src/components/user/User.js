@@ -9,6 +9,7 @@ import UserInfo from './UserInfo'
 import ManageRam from './ManageRam'
 import ManageCpuBw from './ManageCpuBw'
 import UserSend from './UserSend'
+import UserActivity from './UserActivity';
 
 export const USERTAB = {
   INFO: '1',
@@ -40,7 +41,10 @@ export const User = ({
   resourceHandleErr,
 
   handleUserSend,
-  userSendErr
+  userSendErr,
+
+  activityList,
+  gettingActions
 }) => (
   <div>
     <Nav tabs>
@@ -110,6 +114,10 @@ export const User = ({
         />
       </TabPane>
       <TabPane tabId={USERTAB.ACTIVITY}>
+        <UserActivity
+          activityList={activityList}
+          gettingActions={gettingActions}
+        />
       </TabPane>
     </TabContent>
   </div>
