@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { fetchBalanceNumber, beautifyBalance } from '../../utils/beautify'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { MIN_STAKED_CPU, MIN_STAKED_BW, MAX_MEMO_LENGTH } from '../../utils/consts'
 import { getAccountInfo, manageRam, 
-         checkAccountExist, manageCpuBw, sendXFSWithCheck, checkMinCpuBw } from '../../utils/eoshelper'
+         manageCpuBw, sendXFSWithCheck, getActionsProcessed } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
-import { 
-  eosAdminAccount, getEosAdmin 
-} from '../../utils/index'
-import Eos from 'eosjs'
 
 class UserContainer extends Component {
   constructor(props) {
@@ -31,7 +25,10 @@ class UserContainer extends Component {
       isCpu: false,
       isStake: false,
 
-      userSendErr: false
+      userSendErr: false,
+
+      activityList: [],
+      gettingActions: false
     }
   }
 
@@ -125,7 +122,49 @@ class UserContainer extends Component {
       this.setState({
         activeTab: tab
       })
+
+      // When entering the "Activity" view, only if the function handleGetActions() is
+      // being executed, we don't call it
+      if (tab == USERTAB.ACTIVITY) {
+        if (!this.state.gettingActions) {
+          // console.log('handleGetActions is not running')
+          this._asyncRequest = this.handleGetActions().then(() => {
+            this._asyncRequest = null
+          })
+          
+        } else {
+          // console.log('handleGetActions is running')
+        }
+      }
     }
+  }
+
+  handleGetActions = async () => {
+    let currActivityList = this.state.activityList
+
+    this.setState({
+      gettingActions: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+    
+    let res = await getActionsProcessed(eosClient, activeAccount)
+    if (res.errMsg || res.length == 0) {
+      if (currActivityList.length == 0) {
+        this.setState({
+          activityList: []
+        })
+      }
+    } else {
+      this.setState({
+        activityList: res
+      })
+    }
+
+    this.setState({
+      gettingActions: false
+    })
   }
 
   handleManageCpuBw = async (xfsAmount) => {
@@ -140,7 +179,7 @@ class UserContainer extends Component {
 
     const { isCpu, isStake } = this.state
     let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, isCpu, isStake)
-      console.log('manageCpuBw:', res)
+      // console.log('manageCpuBw:', res)
       if (res.errMsg) {
         this.setState({
           resourceHandleErr: res.errMsg,
@@ -216,7 +255,18 @@ class UserContainer extends Component {
   }
 
   async componentDidMount() {
-    this.updateAccountInfo()
+    await this.updateAccountInfo()
+
+    // Time-consuming handling
+    this._asyncRequest = this.handleGetActions().then(() => {
+      this._asyncRequest = null
+    })
+  }
+
+  componentWillUnmount() {
+    if (this.state.gettingActions) {
+      this._asyncRequest.cancel();
+    }
   }
 
   render() {
@@ -253,6 +303,9 @@ class UserContainer extends Component {
 
         handleUserSend={this.handleUserSend}
         userSendErr={this.state.userSendErr}
+
+        activityList={this.state.activityList}
+        gettingActions={this.state.gettingActions}
 
       />
     )

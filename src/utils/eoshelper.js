@@ -1,7 +1,10 @@
 import ecc from 'eosjs-ecc'
 import { getResourceStr, beautifyBalance, 
-         fetchBalanceNumber, beautifyCpu, beautifyRam } from './beautify'
-import { NO_BALANCE, MIN_STAKED_BW, MIN_STAKED_CPU, MAX_MEMO_LENGTH } from './consts'
+         fetchBalanceNumber, beautifyCpu, beautifyRam,
+         beautifyBlockTime } from './beautify'
+import { NO_BALANCE, MIN_STAKED_BW, 
+  MIN_STAKED_CPU, MAX_MEMO_LENGTH,
+  TX_LINK_ROOT } from './consts'
 
 export const getKeyPair = async () => {
   let promises = [], keys = [], keyPairs = []
@@ -117,7 +120,7 @@ export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, is
 
     xfsAmount = conformXfsAmount(xfsAmount)
     const zeroAmount = conformXfsAmount(0)
-    console.log('xfsAmount:', xfsAmount);
+    // console.log('xfsAmount:', xfsAmount);
 
     // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
     if (isCpu) {
@@ -218,12 +221,125 @@ export const refundStake = async (eosClient, activeAccount) => {
   }
 }
 
+export const getActions = async (eosClient, account) => {
+  try {
+    let res = await eosClient.getActions(account)
+    // console.log('getActions:', res);
+    return res.actions
+  } catch (err) {
+    const errMsg = "Get actions failed"
+    
+    return {errMsg}
+  }
+}
+
+export const getTxData = async (eosClient, txid) => {
+  try {
+    let res = await eosClient.getTransaction(txid)
+    // console.log('getTxData:', res);
+    return res
+  } catch (err) {
+    const errMsg = "Get transaction failed"
+    // console.log('getTxData - err:', err);
+    return {errMsg}
+  }
+}
+
+// .traces[0].act.data.memo        "sell ram"
+// .traces[0].act.data.quantity    "0.9671 XFS"
+
+// .traces[1].act.data.memo        "sell ram fee"
+// .traces[1].act.data.quantity    "0.0049 XFS"
+export const getTxDataSellRam = async (eosClient, txid) => {
+  let res = await getTxData(eosClient, txid)
+  if (res.errMsg) {
+    return null
+  }
+
+  let action = res.traces[0].act.data.memo
+  let quantity = res.traces[0].act.data.quantity
+  
+  let ramUsage
+  try {
+    ramUsage = res.traces[1].act.data.quantity
+  } catch (err) {
+    ramUsage = '0 XFS'
+  }
+
+  let cpuBwUsage
+  try {
+    cpuBwUsage = res.trx.receipt.cpu_usage_us.toString() + ' µs'
+    cpuBwUsage += ' & ' + res.trx.receipt.net_usage_words.toString() + ' byte'
+  } catch (err) {
+    cpuBwUsage = '0 µs & O byte'
+  }
+
+  return {action, quantity, ramUsage, cpuBwUsage}
+}
+
+export const getActionsProcessed = async (eosClient, account) => {
+  let res = await getActions(eosClient, account)
+  if (res.errMsg) {
+    return {errMsg: res.errMsg}
+  }
+
+  if (res.length == 0) {
+    return []
+  }
+
+  let activityList = []
+  res = res.reverse()
+  for (let i=0; i < res.length; i++) {
+    let item = res[i]
+    let txid = item.action_trace.trx_id
+    let blockNum = item.block_num
+    let quantity = item.action_trace.act.data.quantity
+    let action = item.action_trace.act.data.memo.toLowerCase()
+    let ramUsage = '0 XFS'
+    let cpuBwUsage = '0 µs & O byte'
+    let txDat = await getTxDataSellRam(eosClient, txid)
+    
+    if (txDat) {
+      action = txDat.action
+      quantity = txDat.quantity
+      ramUsage = txDat.ramUsage,
+      cpuBwUsage = txDat.cpuBwUsage
+    }
+
+    action = action.toLowerCase()
+    // Special check for transfer
+    if (ramUsage == '0 XFS' &&
+        (action.indexOf('stake') == -1 && 
+         action.indexOf('unstake') == -1 &&
+         action.indexOf('bandwidth') == -1 &&
+         action.indexOf('cpu') == -1)) {
+      
+      action = 'transfer'
+    }
+
+    activityList.push({
+      index:    i+1,
+      time:     beautifyBlockTime(item.block_time),
+      action:   action,
+      quantity: quantity,
+      txLink:   TX_LINK_ROOT + blockNum + '/' + item.action_trace.trx_id,
+      txId:     txid.substring(0, 10) + '...', // reduce txid as it's too long,
+      ramUsage:   ramUsage,
+      cpuBwUsage: cpuBwUsage,
+    })
+  }
+
+  return activityList
+}
+
 export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, isBuy) => {
   try {
     
+    let actions = await getActions(eosClient, activeAccount)
+
     if (isBuy) {
       xfsAmount = conformXfsAmount(xfsAmount)
-      console.log('manageRam: xfsAmount:', xfsAmount);
+      // console.log('manageRam: xfsAmount:', xfsAmount);
 
       await eosClient.transaction(tr => {
         // "buyrambytes()" is used to buy RAM in bytes
@@ -241,7 +357,7 @@ export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, i
         // "buyram()" is used to buy RAM in XFS
         tr.sellram({
             account: activeAccount, // account selling RAM
-            bytes: ramBytes
+            bytes: Number(ramBytes)
         });
       })
     }
@@ -329,7 +445,7 @@ export const sendXFS = async (eosClient, activeAccount, receivingAccount, xfsAmo
 export const getAccountInfo = async (eosClient, account) => {
   try {
     let result = await eosClient.getAccount(account)
-    console.log('getAccountInfo - result: ', result)
+    // console.log('getAccountInfo - result: ', result)
     let ramStr = ''
     let ramMeter = '0'
     if (result.ram_usage && result.ram_quota) {
@@ -415,6 +531,7 @@ export const getAccountInfo = async (eosClient, account) => {
         
         ramPrice = ramPrice.toPrecision(1).toString()
         info.ramPriceStr = getRamPriceStr(ramPrice)
+        info.ramPrice = ramPrice
       }
     }
 
@@ -422,7 +539,7 @@ export const getAccountInfo = async (eosClient, account) => {
 
   } catch (err) {
 
-    console.log('getAccountInfo (' + account + ') error: ', err)
+    // console.log('getAccountInfo (' + account + ') error: ', err)
 
     return null
   }
