@@ -120,7 +120,7 @@ export const manageCpuBw = async (eosClient, activeAccount, xfsAmount, isCpu, is
 
     xfsAmount = conformXfsAmount(xfsAmount)
     const zeroAmount = conformXfsAmount(0)
-    console.log('xfsAmount:', xfsAmount);
+    // console.log('xfsAmount:', xfsAmount);
 
     // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
     if (isCpu) {
@@ -224,7 +224,7 @@ export const refundStake = async (eosClient, activeAccount) => {
 export const getActions = async (eosClient, account) => {
   try {
     let res = await eosClient.getActions(account)
-    console.log('getActions:', res);
+    // console.log('getActions:', res);
     return res.actions
   } catch (err) {
     const errMsg = "Get actions failed"
@@ -236,11 +236,11 @@ export const getActions = async (eosClient, account) => {
 export const getTxData = async (eosClient, txid) => {
   try {
     let res = await eosClient.getTransaction(txid)
-    console.log('getTxData:', res);
+    // console.log('getTxData:', res);
     return res
   } catch (err) {
     const errMsg = "Get transaction failed"
-    console.log('getTxData - err:', err);
+    // console.log('getTxData - err:', err);
     return {errMsg}
   }
 }
@@ -339,7 +339,7 @@ export const manageRam = async (eosClient, activeAccount, xfsAmount, ramPrice, i
 
     if (isBuy) {
       xfsAmount = conformXfsAmount(xfsAmount)
-      console.log('manageRam: xfsAmount:', xfsAmount);
+      // console.log('manageRam: xfsAmount:', xfsAmount);
 
       await eosClient.transaction(tr => {
         // "buyrambytes()" is used to buy RAM in bytes
@@ -445,7 +445,7 @@ export const sendXFS = async (eosClient, activeAccount, receivingAccount, xfsAmo
 export const getAccountInfo = async (eosClient, account) => {
   try {
     let result = await eosClient.getAccount(account)
-    console.log('getAccountInfo - result: ', result)
+    // console.log('getAccountInfo - result: ', result)
     let ramStr = ''
     let ramMeter = '0'
     if (result.ram_usage && result.ram_quota) {
@@ -539,7 +539,7 @@ export const getAccountInfo = async (eosClient, account) => {
 
   } catch (err) {
 
-    console.log('getAccountInfo (' + account + ') error: ', err)
+    // console.log('getAccountInfo (' + account + ') error: ', err)
 
     return null
   }

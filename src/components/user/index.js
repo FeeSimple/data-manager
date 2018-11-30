@@ -127,13 +127,13 @@ class UserContainer extends Component {
       // being executed, we don't call it
       if (tab == USERTAB.ACTIVITY) {
         if (!this.state.gettingActions) {
-          console.log('handleGetActions is not running')
+          // console.log('handleGetActions is not running')
           this._asyncRequest = this.handleGetActions().then(() => {
             this._asyncRequest = null
           })
           
         } else {
-          console.log('handleGetActions is running')
+          // console.log('handleGetActions is running')
         }
       }
     }
@@ -179,7 +179,7 @@ class UserContainer extends Component {
 
     const { isCpu, isStake } = this.state
     let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, isCpu, isStake)
-      console.log('manageCpuBw:', res)
+      // console.log('manageCpuBw:', res)
       if (res.errMsg) {
         this.setState({
           resourceHandleErr: res.errMsg,
