@@ -265,7 +265,7 @@ class UserContainer extends Component {
 
   componentWillUnmount() {
     if (this.state.gettingActions) {
-      this._asyncRequest.cancel();
+      this._asyncRequest = null
     }
   }
 
