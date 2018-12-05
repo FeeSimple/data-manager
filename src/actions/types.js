@@ -13,3 +13,6 @@ export const SET_LOADING = 'SET_LOADING'
 
 export const SET_FLOORPLAN = 'SET_FLOORPLAN'
 export const ADD_FLOORPLANS = 'ADD_FLOORPLANS'
+
+export const SET_UNIT = 'SET_UNIT'
+export const ADD_UNITS = 'ADD_UNITS'

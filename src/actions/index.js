@@ -10,6 +10,8 @@ import {
   SET_LOADING,
   SET_FLOORPLAN,
   ADD_FLOORPLANS,
+  SET_UNIT,
+  ADD_UNITS
 } from '../actions/types'
 
 export function addFloorplans (floorplans) {
@@ -23,6 +25,20 @@ export function setFloorplan (propertyId, floorplan) {
   return {
     type: SET_FLOORPLAN,
     payload: { propertyId, floorplan }
+  }
+}
+
+export function addUnits (units) {
+  return {
+    type: ADD_UNITS,
+    payload: { units }
+  }
+}
+
+export function setUnit (propertyId, unit) {
+  return {
+    type: SET_UNIT,
+    payload: { propertyId, unit }
   }
 }
 

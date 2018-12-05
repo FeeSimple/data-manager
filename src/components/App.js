@@ -6,6 +6,7 @@ import PropertyDetails from './properties/details'
 import User from './user'
 import Floorplans from './properties/floorplans'
 import FloorplanDetails from './properties/floorplans/details'
+import Unit from './properties/unit'
 
 class AppContainer extends Component {
   render () {
@@ -25,6 +26,13 @@ class AppContainer extends Component {
           path='/:id'
           render={({match}) => (
             <Floorplans id={match.params.id} />
+          )}
+        />
+        <Route
+          exact
+          path='/:id/unit'
+          render={({match}) => (
+            <Unit id={match.params.id} />
           )}
         />
         <Route
