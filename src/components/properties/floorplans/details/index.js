@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { setFloorplan, setLoading } from '../../../../actions'
 import FloorplanDetails, { READING, EDITING, CREATING } from './FloorplanDetails'
-import { FSMGRCONTRACT } from '../../../../utils/consts'
+import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 import ipfs from '../../../../ipfs'
 
 
@@ -13,16 +13,28 @@ class FloorplanDetailsContainer extends Component {
     prevFloorplan: {},
     floorplan: newFloorplan(),
     buffer: null,
-    ipfsHash: null
+    imagesToUpload: []
   }
 
   onImageDrop = (files) => {
-    console.info('user selected a file to upload')
     const file = files[0]
     const reader = new window.FileReader()
     reader.readAsArrayBuffer(file)
-    reader.onloadend = () => {
-      this.setState({ buffer: Buffer(reader.result) })
+    reader.onloadend = async () => {
+      let buffer = Buffer(reader.result)
+      try {
+        const result = await ipfs.files.add(buffer)
+        const res = await ipfs.files.cat(result[0].hash)
+        buffer = "data:image/png;base64," + Buffer(res).toString('base64')
+        const image = {
+          buffer,
+          hash: result[0].hash
+        }
+        this.setState(prevState => ({ imagesToUpload: [...prevState.imagesToUpload, image] }))
+      } catch (err) {
+        console.error(err)
+        return
+      }
       console.log('buffer', this.state.buffer)
     }
   }
@@ -42,20 +54,8 @@ class FloorplanDetailsContainer extends Component {
   save = async (e) => {
     e.preventDefault()
 
-    const { buffer } = this.state
-
-    try {
-      const result = await ipfs.files.add(buffer)
-      this.setState({ ipfsHash: result[0].hash })
-      const res = await ipfs.files.cat(result[0].hash)
-      this.setState({ buffer: "data:image/png;base64," + Buffer(res).toString('base64') })
-    } catch (err) {
-      console.error(err)
-      return
-    }
-
     const propertyId = this.props.match.params.id
-    const { floorplan } = this.state
+    const { floorplan, imagesToUpload } = this.state
     const { contracts, accountData, setLoading, setFloorplan } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -82,6 +82,13 @@ class FloorplanDetailsContainer extends Component {
     )
 
     setFloorplan(propertyId, floorplan)
+
+    if(imagesToUpload.length > 0){
+      await Promise.all(imagesToUpload.map(async image => {
+        fsmgrcontract.addflplanimg(accountData.active, floorplan.id, '', image.hash)
+      }))
+    }
+
     setLoading(false)
   }
 
@@ -138,24 +145,24 @@ class FloorplanDetailsContainer extends Component {
     })
   }
 
+  async componentDidMount () {
+    const { eosClient, accountData, addFloorplans } = this.props
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      FLOORPLANIMG
+    )
+
+    console.info(rows)
+  }
+
   render() {
     const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
-    const images = [
-      {
-        original: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/TheKenzieUpper-495x400.jpg',
-        thumbnail: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/TheKenzieUpper-495x400.jpg',
-      },
-      {
-        original: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/Bennett-Upper-495x400.png',
-        thumbnail: 'http://www.ryanrealestate.com/wp-content/uploads/2016/01/Bennett-Upper-495x400.png'
-      },
-      {
-        original: 'http://www.realestatephotosandfloorplans.com/wp-content/photos/Floorplansmall21.jpg',
-        thumbnail: 'http://www.realestatephotosandfloorplans.com/wp-content/photos/Floorplansmall21.jpg'
-      }
-    ]
+    const { imagesToUpload } = this.state
 
     const mode = isCreating ? CREATING : this.state.mode
     let floorplan = mode === EDITING || mode === CREATING  ? this.state.floorplan : floorplans[floorplanId]
@@ -172,7 +179,7 @@ class FloorplanDetailsContainer extends Component {
             onCancelClick={this.cancel}
             onChange={(e) => this.handleChange(e)}
             onImageDrop={this.onImageDrop}
-            images={images}
+            images={imagesToUpload}
           />
         }
       </div>

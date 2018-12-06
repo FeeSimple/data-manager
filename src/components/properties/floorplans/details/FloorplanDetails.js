@@ -3,6 +3,10 @@ import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import ImageGallery from 'react-image-gallery'
+import ImagesUploader from 'react-images-uploader-continued'
+import 'react-images-uploader-continued/styles.css'
+import 'react-images-uploader-continued/font.css'
+
 
 export const READING = 'reading'
 export const EDITING = 'editing'
@@ -143,15 +147,20 @@ const FloorplanDetails = ({
             />
           </div>
         </div>
-        <div className="row">
-          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <ImageGallery items={images} />
-          </div>
-        </div>
         { mode === EDITING &&
           <div className="form-group row">
             <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-              <Dropzone
+              <ImagesUploader
+                url="http://localhost:9000/multiple"
+                optimisticPreviews
+                onLoadEnd={(err) => {
+                  if (err) {
+                    console.error(err);
+                  }
+                }}
+                label="Upload multiple images"
+              />
+              {/* <Dropzone
                 multiple={false}
                 accept="image/*"
                 onDrop={onImageDrop}
@@ -162,7 +171,7 @@ const FloorplanDetails = ({
                 rejectClassName='dpz-rejected'
               >
                 <p>Drag and drop a property image, such as a floorplan.</p>
-              </Dropzone>
+              </Dropzone> */}
             </div>
           </div>
         }

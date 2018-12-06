@@ -27,6 +27,7 @@
     "react-dropzone": "^6.2.4",
     "react-icons": "^2.2.7",
     "react-image-gallery": "^0.8.12",
+    "react-images-uploader-continued": "^1.2.1",
     "react-media": "^1.8.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
