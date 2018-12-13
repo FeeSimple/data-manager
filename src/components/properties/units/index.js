@@ -10,13 +10,18 @@ class UnitContainer extends Component {
   async componentDidMount () {
     const { eosClient, accountData, addUnits } = this.props
 
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      UNIT
-    )
-    addUnits(rows)
+    try {
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        accountData.active,
+        UNIT
+      )
+      console.log('Get table "unit" result:', rows)
+      addUnits(rows)
+    } catch (err) {
+      console.log('Get table "unit" failed - err:', err)
+    }
   }
 
   render() {

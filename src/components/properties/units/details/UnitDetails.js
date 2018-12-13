@@ -7,8 +7,8 @@ export const READING = 'reading'
 export const EDITING = 'editing'
 export const CREATING = 'creating'
 
-const FloorplanDetails = ({
-  floorplan,
+const UnitDetails = ({
+  unit,
   mode,
   onEditClick,
   onCreateClick,
@@ -21,7 +21,7 @@ const FloorplanDetails = ({
       <Container>
         <Row>
           <Col>
-            <h3 className="float-left">{' '}Floorplan</h3>
+            <h3 className="float-left">{' '}Unit</h3>
           </Col>
         </Row>
       </Container>
@@ -42,7 +42,7 @@ const FloorplanDetails = ({
               type="text"
               className="form-control"
               name='name'
-              value={floorplan.name}
+              value={unit.name}
               onChange={onChange}
               disabled={mode === READING} />
           </div>
@@ -57,7 +57,7 @@ const FloorplanDetails = ({
               type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={floorplan.bedrooms}
+              value={unit.bedrooms}
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ const FloorplanDetails = ({
               type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={floorplan.bathrooms}
+              value={unit.bathrooms}
             />
           </div>
         </div>
@@ -85,7 +85,7 @@ const FloorplanDetails = ({
               type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={floorplan.sq_ft_min}
+              value={unit.sq_ft_min}
             />
           </div>
           <div className="col-12 col-md-5 col-lg-4">
@@ -97,7 +97,7 @@ const FloorplanDetails = ({
               type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={floorplan.sq_ft_max}
+              value={unit.sq_ft_max}
             />
           </div>
         </div>
@@ -111,7 +111,7 @@ const FloorplanDetails = ({
               type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={floorplan.rent_min}
+              value={unit.rent_min}
             />
           </div>
           <div className="col-12 col-md-5 col-lg-4">
@@ -123,22 +123,47 @@ const FloorplanDetails = ({
               type="number"
               disabled={mode === READING}
               onChange={onChange}
-              value={floorplan.rent_max}
+              value={unit.rent_max}
             />
           </div>
         </div>
         <div className="form-group row">
           <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-            <label className="form-label">Deposit</label>
+            <label className="form-label">Status</label>
             <input
-              id='deposit'
-              name='deposit'
+              id='status'
+              type="text"
               className="form-control"
-              type="number"
-              disabled={mode === READING}
+              name='status'
+              value={unit.status}
               onChange={onChange}
-              value={floorplan.deposit}
-            />
+              disabled={mode === READING} />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">Date Available</label>
+            <input
+              id='dateAvailable'
+              type="text"
+              className="form-control"
+              name='dateAvailable'
+              value={unit.date_available}
+              onChange={onChange}
+              disabled={mode === READING} />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <label className="form-label">Term Pricing</label>
+            <input
+              id='termPricing'
+              type="text"
+              className="form-control"
+              name='termPricing'
+              value={unit.date_available}
+              onChange={onChange}
+              disabled={mode === READING} />
           </div>
         </div>
         { mode === EDITING &&
@@ -154,7 +179,7 @@ const FloorplanDetails = ({
                 disabledClassName='dpz-disabled'
                 rejectClassName='dpz-rejected'
               >
-                <p>Drag and drop a property image, such as a floorplan.</p>
+                <p>Drag and drop a property image, such as a unit.</p>
               </Dropzone>
             </div>
           </div>
@@ -165,7 +190,7 @@ const FloorplanDetails = ({
               type="button"
               className="btn btn-base w100 form-btn"
               hidden={mode !== READING}
-              onClick={(e) => onEditClick(e, floorplan)}
+              onClick={(e) => onEditClick(e, unit)}
             >
               Edit
             </button>
@@ -181,13 +206,13 @@ const FloorplanDetails = ({
               type="button"
               className="btn btn-base w100 form-btn"
               hidden={mode !== CREATING}
-              onClick={(e) => onCreateClick(e, floorplan)}
+              onClick={(e) => onCreateClick(e, unit)}
             >
               Create
             </button>
           </div>
           <div className="col-md-5 col-lg-4 col-6">
-            <Link to={mode === CREATING ? '/' : `/${floorplan.id}`}>
+            <Link to={mode === CREATING ? '/' : `/${unit.id}`}>
               <button
                 type="button"
                 className="btn btn-gray-o w100 form-btn"
@@ -202,4 +227,4 @@ const FloorplanDetails = ({
   </div>
 )
 
-export default FloorplanDetails
+export default UnitDetails

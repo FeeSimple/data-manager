@@ -1,30 +1,30 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { setFloorplan, setLoading } from '../../../../actions'
-import FloorplanDetails, { READING, EDITING, CREATING } from './FloorplanDetails'
+import { setUnit, setLoading } from '../../../../actions'
+import UnitDetails, { READING, EDITING, CREATING } from './UnitDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
 
 
-class FloorplanDetailsContainer extends Component {
+class UnitDetailsContainer extends Component {
   state = {
     mode: READING,
-    prevFloorplan: {},
-    floorplan: newFloorplan()
+    prevUnit: {},
+    unit: newUnit()
   }
 
   onImageDrop = (files) => {
     console.info('got file')
   }
 
-  edit = (e,floorplan) => {
+  edit = (e,unit) => {
     e.preventDefault()
 
     this.setState({
       mode: EDITING,
-      floorplan,
-      prevFloorplan: {
-        ...floorplan
+      unit,
+      prevUnit: {
+        ...unit
       }
     })
   }
@@ -33,8 +33,8 @@ class FloorplanDetailsContainer extends Component {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
-    const { floorplan } = this.state
-    const { contracts, accountData, setLoading, setFloorplan } = this.props
+    const { unit } = this.state
+    const { contracts, accountData, setLoading, setUnit } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -44,22 +44,24 @@ class FloorplanDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modfloorplan(
+    await fsmgrcontract.modunit(
       accountData.active,
-      floorplan.id,
+      unit.id,
+      0,
       propertyId,
-      floorplan.name,
-      floorplan.bedrooms,
-      floorplan.bathrooms,
-      floorplan.sq_ft_min,
-      floorplan.sq_ft_max,
-      floorplan.rent_min,
-      floorplan.rent_max,
-      floorplan.deposit,
+      unit.name,
+      unit.bedrooms,
+      unit.bathrooms,
+      unit.sq_ft_min,
+      unit.sq_ft_max,
+      unit.rent_min,
+      unit.rent_max,
+      unit.status,
+      unit.date_available,
       options
     )
 
-    setFloorplan(propertyId, floorplan)
+    setUnit(propertyId, unit)
     setLoading(false)
   }
 
@@ -68,7 +70,7 @@ class FloorplanDetailsContainer extends Component {
 
     const { contracts, accountData, setLoading, history } = this.props
     const propertyId = this.props.match.params.id
-    const { floorplan } = this.state
+    const { unit } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -78,25 +80,33 @@ class FloorplanDetailsContainer extends Component {
     }
     this.setState({ mode: READING })
 
+    console.log('addunit:', unit);
+
     setLoading(true)
 
-    await fsmgrcontract.addfloorplan(
-      accountData.active,
-      propertyId,
-      floorplan.name,
-      floorplan.bedrooms,
-      floorplan.bathrooms,
-      floorplan.sq_ft_min,
-      floorplan.sq_ft_max,
-      floorplan.rent_min,
-      floorplan.rent_max,
-      floorplan.deposit,
-      options
-    )
+    try {
+      await fsmgrcontract.addunit(
+        accountData.active,
+        0,
+        propertyId,
+        unit.name,
+        unit.bedrooms,
+        unit.bathrooms,
+        unit.sq_ft_min,
+        unit.sq_ft_max,
+        unit.rent_min,
+        unit.rent_max,
+        unit.status,
+        unit.date_available,
+        options
+      )
+      setUnit(propertyId, unit)
+      history.push(`/${propertyId}`)
+    } catch (err) {
+      console.log('addunit error:', err);
+    }
 
-    setFloorplan(propertyId, floorplan)
-    setLoading(false)
-    history.push(`/${propertyId}`)
+    setLoading(false)    
   }
 
   handleChange(event) {
@@ -108,8 +118,8 @@ class FloorplanDetailsContainer extends Component {
       let state = {
         ...prevState
       }
-      state.floorplan = {
-        ...prevState.floorplan,
+      state.unit = {
+        ...prevState.unit,
         [name]: value
       }
       return state
@@ -118,17 +128,17 @@ class FloorplanDetailsContainer extends Component {
 
   render() {
     const { isCreating, properties } = this.props
-    const { id, floorplanId } = this.props.match.params
-    const { floorplans } = properties[id]
+    const { id, unitId } = this.props.match.params
+    const { units } = properties[id]
 
     const mode = isCreating ? CREATING : this.state.mode
-    let floorplan = mode === EDITING || mode === CREATING  ? this.state.floorplan : floorplans[floorplanId]
+    let unit = mode === EDITING || mode === CREATING  ? this.state.unit : units[unitId]
     return (
       <div>
-        {typeof floorplan === 'undefined' && <h1 className="text-center my-5 py-5">404 - Floorplan not found</h1>}
-        {typeof floorplan !== 'undefined' &&
-          <FloorplanDetails
-            floorplan={floorplan}
+        {typeof unit === 'undefined' && <h1 className="text-center my-5 py-5">404 - Unit not found</h1>}
+        {typeof unit !== 'undefined' &&
+          <UnitDetails
+            unit={unit}
             mode={mode}
             onEditClick={this.edit}
             onSaveClick={this.save}
@@ -143,7 +153,7 @@ class FloorplanDetailsContainer extends Component {
   }
 }
 
-const newFloorplan = () => ({
+const newUnit = () => ({
   name: '',
   bedrooms: 0,
   bathrooms: 0,
@@ -151,7 +161,8 @@ const newFloorplan = () => ({
   sq_ft_max: 0,
   rent_min: 0,
   rent_max: 0,
-  deposit: 0
+  status: '',
+  date_available: 0
 })
 
 function mapStateToProps({ eosClient, scatter, contracts, accountData, properties }){
@@ -160,5 +171,5 @@ function mapStateToProps({ eosClient, scatter, contracts, accountData, propertie
 
 export default withRouter(connect(
   mapStateToProps,
-  { setFloorplan, setLoading }
-)(FloorplanDetailsContainer))
+  { setUnit, setLoading }
+)(UnitDetailsContainer))
