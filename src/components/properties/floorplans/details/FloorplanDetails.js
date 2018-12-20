@@ -3,9 +3,8 @@ import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import ImageGallery from 'react-image-gallery'
-import ImagesUploader from 'react-images-uploader-continued'
-import 'react-images-uploader-continued/styles.css'
-import 'react-images-uploader-continued/font.css'
+import ImagesUploader from 'react-images-uploader-fs'
+import 'react-images-uploader-fs/styles.css'
 
 
 export const READING = 'reading'
@@ -19,8 +18,8 @@ const FloorplanDetails = ({
   onCreateClick,
   onSaveClick,
   onChange,
-  onImageDrop,
-  images
+  onImagesUploaded,
+  onImageDeleted
 }) => (
   <div>
     <div className="top-bar">
@@ -150,28 +149,14 @@ const FloorplanDetails = ({
         { mode === EDITING &&
           <div className="form-group row">
             <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
-              <ImagesUploader
-                url="http://localhost:9000/multiple"
-                optimisticPreviews
-                onLoadEnd={(err) => {
-                  if (err) {
-                    console.error(err);
-                  }
-                }}
-                label="Upload multiple images"
-              />
-              {/* <Dropzone
-                multiple={false}
-                accept="image/*"
-                onDrop={onImageDrop}
-                className='dpz-default d-flex justify-content-center align-items-center'
-                acceptClassName='dpz-accepted'
-                activeClassName='dpc-active'
-                disabledClassName='dpz-disabled'
-                rejectClassName='dpz-rejected'
-              >
-                <p>Drag and drop a property image, such as a floorplan.</p>
-              </Dropzone> */}
+            <ImagesUploader
+              url="http://localhost:9000/multiple"
+              optimisticPreviews
+              onLoadEnd={onImagesUploaded}
+              onImageDeleted={onImageDeleted}
+              label="Upload multiple images"
+              styles={{label: {fontFamily: 'Open sans, sans-serif', fontSize: '14px'}}}
+            />
             </div>
           </div>
         }

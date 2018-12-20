@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import ecc from 'eosjs-ecc'
+
 import { setFloorplan, setLoading } from '../../../../actions'
 import FloorplanDetails, { READING, EDITING, CREATING } from './FloorplanDetails'
 import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
-import ipfs from '../../../../ipfs'
-
 
 class FloorplanDetailsContainer extends Component {
   state = {
@@ -13,33 +13,34 @@ class FloorplanDetailsContainer extends Component {
     prevFloorplan: {},
     floorplan: newFloorplan(),
     buffer: null,
-    imagesToUpload: []
+    imagesToUpload: [],
+    loadedImageUrls: []
   }
 
-  onImageDrop = (files) => {
-    const file = files[0]
-    const reader = new window.FileReader()
-    reader.readAsArrayBuffer(file)
-    reader.onloadend = async () => {
-      let buffer = Buffer(reader.result)
-      try {
-        const result = await ipfs.files.add(buffer)
-        const res = await ipfs.files.cat(result[0].hash)
-        buffer = "data:image/png;base64," + Buffer(res).toString('base64')
-        const image = {
-          buffer,
-          hash: result[0].hash
-        }
-        this.setState(prevState => ({ imagesToUpload: [...prevState.imagesToUpload, image] }))
-      } catch (err) {
-        console.error(err)
-        return
-      }
-      console.log('buffer', this.state.buffer)
+  onImagesUploaded = (err, resp) => {
+    if (err) {
+      console.error(err)
+      return
     }
+    const multihashes = resp.map(url => url.split('/')[url.split('/').length - 2])
+
+    const { imagesToUpload } = this.state
+    const newImagesToUpload = [
+      ...imagesToUpload,
+      ...multihashes
+    ]
+    this.setState({ imagesToUpload: newImagesToUpload })
   }
 
-  edit = (e,floorplan) => {
+  onImageDeleted = url => {
+    const { imagesToUpload } = this.state
+    const newImagesToUpload = [...imagesToUpload]
+    newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
+
+    this.setState({ imagesToUpload: newImagesToUpload })
+  }
+
+  edit = (e, floorplan) => {
     e.preventDefault()
 
     this.setState({
@@ -83,9 +84,21 @@ class FloorplanDetailsContainer extends Component {
 
     setFloorplan(propertyId, floorplan)
 
-    if(imagesToUpload.length > 0){
-      await Promise.all(imagesToUpload.map(async image => {
-        fsmgrcontract.addflplanimg(accountData.active, floorplan.id, '', image.hash)
+    if (imagesToUpload.length > 0) {
+      // Mapping values to object keys removes duplicates.
+      const imagesObj = {}
+      imagesToUpload.map(multihash => {
+        imagesObj[multihash] = multihash
+      })
+
+      await Promise.all(Object.keys(imagesObj).map(async multihash => {
+        fsmgrcontract.addflplanimg(
+          accountData.active,
+          floorplan.id,
+          ecc.sha256(multihash),
+          multihash,
+          options
+        )
       }))
     }
 
@@ -145,8 +158,8 @@ class FloorplanDetailsContainer extends Component {
     })
   }
 
-  async componentDidMount () {
-    const { eosClient, accountData, addFloorplans } = this.props
+  async componentDidMount() {
+    const { eosClient, accountData } = this.props
 
     const { rows } = await eosClient.getTableRows(
       true,
@@ -155,17 +168,21 @@ class FloorplanDetailsContainer extends Component {
       FLOORPLANIMG
     )
 
-    console.info(rows)
+    const loadedImageUrls = {}
+    rows.map(row => {
+      loadedImageUrls[row.ipfs_address] = row.ipfs_address
+    })
+
+    this.setState({ loadedImageUrls })
   }
 
   render() {
     const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
-    const { imagesToUpload } = this.state
 
     const mode = isCreating ? CREATING : this.state.mode
-    let floorplan = mode === EDITING || mode === CREATING  ? this.state.floorplan : floorplans[floorplanId]
+    let floorplan = mode === EDITING || mode === CREATING ? this.state.floorplan : floorplans[floorplanId]
     return (
       <div>
         {typeof floorplan === 'undefined' && <h1 className="text-center my-5 py-5">404 - Floorplan not found</h1>}
@@ -178,8 +195,8 @@ class FloorplanDetailsContainer extends Component {
             onCreateClick={this.create}
             onCancelClick={this.cancel}
             onChange={(e) => this.handleChange(e)}
-            onImageDrop={this.onImageDrop}
-            images={imagesToUpload}
+            onImagesUploaded={this.onImagesUploaded}
+            onImageDeleted={this.onImageDeleted}
           />
         }
       </div>
@@ -198,7 +215,7 @@ const newFloorplan = () => ({
   deposit: 0
 })
 
-function mapStateToProps({ eosClient, scatter, contracts, accountData, properties }){
+function mapStateToProps({ eosClient, scatter, contracts, accountData, properties }) {
   return { properties, eosClient, scatter, contracts, accountData }
 }
 
