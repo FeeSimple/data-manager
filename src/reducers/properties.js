@@ -17,7 +17,8 @@ export function properties (state = {}, action) {
       properties.forEach(property => {
         newState[property.id] = {
           ...property,
-          floorplans: {}
+          floorplans: {},
+          units: {}
         }
       })
       return newState
@@ -28,7 +29,8 @@ export function properties (state = {}, action) {
         ...state,
         [property.id]: {
           ...property,
-          floorplans: {}
+          floorplans: {},
+          units: {}
         }
       }
     }

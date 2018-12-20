@@ -18,7 +18,13 @@ class UnitContainer extends Component {
         UNIT
       )
       console.log('Get table "unit" result:', rows)
-      addUnits(rows)
+      
+      try {
+        addUnits(rows)
+      } catch (err) {
+        console.log('addUnits error:', err)  
+      }
+
     } catch (err) {
       console.log('Get table "unit" failed - err:', err)
     }

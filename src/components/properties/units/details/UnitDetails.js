@@ -161,7 +161,7 @@ const UnitDetails = ({
               type="text"
               className="form-control"
               name='termPricing'
-              value={unit.date_available}
+              value='0'
               onChange={onChange}
               disabled={mode === READING} />
           </div>

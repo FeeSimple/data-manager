@@ -47,7 +47,6 @@ class UnitDetailsContainer extends Component {
     await fsmgrcontract.modunit(
       accountData.active,
       unit.id,
-      0,
       propertyId,
       unit.name,
       unit.bedrooms,
@@ -80,14 +79,11 @@ class UnitDetailsContainer extends Component {
     }
     this.setState({ mode: READING })
 
-    console.log('addunit:', unit);
-
     setLoading(true)
 
     try {
       await fsmgrcontract.addunit(
         accountData.active,
-        0,
         propertyId,
         unit.name,
         unit.bedrooms,
