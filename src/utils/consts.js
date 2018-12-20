@@ -1,7 +1,7 @@
 export const PROPERTY = 'property'
 export const FLOORPLAN = 'floorplan'
 export const UNIT = 'unit'
-export const FSMGRCONTRACT = 'fsmgrcode111'
+export const FSMGRCONTRACT = 'fsmgrcode222'
 
 export const NO_BALANCE = '0 XFS'
 export const MIN_STAKED_CPU = 800 // micro-second
