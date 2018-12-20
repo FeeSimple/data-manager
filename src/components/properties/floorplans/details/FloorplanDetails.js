@@ -1,11 +1,9 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import Dropzone from 'react-dropzone'
 import ImageGallery from 'react-image-gallery'
 import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
-
 
 export const READING = 'reading'
 export const EDITING = 'editing'
@@ -19,7 +17,8 @@ const FloorplanDetails = ({
   onSaveClick,
   onChange,
   onImagesUploaded,
-  onImageDeleted
+  onImageDeleted,
+  galleryItems
 }) => (
   <div>
     <div className="top-bar">
@@ -144,6 +143,11 @@ const FloorplanDetails = ({
               onChange={onChange}
               value={floorplan.deposit}
             />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+            <ImageGallery items={galleryItems}/>
           </div>
         </div>
         { mode === EDITING &&

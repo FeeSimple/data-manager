@@ -14,7 +14,7 @@ class FloorplanDetailsContainer extends Component {
     floorplan: newFloorplan(),
     buffer: null,
     imagesToUpload: [],
-    loadedImageUrls: []
+    imgMultihashes: []
   }
 
   onImagesUploaded = (err, resp) => {
@@ -168,18 +168,20 @@ class FloorplanDetailsContainer extends Component {
       FLOORPLANIMG
     )
 
-    const loadedImageUrls = {}
-    rows.map(row => {
-      loadedImageUrls[row.ipfs_address] = row.ipfs_address
-    })
-
-    this.setState({ loadedImageUrls })
+    const imgMultihashes = rows.map(row => row.ipfs_address)
+    this.setState({ imgMultihashes })
   }
 
   render() {
     const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
+    const { imgMultihashes } = this.state
+
+    const galleryItems = imgMultihashes.map(multihash => ({
+      original: `https://gateway.ipfs.io/ipfs/${multihash}/`,
+      thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
+    }))
 
     const mode = isCreating ? CREATING : this.state.mode
     let floorplan = mode === EDITING || mode === CREATING ? this.state.floorplan : floorplans[floorplanId]
@@ -197,6 +199,7 @@ class FloorplanDetailsContainer extends Component {
             onChange={(e) => this.handleChange(e)}
             onImagesUploaded={this.onImagesUploaded}
             onImageDeleted={this.onImageDeleted}
+            galleryItems={galleryItems}
           />
         }
       </div>
