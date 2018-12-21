@@ -5,7 +5,6 @@ import Table from './Table'
 import { FLOORPLAN, FSMGRCONTRACT } from '../../../utils/consts'
 import { addFloorplans } from '../../../actions/index'
 
-
 class FloorplansContainer extends Component {
   async componentDidMount () {
     const { eosClient, accountData, addFloorplans } = this.props
@@ -19,21 +18,24 @@ class FloorplansContainer extends Component {
     addFloorplans(rows)
   }
 
-  render() {
+  render () {
     const { properties } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
-    return (
-      <Table propertyId={property.id} property={property}/>
-    )
+    return <Table propertyId={property.id} property={property} />
   }
 }
 
-function mapStateToProps({ properties, eosClient, scatter, contracts, accountData }){
+function mapStateToProps ({
+  properties,
+  eosClient,
+  scatter,
+  contracts,
+  accountData
+}) {
   return { properties, eosClient, scatter, contracts, accountData }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  { addFloorplans }
-)(FloorplansContainer))
+export default withRouter(
+  connect(mapStateToProps, { addFloorplans })(FloorplansContainer)
+)

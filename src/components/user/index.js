@@ -12,10 +12,10 @@ import {
 import { User, USERTAB } from './User'
 
 class UserContainer extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
-    this.toggleTab = this.toggleTab.bind(this);
+    this.toggleTab = this.toggleTab.bind(this)
     this.state = {
       data: [],
       activeTab: USERTAB.INFO,
@@ -122,7 +122,7 @@ class UserContainer extends Component {
     this.setState({ isCpu: false })
   }
 
-  toggleTab(tab) {
+  toggleTab (tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
@@ -136,7 +136,6 @@ class UserContainer extends Component {
           this._asyncRequest = this.handleGetActions().then(() => {
             this._asyncRequest = null
           })
-
         } else {
           // console.log('handleGetActions is running')
         }
@@ -172,7 +171,7 @@ class UserContainer extends Component {
     })
   }
 
-  handleManageCpuBw = async (xfsAmount) => {
+  handleManageCpuBw = async xfsAmount => {
     // Reset state
     this.setState({
       resourceHandleErr: false,
@@ -183,22 +182,28 @@ class UserContainer extends Component {
     let activeAccount = accountData.active
 
     const { isCpu, isStake } = this.state
-    let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, isCpu, isStake)
-      // console.log('manageCpuBw:', res)
-      if (res.errMsg) {
-        this.setState({
-          resourceHandleErr: res.errMsg,
-          isProcessing: false
-        })
-      } else {
-        this.setState({
-          resourceHandleErr: 'Success',
-          isProcessing: false
-        })
-      }
+    let res = await manageCpuBw(
+      eosClient,
+      activeAccount,
+      xfsAmount,
+      isCpu,
+      isStake
+    )
+    // console.log('manageCpuBw:', res)
+    if (res.errMsg) {
+      this.setState({
+        resourceHandleErr: res.errMsg,
+        isProcessing: false
+      })
+    } else {
+      this.setState({
+        resourceHandleErr: 'Success',
+        isProcessing: false
+      })
+    }
   }
 
-  handleManageRam = async (xfsAmount) => {
+  handleManageRam = async xfsAmount => {
     // Reset state
     this.setState({
       resourceHandleErr: false,
@@ -209,7 +214,13 @@ class UserContainer extends Component {
     let activeAccount = accountData.active
     let ramPrice = this.state.data.ramPrice
     let isBuy = this.state.isBuy
-    let res = await manageRam(eosClient, activeAccount, xfsAmount, ramPrice, isBuy)
+    let res = await manageRam(
+      eosClient,
+      activeAccount,
+      xfsAmount,
+      ramPrice,
+      isBuy
+    )
     if (res.errMsg) {
       this.setState({
         resourceHandleErr: res.errMsg,
@@ -234,7 +245,14 @@ class UserContainer extends Component {
     let activeAccount = accountData.active
     let userData = this.state.data
 
-    let err = await sendXFSWithCheck(eosClient, activeAccount, receivingAccount, xfsAmount, memo, userData)
+    let err = await sendXFSWithCheck(
+      eosClient,
+      activeAccount,
+      receivingAccount,
+      xfsAmount,
+      memo,
+      userData
+    )
 
     if (err) {
       this.setState({
@@ -242,7 +260,6 @@ class UserContainer extends Component {
         isProcessing: false
       })
     } else {
-
       this.updateAccountInfo()
 
       this.setState({
@@ -259,7 +276,7 @@ class UserContainer extends Component {
     this.setState({ data: info })
   }
 
-  async componentDidMount() {
+  async componentDidMount () {
     await this.updateAccountInfo()
 
     // Time-consuming handling
@@ -268,31 +285,29 @@ class UserContainer extends Component {
     })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.state.gettingActions) {
-      this._asyncRequest.cancel();
+      this._asyncRequest.cancel()
     }
   }
 
-  render() {
+  render () {
     const user = this.state.data
     if (!user) {
       // You can render any custom fallback UI
-      return <h1 className="error-message">{ERR_DATA_LOADING_FAILED}</h1>;
+      return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     }
     return (
       <User
         user={user}
         activeTab={this.state.activeTab}
         toggleTab={this.toggleTab}
-
         showModalRam={this.state.showModalRam}
         handleToggleModalRam={this.handleToggleModalRam}
         handleManageRam={this.handleManageRam}
         isBuy={this.state.isBuy}
         setBuy={this.setBuy}
         setSell={this.setSell}
-
         showModalCpuBw={this.state.showModalCpuBw}
         handleToggleModalCpuBw={this.handleToggleModalCpuBw}
         handleToggleModalCpu={this.handleToggleModalCpu}
@@ -302,25 +317,19 @@ class UserContainer extends Component {
         setStake={this.setStake}
         setUnstake={this.setUnstake}
         handleManageCpuBw={this.handleManageCpuBw}
-
         isProcessing={this.state.isProcessing}
         resourceHandleErr={this.state.resourceHandleErr}
-
         handleUserSend={this.handleUserSend}
         userSendErr={this.state.userSendErr}
-
         activityList={this.state.activityList}
         gettingActions={this.state.gettingActions}
-
       />
     )
   }
 }
 
-function mapStateToProps({ eosClient, accountData }){
+function mapStateToProps ({ eosClient, accountData }) {
   return { eosClient, accountData }
 }
 
-export default withRouter(connect(
-  mapStateToProps
-)(UserContainer))
+export default withRouter(connect(mapStateToProps)(UserContainer))

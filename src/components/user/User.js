@@ -1,18 +1,11 @@
 import React from 'react'
-import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Button
-} from 'reactstrap'
+import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from 'reactstrap'
 import classnames from 'classnames'
 import UserInfo from './UserInfo'
 import ManageRam from './ManageRam'
 import ManageCpuBw from './ManageCpuBw'
 import UserSend from './UserSend'
-import UserActivity from './UserActivity';
+import UserActivity from './UserActivity'
 
 export const USERTAB = {
   INFO: '1',
@@ -30,14 +23,18 @@ export const User = ({
   showModalRam,
   handleToggleModalRam,
   handleManageRam,
-  isBuy, setBuy, setSell,
+  isBuy,
+  setBuy,
+  setSell,
 
   showModalCpuBw,
   handleToggleModalCpu,
   handleToggleModalBw,
   handleToggleModalCpuBw,
   isCpu,
-  isStake, setStake, setUnstake,
+  isStake,
+  setStake,
+  setUnstake,
   handleManageCpuBw,
 
   isProcessing,
@@ -54,15 +51,19 @@ export const User = ({
       <NavItem>
         <NavLink
           className={classnames({ active: activeTab === USERTAB.INFO })}
-          onClick={() => { toggleTab(USERTAB.INFO); }}
+          onClick={() => {
+            toggleTab(USERTAB.INFO)
+          }}
         >
-					<Button>Information</Button>
+          <Button>Information</Button>
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink
           className={classnames({ active: activeTab === USERTAB.SEND })}
-          onClick={() => { toggleTab(USERTAB.SEND); }}
+          onClick={() => {
+            toggleTab(USERTAB.SEND)
+          }}
         >
           <Button>Send</Button>
         </NavLink>
@@ -70,7 +71,9 @@ export const User = ({
       <NavItem>
         <NavLink
           className={classnames({ active: activeTab === USERTAB.ACTIVITY })}
-          onClick={() => { toggleTab(USERTAB.ACTIVITY); }}
+          onClick={() => {
+            toggleTab(USERTAB.ACTIVITY)
+          }}
         >
           <Button>Activity</Button>
         </NavLink>

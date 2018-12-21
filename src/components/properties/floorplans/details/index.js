@@ -4,7 +4,11 @@ import { withRouter } from 'react-router-dom'
 import ecc from 'eosjs-ecc'
 
 import { setFloorplan, setLoading } from '../../../../actions'
-import FloorplanDetails, { READING, EDITING, CREATING } from './FloorplanDetails'
+import FloorplanDetails, {
+  READING,
+  EDITING,
+  CREATING
+} from './FloorplanDetails'
 import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 
 class FloorplanDetailsContainer extends Component {
@@ -23,13 +27,12 @@ class FloorplanDetailsContainer extends Component {
       console.error(err)
       return
     }
-    const multihashes = resp.map(url => url.split('/')[url.split('/').length - 2])
+    const multihashes = resp.map(
+      url => url.split('/')[url.split('/').length - 2]
+    )
 
     const { imagesToUpload } = this.state
-    const newImagesToUpload = [
-      ...imagesToUpload,
-      ...multihashes
-    ]
+    const newImagesToUpload = [...imagesToUpload, ...multihashes]
     this.setState({ imagesToUpload: newImagesToUpload })
   }
 
@@ -53,7 +56,7 @@ class FloorplanDetailsContainer extends Component {
     })
   }
 
-  save = async (e) => {
+  save = async e => {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
@@ -93,21 +96,23 @@ class FloorplanDetailsContainer extends Component {
         return multihash
       })
 
-      await Promise.all(Object.keys(imagesObj).map(async multihash => {
-        fsmgrcontract.addflplanimg(
-          accountData.active,
-          floorplan.id,
-          ecc.sha256(multihash),
-          multihash,
-          options
-        )
-      }))
+      await Promise.all(
+        Object.keys(imagesObj).map(async multihash => {
+          fsmgrcontract.addflplanimg(
+            accountData.active,
+            floorplan.id,
+            ecc.sha256(multihash),
+            multihash,
+            options
+          )
+        })
+      )
     }
 
     setLoading(false)
   }
 
-  create = async (e) => {
+  create = async e => {
     e.preventDefault()
 
     const { contracts, accountData, setLoading, history } = this.props
@@ -143,7 +148,7 @@ class FloorplanDetailsContainer extends Component {
     history.push(`/${propertyId}`)
   }
 
-  handleChange(event) {
+  handleChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
@@ -160,7 +165,7 @@ class FloorplanDetailsContainer extends Component {
     })
   }
 
-  async componentDidMount() {
+  async componentDidMount () {
     const { eosClient, accountData } = this.props
 
     const { rows } = await eosClient.getTableRows(
@@ -174,7 +179,7 @@ class FloorplanDetailsContainer extends Component {
     this.setState({ imgMultihashes })
   }
 
-  render() {
+  render () {
     const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
@@ -186,11 +191,16 @@ class FloorplanDetailsContainer extends Component {
     }))
 
     const mode = isCreating ? CREATING : this.state.mode
-    let floorplan = mode === EDITING || mode === CREATING ? this.state.floorplan : floorplans[floorplanId]
+    let floorplan =
+      mode === EDITING || mode === CREATING
+        ? this.state.floorplan
+        : floorplans[floorplanId]
     return (
       <div>
-        {typeof floorplan === 'undefined' && <h1 className="text-center my-5 py-5">404 - Floorplan not found</h1>}
-        {typeof floorplan !== 'undefined' &&
+        {typeof floorplan === 'undefined' && (
+          <h1 className='text-center my-5 py-5'>404 - Floorplan not found</h1>
+        )}
+        {typeof floorplan !== 'undefined' && (
           <FloorplanDetails
             floorplan={floorplan}
             mode={mode}
@@ -198,12 +208,12 @@ class FloorplanDetailsContainer extends Component {
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}
-            onChange={(e) => this.handleChange(e)}
+            onChange={e => this.handleChange(e)}
             onImagesUploaded={this.onImagesUploaded}
             onImageDeleted={this.onImageDeleted}
             galleryItems={galleryItems}
           />
-        }
+        )}
       </div>
     )
   }
@@ -220,11 +230,18 @@ const newFloorplan = () => ({
   deposit: 0
 })
 
-function mapStateToProps({ eosClient, scatter, contracts, accountData, properties }) {
+function mapStateToProps ({
+  eosClient,
+  scatter,
+  contracts,
+  accountData,
+  properties
+}) {
   return { properties, eosClient, scatter, contracts, accountData }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  { setFloorplan, setLoading }
-)(FloorplanDetailsContainer))
+export default withRouter(
+  connect(mapStateToProps, { setFloorplan, setLoading })(
+    FloorplanDetailsContainer
+  )
+)

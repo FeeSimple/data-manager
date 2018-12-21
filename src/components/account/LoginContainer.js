@@ -5,8 +5,10 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
 import {
-  getImportedKeyEos, getNetworkData,
-  eosAdminAccount, getEosAdmin
+  getImportedKeyEos,
+  getNetworkData,
+  eosAdminAccount,
+  getEosAdmin
 } from '../../utils/index'
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
@@ -23,7 +25,7 @@ import {
 } from '../../actions/index'
 
 class LoginContainer extends Component {
-  state={
+  state = {
     showSelectAccModal: false,
     showNewAccModal: false,
     isOpenKeyPair: false,
@@ -35,9 +37,9 @@ class LoginContainer extends Component {
     isProcessing: false
   }
 
-  handleImportPrivKey = (privKey) => {
+  handleImportPrivKey = privKey => {
     const pubKey = ecc.privateToPublic(privKey)
-    const  { eosClient }  = this.props
+    const { eosClient } = this.props
 
     eosClient.getKeyAccounts(pubKey).then(result => {
       this.setState({
@@ -57,7 +59,7 @@ class LoginContainer extends Component {
     console.log('handleCleanup:', this.state.newAccountCreationErr)
   }
 
-  handleCreateNewAccount = async (accountName) => {
+  handleCreateNewAccount = async accountName => {
     // Reset state
     this.setState({
       isOpenKeyPair: false,
@@ -68,7 +70,11 @@ class LoginContainer extends Component {
     })
 
     const eosAdmin = getEosAdmin(Eos)
-    let res = await createNewAccount(eosAdmin, accountName, eosAdminAccount.name)
+    let res = await createNewAccount(
+      eosAdmin,
+      accountName,
+      eosAdminAccount.name
+    )
 
     if (res.errMsg) {
       this.setState({
@@ -91,14 +97,13 @@ class LoginContainer extends Component {
 
   handleScatterClick = async () => {
     const { scatter } = this.props
-    if(!scatter){
+    if (!scatter) {
       console.info('no scatter detected.')
       return
     }
     const network = getNetworkData()
     const identity = await scatter.getIdentity({ accounts: [network] })
-    const availableAccounts = identity
-      .accounts
+    const availableAccounts = identity.accounts
       .filter(account => account.blockchain === 'eos')
       .map(account => account.name)
 
@@ -110,11 +115,10 @@ class LoginContainer extends Component {
   }
 
   handleNewAccountClick = async () => {
-
     this.handleToggleNewAcc()
   }
 
-  handleSelectAcc = async (account) => {
+  handleSelectAcc = async account => {
     const {
       setActive,
       setInfo,
@@ -128,7 +132,7 @@ class LoginContainer extends Component {
     let { eosClient } = this.props
     setLoading(true)
 
-    if(this.state.usingScatter){
+    if (this.state.usingScatter) {
       const network = getNetworkData()
       eosClient = scatter.eos(network, Eos, {}, 'https')
       setActive(account)
@@ -148,7 +152,7 @@ class LoginContainer extends Component {
     }
 
     const { privKey } = this.state
-    eosClient = getImportedKeyEos(Eos,privKey)
+    eosClient = getImportedKeyEos(Eos, privKey)
 
     setActive(account)
     setEosClient(eosClient)
@@ -183,12 +187,12 @@ class LoginContainer extends Component {
 
   handleToggleSelAcc = () => {
     const { showSelectAccModal } = this.state
-    this.setState({showSelectAccModal: !showSelectAccModal})
+    this.setState({ showSelectAccModal: !showSelectAccModal })
   }
 
   handleToggleNewAcc = () => {
     const { showNewAccModal } = this.state
-    this.setState({showNewAccModal: !showNewAccModal})
+    this.setState({ showNewAccModal: !showNewAccModal })
   }
 
   render () {
@@ -214,23 +218,22 @@ class LoginContainer extends Component {
           isOpenKeyPair={this.state.isOpenKeyPair}
           handleCreateNewAccount={this.handleCreateNewAccount}
           handleCleanup={this.handleCleanup}
-          accountPubKey = {this.state.accountPubKey}
-          accountPrivKey = {this.state.accountPrivKey}
-          newAccountCreationErr = {this.state.newAccountCreationErr}
-          isProcessing = {this.state.isProcessing}
+          accountPubKey={this.state.accountPubKey}
+          accountPrivKey={this.state.accountPrivKey}
+          newAccountCreationErr={this.state.newAccountCreationErr}
+          isProcessing={this.state.isProcessing}
         />
       </div>
     )
   }
 }
 
-function mapStateToProps({ eosClient, scatter }){
+function mapStateToProps ({ eosClient, scatter }) {
   return { eosClient, scatter }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  {
+export default withRouter(
+  connect(mapStateToProps, {
     setActive,
     setInfo,
     addProperties,
@@ -238,5 +241,5 @@ export default withRouter(connect(
     setEosClient,
     setScatter,
     setLoading
-  }
-)(LoginContainer))
+  })(LoginContainer)
+)

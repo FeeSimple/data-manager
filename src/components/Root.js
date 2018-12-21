@@ -12,7 +12,7 @@ class RootContainer extends Component {
   render () {
     const { eosClient, isLoading } = this.props
 
-    if(eosClient.locked === true){
+    if (eosClient.locked === true) {
       return <LoginContainer />
     }
 
