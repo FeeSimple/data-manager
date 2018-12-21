@@ -59,7 +59,7 @@ export function getResourceStr(resource, cpu) {
     resourceStr += beautifyRam(resourceAvailable)
   }
   if (cpu) {
-    resourceStr += ' / ' + beautifyCpu(resourceAvailable);
+    resourceStr += ' / ' + beautifyCpu(resource.max);
   }
   else {
     resourceStr += ' / ' + beautifyRam(resource.max)
@@ -67,7 +67,9 @@ export function getResourceStr(resource, cpu) {
   return resourceStr
 }
 
+// Get the numeric balance from the balance string (e.g. "123 XFS")
 export function fetchBalanceNumber(balance) {
+  if (!balance) return null
   let res = ''
   let idx = balance.indexOf(' ') // 100000 XFS
   if (idx != -1) {
@@ -75,6 +77,23 @@ export function fetchBalanceNumber(balance) {
     return parseFloat(balanceNum)
   } else {
     return null
+  }
+}
+
+// Remove the trailing milli-sec digits after 'dot'
+export function beautifyBlockTime(blockTime) {
+  if (!blockTime) return ''
+  let res = ''
+  let idx = blockTime.indexOf('.') 
+  if (idx != -1) {
+    blockTime = blockTime.substring(0, idx)
+    idx = blockTime.indexOf('T')
+    if (idx != -1) {
+      blockTime = blockTime.substring(0, idx) + ' (' + blockTime.substring(idx+1) + ')'
+    }
+    return blockTime
+  } else {
+    return blockTime
   }
 }
 

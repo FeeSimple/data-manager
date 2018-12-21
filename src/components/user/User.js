@@ -8,6 +8,8 @@ import classnames from 'classnames'
 import UserInfo from './UserInfo'
 import ManageRam from './ManageRam'
 import ManageCpuBw from './ManageCpuBw'
+import UserSend from './UserSend'
+import UserActivity from './UserActivity';
 
 export const USERTAB = {
   INFO: '1',
@@ -25,6 +27,7 @@ export const User = ({
   showModalRam,
   handleToggleModalRam,
   handleManageRam,
+  isBuy, setBuy, setSell,
 
   showModalCpuBw,
   handleToggleModalCpu,
@@ -35,7 +38,13 @@ export const User = ({
   handleManageCpuBw,
 
   isProcessing,
-  resourceHandleErr
+  resourceHandleErr,
+
+  handleUserSend,
+  userSendErr,
+
+  activityList,
+  gettingActions
 }) => (
   <div>
     <Nav tabs>
@@ -77,6 +86,9 @@ export const User = ({
           showModalRam={showModalRam}
           handleToggleModalRam={handleToggleModalRam}
           handleManageRam={handleManageRam}
+          isBuy={isBuy}
+          setBuy={setBuy}
+          setSell={setSell}
           isProcessing={isProcessing}
           resourceHandleErr={resourceHandleErr}
         />
@@ -94,8 +106,18 @@ export const User = ({
         />
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
+        <UserSend
+          user={user}
+          handleUserSend={handleUserSend}
+          userSendErr={userSendErr}
+          isProcessing={isProcessing}
+        />
       </TabPane>
       <TabPane tabId={USERTAB.ACTIVITY}>
+        <UserActivity
+          activityList={activityList}
+          gettingActions={gettingActions}
+        />
       </TabPane>
     </TabContent>
   </div>

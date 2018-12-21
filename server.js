@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 
 const environment = process.env.ENVIRONMENT
 if(environment !== 'PRODUCTION' && environment !== 'TESTING') {
@@ -9,6 +10,9 @@ if(environment !== 'PRODUCTION' && environment !== 'TESTING') {
 const PROD = environment === 'PRODUCTION'? true : false
 const app = express()
 app.use(express.static('build'))
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve('', 'build', 'index.html'));
+})
 
 require('greenlock-express').create({
   version: 'draft-11',
@@ -21,9 +25,3 @@ require('greenlock-express').create({
   agreeTos: true,
   app
 }).listen(80, 443)
-
-function ensureSecure (req, res, next) {
-  if (req.secure) return next()
-  res.redirect('https://' + req.hostname + req.url)
-}
-

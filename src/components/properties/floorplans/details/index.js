@@ -11,6 +11,7 @@ class FloorplanDetailsContainer extends Component {
   state = {
     mode: READING,
     prevFloorplan: {},
+
     floorplan: newFloorplan(),
     buffer: null,
     imagesToUpload: [],

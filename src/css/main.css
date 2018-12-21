@@ -158,6 +158,20 @@ h1, h2, h3, h4, h5, h6 {
   color: #0000cc;
   font-size: 12px; }
 
+.user-send-text {
+  background-color: rgba(222, 222, 223, 0.75);
+  color: #2b8acb;
+  width: 200px;
+  text-align: center;
+  font-size: 15px; }
+
+.user-send-text-small {
+  background-color: rgba(222, 222, 223, 0.75);
+  color: #2b8acb;
+  width: 200px;
+  text-align: center;
+  font-size: 13px; }
+
 .error-message {
   background-color: #ff7272;
   color: white;
@@ -165,6 +179,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .tooltip [class$="arrow"] {
   border-top: 5px solid background-color; }
+
+.modal-dialog-resource {
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  transform: translate(-50%, -50%) !important; }
+
+.table-wrapper-scroll-y {
+  display: block;
+  max-height: 300px;
+  max-width: 900px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar; }
 
 .drop-down-input {
   -webkit-appearance: none;

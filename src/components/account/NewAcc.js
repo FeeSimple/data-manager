@@ -46,7 +46,7 @@ const NewAccForm = props => {
             disabled={touched.accountName && errors.accountName}
           >
             {isProcessing ?
-              <Spinner name="three-bounce" color="red"/>
+              <Spinner name="three-bounce" color="white" noFadeIn/>
             :
               <span>Submit</span>
             }
@@ -87,6 +87,8 @@ const EnhancedNewAccForm = withFormik({
     if (errMsg) {
       return {accountName: errMsg}
     }
+
+    return {}
   },
 
   handleSubmit: async({ accountName }, { props }) => {

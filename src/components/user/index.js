@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getResourceStr, beautifyBalance } from '../../utils/beautify'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { getAccountInfo, manageRam, checkAccount, manageCpuBw } from '../../utils/eoshelper'
+import { getAccountInfo, manageRam, 
+         manageCpuBw, sendXFSWithCheck, getActionsProcessed } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
-import { 
-  eosAdminAccount, getEosAdmin 
-} from '../../utils/index'
-import Eos from 'eosjs'
 
 class UserContainer extends Component {
   constructor(props) {
@@ -19,48 +15,93 @@ class UserContainer extends Component {
       data: [],
       activeTab: USERTAB.INFO,
 
-      showModalRam: false, 
+      showModalRam: false,
+      isBuy: false,
+      
       resourceHandleErr: false, 
       isProcessing: false,
 
       showModalCpuBw: false,
       isCpu: false,
       isStake: false,
+
+      userSendErr: false,
+
+      activityList: [],
+      gettingActions: false
     }
+  }
+
+  resetState = () => {
+    this.setState({
+      isBuy: false,
+      isCpu: false,
+      isStake: false,
+      showModalRam: false,
+      showModalCpuBw: false
+    })
+    
+    this.resetProcessing()
+  }
+
+  resetProcessing = () => {
+    this.setState({
+      resourceHandleErr: false, 
+      isProcessing: false
+    })
+  }
+
+  setBuy = () => {
+    this.setState({
+      isBuy: true
+    })
+
+    this.resetProcessing()
+  }
+
+  setSell = () => {
+    this.setState({
+      isBuy: false
+    })
+
+    this.resetProcessing()
   }
 
   setStake = () => {
     this.setState({
-      isStake: true,
-      resourceHandleErr: false, 
-      isProcessing: false
+      isStake: true
     })
+
+    this.resetProcessing()
   }
 
   setUnstake = () => {
     this.setState({
-      isStake: false,
-      resourceHandleErr: false, 
-      isProcessing: false
+      isStake: false
     })
+
+    this.resetProcessing()
   }
 
   handleToggleModalRam = () => {
     const { showModalRam } = this.state
     this.setState({
-      showModalRam: !showModalRam,
-      resourceHandleErr: false, 
-      isProcessing: false
+      showModalRam: !showModalRam
     })
+
+    this.resetProcessing()
+
+    // Update account info
+    this.updateAccountInfo()
   }
 
   handleToggleModalCpuBw = async () => {
     const { showModalCpuBw } = this.state
     this.setState({
-      showModalCpuBw: !showModalCpuBw,
-      resourceHandleErr: false, 
-      isProcessing: false
+      showModalCpuBw: !showModalCpuBw
     })
+
+    this.resetProcessing()
 
     // Update account info
     this.updateAccountInfo()
@@ -77,11 +118,53 @@ class UserContainer extends Component {
   }
 
   toggleTab(tab) {
-    if (this.state.activeTab !== tab) {
+    if (this.state.activeTab !== tab) {  
       this.setState({
         activeTab: tab
       })
+
+      // When entering the "Activity" view, only if the function handleGetActions() is
+      // being executed, we don't call it
+      if (tab == USERTAB.ACTIVITY) {
+        if (!this.state.gettingActions) {
+          // console.log('handleGetActions is not running')
+          this._asyncRequest = this.handleGetActions().then(() => {
+            this._asyncRequest = null
+          })
+          
+        } else {
+          // console.log('handleGetActions is running')
+        }
+      }
     }
+  }
+
+  handleGetActions = async () => {
+    let currActivityList = this.state.activityList
+
+    this.setState({
+      gettingActions: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+    
+    let res = await getActionsProcessed(eosClient, activeAccount)
+    if (res.errMsg || res.length == 0) {
+      if (currActivityList.length == 0) {
+        this.setState({
+          activityList: []
+        })
+      }
+    } else {
+      this.setState({
+        activityList: res
+      })
+    }
+
+    this.setState({
+      gettingActions: false
+    })
   }
 
   handleManageCpuBw = async (xfsAmount) => {
@@ -96,7 +179,7 @@ class UserContainer extends Component {
 
     const { isCpu, isStake } = this.state
     let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, isCpu, isStake)
-      console.log('manageCpuBw:', res)
+      // console.log('manageCpuBw:', res)
       if (res.errMsg) {
         this.setState({
           resourceHandleErr: res.errMsg,
@@ -110,7 +193,7 @@ class UserContainer extends Component {
       }
   }
 
-  handleManageRam = async (accountName, ramAmount) => {
+  handleManageRam = async (xfsAmount) => {
     // Reset state
     this.setState({
       resourceHandleErr: false,
@@ -119,28 +202,48 @@ class UserContainer extends Component {
 
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
-
-    // First, check if account exists
-    let accountExist = await checkAccount(eosClient, accountName)
-    if (!accountExist) {
+    let ramPrice = this.state.data.ramPrice
+    let isBuy = this.state.isBuy
+    let res = await manageRam(eosClient, activeAccount, xfsAmount, ramPrice, isBuy)
+    if (res.errMsg) {
       this.setState({
-        resourceHandleErr: 'The entered account: ' + accountName + ' does not exist',
+        resourceHandleErr: res.errMsg,
         isProcessing: false
       })
     } else {
-      let res = await manageRam(eosClient, accountName, activeAccount, ramAmount)
-      console.log('handleManageRam:', res)
-      if (res.errMsg) {
-        this.setState({
-          resourceHandleErr: res.errMsg,
-          isProcessing: false
-        })
-      } else {
-        this.setState({
-          resourceHandleErr: 'Success',
-          isProcessing: false
-        })
-      }
+      this.setState({
+        resourceHandleErr: 'Success',
+        isProcessing: false
+      })
+    }
+  }
+
+  handleUserSend = async (receivingAccount, xfsAmount, memo) => {
+    // Reset state
+    this.setState({
+      userSendErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+    let userData = this.state.data
+
+    let err = await sendXFSWithCheck(eosClient, activeAccount, receivingAccount, xfsAmount, memo, userData)
+
+    if (err) {
+      this.setState({
+        userSendErr: err,
+        isProcessing: false
+      })
+    } else {
+
+      this.updateAccountInfo()
+
+      this.setState({
+        userSendErr: 'Success',
+        isProcessing: false
+      })
     }
   }
 
@@ -152,7 +255,18 @@ class UserContainer extends Component {
   }
 
   async componentDidMount() {
-    this.updateAccountInfo()
+    await this.updateAccountInfo()
+
+    // Time-consuming handling
+    this._asyncRequest = this.handleGetActions().then(() => {
+      this._asyncRequest = null
+    })
+  }
+
+  componentWillUnmount() {
+    if (this.state.gettingActions) {
+      this._asyncRequest.cancel();
+    }
   }
 
   render() {
@@ -170,6 +284,9 @@ class UserContainer extends Component {
         showModalRam={this.state.showModalRam}
         handleToggleModalRam={this.handleToggleModalRam}
         handleManageRam={this.handleManageRam}
+        isBuy={this.state.isBuy}
+        setBuy={this.setBuy}
+        setSell={this.setSell}
 
         showModalCpuBw={this.state.showModalCpuBw}
         handleToggleModalCpuBw={this.handleToggleModalCpuBw}
@@ -183,6 +300,12 @@ class UserContainer extends Component {
 
         isProcessing={this.state.isProcessing}
         resourceHandleErr={this.state.resourceHandleErr}
+
+        handleUserSend={this.handleUserSend}
+        userSendErr={this.state.userSendErr}
+
+        activityList={this.state.activityList}
+        gettingActions={this.state.gettingActions}
 
       />
     )
