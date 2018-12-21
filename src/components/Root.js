@@ -6,6 +6,8 @@ import App from './App'
 import Navbar from './layout/Navbar'
 import Footer from './layout/Footer'
 import LoadingView from './layout/LoadingView'
+import ImagesUploader from 'react-images-uploader-fs'
+import 'react-images-uploader-fs/styles.css'
 
 class RootContainer extends Component {
   render () {
