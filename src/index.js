@@ -26,16 +26,14 @@ const store = createStore(
 
 // Fallback eosjs
 const eos = getFallbackEos(Eos)
-store.dispatch(setEosClient({ ...eos, locked: true }))
+store.dispatch(setEosClient({...eos, locked: true}))
 
-getScatter
-  .then(async results => {
-    const { scatter } = results
-    store.dispatch(setScatter(scatter))
-  })
-  .catch(error => {
-    console.error('Error setting up scatter.', error)
-  })
+getScatter.then(async (results) => {
+  const { scatter } = results
+  store.dispatch(setScatter(scatter))
+}).catch((error) => {
+  console.error('Error setting up scatter.', error)
+})
 
 ReactDOM.render(
   <div>
@@ -44,10 +42,10 @@ ReactDOM.render(
         <Root />
       </Provider>
     </BrowserRouter>
-    <script src='js/vendor/jquery-3.3.1.min.js' />
-    <script src='js/plugins/bootstrap.min.js' />
-    <script src='js/plugins/popper.min.js' />
-    <script src='js/main.js' />
+    <script src="js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="js/plugins/bootstrap.min.js"></script>
+    <script src="js/plugins/popper.min.js"></script>
+    <script src="js/main.js"></script>
   </div>,
   document.getElementById('root')
 )
