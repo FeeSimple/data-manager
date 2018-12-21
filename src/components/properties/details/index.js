@@ -5,7 +5,6 @@ import { setProperty, addProperties, setLoading } from '../../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 
-
 class PropertyDetailsContainer extends Component {
   state = {
     mode: READING,
@@ -13,7 +12,7 @@ class PropertyDetailsContainer extends Component {
     property: newProperty()
   }
 
-  edit = (e,property) => {
+  edit = (e, property) => {
     e.preventDefault()
 
     this.setState({
@@ -25,7 +24,7 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  save = async (e) => {
+  save = async e => {
     e.preventDefault()
 
     const { property } = this.state
@@ -56,10 +55,17 @@ class PropertyDetailsContainer extends Component {
     setLoading(false)
   }
 
-  create = async (e) => {
+  create = async e => {
     e.preventDefault()
 
-    const { addProperties, contracts, eosClient, accountData, setLoading, history } = this.props
+    const {
+      addProperties,
+      contracts,
+      eosClient,
+      accountData,
+      setLoading,
+      history
+    } = this.props
     const { property } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -95,7 +101,7 @@ class PropertyDetailsContainer extends Component {
     history.push('/')
   }
 
-  handleChange(event) {
+  handleChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
@@ -112,14 +118,19 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  render() {
+  render () {
     const { isCreating, properties, id } = this.props
     const mode = isCreating ? CREATING : this.state.mode
-    let property = mode === EDITING || mode === CREATING  ? this.state.property : properties[id]
+    let property =
+      mode === EDITING || mode === CREATING
+        ? this.state.property
+        : properties[id]
     return (
       <div>
-        {typeof property === 'undefined' && <h1 className="text-center my-5 py-5">404 - Property not found</h1>}
-        {typeof property !== 'undefined' &&
+        {typeof property === 'undefined' && (
+          <h1 className='text-center my-5 py-5'>404 - Property not found</h1>
+        )}
+        {typeof property !== 'undefined' && (
           <PropertyDetails
             property={property}
             mode={mode}
@@ -127,9 +138,9 @@ class PropertyDetailsContainer extends Component {
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}
-            onChange={(e) => this.handleChange(e)}
+            onChange={e => this.handleChange(e)}
           />
-        }
+        )}
       </div>
     )
   }
@@ -145,11 +156,18 @@ const newProperty = () => ({
   unit_count: 0
 })
 
-function mapStateToProps({ properties, eosClient, scatter, contracts, accountData }){
+function mapStateToProps ({
+  properties,
+  eosClient,
+  scatter,
+  contracts,
+  accountData
+}) {
   return { properties, eosClient, scatter, contracts, accountData }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  { setProperty, addProperties, setLoading }
-)(PropertyDetailsContainer))
+export default withRouter(
+  connect(mapStateToProps, { setProperty, addProperties, setLoading })(
+    PropertyDetailsContainer
+  )
+)

@@ -1,23 +1,50 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { setFloorplan, setLoading } from '../../../../actions'
-import FloorplanDetails, { READING, EDITING, CREATING } from './FloorplanDetails'
-import { FSMGRCONTRACT } from '../../../../utils/consts'
+import ecc from 'eosjs-ecc'
 
+import { setFloorplan, setLoading } from '../../../../actions'
+import FloorplanDetails, {
+  READING,
+  EDITING,
+  CREATING
+} from './FloorplanDetails'
+import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 
 class FloorplanDetailsContainer extends Component {
   state = {
     mode: READING,
     prevFloorplan: {},
-    floorplan: newFloorplan()
+
+    floorplan: newFloorplan(),
+    buffer: null,
+    imagesToUpload: [],
+    imgMultihashes: []
   }
 
-  onImageDrop = (files) => {
-    console.info('got file')
+  onImagesUploaded = (err, resp) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    const multihashes = resp.map(
+      url => url.split('/')[url.split('/').length - 2]
+    )
+
+    const { imagesToUpload } = this.state
+    const newImagesToUpload = [...imagesToUpload, ...multihashes]
+    this.setState({ imagesToUpload: newImagesToUpload })
   }
 
-  edit = (e,floorplan) => {
+  onImageDeleted = url => {
+    const { imagesToUpload } = this.state
+    const newImagesToUpload = [...imagesToUpload]
+    newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
+
+    this.setState({ imagesToUpload: newImagesToUpload })
+  }
+
+  edit = (e, floorplan) => {
     e.preventDefault()
 
     this.setState({
@@ -29,11 +56,11 @@ class FloorplanDetailsContainer extends Component {
     })
   }
 
-  save = async (e) => {
+  save = async e => {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
-    const { floorplan } = this.state
+    const { floorplan, imagesToUpload } = this.state
     const { contracts, accountData, setLoading, setFloorplan } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -60,10 +87,32 @@ class FloorplanDetailsContainer extends Component {
     )
 
     setFloorplan(propertyId, floorplan)
+
+    if (imagesToUpload.length > 0) {
+      // Mapping values to object keys removes duplicates.
+      const imagesObj = {}
+      imagesToUpload.map(multihash => {
+        imagesObj[multihash] = multihash
+        return multihash
+      })
+
+      await Promise.all(
+        Object.keys(imagesObj).map(async multihash => {
+          fsmgrcontract.addflplanimg(
+            accountData.active,
+            floorplan.id,
+            ecc.sha256(multihash),
+            multihash,
+            options
+          )
+        })
+      )
+    }
+
     setLoading(false)
   }
 
-  create = async (e) => {
+  create = async e => {
     e.preventDefault()
 
     const { contracts, accountData, setLoading, history } = this.props
@@ -99,7 +148,7 @@ class FloorplanDetailsContainer extends Component {
     history.push(`/${propertyId}`)
   }
 
-  handleChange(event) {
+  handleChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
@@ -116,17 +165,42 @@ class FloorplanDetailsContainer extends Component {
     })
   }
 
-  render() {
+  async componentDidMount () {
+    const { eosClient, accountData } = this.props
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      FLOORPLANIMG
+    )
+
+    const imgMultihashes = rows.map(row => row.ipfs_address)
+    this.setState({ imgMultihashes })
+  }
+
+  render () {
     const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
+    const { imgMultihashes } = this.state
+
+    const galleryItems = imgMultihashes.map(multihash => ({
+      original: `https://gateway.ipfs.io/ipfs/${multihash}/`,
+      thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
+    }))
 
     const mode = isCreating ? CREATING : this.state.mode
-    let floorplan = mode === EDITING || mode === CREATING  ? this.state.floorplan : floorplans[floorplanId]
+    let floorplan =
+      mode === EDITING || mode === CREATING
+        ? this.state.floorplan
+        : floorplans[floorplanId]
     return (
       <div>
-        {typeof floorplan === 'undefined' && <h1 className="text-center my-5 py-5">404 - Floorplan not found</h1>}
-        {typeof floorplan !== 'undefined' &&
+        {typeof floorplan === 'undefined' && (
+          <h1 className='text-center my-5 py-5'>404 - Floorplan not found</h1>
+        )}
+        {typeof floorplan !== 'undefined' && (
           <FloorplanDetails
             floorplan={floorplan}
             mode={mode}
@@ -134,10 +208,12 @@ class FloorplanDetailsContainer extends Component {
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}
-            onChange={(e) => this.handleChange(e)}
-            onImageDrop={this.onImageDrop}
+            onChange={e => this.handleChange(e)}
+            onImagesUploaded={this.onImagesUploaded}
+            onImageDeleted={this.onImageDeleted}
+            galleryItems={galleryItems}
           />
-        }
+        )}
       </div>
     )
   }
@@ -154,11 +230,18 @@ const newFloorplan = () => ({
   deposit: 0
 })
 
-function mapStateToProps({ eosClient, scatter, contracts, accountData, properties }){
+function mapStateToProps ({
+  eosClient,
+  scatter,
+  contracts,
+  accountData,
+  properties
+}) {
   return { properties, eosClient, scatter, contracts, accountData }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  { setFloorplan, setLoading }
-)(FloorplanDetailsContainer))
+export default withRouter(
+  connect(mapStateToProps, { setFloorplan, setLoading })(
+    FloorplanDetailsContainer
+  )
+)
