@@ -90,6 +90,7 @@ class FloorplanDetailsContainer extends Component {
       const imagesObj = {}
       imagesToUpload.map(multihash => {
         imagesObj[multihash] = multihash
+        return multihash
       })
 
       await Promise.all(Object.keys(imagesObj).map(async multihash => {

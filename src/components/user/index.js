@@ -2,14 +2,19 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
-import { getAccountInfo, manageRam, 
-         manageCpuBw, sendXFSWithCheck, getActionsProcessed } from '../../utils/eoshelper'
+import {
+  getAccountInfo,
+  manageRam,
+  manageCpuBw,
+  sendXFSWithCheck,
+  getActionsProcessed
+} from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
 
 class UserContainer extends Component {
   constructor(props) {
     super(props)
-    
+
     this.toggleTab = this.toggleTab.bind(this);
     this.state = {
       data: [],
@@ -17,8 +22,8 @@ class UserContainer extends Component {
 
       showModalRam: false,
       isBuy: false,
-      
-      resourceHandleErr: false, 
+
+      resourceHandleErr: false,
       isProcessing: false,
 
       showModalCpuBw: false,
@@ -40,13 +45,13 @@ class UserContainer extends Component {
       showModalRam: false,
       showModalCpuBw: false
     })
-    
+
     this.resetProcessing()
   }
 
   resetProcessing = () => {
     this.setState({
-      resourceHandleErr: false, 
+      resourceHandleErr: false,
       isProcessing: false
     })
   }
@@ -109,29 +114,29 @@ class UserContainer extends Component {
 
   handleToggleModalCpu = () => {
     this.handleToggleModalCpuBw()
-    this.state.isCpu = true
+    this.setState({ isCpu: true })
   }
 
   handleToggleModalBw = () => {
     this.handleToggleModalCpuBw()
-    this.state.isCpu = false
+    this.setState({ isCpu: false })
   }
 
   toggleTab(tab) {
-    if (this.state.activeTab !== tab) {  
+    if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
       })
 
       // When entering the "Activity" view, only if the function handleGetActions() is
       // being executed, we don't call it
-      if (tab == USERTAB.ACTIVITY) {
+      if (tab === USERTAB.ACTIVITY) {
         if (!this.state.gettingActions) {
           // console.log('handleGetActions is not running')
           this._asyncRequest = this.handleGetActions().then(() => {
             this._asyncRequest = null
           })
-          
+
         } else {
           // console.log('handleGetActions is running')
         }
@@ -148,10 +153,10 @@ class UserContainer extends Component {
 
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
-    
+
     let res = await getActionsProcessed(eosClient, activeAccount)
-    if (res.errMsg || res.length == 0) {
-      if (currActivityList.length == 0) {
+    if (res.errMsg || res.length === 0) {
+      if (currActivityList.length === 0) {
         this.setState({
           activityList: []
         })

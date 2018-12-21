@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Modal,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   Button, Form, FormGroup, Input, Alert, Collapse, Col, Label
 } from 'reactstrap'
@@ -11,14 +10,14 @@ import Spinner from 'react-spinkit'
 import { checkXfsAmountError } from '../../utils/eoshelper'
 
 const ManageRamForm = props => {
-  const { 
+  const {
     values,
     touched,
     errors,
     handleChange,
     handleBlur,
     handleSubmit,
-    showModalRam, handleToggleModalRam, handleManageRam,
+    showModalRam, handleToggleModalRam,
     setBuy, setSell, isBuy, isProcessing, resourceHandleErr
   } = props
 
@@ -83,7 +82,7 @@ const ManageRamForm = props => {
                 :
                   <div>
                     <div><b>Successful selling!</b></div>
-                    <div>{values.xfsAmount} XFS will be transferred back</div> 
+                    <div>{values.xfsAmount} XFS will be transferred back</div>
                     <div>to your balance</div>
                   </div>
               }
@@ -91,7 +90,7 @@ const ManageRamForm = props => {
           :
             <Alert color='danger'>
               {resourceHandleErr}
-            </Alert>  
+            </Alert>
           }
         </Collapse>
       </ModalBody>

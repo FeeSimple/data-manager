@@ -1,7 +1,16 @@
 import React from 'react'
 import {
-  Card, InputGroupText, InputGroupAddon, InputGroup, Col,
-  Button, Form, FormGroup, Input, Alert, Collapse, UncontrolledTooltip,
+  Card,
+  InputGroupText,
+  InputGroupAddon,
+  InputGroup,
+  Button,
+  Form,
+  FormGroup,
+  Input,
+  Alert,
+  Collapse,
+  UncontrolledTooltip
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
@@ -14,7 +23,7 @@ const balanceStr = (balance) => {
 }
 
 const UserSendForm = props => {
-  const { 
+  const {
     values,
     touched,
     errors,
@@ -22,7 +31,6 @@ const UserSendForm = props => {
     handleBlur,
     handleSubmit,
     user,
-    handleUserSend,
     userSendErr,
     isProcessing
   } = props
@@ -100,14 +108,14 @@ const UserSendForm = props => {
               value={values.memo}
               onChange={handleChange}
               type="text"
-              placeholder="Attach some message (max 200 characters)" 
+              placeholder="Attach some message (max 200 characters)"
             />
           </InputGroup>
           <br />
         </FormGroup>
         <Button id='butt'
           type="submit" color='secondary' className="btn-base btn-home"
-          disabled={(touched.accountName && errors.accountName) || 
+          disabled={(touched.accountName && errors.accountName) ||
                     (touched.amount && errors.amount)}
         >
           {isProcessing ?
@@ -115,7 +123,7 @@ const UserSendForm = props => {
           :
             <span>Submit</span>
           }
-          
+
         </Button>
         <UncontrolledTooltip placement="right" target="butt" styleName="tooltip">
           {USER_SEND_TOOLTIP}
@@ -131,7 +139,7 @@ const UserSendForm = props => {
           :
             <Alert color='danger'>
               {userSendErr}
-            </Alert>  
+            </Alert>
           }
         </Collapse>
       </Form>

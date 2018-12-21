@@ -2,25 +2,29 @@ import React from 'react'
 import {
   Modal,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  Button, Form, FormGroup, Input, Alert, Collapse, UncontrolledTooltip, Label, Col
+  Button, Form, FormGroup, Input, Alert, Collapse, Label, Col
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
 import { checkXfsAmountError } from '../../utils/eoshelper'
 
 const ManageCpuBwForm = props => {
-  const { 
+  const {
     values,
     touched,
     errors,
     handleChange,
     handleBlur,
     handleSubmit,
-    showModalCpuBw, handleToggleModalCpuBw, isCpu, 
-    isStake, setStake, setUnstake, handleManageCpuBw,
-    isProcessing, resourceHandleErr
+    showModalCpuBw,
+    handleToggleModalCpuBw,
+    isCpu,
+    isStake,
+    setStake,
+    setUnstake,
+    isProcessing,
+    resourceHandleErr
   } = props
 
   return (
@@ -84,7 +88,7 @@ const ManageCpuBwForm = props => {
                 :
                   <div>
                     <div><b>Successful unstaking!</b></div>
-                    <div>{values.xfsAmount} XFS will be transferred back</div> 
+                    <div>{values.xfsAmount} XFS will be transferred back</div>
                     <div>to your balance after 3 days</div>
                   </div>
               }
@@ -92,7 +96,7 @@ const ManageCpuBwForm = props => {
           :
             <Alert color='danger'>
               {resourceHandleErr}
-            </Alert>  
+            </Alert>
           }
         </Collapse>
       </ModalBody>

@@ -4,14 +4,14 @@ import ecc from 'eosjs-ecc'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { PROPERTY, FSMGRCONTRACT } from '../../utils/consts'
-import { 
-  getImportedKeyEos, getNetworkData, 
-  eosAdminAccount, getEosAdmin 
+import {
+  getImportedKeyEos, getNetworkData,
+  eosAdminAccount, getEosAdmin
 } from '../../utils/index'
 import Eos from 'eosjs'
 import SelectAcc from './SelectAcc'
 import NewAcc from './NewAcc'
-import { getKeyPair, createNewAccount } from '../../utils/eoshelper'
+import { createNewAccount } from '../../utils/eoshelper'
 import {
   setActive,
   setInfo,
@@ -50,7 +50,7 @@ class LoginContainer extends Component {
 
   handleCleanup = () => {
     this.setState({
-      accountPubKey: '', 
+      accountPubKey: '',
       accountPrivKey: '',
       newAccountCreationErr: ''
     })
@@ -61,7 +61,7 @@ class LoginContainer extends Component {
     // Reset state
     this.setState({
       isOpenKeyPair: false,
-      accountPubKey: '', 
+      accountPubKey: '',
       accountPrivKey: '',
       newAccountCreationErr: false,
       isProcessing: true
@@ -73,7 +73,7 @@ class LoginContainer extends Component {
     if (res.errMsg) {
       this.setState({
         isOpenKeyPair: false,
-        accountPubKey: '', 
+        accountPubKey: '',
         accountPrivKey: '',
         newAccountCreationErr: res.errMsg,
         isProcessing: false
@@ -81,7 +81,7 @@ class LoginContainer extends Component {
     } else {
       this.setState({
         isOpenKeyPair: true,
-        accountPubKey: res.accountPubKey, 
+        accountPubKey: res.accountPubKey,
         accountPrivKey: res.accountPrivKey,
         newAccountCreationErr: false,
         isProcessing: false
@@ -110,7 +110,7 @@ class LoginContainer extends Component {
   }
 
   handleNewAccountClick = async () => {
-    
+
     this.handleToggleNewAcc()
   }
 

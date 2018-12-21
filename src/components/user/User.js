@@ -1,8 +1,11 @@
 import React from 'react'
-import { 
-  TabContent, TabPane, Nav, NavItem, NavLink, Card, 
-  Button, CardTitle, CardText, 
-  Row, Col, Container, Label
+import {
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+  Button
 } from 'reactstrap'
 import classnames from 'classnames'
 import UserInfo from './UserInfo'
@@ -81,7 +84,7 @@ export const User = ({
           handleToggleModalCpu={handleToggleModalCpu}
           handleToggleModalBw={handleToggleModalBw}
         />
-        
+
         <ManageRam
           showModalRam={showModalRam}
           handleToggleModalRam={handleToggleModalRam}

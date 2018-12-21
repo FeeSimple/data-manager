@@ -1,26 +1,36 @@
 import React from 'react'
+import { withFormik } from 'formik'
+import Spinner from 'react-spinkit'
 import {
   Modal,
   ModalHeader,
   ModalFooter,
   ModalBody,
-  Button, Form, FormGroup, Label, Input, FormText, Alert, Collapse
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Alert,
+  Collapse
 } from 'reactstrap'
-import { withFormik } from 'formik'
-import Spinner from 'react-spinkit'
+
 import { checkAccountNameError } from '../../utils/eoshelper'
 
 const NewAccForm = props => {
-  const { 
+  const {
     values,
     touched,
     errors,
     handleChange,
     handleBlur,
     handleSubmit,
-    isOpen, handleToggle, 
-    isOpenKeyPair, handleCreateNewAccount ,
-    accountPubKey, accountPrivKey, newAccountCreationErr,
+    isOpen,
+    handleToggle,
+    isOpenKeyPair,
+    accountPubKey,
+    accountPrivKey,
+    newAccountCreationErr,
     isProcessing
   } = props
 
@@ -41,7 +51,7 @@ const NewAccForm = props => {
               placeholder="must be 12 symbols long and include symbols a-z 1-5"
             />
           </FormGroup>
-          <Button 
+          <Button
             type="submit" color='secondary' className="btn-base btn-home"
             disabled={touched.accountName && errors.accountName}
           >
@@ -50,7 +60,7 @@ const NewAccForm = props => {
             :
               <span>Submit</span>
             }
-            
+
           </Button>
           <Collapse isOpen={isOpenKeyPair}>
             <FormGroup>

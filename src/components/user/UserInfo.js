@@ -1,11 +1,11 @@
 import React from 'react'
-import { 
+import {
   Col, Card, Row, Progress, UncontrolledTooltip,
   ListGroup, ListGroupItem, Button
 } from 'reactstrap'
 
 const progressColor = (valueStr) => {
-  let val = parseInt(valueStr)
+  let val = parseInt(valueStr, 10)
   if (val >= 50) {
     return null // blue color
   } else if (val >= 20) {
@@ -66,9 +66,9 @@ const UserInfo = ({
               <div className="user-detail-label-small">
                 Staked: {user.stakedRam} &nbsp; &nbsp; {user.ramPriceStr}
               </div>
-              <Progress 
-                className="user-detail-label" 
-                value={user.ramMeter} 
+              <Progress
+                className="user-detail-label"
+                value={user.ramMeter}
                 color={progressColor(user.ramMeter)}
               >
                 {user.ramMeter + ' %'}
@@ -95,15 +95,15 @@ const UserInfo = ({
             </Col>
             <Col>
               <div className="user-detail-label-small">
-                Staked: {user.stakedCpu} 
+                Staked: {user.stakedCpu}
                 {user.unstakedCpu ?
                   <span>&nbsp; &nbsp; &nbsp;  (Unstaked: {user.unstakedCpu})</span>
                 :
                   <span></span>
                 }
               </div>
-              <Progress 
-                className="user-detail-label" 
+              <Progress
+                className="user-detail-label"
                 value={user.cpuMeter}
                 color={progressColor(user.cpuMeter)}
               >
@@ -138,9 +138,9 @@ const UserInfo = ({
               <span></span>
             }
           </div>
-          <Progress 
-            className="user-detail-label" 
-            value={user.bandwidthMeter} 
+          <Progress
+            className="user-detail-label"
+            value={user.bandwidthMeter}
             color={progressColor(user.bandwidthMeter)}
           >
             {user.bandwidthMeter + ' %'}

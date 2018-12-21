@@ -7,13 +7,13 @@ export function beautifyCpu(cpuAmount) {
     cnt++;
   }
   cpu = new Intl.NumberFormat().format(cpu);
-  if (cnt == 0) {
+  if (cnt === 0) {
     cpu = cpu.toString() + " µs";
   }
-  else if (cnt == 1) {
+  else if (cnt === 1) {
     cpu = cpu.toString() + " ms";
   }
-  else if (cnt == 2) {
+  else if (cnt === 2) {
     cpu = cpu.toString() + " s";
   }
 
@@ -70,9 +70,8 @@ export function getResourceStr(resource, cpu) {
 // Get the numeric balance from the balance string (e.g. "123 XFS")
 export function fetchBalanceNumber(balance) {
   if (!balance) return null
-  let res = ''
   let idx = balance.indexOf(' ') // 100000 XFS
-  if (idx != -1) {
+  if (idx !== -1) {
     let balanceNum = balance.substring(0, idx);
     return parseFloat(balanceNum)
   } else {
@@ -83,12 +82,11 @@ export function fetchBalanceNumber(balance) {
 // Remove the trailing milli-sec digits after 'dot'
 export function beautifyBlockTime(blockTime) {
   if (!blockTime) return ''
-  let res = ''
-  let idx = blockTime.indexOf('.') 
-  if (idx != -1) {
+  let idx = blockTime.indexOf('.')
+  if (idx !== -1) {
     blockTime = blockTime.substring(0, idx)
     idx = blockTime.indexOf('T')
-    if (idx != -1) {
+    if (idx !== -1) {
       blockTime = blockTime.substring(0, idx) + ' (' + blockTime.substring(idx+1) + ')'
     }
     return blockTime
@@ -101,7 +99,7 @@ export function beautifyBalance(balance) {
   if (!balance) return '0 XFS'
   let res = ''
   let idx = balance.indexOf(' ') // 100000 XFS
-  if (idx != -1) {
+  if (idx !== -1) {
     let balanceNum = balance.substring(0, idx);
     balanceNum = new Intl.NumberFormat().format(balanceNum).toString()
     res = balanceNum + ' ' + balance.substring(idx);

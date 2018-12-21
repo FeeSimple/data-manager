@@ -1,15 +1,12 @@
 import React from 'react'
-import { 
+import {
   Table
 } from 'reactstrap'
 import LoadingView from '../layout/LoadingView'
 
-const UserActivity = ({
-  activityList,
-  gettingActions
-}) => (
+const UserActivity = ({ activityList }) => (
   <div className="col-lg-12">
-    {activityList.length == 0 ?
+    {activityList.length === 0 ?
       <LoadingView />
     :
       <Table striped>
