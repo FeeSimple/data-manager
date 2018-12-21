@@ -8,11 +8,8 @@ export const getNetworkData = () => {
   }
 }
 
-export const idFromPath = pathname => {
-  const result = pathname.substring(
-    pathname.lastIndexOf('/') + 1,
-    pathname.length
-  )
+export const idFromPath = (pathname) => {
+  const result = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.length)
   return result === '' ? '-1' : result
 }
 
@@ -26,12 +23,12 @@ export const getImportedKeyEos = (Eos, privKey) => {
 }
 
 export const eosAdminAccount = {
-  name: process.env.REACT_APP_ADMIN_ACCOUNT_NAME,
-  pubKey: process.env.REACT_APP_ADMIN_ACCOUNT_PUB,
-  privKey: process.env.REACT_APP_ADMIN_ACCOUNT_PRIV
+	name: process.env.REACT_APP_ADMIN_ACCOUNT_NAME,
+	pubKey: process.env.REACT_APP_ADMIN_ACCOUNT_PUB,
+	privKey: process.env.REACT_APP_ADMIN_ACCOUNT_PRIV
 }
 
-export const getEosAdmin = Eos => {
+export const getEosAdmin= (Eos) => {
   const network = getNetworkData()
   return Eos({
     httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
@@ -40,7 +37,7 @@ export const getEosAdmin = Eos => {
   })
 }
 
-export const getFallbackEos = Eos => {
+export const getFallbackEos = (Eos) => {
   const network = getNetworkData()
   return Eos({
     httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
@@ -59,7 +56,10 @@ export const getAccountFrom = async (scatter, network) => {
     await scatter.getIdentity({ accounts: [network] })
   }
 
-  return scatter.identity.accounts.find(account => account.blockchain === 'eos')
+  return scatter
+    .identity
+    .accounts
+    .find(account => account.blockchain === 'eos')
 }
 
 export const fakeData = {

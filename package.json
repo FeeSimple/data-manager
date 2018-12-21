@@ -9,8 +9,7 @@
     "build-react": "react-scripts build",
     "build-css": "node-sass-chokidar ./src/scss -o ./src/css",
     "watch-css": "npm run build-css && node-sass-chokidar ./src/scss -o ./src/css --watch",
-    "prod": "node -r dotenv/config server.js",
-    "format": "prettier-standard 'src/**/*.js'"
+    "prod": "node -r dotenv/config server.js"
   },
   "dependencies": {
     "dotenv": "^6.1.0",
@@ -36,8 +35,5 @@
     "reactstrap": "^6.4.0",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6"
-  },
-  "devDependencies": {
-    "prettier-standard": "^8.0.1"
   }
 }

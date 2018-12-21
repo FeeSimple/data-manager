@@ -9,7 +9,7 @@ import {
   SET_INFO,
   SET_LOADING,
   SET_FLOORPLAN,
-  ADD_FLOORPLANS
+  ADD_FLOORPLANS,
 } from '../actions/types'
 
 export function addFloorplans (floorplans) {
@@ -88,3 +88,4 @@ export function setProperty (property) {
     property
   }
 }
+

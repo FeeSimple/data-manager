@@ -1,4 +1,7 @@
-import { SET_ACTIVE, SET_INFO } from '../actions/types'
+import {
+  SET_ACTIVE,
+  SET_INFO
+} from '../actions/types'
 
 export function accountData (state = {}, action) {
   switch (action.type) {
