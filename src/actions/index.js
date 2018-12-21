@@ -104,4 +104,3 @@ export function setProperty (property) {
     property
   }
 }
-

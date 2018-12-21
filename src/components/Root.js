@@ -6,12 +6,13 @@ import App from './App'
 import Navbar from './layout/Navbar'
 import Footer from './layout/Footer'
 import LoadingView from './layout/LoadingView'
+import 'react-images-uploader-fs/styles.css'
 
 class RootContainer extends Component {
   render () {
     const { eosClient, isLoading } = this.props
 
-    if(eosClient.locked === true){
+    if (eosClient.locked === true) {
       return <LoginContainer />
     }
 

@@ -8,10 +8,14 @@ export default function (props) {
     <Container>
       <Row>
         <Col>
-          <ul className="properties-ul">
+          <ul className='properties-ul'>
             {Object.keys(properties).map(id => {
               const property = properties[id]
-              return <li key={id}><Item property={property} /></li>
+              return (
+                <li key={id}>
+                  <Item property={property} />
+                </li>
+              )
             })}
           </ul>
         </Col>
