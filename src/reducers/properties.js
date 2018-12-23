@@ -58,7 +58,7 @@ export function properties (state = {}, action) {
     }
     case ADD_UNITS: {
       const { units } = action.payload
-      const newState = {...state}
+      const newState = { ...state }
       units.map(unit => {
         newState[unit.property_id].units[unit.id] = unit
         return unit // Only returning to resolve react warning.

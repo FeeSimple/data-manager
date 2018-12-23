@@ -5,7 +5,6 @@ import { setUnit, setLoading } from '../../../../actions'
 import UnitDetails, { READING, EDITING, CREATING } from './UnitDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
 
-
 class UnitDetailsContainer extends Component {
   state = {
     mode: READING,
@@ -13,11 +12,11 @@ class UnitDetailsContainer extends Component {
     unit: newUnit()
   }
 
-  onImageDrop = (files) => {
+  onImageDrop = files => {
     console.info('got file')
   }
 
-  edit = (e,unit) => {
+  edit = (e, unit) => {
     e.preventDefault()
 
     this.setState({
@@ -29,7 +28,7 @@ class UnitDetailsContainer extends Component {
     })
   }
 
-  save = async (e) => {
+  save = async e => {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
@@ -64,7 +63,7 @@ class UnitDetailsContainer extends Component {
     setLoading(false)
   }
 
-  create = async (e) => {
+  create = async e => {
     e.preventDefault()
 
     const { contracts, accountData, setLoading, history } = this.props
@@ -99,13 +98,13 @@ class UnitDetailsContainer extends Component {
       setUnit(propertyId, unit)
       history.push(`/${propertyId}`)
     } catch (err) {
-      console.log('addunit error:', err);
+      console.log('addunit error:', err)
     }
 
-    setLoading(false)    
+    setLoading(false)
   }
 
-  handleChange(event) {
+  handleChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
@@ -122,17 +121,20 @@ class UnitDetailsContainer extends Component {
     })
   }
 
-  render() {
+  render () {
     const { isCreating, properties } = this.props
     const { id, unitId } = this.props.match.params
     const { units } = properties[id]
 
     const mode = isCreating ? CREATING : this.state.mode
-    let unit = mode === EDITING || mode === CREATING  ? this.state.unit : units[unitId]
+    let unit =
+      mode === EDITING || mode === CREATING ? this.state.unit : units[unitId]
     return (
       <div>
-        {typeof unit === 'undefined' && <h1 className="text-center my-5 py-5">404 - Unit not found</h1>}
-        {typeof unit !== 'undefined' &&
+        {typeof unit === 'undefined' && (
+          <h1 className='text-center my-5 py-5'>404 - Unit not found</h1>
+        )}
+        {typeof unit !== 'undefined' && (
           <UnitDetails
             unit={unit}
             mode={mode}
@@ -140,10 +142,10 @@ class UnitDetailsContainer extends Component {
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}
-            onChange={(e) => this.handleChange(e)}
+            onChange={e => this.handleChange(e)}
             onImageDrop={this.onImageDrop}
           />
-        }
+        )}
       </div>
     )
   }
@@ -158,14 +160,19 @@ const newUnit = () => ({
   rent_min: 0,
   rent_max: 0,
   status: '',
-  date_available: 0
+  date_available: ''
 })
 
-function mapStateToProps({ eosClient, scatter, contracts, accountData, properties }){
+function mapStateToProps ({
+  eosClient,
+  scatter,
+  contracts,
+  accountData,
+  properties
+}) {
   return { properties, eosClient, scatter, contracts, accountData }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  { setUnit, setLoading }
-)(UnitDetailsContainer))
+export default withRouter(
+  connect(mapStateToProps, { setUnit, setLoading })(UnitDetailsContainer)
+)
