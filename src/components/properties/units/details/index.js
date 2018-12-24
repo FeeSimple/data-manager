@@ -100,10 +100,15 @@ class UnitDetailsContainer extends Component {
         new Date(unit.date_available).getTime(),
         options
       )
-      setUnit(propertyId, unit)
-      history.push(`/${propertyId}`)
     } catch (err) {
-      console.log('addunit error:', err)
+      console.log('fsmgrcontract.addunit - error:', err)
+    }
+
+    try {
+      setUnit(propertyId, unit)
+      history.push(`/${propertyId}/unit`)
+    } catch (err) {
+      console.log('setUnit error:', err)
     }
 
     setLoading(false)
