@@ -22,7 +22,7 @@ export default props => {
         ${unit.rent_min} - ${unit.rent_max}
       </td>
       <td>{unit.status}</td>
-      <td>{ new Date(parseInt(unit.date_available)).toLocaleDateString() }</td>
+      <td>{new Date(parseInt(unit.date_available)).toLocaleDateString()}</td>
       <td>Term</td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}`} className='table-edit'>

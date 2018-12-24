@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { setUnit, setLoading } from '../../../../actions'
+import { setUnit, setLoading, setErrMsg } from '../../../../actions'
 import UnitDetails, { READING, EDITING, CREATING } from './UnitDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
 
@@ -66,7 +66,13 @@ class UnitDetailsContainer extends Component {
   create = async e => {
     e.preventDefault()
 
-    const { contracts, accountData, setLoading, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setErrMsg,
+      history
+    } = this.props
     const propertyId = this.props.match.params.id
     const { unit } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
@@ -101,6 +107,7 @@ class UnitDetailsContainer extends Component {
         options
       )
     } catch (err) {
+      setErrMsg('Failed to create new unit')
       console.log('fsmgrcontract.addunit - error:', err)
     }
 
@@ -184,5 +191,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setUnit, setLoading })(UnitDetailsContainer)
+  connect(mapStateToProps, { setUnit, setLoading, setErrMsg })(
+    UnitDetailsContainer
+  )
 )

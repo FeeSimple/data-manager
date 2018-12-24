@@ -8,6 +8,7 @@ import {
   SET_ACTIVE,
   SET_INFO,
   SET_LOADING,
+  SET_ERROR_POPUP,
   SET_FLOORPLAN,
   ADD_FLOORPLANS,
   SET_UNIT,
@@ -46,6 +47,13 @@ export function setLoading (isLoading) {
   return {
     type: SET_LOADING,
     payload: isLoading
+  }
+}
+
+export function setErrMsg (errMsg) {
+  return {
+    type: SET_ERROR_POPUP,
+    payload: errMsg
   }
 }
 
