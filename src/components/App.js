@@ -50,6 +50,13 @@ class AppContainer extends Component {
             <FloorplanDetails id={match.params.floorplanId} />
           )}
         />
+        <Route
+          exact
+          path='/:id/unit/:unitId'
+          render={({ match }) => (
+            <UnitDetails id={match.params.unitId} />
+          )}
+        />
       </Switch>
     )
   }
