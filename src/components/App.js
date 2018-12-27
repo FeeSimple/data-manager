@@ -53,9 +53,7 @@ class AppContainer extends Component {
         <Route
           exact
           path='/:id/unit/:unitId'
-          render={({ match }) => (
-            <UnitDetails id={match.params.unitId} />
-          )}
+          render={({ match }) => <UnitDetails id={match.params.unitId} />}
         />
       </Switch>
     )

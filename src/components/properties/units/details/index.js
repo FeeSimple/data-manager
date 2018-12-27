@@ -85,11 +85,10 @@ class UnitDetailsContainer extends Component {
     this.setState({ mode: READING })
 
     setLoading(true)
-    
+
     // console.log('new unit time: ', unit.date_available)
     // console.log('new unit time: ', new Date(unit.date_available).getTime())
-    // console.log('unit time: 1545609600000, date: ', new Date(1545609600000).toLocaleDateString()) 
-    
+    // console.log('unit time: 1545609600000, date: ', new Date(1545609600000).toLocaleDateString())
 
     try {
       await fsmgrcontract.addunit(
