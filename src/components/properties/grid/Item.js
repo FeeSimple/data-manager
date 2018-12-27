@@ -27,7 +27,7 @@ export default function (props) {
               <Link to={`/${property.id}`} className='btn btn-base'>
                 Floor Plans
               </Link>
-              <Link to='/' className='btn btn-base'>
+              <Link to={`/${property.id}/unit`} className='btn btn-base'>
                 Units
               </Link>
             </div>

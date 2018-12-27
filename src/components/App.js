@@ -6,6 +6,8 @@ import PropertyDetails from './properties/details'
 import User from './user'
 import Floorplans from './properties/floorplans'
 import FloorplanDetails from './properties/floorplans/details'
+import Unit from './properties/units'
+import UnitDetails from './properties/units/details'
 
 class AppContainer extends Component {
   render () {
@@ -27,17 +29,32 @@ class AppContainer extends Component {
         />
         <Route
           exact
+          path='/:id/unit'
+          render={({ match }) => <Unit id={match.params.id} />}
+        />
+        <Route
+          exact
           path='/:id/edit'
           render={({ match }) => <PropertyDetails id={match.params.id} />}
         />
         <Route exact path='/:id/floorplan/new'>
           <FloorplanDetails isCreating />
         </Route>
+        <Route exact path='/:id/unit/new'>
+          <UnitDetails isCreating />
+        </Route>
         <Route
           exact
           path='/:id/floorplan/:floorplanId'
           render={({ match }) => (
             <FloorplanDetails id={match.params.floorplanId} />
+          )}
+        />
+        <Route
+          exact
+          path='/:id/unit/:unitId'
+          render={({ match }) => (
+            <UnitDetails id={match.params.unitId} />
           )}
         />
       </Switch>

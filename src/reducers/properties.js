@@ -2,7 +2,9 @@ import {
   ADD_PROPERTIES,
   SET_PROPERTY,
   SET_FLOORPLAN,
-  ADD_FLOORPLANS
+  ADD_FLOORPLANS,
+  SET_UNIT,
+  ADD_UNITS
 } from '../actions/types'
 
 export function properties (state = {}, action) {
@@ -15,7 +17,8 @@ export function properties (state = {}, action) {
       properties.forEach(property => {
         newState[property.id] = {
           ...property,
-          floorplans: {}
+          floorplans: {},
+          units: {}
         }
       })
       return newState
@@ -26,7 +29,8 @@ export function properties (state = {}, action) {
         ...state,
         [property.id]: {
           ...property,
-          floorplans: {}
+          floorplans: {},
+          units: {}
         }
       }
     }
@@ -43,6 +47,23 @@ export function properties (state = {}, action) {
         newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
         return floorplan // Only returning to resolve react warning.
       })
+      return newState
+    }
+    case SET_UNIT: {
+      const { propertyId, unit } = action.payload
+      const newState = { ...state }
+      newState[propertyId].units[unit.id] = unit
+      console.log('SET_UNIT - newState:', newState)
+      return newState
+    }
+    case ADD_UNITS: {
+      const { units } = action.payload
+      const newState = { ...state }
+      units.map(unit => {
+        newState[unit.property_id].units[unit.id] = unit
+        return unit // Only returning to resolve react warning.
+      })
+      console.log('ADD_UNITS - newState:', newState)
       return newState
     }
     default:
