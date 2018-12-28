@@ -4,28 +4,22 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import IconAdd from '../../../img/icon-add.svg'
 import Grid from './Grid'
-import {
-  Col,
-  Row,
-  Container
-} from 'reactstrap'
+import { Col, Row, Container } from 'reactstrap'
 
 class GridContainer extends Component {
-  render() {
+  render () {
     const { properties } = this.props
     return (
       <div>
-        <div className="top-bar">
+        <div className='top-bar'>
           <Container>
             <Row>
               <Col>
-                <h3 className="float-left">Properties</h3>
-                <h3 className="float-right">
+                <h3 className='float-left'>Properties</h3>
+                <h3 className='float-right'>
                   <Link to='/new'>
-                    <img src={IconAdd} alt=""/>
-                    <span className="hide-xs">
-                      New Property
-                    </span>
+                    <img src={IconAdd} alt='' />
+                    <span className='hide-xs'>New Property</span>
                   </Link>
                 </h3>
               </Col>
@@ -33,18 +27,15 @@ class GridContainer extends Component {
           </Container>
         </div>
         <Container>
-          <Grid properties={properties}/>
+          <Grid properties={properties} />
         </Container>
       </div>
     )
   }
-
 }
 
-function mapStateToProps({ properties, scatter, eosjs }){
+function mapStateToProps ({ properties, scatter, eosjs }) {
   return { properties, scatter, eosjs }
 }
 
-export default withRouter(connect(
-  mapStateToProps
-)(GridContainer))
+export default withRouter(connect(mapStateToProps)(GridContainer))

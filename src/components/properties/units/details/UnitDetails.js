@@ -1,38 +1,35 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import ImageGallery from 'react-image-gallery'
-import ImagesUploader from 'react-images-uploader-fs'
-import 'react-images-uploader-fs/styles.css'
+import Dropzone from 'react-dropzone'
+import { AvForm, AvField } from 'availity-reactstrap-validation'
 
 export const READING = 'reading'
 export const EDITING = 'editing'
 export const CREATING = 'creating'
 
-const FloorplanDetails = ({
-  floorplan,
+const UnitDetails = ({
+  unit,
   mode,
   onEditClick,
   onCreateClick,
   onSaveClick,
   onChange,
-  onImagesUploaded,
-  onImageDeleted,
-  galleryItems
+  onImageDrop
 }) => (
   <div>
     <div className='top-bar'>
       <Container>
         <Row>
           <Col>
-            <h3 className='float-left'> Floorplan</h3>
+            <h3 className='float-left'> Unit</h3>
           </Col>
         </Row>
       </Container>
     </div>
     <br />
     <Container>
-      <form className=''>
+      <AvForm className=''>
         <div className='form-group row'>
           <div className='col-12'>
             <h3 className='bar-header'>Details</h3>
@@ -40,13 +37,16 @@ const FloorplanDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Name</label>
-            <input
-              id='name'
+            <AvField
+              label='Name'
               type='text'
-              className='form-control'
+              validate={{
+                required: { value: true, errorMessage: 'Please enter a name' },
+                minLength: { value: 1 }
+              }}
+              id='name'
               name='name'
-              value={floorplan.name}
+              value={unit.name}
               onChange={onChange}
               disabled={mode === READING}
             />
@@ -54,119 +54,150 @@ const FloorplanDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Bedrooms</label>
-            <input
+            <AvField
+              label='Bedrooms'
+              type='number'
+              min='0'
               id='bedrooms'
               name='bedrooms'
-              className='form-control'
-              type='number'
-              disabled={mode === READING}
+              value={unit.bedrooms}
               onChange={onChange}
-              value={floorplan.bedrooms}
+              disabled={mode === READING}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Bathrooms</label>
-            <input
+            <AvField
+              label='Bathrooms'
+              type='number'
+              min='0'
               id='bathrooms'
               name='bathrooms'
-              className='form-control'
-              type='number'
-              disabled={mode === READING}
+              value={unit.bathrooms}
               onChange={onChange}
-              value={floorplan.bathrooms}
+              disabled={mode === READING}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-5 col-lg-4 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Sq. Ft. Min</label>
-            <input
+            <AvField
+              label='Sq. Ft. Min'
+              type='number'
+              min='0'
               id='sq_ft_min'
               name='sq_ft_min'
-              className='form-control'
-              type='number'
-              disabled={mode === READING}
+              value={unit.sq_ft_min}
               onChange={onChange}
-              value={floorplan.sq_ft_min}
+              disabled={mode === READING}
             />
           </div>
           <div className='col-12 col-md-5 col-lg-4'>
-            <label className='form-label'>Sq. Ft. Max</label>
-            <input
+            <AvField
+              label='Sq. Ft. Max'
+              type='number'
+              min='0'
               id='sq_ft_max'
               name='sq_ft_max'
-              className='form-control'
-              type='number'
-              disabled={mode === READING}
+              value={unit.sq_ft_max}
               onChange={onChange}
-              value={floorplan.sq_ft_max}
+              disabled={mode === READING}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-5 col-lg-4 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Rent Min</label>
-            <input
+            <AvField
+              label='Rent Min'
+              type='number'
+              min='0'
               id='rent_min'
               name='rent_min'
-              className='form-control'
-              type='number'
-              disabled={mode === READING}
+              value={unit.rent_min}
               onChange={onChange}
-              value={floorplan.rent_min}
+              disabled={mode === READING}
             />
           </div>
           <div className='col-12 col-md-5 col-lg-4'>
-            <label className='form-label'>Rent Max</label>
-            <input
+            <AvField
+              label='Rent Max'
+              type='number'
+              min='0'
               id='rent_max'
               name='rent_max'
-              className='form-control'
-              type='number'
-              disabled={mode === READING}
+              value={unit.rent_max}
               onChange={onChange}
-              value={floorplan.rent_max}
+              disabled={mode === READING}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Deposit</label>
+            <label className='form-label'>Status</label>
+            <div>
+              <input
+                type='radio'
+                name='status'
+                id='status'
+                value='Leased'
+                onChange={onChange}
+              />{' '}
+              <label className='form-label'>Leased</label>
+            </div>
+            <div>
+              <input
+                type='radio'
+                name='status'
+                id='status'
+                value='Available'
+                onChange={onChange}
+              />{' '}
+              <label className='form-label'>Available</label>
+            </div>
+          </div>
+        </div>
+        <div className='form-group row'>
+          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
+            <AvField
+              name='date_available'
+              id='date_available'
+              value={unit.date_available}
+              label='Date Available'
+              type='date'
+              onChange={onChange}
+              disabled={mode === READING}
+            />
+          </div>
+        </div>
+        <div className='form-group row'>
+          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
+            <label className='form-label'>Term Pricing</label>
             <input
-              id='deposit'
-              name='deposit'
+              id='termPricing'
+              type='text'
               className='form-control'
-              type='number'
-              disabled={mode === READING}
+              name='termPricing'
               onChange={onChange}
-              value={floorplan.deposit}
+              disabled={mode === READING}
             />
-          </div>
-        </div>
-        <div className='form-group row'>
-          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <ImageGallery items={galleryItems} />
           </div>
         </div>
         {mode === EDITING && (
           <div className='form-group row'>
             <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-              <ImagesUploader
-                url='http://localhost:9000/multiple'
-                optimisticPreviews
-                onLoadEnd={onImagesUploaded}
-                onImageDeleted={onImageDeleted}
-                label='Upload multiple images'
-                styles={{
-                  label: {
-                    fontFamily: 'Open sans, sans-serif',
-                    fontSize: '14px'
-                  }
-                }}
-              />
+              <Dropzone
+                multiple={false}
+                accept='image/*'
+                onDrop={onImageDrop}
+                className='dpz-default d-flex justify-content-center align-items-center'
+                acceptClassName='dpz-accepted'
+                activeClassName='dpc-active'
+                disabledClassName='dpz-disabled'
+                rejectClassName='dpz-rejected'
+              >
+                <p>Drag and drop a property image, such as a unit.</p>
+              </Dropzone>
             </div>
           </div>
         )}
@@ -176,7 +207,7 @@ const FloorplanDetails = ({
               type='button'
               className='btn btn-base w100 form-btn'
               hidden={mode !== READING}
-              onClick={e => onEditClick(e, floorplan)}
+              onClick={e => onEditClick(e, unit)}
             >
               Edit
             </button>
@@ -193,22 +224,22 @@ const FloorplanDetails = ({
               type='button'
               className='btn btn-base w100 form-btn'
               hidden={mode !== CREATING}
-              onClick={e => onCreateClick(e, floorplan)}
+              onClick={e => onCreateClick(e, unit)}
             >
               Create
             </button>
           </div>
           <div className='col-md-5 col-lg-4 col-6'>
-            <Link to={mode === CREATING ? '/' : `/${floorplan.id}`}>
+            <Link to={mode === CREATING ? '/' : `/${unit.id}`}>
               <button type='button' className='btn btn-gray-o w100 form-btn'>
                 Cancel
               </button>
             </Link>
           </div>
         </div>
-      </form>
+      </AvForm>
     </Container>
   </div>
 )
 
-export default FloorplanDetails
+export default UnitDetails

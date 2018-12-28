@@ -10,12 +10,12 @@ import { setInfo } from '../../actions/index'
 import { beautifyRam } from '../../utils/beautify'
 
 class NavbarContainer extends Component {
-  constructor() {
+  constructor () {
     super()
-    this.state = {data: []}
+    this.state = { data: [] }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { eosClient, accountData } = this.props
     let account = accountData.active
     eosClient.getAccount(account).then(result => {
@@ -40,65 +40,73 @@ class NavbarContainer extends Component {
     })
   }
 
-  beautifyRam(ram) {
+  beautifyRam (ram) {
     let cnt = 0
     while (cnt < 3 && ram >= 1024) {
-      ram = ram/1024
+      ram = ram / 1024
       cnt++
     }
     ram = new Intl.NumberFormat().format(ram)
     if (cnt === 0) {
-      ram = ram.toString() + " Byte"
-    }
-    else if (cnt === 1) {
-      ram = ram.toString() + " KB"
-    }
-    else if (cnt === 2) {
-      ram = ram.toString() + " MB"
-    }
-    else if (cnt === 3) {
-      ram = ram.toString() + " GB"
+      ram = ram.toString() + ' Byte'
+    } else if (cnt === 1) {
+      ram = ram.toString() + ' KB'
+    } else if (cnt === 2) {
+      ram = ram.toString() + ' MB'
+    } else if (cnt === 3) {
+      ram = ram.toString() + ' GB'
     }
 
     return ram
   }
 
-  render() {
+  render () {
     return (
-      <div className="menu-holder">
-        <div className="container">
-            <div className="row">
-              <div className="col-12">
-                <Link to="/" className="logo">
-                  <img src={Logo} alt="Logo"/>
-                </Link>
-                <div className="storage">
-                  <span className="badge badge-pill">{this.state.data.ramAvailable}</span>
-                  <span className="storage-text">
-                      {' '}Available Storage
-                  </span>
-                </div>
-
-                <ul id="main-menu">
-                  <li><Link to="/"><img src={IconProperties} alt=""/> <span>Properties</span></Link></li>
-                  <li><Link to="/user"><img src={IconUser} alt=""/></Link></li>
-                  <li><a href=""><img src={IconLogout} alt=""/></a></li>
-                </ul>
+      <div className='menu-holder'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-12'>
+              <Link to='/' className='logo'>
+                <img src={Logo} alt='Logo' />
+              </Link>
+              <div className='storage'>
+                <span className='badge badge-pill'>
+                  {this.state.data.ramAvailable}
+                </span>
+                <span className='storage-text'> Available Storage</span>
               </div>
+
+              <ul id='main-menu'>
+                <li>
+                  <Link to='/'>
+                    <img src={IconProperties} alt='' /> <span>Properties</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to='/user'>
+                    <img src={IconUser} alt='' />
+                  </Link>
+                </li>
+                <li>
+                  <a href=''>
+                    <img src={IconLogout} alt='' />
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
+        </div>
       </div>
     )
   }
 }
 
-function mapStateToProps({ eosClient, accountData }){
+function mapStateToProps ({ eosClient, accountData }) {
   return { eosClient, accountData }
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  {
+export default withRouter(
+  connect(mapStateToProps, {
     setInfo
-  }
-)(NavbarContainer))
+  })(NavbarContainer)
+)

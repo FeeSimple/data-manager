@@ -10,6 +10,10 @@ export const SET_ACTIVE = 'SET_ACTIVE'
 export const SET_INFO = 'SET_INFO'
 
 export const SET_LOADING = 'SET_LOADING'
+export const SET_ERROR_POPUP = 'SET_ERROR_POPUP'
 
 export const SET_FLOORPLAN = 'SET_FLOORPLAN'
 export const ADD_FLOORPLANS = 'ADD_FLOORPLANS'
+
+export const SET_UNIT = 'SET_UNIT'
+export const ADD_UNITS = 'ADD_UNITS'

@@ -6,20 +6,21 @@ import App from './App'
 import Navbar from './layout/Navbar'
 import Footer from './layout/Footer'
 import LoadingView from './layout/LoadingView'
-import ImagesUploader from 'react-images-uploader-fs'
+import { ErrorPopup } from './layout/ErrorPopup'
 import 'react-images-uploader-fs/styles.css'
 
 class RootContainer extends Component {
   render () {
-    const { eosClient, isLoading } = this.props
+    const { eosClient, isLoading, errMsg } = this.props
 
-    if(eosClient.locked === true){
+    if (eosClient.locked === true) {
       return <LoginContainer />
     }
 
     return (
       <div>
         <Navbar />
+        {errMsg && <ErrorPopup errMsg={errMsg} />}
         {!isLoading && <App />}
         {isLoading && <LoadingView />}
         <Footer />
@@ -28,8 +29,8 @@ class RootContainer extends Component {
   }
 }
 
-function mapStateToProps ({ isLoading, eosClient }) {
-  return { isLoading, eosClient }
+function mapStateToProps ({ isLoading, eosClient, errMsg }) {
+  return { isLoading, eosClient, errMsg }
 }
 
 export default withRouter(connect(mapStateToProps)(RootContainer))

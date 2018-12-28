@@ -3,7 +3,7 @@ import { Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
-import FloorplanRow from './Row'
+import UnitRow from './Row'
 
 export default props => {
   const { property } = props
@@ -20,19 +20,11 @@ export default props => {
                 </Link>
               </h3>
             </div>
-            {/* <div className='col-10 col-md-4 tc tl-xs'>
-              <Link to='/' className='btn btn-base-o prop-btn'>
-                Floor Plan
-              </Link>
-              <Link to='/' className='btn btn-gray-o prop-btn'>
-                Units
-              </Link>
-            </div> */}
             <div className='col-2 col-md-4'>
               <h3 className='float-right'>
-                <Link to={`/${props.propertyId}/floorplan/new`}>
+                <Link to={`/${props.propertyId}/unit/new`}>
                   <img src={IconAdd} alt='' />
-                  <span className='hide-xs'>New Floor Plan</span>
+                  <span className='hide-xs'>New Unit</span>
                 </Link>
               </h3>
             </div>
@@ -82,10 +74,10 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='Ploor Plan: activate to sort column ascending'
+                            aria-label='Unit: activate to sort column ascending'
                             style={{ width: 148 }}
                           >
-                            Ploor Plan
+                            Unit
                           </th>
                           <th
                             className='sorting'
@@ -126,10 +118,32 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='# Of Units: activate to sort column ascending'
+                            aria-label='Status: activate to sort column ascending'
+                            style={{ width: 147 }}
+                          >
+                            Status
+                          </th>
+                          <th
+                            className='sorting'
+                            tabIndex='0'
+                            aria-controls='TableSorting'
+                            rowSpan='1'
+                            colSpan='1'
+                            aria-label='Date Available: activate to sort column ascending'
+                            style={{ width: 147 }}
+                          >
+                            Date Available
+                          </th>
+                          <th
+                            className='sorting'
+                            tabIndex='0'
+                            aria-controls='TableSorting'
+                            rowSpan='1'
+                            colSpan='1'
+                            aria-label='Term Pricing: activate to sort column ascending'
                             style={{ width: 139 }}
                           >
-                            # Of Units
+                            Term Pricing
                           </th>
                           <th
                             style={{ width: 20 }}
@@ -148,12 +162,12 @@ export default props => {
                         </tr>
                       </thead>
                       <tbody>
-                        {property.floorplans &&
-                          Object.keys(property.floorplans).length > 0 &&
-                          Object.keys(property.floorplans).map(floorplanId => (
-                            <FloorplanRow
-                              key={floorplanId}
-                              floorplan={property.floorplans[floorplanId]}
+                        {property.units &&
+                          Object.keys(property.units).length > 0 &&
+                          Object.keys(property.units).map(unitId => (
+                            <UnitRow
+                              key={unitId}
+                              unit={property.units[unitId]}
                               property={property}
                             />
                           ))}

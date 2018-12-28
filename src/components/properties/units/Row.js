@@ -4,29 +4,28 @@ import IconDelete from '../../../img/icon-delete.svg'
 import { Link } from 'react-router-dom'
 
 export default props => {
-  const { floorplan, property } = props
+  const { unit, property } = props
   return (
     <tr role='row' className='even'>
       <td>
         <input type='checkbox' />
       </td>
-      <td>{floorplan.id}</td>
-      <td>{floorplan.name}</td>
+      <td>{unit.id}</td>
+      <td>{unit.name}</td>
       <td>
-        {floorplan.bedrooms} beds / {floorplan.bathrooms} baths
+        {unit.bedrooms} beds / {unit.bathrooms} baths
       </td>
       <td>
-        {floorplan.sq_ft_min} - {floorplan.sq_ft_max}
+        {unit.sq_ft_min} - {unit.sq_ft_max}
       </td>
       <td>
-        ${floorplan.rent_min} - ${floorplan.rent_max}
+        ${unit.rent_min} - ${unit.rent_max}
       </td>
-      <td>{property.unit_count}</td>
+      <td>{unit.status}</td>
+      <td>{new Date(parseInt(unit.date_available)).toLocaleDateString()}</td>
+      <td>Term</td>
       <td>
-        <Link
-          to={`/${property.id}/floorplan/${floorplan.id}`}
-          className='table-edit'
-        >
+        <Link to={`/${property.id}/unit/${unit.id}`} className='table-edit'>
           <img src={IconEditBlue} alt='' />
         </Link>
       </td>

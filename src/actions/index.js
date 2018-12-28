@@ -8,8 +8,11 @@ import {
   SET_ACTIVE,
   SET_INFO,
   SET_LOADING,
+  SET_ERROR_POPUP,
   SET_FLOORPLAN,
   ADD_FLOORPLANS,
+  SET_UNIT,
+  ADD_UNITS
 } from '../actions/types'
 
 export function addFloorplans (floorplans) {
@@ -26,10 +29,31 @@ export function setFloorplan (propertyId, floorplan) {
   }
 }
 
+export function addUnits (units) {
+  return {
+    type: ADD_UNITS,
+    payload: { units }
+  }
+}
+
+export function setUnit (propertyId, unit) {
+  return {
+    type: SET_UNIT,
+    payload: { propertyId, unit }
+  }
+}
+
 export function setLoading (isLoading) {
   return {
     type: SET_LOADING,
     payload: isLoading
+  }
+}
+
+export function setErrMsg (errMsg) {
+  return {
+    type: SET_ERROR_POPUP,
+    payload: errMsg
   }
 }
 
@@ -88,4 +112,3 @@ export function setProperty (property) {
     property
   }
 }
-
