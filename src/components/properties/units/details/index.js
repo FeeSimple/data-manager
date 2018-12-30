@@ -1,19 +1,47 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import ecc from 'eosjs-ecc'
+
 import { setUnit, setLoading, setErrMsg } from '../../../../actions'
-import UnitDetails, { READING, EDITING, CREATING } from './UnitDetails'
-import { FSMGRCONTRACT } from '../../../../utils/consts'
+import UnitDetails, {
+  READING,
+  EDITING,
+  CREATING
+} from './UnitDetails'
+import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 
 class UnitDetailsContainer extends Component {
   state = {
     mode: READING,
     prevUnit: {},
-    unit: newUnit()
+
+    unit: newUnit(),
+    buffer: null,
+    imagesToUpload: [],
+    imgMultihashes: []
   }
 
-  onImageDrop = files => {
-    console.info('got file')
+  onImagesUploaded = (err, resp) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    const multihashes = resp.map(
+      url => url.split('/')[url.split('/').length - 2]
+    )
+
+    const { imagesToUpload } = this.state
+    const newImagesToUpload = [...imagesToUpload, ...multihashes]
+    this.setState({ imagesToUpload: newImagesToUpload })
+  }
+
+  onImageDeleted = url => {
+    const { imagesToUpload } = this.state
+    const newImagesToUpload = [...imagesToUpload]
+    newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
+
+    this.setState({ imagesToUpload: newImagesToUpload })
   }
 
   edit = (e, unit) => {
@@ -32,7 +60,7 @@ class UnitDetailsContainer extends Component {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
-    const { unit } = this.state
+    const { unit, imagesToUpload } = this.state
     const { contracts, accountData, setLoading, setUnit } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -60,19 +88,35 @@ class UnitDetailsContainer extends Component {
     )
 
     setUnit(propertyId, unit)
+
+    if (imagesToUpload.length > 0) {
+      // Mapping values to object keys removes duplicates.
+      const imagesObj = {}
+      imagesToUpload.map(multihash => {
+        imagesObj[multihash] = multihash
+        return multihash
+      })
+
+      await Promise.all(
+        Object.keys(imagesObj).map(async multihash => {
+          fsmgrcontract.addflplanimg(
+            accountData.active,
+            unit.id,
+            ecc.sha256(multihash),
+            multihash,
+            options
+          )
+        })
+      )
+    }
+
     setLoading(false)
   }
 
   create = async e => {
     e.preventDefault()
 
-    const {
-      contracts,
-      accountData,
-      setLoading,
-      setErrMsg,
-      history
-    } = this.props
+    const { contracts, accountData, setLoading, history } = this.props
     const propertyId = this.props.match.params.id
     const { unit } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
@@ -133,14 +177,36 @@ class UnitDetailsContainer extends Component {
     })
   }
 
+  async componentDidMount () {
+    const { eosClient, accountData } = this.props
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      UNITIMG
+    )
+
+    const imgMultihashes = rows.map(row => row.ipfs_address)
+    this.setState({ imgMultihashes })
+  }
+
   render () {
     const { isCreating, properties } = this.props
     const { id, unitId } = this.props.match.params
     const { units } = properties[id]
+    const { imgMultihashes } = this.state
+
+    const galleryItems = imgMultihashes.map(multihash => ({
+      original: `https://gateway.ipfs.io/ipfs/${multihash}/`,
+      thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
+    }))
 
     const mode = isCreating ? CREATING : this.state.mode
     let unit =
-      mode === EDITING || mode === CREATING ? this.state.unit : units[unitId]
+      mode === EDITING || mode === CREATING
+        ? this.state.unit
+        : units[unitId]
     return (
       <div>
         {typeof unit === 'undefined' && (
@@ -155,7 +221,9 @@ class UnitDetailsContainer extends Component {
             onCreateClick={this.create}
             onCancelClick={this.cancel}
             onChange={e => this.handleChange(e)}
-            onImageDrop={this.onImageDrop}
+            onImagesUploaded={this.onImagesUploaded}
+            onImageDeleted={this.onImageDeleted}
+            galleryItems={galleryItems}
           />
         )}
       </div>
