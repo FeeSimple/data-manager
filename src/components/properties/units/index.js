@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import Table from './Table'
 import { UNIT, FSMGRCONTRACT } from '../../../utils/consts'
 import { addUnits } from '../../../actions/index'
+import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 
 class UnitContainer extends Component {
   async componentDidMount () {
@@ -32,7 +33,11 @@ class UnitContainer extends Component {
     const { properties } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
-    return <Table propertyId={property.id} property={property} />
+    if (!property) {
+      return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
+    } else {
+      return <Table propertyId={property.id} property={property} />
+    }
   }
 }
 
