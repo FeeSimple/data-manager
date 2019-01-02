@@ -12,7 +12,9 @@ import {
   SET_FLOORPLAN,
   ADD_FLOORPLANS,
   SET_UNIT,
-  ADD_UNITS
+  ADD_UNITS,
+  SET_TERMPRICE,
+  ADD_TERMPRICES
 } from '../actions/types'
 
 export function addFloorplans (floorplans) {
@@ -40,6 +42,20 @@ export function setUnit (propertyId, unit) {
   return {
     type: SET_UNIT,
     payload: { propertyId, unit }
+  }
+}
+
+export function addTermPrices (termprices) {
+  return {
+    type: ADD_TERMPRICES,
+    payload: { termprices }
+  }
+}
+
+export function setTermPrice (propertyId, termprice) {
+  return {
+    type: SET_TERMPRICE,
+    payload: { propertyId, termprice }
   }
 }
 

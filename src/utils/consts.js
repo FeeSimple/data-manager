@@ -3,6 +3,7 @@ export const FLOORPLAN = 'floorplan'
 export const FLOORPLANIMG = 'floorplanimg'
 export const UNIT = 'unit'
 export const UNITIMG = 'unitimg'
+export const TERMPRICE = 'termpricing'
 export const FSMGRCONTRACT = 'fsmgrcode222'
 
 export const NO_BALANCE = '0 XFS'
