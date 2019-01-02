@@ -63,21 +63,10 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='ID: activate to sort column ascending'
-                            style={{ width: 51 }}
-                          >
-                            ID
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Unit: activate to sort column ascending'
+                            aria-label='Unit ID: activate to sort column ascending'
                             style={{ width: 148 }}
                           >
-                            Unit
+                            Unit ID
                           </th>
                           <th
                             className='sorting'
@@ -88,7 +77,7 @@ export default props => {
                             aria-label='Type: activate to sort column ascending'
                             style={{ width: 147 }}
                           >
-                            Type
+                            Beds/Baths
                           </th>
                           <th
                             className='sorting'
@@ -99,7 +88,7 @@ export default props => {
                             aria-label='Sq, Ft.: activate to sort column ascending'
                             style={{ width: 95 }}
                           >
-                            Sq, Ft.
+                            Sq. Ft.
                           </th>
                           <th
                             className='sorting'
@@ -133,17 +122,6 @@ export default props => {
                             style={{ width: 147 }}
                           >
                             Date Available
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Term Pricing: activate to sort column ascending'
-                            style={{ width: 139 }}
-                          >
-                            Term Pricing
                           </th>
                           <th
                             style={{ width: 20 }}
