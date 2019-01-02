@@ -12,6 +12,7 @@ export const CREATING = 'creating'
 
 const UnitDetails = ({
   unit,
+  propertyId,
   mode,
   onEditClick,
   onCreateClick,
@@ -176,19 +177,6 @@ const UnitDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Term Pricing</label>
-            <input
-              id='termPricing'
-              type='text'
-              className='form-control'
-              name='termPricing'
-              onChange={onChange}
-              disabled={mode === READING}
-            />
-          </div>
-        </div>
-        <div className='form-group row'>
-          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
             <ImageGallery items={galleryItems} />
           </div>
         </div>
@@ -240,7 +228,7 @@ const UnitDetails = ({
             </button>
           </div>
           <div className='col-md-5 col-lg-4 col-6'>
-            <Link to={mode === CREATING ? '/' : `/${unit.id}`}>
+            <Link to={mode === CREATING ? '/' : `/${propertyId}/unit`}>
               <button type='button' className='btn btn-gray-o w100 form-btn'>
                 Cancel
               </button>

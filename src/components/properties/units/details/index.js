@@ -215,6 +215,7 @@ class UnitDetailsContainer extends Component {
         {typeof unit !== 'undefined' && (
           <UnitDetails
             unit={unit}
+            propertyId={id}
             mode={mode}
             onEditClick={this.edit}
             onSaveClick={this.save}
