@@ -10,10 +10,9 @@ export default props => {
       <td>
         <input type='checkbox' />
       </td>
-      <td>{unit.id}</td>
       <td>{unit.name}</td>
       <td>
-        {unit.bedrooms} beds / {unit.bathrooms} baths
+        {unit.bedrooms}/{unit.bathrooms}
       </td>
       <td>
         {unit.sq_ft_min} - {unit.sq_ft_max}
@@ -23,7 +22,6 @@ export default props => {
       </td>
       <td>{unit.status}</td>
       <td>{new Date(parseInt(unit.date_available)).toLocaleDateString()}</td>
-      <td>Term</td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}`} className='table-edit'>
           <img src={IconEditBlue} alt='' />
