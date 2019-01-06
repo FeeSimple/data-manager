@@ -193,6 +193,10 @@ h1, h2, h3, h4, h5, h6 {
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar; }
 
+.new-comp-button {
+  padding-left: 64px;
+  margin-left: 450px; }
+
 .drop-down-input {
   -webkit-appearance: none;
   -moz-appearance: none;

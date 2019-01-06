@@ -69,12 +69,15 @@ export function properties (state = {}, action) {
         }
         return unit // Only returning to resolve react warning.
       })
+      console.log('ADD_UNITS - newState:', newState)
       return newState
     }
     case SET_TERMPRICE: {
-      const { unitId, termprice } = action.payload
+      console.log('SET_TERMPRICE - action.payload:', action.payload)
+      const { unitid, termprice } = action.payload
       const newState = { ...state }
-      newState[unitId].termprices[termprice.id] = termprice
+      console.log('SET_TERMPRICE - newState:', newState)
+      newState[unitid].termprices[termprice.id] = termprice
       console.log('SET_TERMPRICE - newState:', newState)
       return newState
     }

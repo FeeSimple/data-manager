@@ -30,26 +30,27 @@ class TermPriceContainer extends Component {
   }
 
   render () {
-    const { properties, units } = this.props
-    const { id } = this.props.match.params
-    const unit = units[id]
+    const { properties } = this.props
+    const { id, unitid } = this.props.match.params
     const property = properties[id]
+    const unit = property.units[unitid]
+    
     if (!property || !unit) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
-      return <Table propertyId={property.id} unitId={unit.id} unit={unit} />
+      return <Table propertyId={property.id} unitid={unitid} unit={unit} />
     }
   }
 }
 
 function mapStateToProps ({
-  units,
+  properties,
   eosClient,
   scatter,
   contracts,
   accountData
 }) {
-  return { units, eosClient, scatter, contracts, accountData }
+  return { properties, eosClient, scatter, contracts, accountData }
 }
 
 export default withRouter(connect(mapStateToProps, { addTermPrices })(TermPriceContainer))

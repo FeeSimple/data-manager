@@ -36,7 +36,7 @@ class AppContainer extends Component {
         />
         <Route
           exact
-          path='/:id/unit/termprice'
+          path='/:id/unit/:unitid/termprice'
           render={({ match }) => <TermPrice id={match.params.id} />}
         />
         <Route
@@ -50,7 +50,7 @@ class AppContainer extends Component {
         <Route exact path='/:id/unit/new'>
           <UnitDetails isCreating />
         </Route>
-        <Route exact path='/:id/unit/termprice/new'>
+        <Route exact path='/:id/unit/:unitid/termprice/new'>
           <TermPriceDetails isCreating />
         </Route>
         <Route
@@ -62,13 +62,13 @@ class AppContainer extends Component {
         />
         <Route
           exact
-          path='/:id/unit/:unitId'
-          render={({ match }) => <UnitDetails id={match.params.unitId} />}
+          path='/:id/unit/:unitid'
+          render={({ match }) => <UnitDetails id={match.params.unitid} />}
         />
         <Route
           exact
-          path='/:id/unit/termprice/:unitId'
-          render={({ match }) => <TermPriceDetails id={match.params.unitId} />}
+          path='/:id/unit/:unitid/termprice'
+          render={({ match }) => <TermPriceDetails id={match.params.id} />}
         />
       </Switch>
     )

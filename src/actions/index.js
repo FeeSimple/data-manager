@@ -52,10 +52,10 @@ export function addTermPrices (termprices) {
   }
 }
 
-export function setTermPrice (propertyId, termprice) {
+export function setTermPrice (unitid, termprice) {
   return {
     type: SET_TERMPRICE,
-    payload: { propertyId, termprice }
+    payload: { unitid, termprice }
   }
 }
 

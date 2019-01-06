@@ -1,57 +1,32 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import ecc from 'eosjs-ecc'
 
-import { setUnit, setLoading, setErrMsg } from '../../../../actions'
-import UnitDetails, {
+import { setTermPrice, setLoading, setErrMsg } from '../../../../actions'
+import TermPriceDetails, {
   READING,
   EDITING,
   CREATING
-} from './UnitDetails'
-import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
+} from './TermPriceDetails'
+import { FSMGRCONTRACT } from '../../../../utils/consts'
 
 class TermPriceDetailsContainer extends Component {
   state = {
     mode: READING,
-    prevUnit: {},
+    prevTermPrice: {},
 
-    unit: newUnit(),
-    buffer: null,
-    imagesToUpload: [],
-    imgMultihashes: []
+    termprice: newTermPrice,
+    buffer: null
   }
 
-  onImagesUploaded = (err, resp) => {
-    if (err) {
-      console.error(err)
-      return
-    }
-    const multihashes = resp.map(
-      url => url.split('/')[url.split('/').length - 2]
-    )
-
-    const { imagesToUpload } = this.state
-    const newImagesToUpload = [...imagesToUpload, ...multihashes]
-    this.setState({ imagesToUpload: newImagesToUpload })
-  }
-
-  onImageDeleted = url => {
-    const { imagesToUpload } = this.state
-    const newImagesToUpload = [...imagesToUpload]
-    newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
-
-    this.setState({ imagesToUpload: newImagesToUpload })
-  }
-
-  edit = (e, unit) => {
+  edit = (e, termprice) => {
     e.preventDefault()
 
     this.setState({
       mode: EDITING,
-      unit,
-      prevUnit: {
-        ...unit
+      termprice,
+      prevTermPrice: {
+        ...termprice
       }
     })
   }
@@ -59,9 +34,9 @@ class TermPriceDetailsContainer extends Component {
   save = async e => {
     e.preventDefault()
 
-    const propertyId = this.props.match.params.id
-    const { unit, imagesToUpload } = this.state
-    const { contracts, accountData, setLoading, setUnit } = this.props
+    const { id, uid } = this.props.match.params
+    const { termprice } = this.state
+    const { contracts, accountData, setLoading, setTermPrice } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -71,56 +46,31 @@ class TermPriceDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modunit(
+    await fsmgrcontract.modtmpricing(
       accountData.active,
-      unit.id,
-      propertyId,
-      unit.name,
-      unit.bedrooms,
-      unit.bathrooms,
-      unit.sq_ft_min,
-      unit.sq_ft_max,
-      unit.rent_min,
-      unit.rent_max,
-      unit.status,
-      new Date(unit.date_available).getTime(),
+      termprice.id,
+      uid,
+      termprice.rent,
+      termprice.term,
+      termprice.start_date,
+      termprice.end_date,
       options
     )
 
-    setUnit(propertyId, unit)
-
-    if (imagesToUpload.length > 0) {
-      // Mapping values to object keys removes duplicates.
-      const imagesObj = {}
-      imagesToUpload.map(multihash => {
-        imagesObj[multihash] = multihash
-        return multihash
-      })
-
-      await Promise.all(
-        Object.keys(imagesObj).map(async multihash => {
-          fsmgrcontract.addflplanimg(
-            accountData.active,
-            unit.id,
-            ecc.sha256(multihash),
-            multihash,
-            options
-          )
-        })
-      )
-    }
-
+    setTermPrice(uid, termprice)
     setLoading(false)
   }
 
   create = async e => {
     e.preventDefault()
 
-    const { contracts, accountData, setLoading, history } = this.props
-    const propertyId = this.props.match.params.id
-    const { unit } = this.state
+    const { id, unitid } = this.props.match.params
+    const { termprice } = this.state
+    const { contracts, accountData, setLoading, setTermPrice, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
+    // console.log('term price create - this.state:', this.state)
+    console.log('term price create - this.props.match.params:', this.props.match.params)
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -131,30 +81,25 @@ class TermPriceDetailsContainer extends Component {
     setLoading(true)
 
     try {
-      await fsmgrcontract.addunit(
+      await fsmgrcontract.addtmpricing(
         accountData.active,
-        propertyId,
-        unit.name,
-        unit.bedrooms,
-        unit.bathrooms,
-        unit.sq_ft_min,
-        unit.sq_ft_max,
-        unit.rent_min,
-        unit.rent_max,
-        unit.status,
-        new Date(unit.date_available).getTime(),
+        unitid,
+        termprice.rent,
+        termprice.term,
+        termprice.start_date,
+        termprice.end_date,
         options
       )
     } catch (err) {
-      setErrMsg('Failed to create new unit')
-      console.log('fsmgrcontract.addunit - error:', err)
+      setErrMsg('Failed to create new termprice')
+      console.log('fsmgrcontract.addtmpricing - error:', err)
     }
 
     try {
-      setUnit(propertyId, unit)
-      history.push(`/${propertyId}/unit`)
+      setTermPrice(unitid, termprice)
+      history.push(`/${id}/unit/${unitid}/termprice`)
     } catch (err) {
-      console.log('setUnit error:', err)
+      console.log('setTermPrice error:', err)
     }
 
     setLoading(false)
@@ -169,8 +114,8 @@ class TermPriceDetailsContainer extends Component {
       let state = {
         ...prevState
       }
-      state.unit = {
-        ...prevState.unit,
+      state.termprice = {
+        ...prevState.termprice,
         [name]: value
       }
       return state
@@ -179,51 +124,34 @@ class TermPriceDetailsContainer extends Component {
 
   async componentDidMount () {
     const { eosClient, accountData } = this.props
-
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      UNITIMG
-    )
-
-    const imgMultihashes = rows.map(row => row.ipfs_address)
-    this.setState({ imgMultihashes })
   }
 
   render () {
     const { isCreating, properties } = this.props
-    const { id, unitId } = this.props.match.params
+    const { id, uid } = this.props.match.params
     const { units } = properties[id]
-    const { imgMultihashes } = this.state
 
-    const galleryItems = imgMultihashes.map(multihash => ({
-      original: `https://gateway.ipfs.io/ipfs/${multihash}/`,
-      thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
-    }))
+    console.log('termprice details render - this.state:', this.state.termprice)
 
     const mode = isCreating ? CREATING : this.state.mode
-    let unit =
+    let termprice =
       mode === EDITING || mode === CREATING
-        ? this.state.unit
-        : units[unitId]
+        ? this.state.termprice
+        : units[uid].termprices[uid]
     return (
       <div>
-        {typeof unit === 'undefined' && (
-          <h1 className='text-center my-5 py-5'>404 - Unit not found</h1>
+        {typeof termprice === 'undefined' && (
+          <h1 className='text-center my-5 py-5'>404 - Term Price not found</h1>
         )}
-        {typeof unit !== 'undefined' && (
-          <UnitDetails
-            unit={unit}
+        {typeof termprice !== 'undefined' && (
+          <TermPriceDetails
+            termprice={termprice}
             mode={mode}
             onEditClick={this.edit}
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}
             onChange={e => this.handleChange(e)}
-            onImagesUploaded={this.onImagesUploaded}
-            onImageDeleted={this.onImageDeleted}
-            galleryItems={galleryItems}
           />
         )}
       </div>
@@ -231,16 +159,11 @@ class TermPriceDetailsContainer extends Component {
   }
 }
 
-const newUnit = () => ({
-  name: '',
-  bedrooms: 0,
-  bathrooms: 0,
-  sq_ft_min: 0,
-  sq_ft_max: 0,
-  rent_min: 0,
-  rent_max: 0,
-  status: '',
-  date_available: ''
+const newTermPrice = () => ({
+  rent: 0,
+  term: 0,
+  start_date: 0,
+  end_date: 0
 })
 
 function mapStateToProps ({
@@ -254,7 +177,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setUnit, setLoading, setErrMsg })(
+  connect(mapStateToProps, { setTermPrice, setLoading, setErrMsg })(
     TermPriceDetailsContainer
   )
 )

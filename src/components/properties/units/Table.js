@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row } from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
@@ -12,22 +12,20 @@ export default props => {
       <div className='top-bar'>
         <Container>
           <Row>
-            <div className='col-12 col-md-4 m-xs-b-10'>
-              <h3>
+            <Col>
+              <h3 className='float-left'>
                 {property.name}{' '}
                 <Link to={`/${props.propertyId}/edit`}>
                   <img src={IconEditGrey} alt='' />
                 </Link>
               </h3>
-            </div>
-            <div className='col-2 col-md-4'>
               <h3 className='float-right'>
                 <Link to={`/${props.propertyId}/unit/new`}>
                   <img src={IconAdd} alt='' />
                   <span className='hide-xs'>New Unit</span>
                 </Link>
               </h3>
-            </div>
+            </Col>
           </Row>
         </Container>
       </div>
@@ -164,10 +162,10 @@ export default props => {
                       <tbody>
                         {property.units &&
                           Object.keys(property.units).length > 0 &&
-                          Object.keys(property.units).map(unitId => (
+                          Object.keys(property.units).map(unitid => (
                             <UnitRow
-                              key={unitId}
-                              unit={property.units[unitId]}
+                              key={unitid}
+                              unit={property.units[unitid]}
                               property={property}
                             />
                           ))}

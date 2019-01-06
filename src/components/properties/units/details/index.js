@@ -193,7 +193,7 @@ class UnitDetailsContainer extends Component {
 
   render () {
     const { isCreating, properties } = this.props
-    const { id, unitId } = this.props.match.params
+    const { id, unitid } = this.props.match.params
     const { units } = properties[id]
     const { imgMultihashes } = this.state
 
@@ -206,7 +206,7 @@ class UnitDetailsContainer extends Component {
     let unit =
       mode === EDITING || mode === CREATING
         ? this.state.unit
-        : units[unitId]
+        : units[unitid]
     return (
       <div>
         {typeof unit === 'undefined' && (
