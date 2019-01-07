@@ -67,7 +67,7 @@ export default props => {
                             rowSpan='1'
                             colSpan='1'
                             aria-label='Unit: activate to sort column ascending'
-                            style={{ width: 148 }}
+                            style={{ width: 60 }}
                           >
                             Rent
                           </th>
@@ -78,7 +78,7 @@ export default props => {
                             rowSpan='1'
                             colSpan='1'
                             aria-label='Type: activate to sort column ascending'
-                            style={{ width: 147 }}
+                            style={{ width: 60 }}
                           >
                             Term
                           </th>
@@ -89,7 +89,7 @@ export default props => {
                             rowSpan='1'
                             colSpan='1'
                             aria-label='Sq, Ft.: activate to sort column ascending'
-                            style={{ width: 95 }}
+                            style={{ width: 100 }}
                           >
                             Start Date
                           </th>
@@ -100,7 +100,7 @@ export default props => {
                             rowSpan='1'
                             colSpan='1'
                             aria-label='Rent: activate to sort column ascending'
-                            style={{ width: 147 }}
+                            style={{ width: 100 }}
                           >
                             End Date
                           </th>

@@ -87,7 +87,7 @@ export function properties (state = {}, action) {
         ...state 
       }
       termprices.forEach(termprice => {
-        newState[id].units[unitid].termprices[termprice.id] = termprice
+        newState[id].units[termprice.unit_id].termprices[termprice.id] = termprice
         return termprice // Only returning to resolve react warning.
       })
       console.log('ADD_TERMPRICES - newState:', newState)
