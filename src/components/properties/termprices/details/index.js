@@ -96,7 +96,7 @@ class TermPriceDetailsContainer extends Component {
     }
 
     try {
-      setTermPrice(unitid, termprice)
+      setTermPrice(id, unitid, termprice)
       history.push(`/${id}/unit/${unitid}/termprice`)
     } catch (err) {
       console.log('setTermPrice error:', err)

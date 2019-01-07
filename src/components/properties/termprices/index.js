@@ -8,7 +8,10 @@ import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 
 class TermPriceContainer extends Component {
   async componentDidMount () {
-    const { eosClient, accountData, addTermPrices } = this.props
+    const { eosClient, accountData, addTermPrices, properties } = this.props
+    const { id, unitid } = this.props.match.params
+    const property = properties[id]
+    const unit = property.units[unitid]
 
     try {
       const { rows } = await eosClient.getTableRows(
@@ -20,7 +23,7 @@ class TermPriceContainer extends Component {
       console.log('Get table "termpricing" result:', rows)
 
       try {
-        addTermPrices(rows)
+        addTermPrices(id, unitid, rows)
       } catch (err) {
         console.log('addTermPrices error:', err)
       }
