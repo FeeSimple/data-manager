@@ -36,7 +36,13 @@ class TermPriceDetailsContainer extends Component {
 
     const { id, unitid } = this.props.match.params
     const { termprice } = this.state
-    const { contracts, accountData, setLoading, setTermPrice, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setTermPrice,
+      history
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -78,11 +84,20 @@ class TermPriceDetailsContainer extends Component {
 
     const { id, unitid } = this.props.match.params
     const { termprice } = this.state
-    const { contracts, accountData, setLoading, setTermPrice, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setTermPrice,
+      history
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     // console.log('term price create - this.state:', this.state)
-    console.log('term price create - this.props.match.params:', this.props.match.params)
+    console.log(
+      'term price create - this.props.match.params:',
+      this.props.match.params
+    )
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,

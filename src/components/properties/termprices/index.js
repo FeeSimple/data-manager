@@ -37,7 +37,7 @@ class TermPriceContainer extends Component {
     const { id, unitid } = this.props.match.params
     const property = properties[id]
     const unit = property.units[unitid]
-    
+
     if (!property || !unit) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
@@ -56,4 +56,6 @@ function mapStateToProps ({
   return { properties, eosClient, scatter, contracts, accountData }
 }
 
-export default withRouter(connect(mapStateToProps, { addTermPrices })(TermPriceContainer))
+export default withRouter(
+  connect(mapStateToProps, { addTermPrices })(TermPriceContainer)
+)

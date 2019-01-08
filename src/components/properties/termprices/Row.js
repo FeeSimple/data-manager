@@ -16,7 +16,10 @@ export default props => {
       <td> {new Date(parseInt(termprice.start_date)).toLocaleDateString()}</td>
       <td> {new Date(parseInt(termprice.end_date)).toLocaleDateString()}</td>
       <td>
-        <Link to={`/${propertyId}/unit/${unit.id}/termprice/${termprice.id}`} className='table-edit'>
+        <Link
+          to={`/${propertyId}/unit/${unit.id}/termprice/${termprice.id}`}
+          className='table-edit'
+        >
           <img src={IconEditBlue} alt='' />
         </Link>
       </td>

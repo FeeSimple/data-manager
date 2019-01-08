@@ -4,11 +4,7 @@ import { withRouter } from 'react-router-dom'
 import ecc from 'eosjs-ecc'
 
 import { setUnit, setLoading, setErrMsg } from '../../../../actions'
-import UnitDetails, {
-  READING,
-  EDITING,
-  CREATING
-} from './UnitDetails'
+import UnitDetails, { READING, EDITING, CREATING } from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 
 class UnitDetailsContainer extends Component {
@@ -204,9 +200,7 @@ class UnitDetailsContainer extends Component {
 
     const mode = isCreating ? CREATING : this.state.mode
     let unit =
-      mode === EDITING || mode === CREATING
-        ? this.state.unit
-        : units[unitid]
+      mode === EDITING || mode === CREATING ? this.state.unit : units[unitid]
     return (
       <div>
         {typeof unit === 'undefined' && (

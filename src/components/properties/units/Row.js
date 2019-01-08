@@ -26,8 +26,10 @@ export default props => {
       <td>{new Date(parseInt(unit.date_available)).toLocaleDateString()}</td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}/termprice`}>
-          <img  src={IconFinderEye}
-                style={{marginLeft: '24px', width: '27px', height: '27px'}} />
+          <img
+            src={IconFinderEye}
+            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
+          />
         </Link>
       </td>
       <td>
