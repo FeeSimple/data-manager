@@ -63,7 +63,7 @@ const TermPriceDetails = ({
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
             <AvField
               label='Start Date'
-              type='number'
+              type='date'
               id='start_date'
               name='start_date'
               value={termprice.start_date}
@@ -76,7 +76,7 @@ const TermPriceDetails = ({
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
             <AvField
               label='End Date'
-              type='number'
+              type='date'
               id='end_date'
               name='end_date'
               value={termprice.end_date}

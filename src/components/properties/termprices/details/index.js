@@ -52,8 +52,8 @@ class TermPriceDetailsContainer extends Component {
       uid,
       termprice.rent,
       termprice.term,
-      termprice.start_date,
-      termprice.end_date,
+      new Date(termprice.start_date).getTime(),
+      new Date(termprice.end_date).getTime(),
       options
     )
 
@@ -86,8 +86,8 @@ class TermPriceDetailsContainer extends Component {
         unitid,
         termprice.rent,
         termprice.term,
-        termprice.start_date,
-        termprice.end_date,
+        new Date(termprice.start_date).getTime(),
+        new Date(termprice.end_date).getTime(),
         options
       )
     } catch (err) {
