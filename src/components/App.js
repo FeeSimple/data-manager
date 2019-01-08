@@ -67,7 +67,7 @@ class AppContainer extends Component {
         />
         <Route
           exact
-          path='/:id/unit/:unitid/termprice'
+          path='/:id/unit/:unitid/termprice/:termid'
           render={({ match }) => <TermPriceDetails id={match.params.id} />}
         />
       </Switch>

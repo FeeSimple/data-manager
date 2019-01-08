@@ -34,9 +34,9 @@ class TermPriceDetailsContainer extends Component {
   save = async e => {
     e.preventDefault()
 
-    const { id, uid } = this.props.match.params
+    const { id, unitid } = this.props.match.params
     const { termprice } = this.state
-    const { contracts, accountData, setLoading, setTermPrice } = this.props
+    const { contracts, accountData, setLoading, setTermPrice, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -46,18 +46,30 @@ class TermPriceDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modtmpricing(
-      accountData.active,
-      termprice.id,
-      uid,
-      termprice.rent,
-      termprice.term,
-      new Date(termprice.start_date).getTime(),
-      new Date(termprice.end_date).getTime(),
-      options
-    )
 
-    setTermPrice(uid, termprice)
+    try {
+      await fsmgrcontract.modtmpricing(
+        accountData.active,
+        termprice.id,
+        unitid,
+        termprice.rent,
+        termprice.term,
+        new Date(termprice.start_date).getTime(),
+        new Date(termprice.end_date).getTime(),
+        options
+      )
+    } catch (err) {
+      setErrMsg('Failed to save termprice')
+      console.log('fsmgrcontract.modtmpricing - error:', err)
+    }
+
+    try {
+      setTermPrice(id, unitid, termprice)
+      history.push(`/${id}/unit/${unitid}/termprice`)
+    } catch (err) {
+      console.log('setTermPrice error:', err)
+    }
+
     setLoading(false)
   }
 
@@ -130,16 +142,19 @@ class TermPriceDetailsContainer extends Component {
 
   render () {
     const { isCreating, properties } = this.props
-    const { id, uid } = this.props.match.params
+    const { id, unitid, termid } = this.props.match.params
     const { units } = properties[id]
 
-    console.log('termprice details render - this.state:', this.state.termprice)
+    console.log('termprice details render - this.props:', this.props)
+
+    console.log('termprice details render - this.state:', this.state)
+    console.log('termprice details render - isCreating:', isCreating)
 
     const mode = isCreating ? CREATING : this.state.mode
     let termprice =
       mode === EDITING || mode === CREATING
         ? this.state.termprice
-        : units[uid].termprices[uid]
+        : units[unitid].termprices[termid]
     return (
       <div>
         {typeof termprice === 'undefined' && (
