@@ -3,26 +3,20 @@ import { Container, Row, Col } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
-import UnitRow from './Row'
+import TermPriceRow from './Row'
 
 export default props => {
-  const { property } = props
+  const { unit } = props
   return (
     <div>
       <div className='top-bar'>
         <Container>
           <Row>
             <Col>
-              <h3 className='float-left'>
-                {property.name}{' '}
-                <Link to={`/${props.propertyId}/edit`}>
-                  <img src={IconEditGrey} alt='' />
-                </Link>
-              </h3>
               <h3 className='float-right'>
-                <Link to={`/${props.propertyId}/unit/new`}>
+                <Link to={`/${props.propertyId}/unit/${unit.id}/termprice/new`}>
                   <img src={IconAdd} alt='' />
-                  <span className='hide-xs'>New Unit</span>
+                  <span>New Term Price</span>
                 </Link>
               </h3>
             </Col>
@@ -73,40 +67,7 @@ export default props => {
                             rowSpan='1'
                             colSpan='1'
                             aria-label='Unit: activate to sort column ascending'
-                            style={{ width: 148 }}
-                          >
-                            Unit
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Type: activate to sort column ascending'
-                            style={{ width: 147 }}
-                          >
-                            Type
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Sq, Ft.: activate to sort column ascending'
-                            style={{ width: 95 }}
-                          >
-                            Sq, Ft.
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Rent: activate to sort column ascending'
-                            style={{ width: 147 }}
+                            style={{ width: 60 }}
                           >
                             Rent
                           </th>
@@ -116,10 +77,10 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='Status: activate to sort column ascending'
-                            style={{ width: 147 }}
+                            aria-label='Type: activate to sort column ascending'
+                            style={{ width: 60 }}
                           >
-                            Status
+                            Term
                           </th>
                           <th
                             className='sorting'
@@ -127,10 +88,10 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='Date Available: activate to sort column ascending'
-                            style={{ width: 147 }}
+                            aria-label='Sq, Ft.: activate to sort column ascending'
+                            style={{ width: 100 }}
                           >
-                            Date Available
+                            Start Date
                           </th>
                           <th
                             className='sorting'
@@ -138,10 +99,10 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='Term Pricing: activate to sort column ascending'
-                            style={{ width: 139 }}
+                            aria-label='Rent: activate to sort column ascending'
+                            style={{ width: 100 }}
                           >
-                            Term Pricing
+                            End Date
                           </th>
                           <th
                             style={{ width: 20 }}
@@ -160,13 +121,14 @@ export default props => {
                         </tr>
                       </thead>
                       <tbody>
-                        {property.units &&
-                          Object.keys(property.units).length > 0 &&
-                          Object.keys(property.units).map(unitid => (
-                            <UnitRow
-                              key={unitid}
-                              unit={property.units[unitid]}
-                              property={property}
+                        {unit.termprices &&
+                          Object.keys(unit.termprices).length > 0 &&
+                          Object.keys(unit.termprices).map(termpriceId => (
+                            <TermPriceRow
+                              key={termpriceId}
+                              termprice={unit.termprices[termpriceId]}
+                              unit={unit}
+                              propertyId={props.propertyId}
                             />
                           ))}
                       </tbody>

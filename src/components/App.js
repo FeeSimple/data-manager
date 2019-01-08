@@ -8,6 +8,8 @@ import Floorplans from './properties/floorplans'
 import FloorplanDetails from './properties/floorplans/details'
 import Unit from './properties/units'
 import UnitDetails from './properties/units/details'
+import TermPrice from './properties/termprices'
+import TermPriceDetails from './properties/termprices/details'
 
 class AppContainer extends Component {
   render () {
@@ -34,6 +36,11 @@ class AppContainer extends Component {
         />
         <Route
           exact
+          path='/:id/unit/:unitid/termprice'
+          render={({ match }) => <TermPrice id={match.params.id} />}
+        />
+        <Route
+          exact
           path='/:id/edit'
           render={({ match }) => <PropertyDetails id={match.params.id} />}
         />
@@ -42,6 +49,9 @@ class AppContainer extends Component {
         </Route>
         <Route exact path='/:id/unit/new'>
           <UnitDetails isCreating />
+        </Route>
+        <Route exact path='/:id/unit/:unitid/termprice/new'>
+          <TermPriceDetails isCreating />
         </Route>
         <Route
           exact
@@ -52,8 +62,13 @@ class AppContainer extends Component {
         />
         <Route
           exact
-          path='/:id/unit/:unitId'
-          render={({ match }) => <UnitDetails id={match.params.unitId} />}
+          path='/:id/unit/:unitid'
+          render={({ match }) => <UnitDetails id={match.params.unitid} />}
+        />
+        <Route
+          exact
+          path='/:id/unit/:unitid/termprice/:termid'
+          render={({ match }) => <TermPriceDetails id={match.params.id} />}
         />
       </Switch>
     )
