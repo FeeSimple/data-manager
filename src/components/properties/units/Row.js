@@ -2,6 +2,7 @@ import React from 'react'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import { Link } from 'react-router-dom'
+import IconFinderEye from '../../../img/iconfinder_eye.png'
 
 export default props => {
   const { unit, property } = props
@@ -10,9 +11,10 @@ export default props => {
       <td>
         <input type='checkbox' />
       </td>
+      <td>{unit.id}</td>
       <td>{unit.name}</td>
       <td>
-        {unit.bedrooms}/{unit.bathrooms}
+        {unit.bedrooms} beds / {unit.bathrooms} baths
       </td>
       <td>
         {unit.sq_ft_min} - {unit.sq_ft_max}
@@ -22,6 +24,14 @@ export default props => {
       </td>
       <td>{unit.status}</td>
       <td>{new Date(parseInt(unit.date_available)).toLocaleDateString()}</td>
+      <td>
+        <Link to={`/${property.id}/unit/${unit.id}/termprice`}>
+          <img
+            src={IconFinderEye}
+            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
+          />
+        </Link>
+      </td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}`} className='table-edit'>
           <img src={IconEditBlue} alt='' />

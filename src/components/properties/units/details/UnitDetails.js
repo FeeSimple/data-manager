@@ -1,7 +1,9 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import Dropzone from 'react-dropzone'
+import ImageGallery from 'react-image-gallery'
+import ImagesUploader from 'react-images-uploader-fs'
+import 'react-images-uploader-fs/styles.css'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
 
 export const READING = 'reading'
@@ -10,12 +12,15 @@ export const CREATING = 'creating'
 
 const UnitDetails = ({
   unit,
+  propertyId,
   mode,
   onEditClick,
   onCreateClick,
   onSaveClick,
   onChange,
-  onImageDrop
+  onImagesUploaded,
+  onImageDeleted,
+  galleryItems
 }) => (
   <div>
     <div className='top-bar'>
@@ -172,32 +177,25 @@ const UnitDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Term Pricing</label>
-            <input
-              id='termPricing'
-              type='text'
-              className='form-control'
-              name='termPricing'
-              onChange={onChange}
-              disabled={mode === READING}
-            />
+            <ImageGallery items={galleryItems} />
           </div>
         </div>
         {mode === EDITING && (
           <div className='form-group row'>
             <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-              <Dropzone
-                multiple={false}
-                accept='image/*'
-                onDrop={onImageDrop}
-                className='dpz-default d-flex justify-content-center align-items-center'
-                acceptClassName='dpz-accepted'
-                activeClassName='dpc-active'
-                disabledClassName='dpz-disabled'
-                rejectClassName='dpz-rejected'
-              >
-                <p>Drag and drop a property image, such as a unit.</p>
-              </Dropzone>
+              <ImagesUploader
+                url='http://localhost:9000/multiple'
+                optimisticPreviews
+                onLoadEnd={onImagesUploaded}
+                onImageDeleted={onImageDeleted}
+                label='Upload multiple images'
+                styles={{
+                  label: {
+                    fontFamily: 'Open sans, sans-serif',
+                    fontSize: '14px'
+                  }
+                }}
+              />
             </div>
           </div>
         )}
@@ -230,7 +228,7 @@ const UnitDetails = ({
             </button>
           </div>
           <div className='col-md-5 col-lg-4 col-6'>
-            <Link to={mode === CREATING ? '/' : `/${unit.id}`}>
+            <Link to={mode === CREATING ? '/' : `/${propertyId}/unit`}>
               <button type='button' className='btn btn-gray-o w100 form-btn'>
                 Cancel
               </button>
