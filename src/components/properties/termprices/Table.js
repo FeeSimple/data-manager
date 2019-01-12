@@ -55,10 +55,10 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='ID: activate to sort column ascending'
-                            style={{ width: 51 }}
+                            aria-label='Type: activate to sort column ascending'
+                            style={{ width: 60 }}
                           >
-                            ID
+                            Term
                           </th>
                           <th
                             className='sorting'
@@ -70,17 +70,6 @@ export default props => {
                             style={{ width: 60 }}
                           >
                             Rent
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Type: activate to sort column ascending'
-                            style={{ width: 60 }}
-                          >
-                            Term
                           </th>
                           <th
                             className='sorting'
