@@ -10,9 +10,8 @@ export default props => {
       <td>
         <input type='checkbox' />
       </td>
-      <td>{termprice.id}</td>
-      <td>{termprice.rent}</td>
-      <td> {termprice.term}</td>
+      <td>{termprice.term}</td>
+      <td> {termprice.rent}</td>
       <td> {new Date(parseInt(termprice.start_date)).toLocaleDateString()}</td>
       <td> {new Date(parseInt(termprice.end_date)).toLocaleDateString()}</td>
       <td>
