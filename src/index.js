@@ -11,6 +11,7 @@ import getScatter from './utils/getScatter'
 import { getFallbackEos } from './utils'
 import './css/style.css'
 import './css/main.css'
+import './css/datatables.min.css'
 
 // import logger from 'redux-logger'
 // import { applyMiddleware, compose } from 'redux'
@@ -47,6 +48,7 @@ ReactDOM.render(
     <script src='js/vendor/jquery-3.3.1.min.js' />
     <script src='js/plugins/bootstrap.min.js' />
     <script src='js/plugins/popper.min.js' />
+    <script src='js/plugins/datatables.min.js' />
     <script src='js/main.js' />
   </div>,
   document.getElementById('root')
