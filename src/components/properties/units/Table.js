@@ -4,6 +4,109 @@ import { Link } from 'react-router-dom'
 import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
 import UnitRow from './Row'
+import IconEditBlue from '../../../img/icon-edit-blue.svg'
+import IconDelete from '../../../img/icon-delete.svg'
+import IconFinderEye from '../../../img/iconfinder_eye.png'
+
+import BootstrapTable from 'react-bootstrap-table-next'
+import paginationFactory from 'react-bootstrap-table2-paginator'
+
+var property_id;
+
+const columns = [
+  {
+    dataField: 'id',
+    text: 'ID',
+  },
+  {
+    dataField: 'unit',
+    text: 'Unit',
+    sort: true
+  }, 
+  {
+    dataField: 'type',
+    text: 'Type',
+    sort: true
+  },
+  {
+    dataField: 'sq_ft',
+    text: 'Sq, Ft.',
+    sort: true
+  },
+  {
+    dataField: 'rent',
+    text: 'Rent',
+    sort: true
+  },
+  {
+    dataField: 'status',
+    text: 'Status',
+    sort: true
+  },
+  {
+    dataField: 'date_available',
+    text: 'Date Available',
+    sort: true
+  },
+  {
+    dataField: 'term_pricing',
+    text: 'Term Pricing',
+    formatter: (cellContent, row) => {
+      return (
+        <Link to={`/${row.df1}/unit/${row.id}/termprice`}>
+          <img
+            src={IconFinderEye}
+            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
+          />
+        </Link>
+      )
+    }
+  },
+  {
+    dataField: 'df1',
+    text: '',
+    isDummyField: true,
+    formatter: (cellContent, row) => {
+      return (
+        <Link to={`/${row.df1}/unit/${row.id}`} className='table-edit'>
+          <img src={IconEditBlue} alt='' />
+        </Link>
+      )
+    }
+  },
+  {
+    dataField: 'df2',
+    text: '',
+    isDummyField: true,
+    formatter: (cellContent, row) => {
+      return (
+        <Link to={`/${row.df2}/unit/${row.id}`} className='table-edit'>
+          <img src={IconDelete} alt='' />
+        </Link>
+      )
+    }
+  }
+]
+
+const defaultSorted = [{
+  dataField: 'unit',
+  order: 'asc'
+}]
+
+const data = [
+  {
+    id: 1,
+    unit: 'TV',
+    type: 1000,
+    sq_ft: 0,
+    rent: 0,
+    status: 0,
+    date_available: 0,
+    term_pricing: 0,
+    df1: 1,
+    df2: 1
+  }
+]
 
 export default props => {
   const { property } = props
@@ -31,152 +134,12 @@ export default props => {
       </div>
       <br />
       <Container>
-        <div className='row'>
-          <div className='col-12 m-t-30 m-b-15'>
-            <div className='table-responsive p-b-15 m-b-5'>
-              <div
-                id='TableSorting_wrapper'
-                className='dataTables_wrapper dt-bootstrap4 no-footer'
-              >
-                <div className='row'>
-                  <div className='col-sm-12'>
-                    <table
-                      id='TableSorting'
-                      className='table table-striped dataTable no-footer'
-                      role='grid'
-                      aria-describedby='TableSorting_info'
-                    >
-                      <thead>
-                        <tr role='row'>
-                          <th
-                            style={{ width: 15 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='ID: activate to sort column ascending'
-                            style={{ width: 51 }}
-                          >
-                            ID
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Unit: activate to sort column ascending'
-                            style={{ width: 148 }}
-                          >
-                            Unit
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Type: activate to sort column ascending'
-                            style={{ width: 147 }}
-                          >
-                            Type
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Sq, Ft.: activate to sort column ascending'
-                            style={{ width: 95 }}
-                          >
-                            Sq, Ft.
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Rent: activate to sort column ascending'
-                            style={{ width: 147 }}
-                          >
-                            Rent
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Status: activate to sort column ascending'
-                            style={{ width: 147 }}
-                          >
-                            Status
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Date Available: activate to sort column ascending'
-                            style={{ width: 147 }}
-                          >
-                            Date Available
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Term Pricing: activate to sort column ascending'
-                            style={{ width: 139 }}
-                          >
-                            Term Pricing
-                          </th>
-                          <th
-                            style={{ width: 20 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                          <th
-                            style={{ width: 20 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {property.units &&
-                          Object.keys(property.units).length > 0 &&
-                          Object.keys(property.units).map(unitid => (
-                            <UnitRow
-                              key={unitid}
-                              unit={property.units[unitid]}
-                              property={property}
-                            />
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <BootstrapTable
+          keyField="id"
+          data={ data }
+          columns={ columns }
+          defaultSortDirection="asc"
+        />
       </Container>
     </div>
   )
