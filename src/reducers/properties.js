@@ -4,6 +4,7 @@ import {
   SET_FLOORPLAN,
   ADD_FLOORPLANS,
   SET_UNIT,
+  DELETE_UNIT,
   ADD_UNITS,
   SET_TERMPRICE,
   ADD_TERMPRICES
@@ -16,6 +17,12 @@ export function properties (state = {}, action) {
       let newState = {
         ...state
       }
+
+      // In case of property deletion, the "state" still hold the already-deleted property
+      // Thus, we need to cleanup the "properties" before assigning again with
+      // the "properties" data loaded from chain
+      newState = {}
+
       properties.forEach(property => {
         newState[property.id] = {
           ...property,
@@ -45,6 +52,12 @@ export function properties (state = {}, action) {
     case ADD_FLOORPLANS: {
       const { floorplans } = action.payload
       const newState = { ...state }
+
+      // In case of floorplan deletion, the "state" still hold the already-deleted floorplan
+      // Thus, we need to cleanup the "floorplans" before assigning again with
+      // the "floorplans" data loaded from chain
+      newState[floorplans[0].property_id].floorplans = {}
+
       floorplans.map(floorplan => {
         newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
         return floorplan // Only returning to resolve react warning.
@@ -57,11 +70,23 @@ export function properties (state = {}, action) {
       newState[propertyId].units[unit.id] = unit
       return newState
     }
+    case DELETE_UNIT: {
+      const { propertyId, unitId } = action.payload
+      const newState = { ...state }
+      delete newState[propertyId].units[unitId]
+      return newState
+    }
     case ADD_UNITS: {
       const { units } = action.payload
       let newState = {
         ...state
       }
+
+      // In case of unit deletion, the "state" still hold the already-deleted unit
+      // Thus, we need to cleanup the "units" before assigning again with
+      // the "units" data loaded from chain
+      newState[units[0].property_id].units = {}
+
       units.forEach(unit => {
         newState[unit.property_id].units[unit.id] = {
           ...unit,
@@ -86,6 +111,12 @@ export function properties (state = {}, action) {
       let newState = {
         ...state
       }
+
+      // In case of termprice deletion, the "state" still hold the already-deleted termprice
+      // Thus, we need to cleanup the "termprices" before assigning again with
+      // the "termprices" data loaded from chain
+      newState[id].units[unitid].termprices = {}
+
       termprices.forEach(termprice => {
         newState[id].units[termprice.unit_id].termprices[
           termprice.id
