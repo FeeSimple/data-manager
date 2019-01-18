@@ -10,6 +10,7 @@ import { setLoading } from '../../../actions'
 class UnitContainer extends Component {
   async componentDidMount () {
     const { eosClient, accountData, addUnits } = this.props
+    const { id } = this.props.match.params
 
     try {
       const { rows } = await eosClient.getTableRows(
@@ -21,7 +22,7 @@ class UnitContainer extends Component {
       console.log('Get table "unit" result:', rows)
 
       try {
-        addUnits(rows)
+        addUnits(id, rows)
       } catch (err) {
         console.log('addUnits error:', err)
       }

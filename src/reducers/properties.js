@@ -77,7 +77,7 @@ export function properties (state = {}, action) {
       return newState
     }
     case ADD_UNITS: {
-      const { units } = action.payload
+      const { id, units } = action.payload
       let newState = {
         ...state
       }
@@ -85,7 +85,11 @@ export function properties (state = {}, action) {
       // In case of unit deletion, the "state" still hold the already-deleted unit
       // Thus, we need to cleanup the "units" before assigning again with
       // the "units" data loaded from chain
-      newState[units[0].property_id].units = {}
+      newState[id].units = {}
+
+      if (units.length == 0) {
+        return newState;
+      }
 
       units.forEach(unit => {
         newState[unit.property_id].units[unit.id] = {

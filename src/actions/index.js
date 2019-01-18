@@ -32,10 +32,10 @@ export function setFloorplan (propertyId, floorplan) {
   }
 }
 
-export function addUnits (units) {
+export function addUnits (id, units) {
   return {
     type: ADD_UNITS,
-    payload: { units }
+    payload: { id, units }
   }
 }
 
