@@ -88,7 +88,7 @@ export function properties (state = {}, action) {
       newState[id].units = {}
 
       if (units.length == 0) {
-        return newState;
+        return newState
       }
 
       units.forEach(unit => {

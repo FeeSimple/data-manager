@@ -32,7 +32,6 @@ class UnitContainer extends Component {
   }
 
   delete = async (propertyId, unitId) => {
-
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -45,11 +44,7 @@ class UnitContainer extends Component {
     setLoading(true)
 
     try {
-      await fsmgrcontract.delunit(
-        accountData.active,
-        unitId,
-        options
-      )
+      await fsmgrcontract.delunit(accountData.active, unitId, options)
       console.log('fsmgrcontract.delunit - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.delunit - error:', err)
@@ -72,7 +67,13 @@ class UnitContainer extends Component {
     if (!property) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
-      return <Table propertyId={property.id} property={property} onDelete={this.delete}/>
+      return (
+        <Table
+          propertyId={property.id}
+          property={property}
+          onDelete={this.delete}
+        />
+      )
     }
   }
 }
@@ -88,5 +89,5 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addUnits, setLoading, delUnit }
-)(UnitContainer))
+  connect(mapStateToProps, { addUnits, setLoading, delUnit })(UnitContainer)
+)

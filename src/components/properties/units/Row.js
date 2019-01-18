@@ -38,7 +38,10 @@ export default props => {
         </Link>
       </td>
       <td>
-        <button className='table-del' onClick={e => onDelete(property.id, unit.id)}>
+        <button
+          className='table-del'
+          onClick={e => onDelete(property.id, unit.id)}
+        >
           <img src={IconDelete} alt='' />
         </button>
       </td>
