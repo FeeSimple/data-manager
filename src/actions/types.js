@@ -17,6 +17,7 @@ export const ADD_FLOORPLANS = 'ADD_FLOORPLANS'
 
 export const SET_UNIT = 'SET_UNIT'
 export const ADD_UNITS = 'ADD_UNITS'
+export const DELETE_UNIT = 'DELETE_UNIT'
 
 export const SET_TERMPRICE = 'SET_TERMPRICE'
 export const ADD_TERMPRICES = 'ADD_TERMPRICES'

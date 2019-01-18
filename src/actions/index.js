@@ -12,6 +12,7 @@ import {
   SET_FLOORPLAN,
   ADD_FLOORPLANS,
   SET_UNIT,
+  DELETE_UNIT,
   ADD_UNITS,
   SET_TERMPRICE,
   ADD_TERMPRICES
@@ -31,10 +32,10 @@ export function setFloorplan (propertyId, floorplan) {
   }
 }
 
-export function addUnits (units) {
+export function addUnits (id, units) {
   return {
     type: ADD_UNITS,
-    payload: { units }
+    payload: { id, units }
   }
 }
 
@@ -42,6 +43,13 @@ export function setUnit (propertyId, unit) {
   return {
     type: SET_UNIT,
     payload: { propertyId, unit }
+  }
+}
+
+export function delUnit (propertyId, unitId) {
+  return {
+    type: DELETE_UNIT,
+    payload: { propertyId, unitId }
   }
 }
 

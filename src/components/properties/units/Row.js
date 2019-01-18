@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import IconFinderEye from '../../../img/iconfinder_eye.png'
 
 export default props => {
-  const { unit, property } = props
+  const { unit, property, onDelete } = props
   return (
     <tr role='row' className='even'>
       <td>
@@ -38,9 +38,12 @@ export default props => {
         </Link>
       </td>
       <td>
-        <Link to={`/`} className='table-del'>
+        <button
+          className='table-del'
+          onClick={e => onDelete(property.id, unit.id)}
+        >
           <img src={IconDelete} alt='' />
-        </Link>
+        </button>
       </td>
     </tr>
   )
