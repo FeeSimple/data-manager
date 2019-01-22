@@ -5,6 +5,7 @@ import Table from './Table'
 import { FLOORPLAN, FSMGRCONTRACT } from '../../../utils/consts'
 import { addFloorplans, delFloorplan } from '../../../actions/index'
 import { setLoading } from '../../../actions'
+import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 
 class FloorplansContainer extends Component {
   async componentDidMount () {
@@ -41,7 +42,7 @@ class FloorplansContainer extends Component {
 
     try {
       delFloorplan(propertyId, floorplanId)
-      history.push(`/${propertyId}/floorplan`)
+      history.push(`/${propertyId}`)
     } catch (err) {
       console.log('delFloorplan error:', err)
     }
@@ -53,13 +54,17 @@ class FloorplansContainer extends Component {
     const { properties } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
-    return (
-      <Table
-        propertyId={property.id}
-        property={property}
-        onDelete={this.delete}
-      />
-    )
+    if (!property) {
+      return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
+    } else {
+      return (
+        <Table
+          propertyId={property.id}
+          property={property}
+          onDelete={this.delete}
+        />
+      )
+    }
   }
 }
 

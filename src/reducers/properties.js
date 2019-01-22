@@ -52,13 +52,17 @@ export function properties (state = {}, action) {
       return newState
     }
     case ADD_FLOORPLANS: {
-      const { floorplans } = action.payload
+      const { id, floorplans } = action.payload
       const newState = { ...state }
 
       // In case of floorplan deletion, the "state" still hold the already-deleted floorplan
       // Thus, we need to cleanup the "floorplans" before assigning again with
       // the "floorplans" data loaded from chain
-      newState[floorplans[0].property_id].floorplans = {}
+      newState[id].floorplans = {}
+
+      if (floorplans.length == 0) {
+        return newState
+      }
 
       floorplans.map(floorplan => {
         newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
@@ -134,6 +138,10 @@ export function properties (state = {}, action) {
       // Thus, we need to cleanup the "termprices" before assigning again with
       // the "termprices" data loaded from chain
       newState[id].units[unitid].termprices = {}
+
+      if (termprices.length == 0) {
+        return newState
+      }
 
       termprices.forEach(termprice => {
         newState[id].units[termprice.unit_id].termprices[

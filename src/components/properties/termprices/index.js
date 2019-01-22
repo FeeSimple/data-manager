@@ -54,7 +54,7 @@ class TermPriceContainer extends Component {
 
     try {
       delTermPrice(propertyId, unitId, termpriceId)
-      history.push(`/${propertyId}/unit/unitId/termprice`)
+      history.push(`/${propertyId}/unit/${unitId}/termprice`)
     } catch (err) {
       console.log('delTermPrice error:', err)
     }

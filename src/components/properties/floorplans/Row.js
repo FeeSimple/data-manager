@@ -23,17 +23,20 @@ export default props => {
       </td>
       <td>{property.unit_count}</td>
       <td>
+        <Link
+          to={`/${property.id}/floorplan/${floorplan.id}`}
+          className='table-edit'
+        >
+          <img src={IconEditBlue} alt='' />
+        </Link>
+      </td>
+      <td>
         <button
           className='table-del'
           onClick={e => onDelete(property.id, floorplan.id)}
         >
           <img src={IconDelete} alt='' />
         </button>
-      </td>
-      <td>
-        <Link to={`/`} className='table-del'>
-          <img src={IconDelete} alt='' />
-        </Link>
       </td>
     </tr>
   )
