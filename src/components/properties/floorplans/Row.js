@@ -4,7 +4,7 @@ import IconDelete from '../../../img/icon-delete.svg'
 import { Link } from 'react-router-dom'
 
 export default props => {
-  const { floorplan, property } = props
+  const { floorplan, property, onDelete } = props
   return (
     <tr role='row' className='even'>
       <td>
@@ -23,12 +23,12 @@ export default props => {
       </td>
       <td>{property.unit_count}</td>
       <td>
-        <Link
-          to={`/${property.id}/floorplan/${floorplan.id}`}
-          className='table-edit'
+        <button
+          className='table-del'
+          onClick={e => onDelete(property.id, floorplan.id)}
         >
-          <img src={IconEditBlue} alt='' />
-        </Link>
+          <img src={IconDelete} alt='' />
+        </button>
       </td>
       <td>
         <Link to={`/`} className='table-del'>

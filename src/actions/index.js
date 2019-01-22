@@ -13,15 +13,17 @@ import {
   ADD_FLOORPLANS,
   SET_UNIT,
   DELETE_UNIT,
+  DELETE_TERMPRICE,
+  DELETE_FLOORPLAN,
   ADD_UNITS,
   SET_TERMPRICE,
   ADD_TERMPRICES
 } from '../actions/types'
 
-export function addFloorplans (floorplans) {
+export function addFloorplans (id, floorplans) {
   return {
     type: ADD_FLOORPLANS,
-    payload: { floorplans }
+    payload: { id, floorplans }
   }
 }
 
@@ -29,6 +31,13 @@ export function setFloorplan (propertyId, floorplan) {
   return {
     type: SET_FLOORPLAN,
     payload: { propertyId, floorplan }
+  }
+}
+
+export function delFloorplan (propertyId, floorplanId) {
+  return {
+    type: DELETE_FLOORPLAN,
+    payload: { propertyId, floorplanId }
   }
 }
 
@@ -64,6 +73,13 @@ export function setTermPrice (id, unitid, termprice) {
   return {
     type: SET_TERMPRICE,
     payload: { id, unitid, termprice }
+  }
+}
+
+export function delTermPrice (propertyId, unitId, termpriceId) {
+  return {
+    type: DELETE_TERMPRICE,
+    payload: { propertyId, unitId, termpriceId }
   }
 }
 

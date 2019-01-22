@@ -54,7 +54,7 @@ class UnitContainer extends Component {
       delUnit(propertyId, unitId)
       history.push(`/${propertyId}/unit`)
     } catch (err) {
-      console.log('setUnit error:', err)
+      console.log('delUnit error:', err)
     }
 
     setLoading(false)
