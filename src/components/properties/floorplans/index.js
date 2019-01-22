@@ -3,11 +3,14 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Table from './Table'
 import { FLOORPLAN, FSMGRCONTRACT } from '../../../utils/consts'
-import { addFloorplans } from '../../../actions/index'
+import { addFloorplans, delFloorplan } from '../../../actions/index'
+import { setLoading } from '../../../actions'
+import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 
 class FloorplansContainer extends Component {
   async componentDidMount () {
     const { eosClient, accountData, addFloorplans } = this.props
+    const { id } = this.props.match.params
 
     const { rows } = await eosClient.getTableRows(
       true,
@@ -15,14 +18,53 @@ class FloorplansContainer extends Component {
       accountData.active,
       FLOORPLAN
     )
-    addFloorplans(rows)
+    addFloorplans(id, rows)
+  }
+
+  delete = async (propertyId, floorplanId) => {
+    const { contracts, accountData, setLoading, history } = this.props
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    try {
+      await fsmgrcontract.delfloorplan(accountData.active, floorplanId, options)
+      console.log('fsmgrcontract.delfloorplan - floorplanId:', floorplanId)
+    } catch (err) {
+      console.log('fsmgrcontract.delfloorplan - error:', err)
+    }
+
+    try {
+      delFloorplan(propertyId, floorplanId)
+      history.push(`/${propertyId}`)
+    } catch (err) {
+      console.log('delFloorplan error:', err)
+    }
+
+    setLoading(false)
   }
 
   render () {
     const { properties } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
-    return <Table propertyId={property.id} property={property} />
+    if (!property) {
+      return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
+    } else {
+      return (
+        <Table
+          propertyId={property.id}
+          property={property}
+          onDelete={this.delete}
+        />
+      )
+    }
   }
 }
 
@@ -37,5 +79,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addFloorplans })(FloorplansContainer)
+  connect(mapStateToProps, { addFloorplans, setLoading, delFloorplan })(
+    FloorplansContainer
+  )
 )

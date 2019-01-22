@@ -6,7 +6,7 @@ import IconAdd from '../../../img/icon-add.svg'
 import FloorplanRow from './Row'
 
 export default props => {
-  const { property } = props
+  const { property, onDelete } = props
   return (
     <div>
       <div className='top-bar'>
@@ -155,6 +155,7 @@ export default props => {
                               key={floorplanId}
                               floorplan={property.floorplans[floorplanId]}
                               property={property}
+                              onDelete={onDelete}
                             />
                           ))}
                       </tbody>
