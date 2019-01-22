@@ -2,11 +2,13 @@ import {
   ADD_PROPERTIES,
   SET_PROPERTY,
   SET_FLOORPLAN,
+  DELETE_FLOORPLAN,
   ADD_FLOORPLANS,
   SET_UNIT,
   DELETE_UNIT,
   ADD_UNITS,
   SET_TERMPRICE,
+  DELETE_TERMPRICE,
   ADD_TERMPRICES
 } from '../actions/types'
 
@@ -50,18 +52,28 @@ export function properties (state = {}, action) {
       return newState
     }
     case ADD_FLOORPLANS: {
-      const { floorplans } = action.payload
+      const { id, floorplans } = action.payload
       const newState = { ...state }
 
       // In case of floorplan deletion, the "state" still hold the already-deleted floorplan
       // Thus, we need to cleanup the "floorplans" before assigning again with
       // the "floorplans" data loaded from chain
-      newState[floorplans[0].property_id].floorplans = {}
+      newState[id].floorplans = {}
+
+      if (floorplans.length == 0) {
+        return newState
+      }
 
       floorplans.map(floorplan => {
         newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
         return floorplan // Only returning to resolve react warning.
       })
+      return newState
+    }
+    case DELETE_FLOORPLAN: {
+      const { propertyId, floorplanId } = action.payload
+      const newState = { ...state }
+      delete newState[propertyId].floorplans[floorplanId]
       return newState
     }
     case SET_UNIT: {
@@ -110,6 +122,12 @@ export function properties (state = {}, action) {
       console.log('SET_TERMPRICE - newState:', newState)
       return newState
     }
+    case DELETE_TERMPRICE: {
+      const { propertyId, unitId, termpriceId } = action.payload
+      const newState = { ...state }
+      delete newState[propertyId].units[unitId].termprices[termpriceId]
+      return newState
+    }
     case ADD_TERMPRICES: {
       const { id, unitid, termprices } = action.payload
       let newState = {
@@ -120,6 +138,10 @@ export function properties (state = {}, action) {
       // Thus, we need to cleanup the "termprices" before assigning again with
       // the "termprices" data loaded from chain
       newState[id].units[unitid].termprices = {}
+
+      if (termprices.length == 0) {
+        return newState
+      }
 
       termprices.forEach(termprice => {
         newState[id].units[termprice.unit_id].termprices[
