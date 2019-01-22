@@ -79,5 +79,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addFloorplans, setLoading, delFloorplan })(FloorplansContainer)
+  connect(mapStateToProps, { addFloorplans, setLoading, delFloorplan })(
+    FloorplansContainer
+  )
 )

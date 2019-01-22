@@ -71,7 +71,15 @@ class TermPriceContainer extends Component {
     if (!property || !unit) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
-      return <Table propertyId={property.id} unitid={unitid} unit={unit} termid={termid} onDelete={this.delete} />
+      return (
+        <Table
+          propertyId={property.id}
+          unitid={unitid}
+          unit={unit}
+          termid={termid}
+          onDelete={this.delete}
+        />
+      )
     }
   }
 }
@@ -87,5 +95,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addTermPrices, setLoading, delTermPrice })(TermPriceContainer)
+  connect(mapStateToProps, { addTermPrices, setLoading, delTermPrice })(
+    TermPriceContainer
+  )
 )
