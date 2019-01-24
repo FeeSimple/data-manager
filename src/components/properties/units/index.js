@@ -11,6 +11,8 @@ class UnitContainer extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.delete = this.delete.bind(this);
+    this.deleteBulk = this.deleteBulk.bind(this);
     this.state = {
       checkedEntry: {}
     }
@@ -84,6 +86,21 @@ class UnitContainer extends Component {
     // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
   }
 
+  deleteBulk = async (propertyId) => {
+    let checkedEntry = this.state.checkedEntry;
+    let ids = Object.keys(checkedEntry);
+    console.log(`deleteBulk - propertyId: ${propertyId}`)
+    console.log('deleteBulk - ids: ', ids)
+    
+    for (let i=0; i<ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        console.log(`deleteBulk - id: ${id}`)
+        await this.delete(propertyId, id)  
+      }
+    }
+  }
+
   render () {
     const { properties } = this.props
     const { id } = this.props.match.params
@@ -97,6 +114,7 @@ class UnitContainer extends Component {
           property={property}
           onDelete={this.delete}
           onChange={this.handleInputChange}
+          deleteBulk={this.deleteBulk}
         />
       )
     }
