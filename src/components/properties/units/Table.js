@@ -6,7 +6,7 @@ import IconAdd from '../../../img/icon-add.svg'
 import UnitRow from './Row'
 
 export default props => {
-  const { property, onDelete } = props
+  const { property, onDelete, onChange } = props
   return (
     <div>
       <div className='top-bar'>
@@ -168,6 +168,7 @@ export default props => {
                               unit={property.units[unitid]}
                               property={property}
                               onDelete={onDelete}
+                              onChange={onChange}
                             />
                           ))}
                       </tbody>
