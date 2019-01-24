@@ -11,7 +11,7 @@ class UnitContainer extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.delete = this.delete.bind(this);
+    this.deleteOne = this.deleteOne.bind(this);
     this.deleteBulk = this.deleteBulk.bind(this);
     this.state = {
       checkedEntry: {}
@@ -41,7 +41,7 @@ class UnitContainer extends Component {
     }
   }
 
-  delete = async (propertyId, unitId) => {
+  deleteOne = async (propertyId, unitId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -96,7 +96,7 @@ class UnitContainer extends Component {
       let id = ids[i]
       if (checkedEntry[id] == true) {
         console.log(`deleteBulk - id: ${id}`)
-        await this.delete(propertyId, id)  
+        await this.deleteOne(propertyId, id)  
       }
     }
   }
@@ -112,7 +112,7 @@ class UnitContainer extends Component {
         <Table
           propertyId={property.id}
           property={property}
-          onDelete={this.delete}
+          onDelete={this.deleteOne}
           onChange={this.handleInputChange}
           deleteBulk={this.deleteBulk}
         />

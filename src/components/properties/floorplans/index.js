@@ -21,7 +21,7 @@ class FloorplansContainer extends Component {
     addFloorplans(id, rows)
   }
 
-  delete = async (propertyId, floorplanId) => {
+  deleteOne = async (propertyId, floorplanId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -61,7 +61,7 @@ class FloorplansContainer extends Component {
         <Table
           propertyId={property.id}
           property={property}
-          onDelete={this.delete}
+          onDelete={this.deleteOne}
         />
       )
     }

@@ -33,7 +33,7 @@ class TermPriceContainer extends Component {
     }
   }
 
-  delete = async (propertyId, unitId, termpriceId) => {
+  deleteOne = async (propertyId, unitId, termpriceId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -77,7 +77,7 @@ class TermPriceContainer extends Component {
           unitid={unitid}
           unit={unit}
           termid={termid}
-          onDelete={this.delete}
+          onDelete={this.deleteOne}
         />
       )
     }
