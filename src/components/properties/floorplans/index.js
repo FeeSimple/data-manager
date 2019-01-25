@@ -8,6 +8,14 @@ import { setLoading } from '../../../actions'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 
 class FloorplansContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.state = {
+      checkedEntry: {}
+    }
+  }
+
   async componentDidMount () {
     const { eosClient, accountData, addFloorplans } = this.props
     const { id } = this.props.match.params
@@ -50,6 +58,22 @@ class FloorplansContainer extends Component {
     setLoading(false)
   }
 
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    // console.log(`handleInputChange - name: ${name}, value: ${value}`);
+
+    let checked = this.state.checkedEntry
+    checked[name] = value
+    this.setState({
+      checkedEntry: checked
+    });
+
+    // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
+  }
+
   render () {
     const { properties } = this.props
     const { id } = this.props.match.params
@@ -62,6 +86,7 @@ class FloorplansContainer extends Component {
           propertyId={property.id}
           property={property}
           onDelete={this.deleteOne}
+          onChange={this.handleInputChange}
         />
       )
     }

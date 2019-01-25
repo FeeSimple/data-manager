@@ -6,7 +6,7 @@ import IconAdd from '../../../img/icon-add.svg'
 import TermPriceRow from './Row'
 
 export default props => {
-  const { unit, termid, onDelete } = props
+  const { unit, termid, onDelete, onChange } = props
   return (
     <div>
       <div className='top-bar'>
@@ -130,6 +130,7 @@ export default props => {
                               unit={unit}
                               propertyId={props.propertyId}
                               onDelete={onDelete}
+                              onChange={onChange}
                             />
                           ))}
                       </tbody>

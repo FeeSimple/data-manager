@@ -4,11 +4,15 @@ import IconDelete from '../../../img/icon-delete.svg'
 import { Link } from 'react-router-dom'
 
 export default props => {
-  const { unit, termprice, propertyId, onDelete } = props
+  const { unit, termprice, propertyId, onDelete, onChange } = props
   return (
     <tr role='row' className='even'>
       <td>
-        <input type='checkbox' />
+        <input 
+          type='checkbox'
+          name={termprice.id}
+          onChange={onChange}
+        />
       </td>
       <td>{termprice.id}</td>
       <td>{termprice.rent}</td>

@@ -62,6 +62,22 @@ class TermPriceContainer extends Component {
     setLoading(false)
   }
 
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    // console.log(`handleInputChange - name: ${name}, value: ${value}`);
+
+    let checked = this.state.checkedEntry
+    checked[name] = value
+    this.setState({
+      checkedEntry: checked
+    });
+
+    // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
+  }
+
   render () {
     const { properties } = this.props
     const { id, unitid, termid } = this.props.match.params
@@ -78,6 +94,7 @@ class TermPriceContainer extends Component {
           unit={unit}
           termid={termid}
           onDelete={this.deleteOne}
+          onChange={this.handleInputChange}
         />
       )
     }
