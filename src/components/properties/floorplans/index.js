@@ -11,6 +11,8 @@ class FloorplansContainer extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.deleteOne = this.deleteOne.bind(this);
+    this.deleteBulk = this.deleteBulk.bind(this);
     this.state = {
       checkedEntry: {}
     }
@@ -58,6 +60,21 @@ class FloorplansContainer extends Component {
     setLoading(false)
   }
 
+  deleteBulk = async (propertyId) => {
+    let checkedEntry = this.state.checkedEntry;
+    let ids = Object.keys(checkedEntry);
+    console.log(`deleteBulk - propertyId: ${propertyId}`)
+    console.log('deleteBulk - ids: ', ids)
+    
+    for (let i=0; i<ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        console.log(`deleteBulk - id: ${id}`)
+        await this.deleteOne(propertyId, id)  
+      }
+    }
+  }
+
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -87,6 +104,7 @@ class FloorplansContainer extends Component {
           property={property}
           onDelete={this.deleteOne}
           onChange={this.handleInputChange}
+          deleteBulk={this.deleteBulk}
         />
       )
     }
