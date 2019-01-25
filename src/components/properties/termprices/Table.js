@@ -6,7 +6,7 @@ import IconAdd from '../../../img/icon-add.svg'
 import TermPriceRow from './Row'
 
 export default props => {
-  const { unit, termid, onDelete, onChange, deleteBulk } = props
+  const { propertyId, unit, termid, onDelete, onChange, deleteBulk } = props
   return (
     <div>
       <div className='top-bar'>
@@ -14,7 +14,7 @@ export default props => {
           <Row>
             <Col>
               <h3 className='float-right'>
-                <Link to={`/${props.propertyId}/unit/${unit.id}/termprice/new`}>
+                <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
                   <img src={IconAdd} alt='' />
                   <span>New Term Price</span>
                 </Link>
@@ -128,7 +128,7 @@ export default props => {
                               key={termpriceId}
                               termprice={unit.termprices[termpriceId]}
                               unit={unit}
-                              propertyId={props.propertyId}
+                              propertyId={propertyId}
                               onDelete={onDelete}
                               onChange={onChange}
                             />
@@ -143,7 +143,7 @@ export default props => {
                       size='sm'
                       outline
                       color='red'
-                      onClick={() => deleteBulk(property.id, unit.id)}
+                      onClick={() => deleteBulk(propertyId, unit.id)}
                     >
                       Delete Checked
                     </Button>
