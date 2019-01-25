@@ -8,6 +8,16 @@ import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 import { setLoading } from '../../../actions'
 
 class TermPriceContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.deleteOne = this.deleteOne.bind(this);
+    this.deleteBulk = this.deleteBulk.bind(this);
+    this.state = {
+      checkedEntry: {}
+    }
+  }
+
   async componentDidMount () {
     const { eosClient, accountData, addTermPrices, properties } = this.props
     const { id, unitid } = this.props.match.params
@@ -33,7 +43,7 @@ class TermPriceContainer extends Component {
     }
   }
 
-  delete = async (propertyId, unitId, termpriceId) => {
+  deleteOne = async (propertyId, unitId, termpriceId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -62,6 +72,37 @@ class TermPriceContainer extends Component {
     setLoading(false)
   }
 
+  deleteBulk = async (propertyId, unitId) => {
+    let checkedEntry = this.state.checkedEntry;
+    let ids = Object.keys(checkedEntry);
+    console.log(`deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`)
+    console.log('deleteBulk - ids: ', ids)
+    
+    for (let i=0; i<ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        console.log(`deleteBulk - id: ${id}`)
+        await this.deleteOne(propertyId, unitId, id)  
+      }
+    }
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    // console.log(`handleInputChange - name: ${name}, value: ${value}`);
+
+    let checked = this.state.checkedEntry
+    checked[name] = value
+    this.setState({
+      checkedEntry: checked
+    });
+
+    // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
+  }
+
   render () {
     const { properties } = this.props
     const { id, unitid, termid } = this.props.match.params
@@ -77,7 +118,9 @@ class TermPriceContainer extends Component {
           unitid={unitid}
           unit={unit}
           termid={termid}
-          onDelete={this.delete}
+          onDelete={this.deleteOne}
+          onChange={this.handleInputChange}
+          deleteBulk={this.deleteBulk}
         />
       )
     }

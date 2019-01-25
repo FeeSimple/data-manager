@@ -1,12 +1,12 @@
 import React from 'react'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
 import UnitRow from './Row'
 
 export default props => {
-  const { property, onDelete } = props
+  const { property, onDelete, onChange, deleteBulk } = props
   return (
     <div>
       <div className='top-bar'>
@@ -168,10 +168,23 @@ export default props => {
                               unit={property.units[unitid]}
                               property={property}
                               onDelete={onDelete}
+                              onChange={onChange}
                             />
                           ))}
                       </tbody>
                     </table>
+                  </div>
+                </div>
+                <div className='row'>
+                  <div className='col-sm-12'>
+                    <Button
+                      size='sm'
+                      outline
+                      color='red'
+                      onClick={() => deleteBulk(property.id)}
+                    >
+                      Delete Checked
+                    </Button>
                   </div>
                 </div>
               </div>
