@@ -20,14 +20,14 @@ export default props => {
                 </Link>
               </h3>
             </div>
-            {/* <div className='col-10 col-md-4 tc tl-xs'>
+            <div className='col-10 col-md-4 tc tl-xs'>
               <Link to='/' className='btn btn-base-o prop-btn'>
                 Floor Plan
-              </Link>
+              </Link> 
               <Link to='/' className='btn btn-gray-o prop-btn'>
                 Units
               </Link>
-            </div> */}
+            </div>
             <div className='col-2 col-md-4'>
               <h3 className='float-right'>
                 <Link to={`/${props.propertyId}/floorplan/new`}>

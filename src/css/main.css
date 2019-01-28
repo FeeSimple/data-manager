@@ -247,7 +247,8 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 13px;
   text-align: center;
   left: 15px;
-  right: 15px; }
+  right: 15px;
+  position: absolute; }
 
 /*-----------------------------------------
   UI Elemnets
@@ -426,6 +427,9 @@ h1, h2, h3, h4, h5, h6 {
   border-width: 2px;
   min-width: 95px; }
 
+.tc {
+  text-align: center; }
+
 /*------------------------------------------
     Responsive Grid Media Queries Settings
     1600+   -     Extra Large Screen
@@ -473,6 +477,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /*--- below small screen -----*/
 @media all and (max-width: 767px) {
+  .hide-xs {
+    display: none; }
   .tc-xs {
     text-align: center; }
   .tl-xs {

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm-run-all -p watch-css start-react",
-    "start-react": "PORT=3000 REACT_APP_NODEOS_ADDR=138.197.194.220 REACT_APP_NODEOS_PORT=8877 REACT_APP_ENV=staging REACT_APP_CHAIN_ID=1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32 react-scripts start",
+    "start-react": "react-scripts start PORT=3000 REACT_APP_NODEOS_ADDR=138.197.194.220 REACT_APP_NODEOS_PORT=8877 REACT_APP_ENV=staging REACT_APP_CHAIN_ID=1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32",
     "build": "npm-run-all -s build-css build-react",
     "build-react": "react-scripts build",
     "build-css": "node-sass-chokidar ./src/scss -o ./src/css",
