@@ -30,7 +30,7 @@ const PropertyDetails = ({
             >
               <img 
                 src={IconDelete} alt='' 
-                style={{width: '30px', height: '30  px' }}/>
+                style={{width: '30px', height: '30px' }}/>
             </button>
           </Col>
         </Row>

@@ -9,7 +9,8 @@ import {
   ADD_UNITS,
   SET_TERMPRICE,
   DELETE_TERMPRICE,
-  ADD_TERMPRICES
+  ADD_TERMPRICES,
+  DELETE_PROPERTY
 } from '../actions/types'
 
 export function properties (state = {}, action) {
@@ -32,6 +33,7 @@ export function properties (state = {}, action) {
           units: {}
         }
       })
+      console.log('ADD_PROPERTIES - newState:', newState);
       return newState
     }
     case SET_PROPERTY: {
@@ -44,6 +46,13 @@ export function properties (state = {}, action) {
           units: {}
         }
       }
+    }
+    case DELETE_PROPERTY: {
+      const { propertyId } = action.payload
+      const newState = { ...state }
+      delete newState[propertyId]
+      console.log('DELETE_PROPERTY - state:', newState)
+      return newState
     }
     case SET_FLOORPLAN: {
       const { propertyId, floorplan } = action.payload

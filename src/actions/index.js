@@ -1,6 +1,7 @@
 import {
   ADD_PROPERTIES,
   SET_PROPERTY,
+  DELETE_PROPERTY,
   SET_SCATTER,
   SET_EOSCLIENT,
   SET_FSMGRCONTRACT,
@@ -150,5 +151,12 @@ export function setProperty (property) {
   return {
     type: SET_PROPERTY,
     property
+  }
+}
+
+export function delProperty (propertyId) {
+  return {
+    type: DELETE_PROPERTY,
+    payload: { propertyId }
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { setProperty, addProperties, setLoading } from '../../../actions'
+import { setProperty, addProperties, setLoading, delProperty } from '../../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 
@@ -118,6 +118,49 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
+  deleteOne = async (propertyId) => {
+    const { contracts, accountData, setLoading, history, eosClient } = this.props
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    try {
+      await fsmgrcontract.delproperty(accountData.active, propertyId, options)
+      console.log('fsmgrcontract.delproperty - propertyId:', propertyId)
+    } catch (err) {
+      console.log('fsmgrcontract.delproperty - error:', err)
+    }
+
+    try {
+      delProperty(propertyId)
+      console.log('delProperty OK')
+    } catch (err) {
+      console.log('delProperty error:', err)
+    }
+
+    try {
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        accountData.active,
+        PROPERTY
+      )
+      addProperties(rows)
+      console.log('getTableRows (PROPERTY) - rows:', rows)
+      setLoading(false)
+      history.push('/')
+    } catch (err) {
+      setLoading(false)
+      console.log('getTableRows (PROPERTY) error:', err)
+    }
+  }
+
   render () {
     const { isCreating, properties, id } = this.props
     const mode = isCreating ? CREATING : this.state.mode
@@ -139,6 +182,7 @@ class PropertyDetailsContainer extends Component {
             onCreateClick={this.create}
             onCancelClick={this.cancel}
             onChange={e => this.handleChange(e)}
+            onDelete={this.deleteOne}
           />
         )}
       </div>

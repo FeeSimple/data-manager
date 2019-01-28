@@ -5,6 +5,7 @@ export const SET_FSMGRCONTRACT = 'SET_FSMGRCONTRACT'
 
 export const ADD_PROPERTIES = 'ADD_PROPERTIES'
 export const SET_PROPERTY = 'SET_PROPERTY'
+export const DELETE_PROPERTY = 'DELETE_PROPERTY'
 
 export const SET_ACTIVE = 'SET_ACTIVE'
 export const SET_INFO = 'SET_INFO'
