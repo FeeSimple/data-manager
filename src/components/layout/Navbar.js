@@ -79,7 +79,7 @@ class NavbarContainer extends Component {
               <ul id='main-menu'>
                 <li>
                   <Link to='/'>
-                    <img src={IconProperties} alt='' /> <span>Properties</span>
+                    <img src={IconProperties} alt='' />
                   </Link>
                 </li>
                 <li>
