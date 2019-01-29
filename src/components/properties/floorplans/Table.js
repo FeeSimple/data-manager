@@ -15,16 +15,13 @@ export default props => {
             <div className='col-12 col-md-4 m-xs-b-10'>
               <h3>
                 {property.name}{' '}
-                <Link to={`/${props.propertyId}/edit`}>
-                  <img src={IconEditGrey} alt='' />
-                </Link>
               </h3>
             </div>
             <div className='col-10 col-md-4 tc tl-xs'>
-              <Link to='/' className='btn btn-base-o prop-btn'>
+              <Link to={`/${property.id}`} className='btn btn-base-o prop-btn'>
                 Floor Plan
               </Link> 
-              <Link to='/' className='btn btn-gray-o prop-btn'>
+              <Link to={`/${property.id}/unit`} className='btn btn-gray-o prop-btn'>
                 Units
               </Link>
             </div>

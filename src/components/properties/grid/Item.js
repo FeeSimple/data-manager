@@ -7,7 +7,7 @@ export default function (props) {
   return (
     <div className='card panel-fs'>
       <div className='card-header text-center'>
-        <Link to={`/${property.id}`}>{property.name}</Link>
+        <Link to={`/${property.id}/edit`}>{property.name}</Link>
       </div>
       <div className='card-body'>
         <Link to={`/${property.id}`}>
