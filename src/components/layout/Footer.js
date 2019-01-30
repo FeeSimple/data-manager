@@ -3,7 +3,7 @@ import OpenReLogoBlack from '../../img/openre-logo-black.svg'
 
 export default function Footer () {
   return (
-    <div className='fs-footer mt-5'>
+    <div className='fs-footer'>
       <span
         className='badge badge-pill badge-fs bold'
         style={{ color: 'white' }}

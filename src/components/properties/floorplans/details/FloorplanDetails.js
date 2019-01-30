@@ -25,7 +25,7 @@ const FloorplanDetails = ({
       <Container>
         <Row>
           <Col>
-            <h3 className='float-left'> Floorplan</h3>
+            <h3 className='float-left'>Floorplan</h3>
           </Col>
         </Row>
       </Container>

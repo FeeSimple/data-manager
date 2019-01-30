@@ -132,7 +132,8 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
     a{
       color: #4abaee;
       img{
-        width: 20px;
+        width: 25px;
+        margin-right: 5px;
         height: auto;
       }
       &:hover,&:active{
@@ -253,7 +254,8 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   text-align: center;
   left: 15px;
   right: 15px;
-	}
+  position: absolute;
+}
 
 /*-----------------------------------------
   UI Elemnets
@@ -405,6 +407,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .btn:focus,a {outline: none;} /* firefox outline fix */
 .clr-base{color: $clr-base;}
 .prop-btn{border-width: 2px; min-width: 95px;}
+.tc{text-align: center;}
 /*------------------------------------------
     Responsive Grid Media Queries Settings
     1600+   -     Extra Large Screen
@@ -489,6 +492,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 
 /*--- below small screen -----*/
 @media all and (max-width: 767px) {
+  .hide-xs{display: none;}
   .tc-xs{text-align: center;}
   .tl-xs{text-align: left;}
   .created-by{display: block}
