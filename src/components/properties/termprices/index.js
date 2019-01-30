@@ -8,11 +8,11 @@ import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 import { setLoading } from '../../../actions'
 
 class TermPriceContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.deleteOne = this.deleteOne.bind(this);
-    this.deleteBulk = this.deleteBulk.bind(this);
+  constructor (props) {
+    super(props)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.deleteOne = this.deleteOne.bind(this)
+    this.deleteBulk = this.deleteBulk.bind(this)
     this.state = {
       checkedEntry: {}
     }
@@ -73,24 +73,24 @@ class TermPriceContainer extends Component {
   }
 
   deleteBulk = async (propertyId, unitId) => {
-    let checkedEntry = this.state.checkedEntry;
-    let ids = Object.keys(checkedEntry);
+    let checkedEntry = this.state.checkedEntry
+    let ids = Object.keys(checkedEntry)
     console.log(`deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`)
     console.log('deleteBulk - ids: ', ids)
-    
-    for (let i=0; i<ids.length; i++) {
+
+    for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
       if (checkedEntry[id] == true) {
         console.log(`deleteBulk - id: ${id}`)
-        await this.deleteOne(propertyId, unitId, id)  
+        await this.deleteOne(propertyId, unitId, id)
       }
     }
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
+  handleInputChange (event) {
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
 
     // console.log(`handleInputChange - name: ${name}, value: ${value}`);
 
@@ -98,7 +98,7 @@ class TermPriceContainer extends Component {
     checked[name] = value
     this.setState({
       checkedEntry: checked
-    });
+    })
 
     // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
   }
