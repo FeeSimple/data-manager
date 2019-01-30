@@ -11,17 +11,21 @@ export default props => {
     <div>
       <div className='top-bar'>
         <Container>
-		      <Row>
+          <Row>
             <div className='col-12 col-md-4 m-xs-b-10'>
-              <h3>
-                {property.name}{' '}
-              </h3>
+              <h3>{property.name} </h3>
             </div>
             <div className='col-10 col-md-4 tc tl-xs'>
-              <Link to={`/${props.propertyId}`} className='btn btn-gray-o prop-btn'>
+              <Link
+                to={`/${props.propertyId}`}
+                className='btn btn-gray-o prop-btn'
+              >
                 Floor Plan
-              </Link> 
-              <Link to={`/${props.propertyId}/unit`} className='btn btn-base-o prop-btn'>
+              </Link>
+              <Link
+                to={`/${props.propertyId}/unit`}
+                className='btn btn-base-o prop-btn'
+              >
                 Units
               </Link>
             </div>

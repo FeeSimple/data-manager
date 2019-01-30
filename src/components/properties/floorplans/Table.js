@@ -13,15 +13,16 @@ export default props => {
         <Container>
           <Row>
             <div className='col-12 col-md-4 m-xs-b-10'>
-              <h3>
-                {property.name}{' '}
-              </h3>
+              <h3>{property.name} </h3>
             </div>
             <div className='col-10 col-md-4 tc tl-xs'>
               <Link to={`/${property.id}`} className='btn btn-base-o prop-btn'>
                 Floor Plan
-              </Link> 
-              <Link to={`/${property.id}/unit`} className='btn btn-gray-o prop-btn'>
+              </Link>
+              <Link
+                to={`/${property.id}/unit`}
+                className='btn btn-gray-o prop-btn'
+              >
                 Units
               </Link>
             </div>
