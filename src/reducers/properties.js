@@ -33,7 +33,7 @@ export function properties (state = {}, action) {
           units: {}
         }
       })
-      console.log('ADD_PROPERTIES - newState:', newState);
+      console.log('ADD_PROPERTIES - newState:', newState)
       return newState
     }
     case SET_PROPERTY: {

@@ -28,9 +28,11 @@ const PropertyDetails = ({
               className='float-right'
               onClick={e => onDelete(e, property.id)}
             >
-              <img 
-                src={IconDelete} alt='' 
-                style={{width: '30px', height: '30px' }}/>
+              <img
+                src={IconDelete}
+                alt=''
+                style={{ width: '30px', height: '30px' }}
+              />
             </button>
           </Col>
         </Row>

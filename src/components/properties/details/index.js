@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { setProperty, addProperties, setLoading, delProperty } from '../../../actions'
+import {
+  setProperty,
+  addProperties,
+  setLoading,
+  delProperty
+} from '../../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 
@@ -129,7 +134,7 @@ class PropertyDetailsContainer extends Component {
       setLoading,
       history
     } = this.props
-    
+
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -209,7 +214,10 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setProperty, addProperties, delProperty, setLoading })(
-    PropertyDetailsContainer
-  )
+  connect(mapStateToProps, {
+    setProperty,
+    addProperties,
+    delProperty,
+    setLoading
+  })(PropertyDetailsContainer)
 )
