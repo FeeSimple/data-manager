@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
+import IconDelete from '../../../img/icon-delete.svg'
 
 export const READING = 'reading'
 export const EDITING = 'editing'
@@ -12,7 +13,8 @@ const PropertyDetails = ({
   onEditClick,
   onCreateClick,
   onSaveClick,
-  onChange
+  onChange,
+  onDelete
 }) => (
   <div>
     <div className='top-bar'>
@@ -20,6 +22,18 @@ const PropertyDetails = ({
         <Row>
           <Col>
             <h3 className='float-left'>New Property</h3>
+          </Col>
+          <Col>
+            <button
+              className='float-right'
+              onClick={e => onDelete(e, property.id)}
+            >
+              <img
+                src={IconDelete}
+                alt=''
+                style={{ width: '30px', height: '30px' }}
+              />
+            </button>
           </Col>
         </Row>
       </Container>

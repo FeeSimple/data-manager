@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { setProperty, addProperties, setLoading } from '../../../actions'
+import {
+  setProperty,
+  addProperties,
+  setLoading,
+  delProperty
+} from '../../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 
@@ -118,6 +123,47 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
+  deleteOne = async (e, propertyId) => {
+    e.preventDefault()
+
+    const {
+      addProperties,
+      contracts,
+      eosClient,
+      accountData,
+      setLoading,
+      history
+    } = this.props
+
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+    this.setState({ mode: READING })
+
+    setLoading(true)
+
+    try {
+      await fsmgrcontract.delproperty(accountData.active, propertyId, options)
+      console.log('fsmgrcontract.delproperty - propertyId:', propertyId)
+    } catch (err) {
+      console.log('fsmgrcontract.delproperty - error:', err)
+    }
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      PROPERTY
+    )
+    addProperties(rows)
+    setLoading(false)
+    history.push('/')
+  }
+
   render () {
     const { isCreating, properties, id } = this.props
     const mode = isCreating ? CREATING : this.state.mode
@@ -139,6 +185,7 @@ class PropertyDetailsContainer extends Component {
             onCreateClick={this.create}
             onCancelClick={this.cancel}
             onChange={e => this.handleChange(e)}
+            onDelete={this.deleteOne}
           />
         )}
       </div>
@@ -167,7 +214,10 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setProperty, addProperties, setLoading })(
-    PropertyDetailsContainer
-  )
+  connect(mapStateToProps, {
+    setProperty,
+    addProperties,
+    delProperty,
+    setLoading
+  })(PropertyDetailsContainer)
 )

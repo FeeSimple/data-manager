@@ -9,11 +9,7 @@ export default props => {
   return (
     <tr role='row' className='even'>
       <td>
-        <input 
-          type='checkbox'
-          name={unit.id}
-          onChange={onChange}
-        />
+        <input type='checkbox' name={unit.id} onChange={onChange} />
       </td>
       <td>{unit.id}</td>
       <td>{unit.name}</td>
