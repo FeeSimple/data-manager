@@ -26,7 +26,7 @@ const PropertyDetails = ({
           <Col>
             <button
               className='float-right'
-              onClick={e => onDelete(property.id)}
+              onClick={e => onDelete(e, property.id)}
             >
               <img 
                 src={IconDelete} alt='' 

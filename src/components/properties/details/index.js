@@ -118,8 +118,18 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  deleteOne = async (propertyId) => {
-    const { contracts, accountData, setLoading, history, eosClient } = this.props
+  deleteOne = async (e, propertyId) => {
+    e.preventDefault()
+
+    const {
+      addProperties,
+      contracts,
+      eosClient,
+      accountData,
+      setLoading,
+      history
+    } = this.props
+    
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -127,6 +137,7 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
+    this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -137,28 +148,15 @@ class PropertyDetailsContainer extends Component {
       console.log('fsmgrcontract.delproperty - error:', err)
     }
 
-    try {
-      delProperty(propertyId)
-      console.log('delProperty OK')
-    } catch (err) {
-      console.log('delProperty error:', err)
-    }
-
-    try {
-      const { rows } = await eosClient.getTableRows(
-        true,
-        FSMGRCONTRACT,
-        accountData.active,
-        PROPERTY
-      )
-      addProperties(rows)
-      console.log('getTableRows (PROPERTY) - rows:', rows)
-      setLoading(false)
-      history.push('/')
-    } catch (err) {
-      setLoading(false)
-      console.log('getTableRows (PROPERTY) error:', err)
-    }
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      PROPERTY
+    )
+    addProperties(rows)
+    setLoading(false)
+    history.push('/')
   }
 
   render () {
@@ -211,7 +209,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setProperty, addProperties, setLoading })(
+  connect(mapStateToProps, { setProperty, addProperties, delProperty, setLoading })(
     PropertyDetailsContainer
   )
 )
