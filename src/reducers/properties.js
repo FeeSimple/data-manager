@@ -66,6 +66,12 @@ export function properties (state = {}, action) {
       const { id, floorplans } = action.payload
       const newState = { ...state }
 
+      // floorplans belong to a non-existing property.
+      // This case happens when deleting a property, but the associated floorplans are not removed
+      if (!newState[id]) {
+        return newState
+      }
+
       // In case of floorplan deletion, the "state" still hold the already-deleted floorplan
       // Thus, we need to cleanup the "floorplans" before assigning again with
       // the "floorplans" data loaded from chain
@@ -113,6 +119,12 @@ export function properties (state = {}, action) {
         ...state
       }
 
+      // units belong to a non-existing property.
+      // This case happens when deleting a property, but the associated units are not removed
+      if (!newState[id]) {
+        return newState
+      }
+
       // In case of unit deletion, the "state" still hold the already-deleted unit
       // Thus, we need to cleanup the "units" before assigning again with
       // the "units" data loaded from chain
@@ -154,6 +166,12 @@ export function properties (state = {}, action) {
       const { id, unitid, termprices } = action.payload
       let newState = {
         ...state
+      }
+
+      // termprices belong to a non-existing unit.
+      // This case happens when deleting a unit, but the associated termprices are not removed
+      if (!newState[id] || !newState[id].units[unitid]) {
+        return newState
       }
 
       // In case of termprice deletion, the "state" still hold the already-deleted termprice
