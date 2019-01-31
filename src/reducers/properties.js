@@ -57,7 +57,9 @@ export function properties (state = {}, action) {
     case SET_FLOORPLAN: {
       const { propertyId, floorplan } = action.payload
       const newState = { ...state }
-      newState[propertyId].floorplans[floorplan.id] = floorplan
+      if (newState[propertyId]) {
+        newState[propertyId].floorplans[floorplan.id] = floorplan
+      }
       return newState
     }
     case ADD_FLOORPLANS: {
@@ -74,7 +76,9 @@ export function properties (state = {}, action) {
       }
 
       floorplans.map(floorplan => {
-        newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
+        if (newState[floorplan.property_id]) {
+          newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
+        }
         return floorplan // Only returning to resolve react warning.
       })
       return newState
@@ -82,19 +86,25 @@ export function properties (state = {}, action) {
     case DELETE_FLOORPLAN: {
       const { propertyId, floorplanId } = action.payload
       const newState = { ...state }
-      delete newState[propertyId].floorplans[floorplanId]
+      if (newState[propertyId]) {
+        delete newState[propertyId].floorplans[floorplanId]
+      }
       return newState
     }
     case SET_UNIT: {
       const { propertyId, unit } = action.payload
       const newState = { ...state }
-      newState[propertyId].units[unit.id] = unit
+      if (newState[propertyId]) {
+        newState[propertyId].units[unit.id] = unit
+      }
       return newState
     }
     case DELETE_UNIT: {
       const { propertyId, unitId } = action.payload
       const newState = { ...state }
-      delete newState[propertyId].units[unitId]
+      if (newState[propertyId]) {
+        delete newState[propertyId].units[unitId]
+      }
       return newState
     }
     case ADD_UNITS: {
@@ -113,9 +123,11 @@ export function properties (state = {}, action) {
       }
 
       units.forEach(unit => {
-        newState[unit.property_id].units[unit.id] = {
-          ...unit,
-          termprices: {}
+        if (newState[unit.property_id]) {
+          newState[unit.property_id].units[unit.id] = {
+            ...unit,
+            termprices: {}
+          }
         }
         return unit // Only returning to resolve react warning.
       })
@@ -123,18 +135,19 @@ export function properties (state = {}, action) {
       return newState
     }
     case SET_TERMPRICE: {
-      console.log('SET_TERMPRICE - action.payload:', action.payload)
       const { id, unitid, termprice } = action.payload
       const newState = { ...state }
-      console.log('SET_TERMPRICE - newState:', newState)
-      newState[id].units[unitid].termprices[termprice.id] = termprice
-      console.log('SET_TERMPRICE - newState:', newState)
+      if (newState[id] && newState[id].units[unitid]) {
+        newState[id].units[unitid].termprices[termprice.id] = termprice
+      }
       return newState
     }
     case DELETE_TERMPRICE: {
       const { propertyId, unitId, termpriceId } = action.payload
       const newState = { ...state }
-      delete newState[propertyId].units[unitId].termprices[termpriceId]
+      if (newState[propertyId] && newState[propertyId].units[unitId]) {
+        delete newState[propertyId].units[unitId].termprices[termpriceId]
+      }
       return newState
     }
     case ADD_TERMPRICES: {
@@ -153,9 +166,11 @@ export function properties (state = {}, action) {
       }
 
       termprices.forEach(termprice => {
-        newState[id].units[termprice.unit_id].termprices[
-          termprice.id
-        ] = termprice
+        if (newState[id] && newState[id].units[termprice.unit_id]) {
+          newState[id].units[termprice.unit_id].termprices[
+            termprice.id
+          ] = termprice
+        }
         return termprice // Only returning to resolve react warning.
       })
       console.log('ADD_TERMPRICES - newState:', newState)
