@@ -27,7 +27,7 @@ export const getKeyPair = async () => {
     pub = ecc.privateToPublic(k)
   })
 
-  return {pub, priv}
+  return { pub, priv }
 }
 
 export const getRamPrice = async eosClient => {
@@ -96,7 +96,7 @@ export const createNewAccount = async (
   const keyPair = await getKeyPair()
   const accountPubKey = keyPair.pub
   const accountPrivKey = keyPair.priv
-  
+
   if (!accountPubKey || !accountPrivKey) {
     return { errMsg: 'Invalid generated pub/priv keys' }
   }
