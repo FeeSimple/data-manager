@@ -18,7 +18,15 @@ import {
 export const getKeyPair = async () => {
   let promises = []
   promises.push(ecc.randomKey())
-  let priv, pub
+
+  let priv = null
+  let pub = null
+  let keys = await Promise.all(promises)
+  keys.map(k => {
+    priv = k
+    pub = ecc.privateToPublic(k)
+  })
+
   return { pub, priv }
 }
 
@@ -88,6 +96,11 @@ export const createNewAccount = async (
   const keyPair = await getKeyPair()
   const accountPubKey = keyPair.pub
   const accountPrivKey = keyPair.priv
+
+  if (!accountPubKey || !accountPrivKey) {
+    return { errMsg: 'Invalid generated pub/priv keys' }
+  }
+
   try {
     await eosAdmin.transaction(tr => {
       tr.newaccount({

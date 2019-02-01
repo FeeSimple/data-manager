@@ -57,12 +57,20 @@ export function properties (state = {}, action) {
     case SET_FLOORPLAN: {
       const { propertyId, floorplan } = action.payload
       const newState = { ...state }
-      newState[propertyId].floorplans[floorplan.id] = floorplan
+      if (newState[propertyId]) {
+        newState[propertyId].floorplans[floorplan.id] = floorplan
+      }
       return newState
     }
     case ADD_FLOORPLANS: {
       const { id, floorplans } = action.payload
       const newState = { ...state }
+
+      // floorplans belong to a non-existing property.
+      // This case happens when deleting a property, but the associated floorplans are not removed
+      if (!newState[id]) {
+        return newState
+      }
 
       // In case of floorplan deletion, the "state" still hold the already-deleted floorplan
       // Thus, we need to cleanup the "floorplans" before assigning again with
@@ -74,7 +82,9 @@ export function properties (state = {}, action) {
       }
 
       floorplans.map(floorplan => {
-        newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
+        if (newState[floorplan.property_id]) {
+          newState[floorplan.property_id].floorplans[floorplan.id] = floorplan
+        }
         return floorplan // Only returning to resolve react warning.
       })
       return newState
@@ -82,25 +92,37 @@ export function properties (state = {}, action) {
     case DELETE_FLOORPLAN: {
       const { propertyId, floorplanId } = action.payload
       const newState = { ...state }
-      delete newState[propertyId].floorplans[floorplanId]
+      if (newState[propertyId]) {
+        delete newState[propertyId].floorplans[floorplanId]
+      }
       return newState
     }
     case SET_UNIT: {
       const { propertyId, unit } = action.payload
       const newState = { ...state }
-      newState[propertyId].units[unit.id] = unit
+      if (newState[propertyId]) {
+        newState[propertyId].units[unit.id] = unit
+      }
       return newState
     }
     case DELETE_UNIT: {
       const { propertyId, unitId } = action.payload
       const newState = { ...state }
-      delete newState[propertyId].units[unitId]
+      if (newState[propertyId]) {
+        delete newState[propertyId].units[unitId]
+      }
       return newState
     }
     case ADD_UNITS: {
       const { id, units } = action.payload
       let newState = {
         ...state
+      }
+
+      // units belong to a non-existing property.
+      // This case happens when deleting a property, but the associated units are not removed
+      if (!newState[id]) {
+        return newState
       }
 
       // In case of unit deletion, the "state" still hold the already-deleted unit
@@ -113,9 +135,11 @@ export function properties (state = {}, action) {
       }
 
       units.forEach(unit => {
-        newState[unit.property_id].units[unit.id] = {
-          ...unit,
-          termprices: {}
+        if (newState[unit.property_id]) {
+          newState[unit.property_id].units[unit.id] = {
+            ...unit,
+            termprices: {}
+          }
         }
         return unit // Only returning to resolve react warning.
       })
@@ -123,24 +147,31 @@ export function properties (state = {}, action) {
       return newState
     }
     case SET_TERMPRICE: {
-      console.log('SET_TERMPRICE - action.payload:', action.payload)
       const { id, unitid, termprice } = action.payload
       const newState = { ...state }
-      console.log('SET_TERMPRICE - newState:', newState)
-      newState[id].units[unitid].termprices[termprice.id] = termprice
-      console.log('SET_TERMPRICE - newState:', newState)
+      if (newState[id] && newState[id].units[unitid]) {
+        newState[id].units[unitid].termprices[termprice.id] = termprice
+      }
       return newState
     }
     case DELETE_TERMPRICE: {
       const { propertyId, unitId, termpriceId } = action.payload
       const newState = { ...state }
-      delete newState[propertyId].units[unitId].termprices[termpriceId]
+      if (newState[propertyId] && newState[propertyId].units[unitId]) {
+        delete newState[propertyId].units[unitId].termprices[termpriceId]
+      }
       return newState
     }
     case ADD_TERMPRICES: {
       const { id, unitid, termprices } = action.payload
       let newState = {
         ...state
+      }
+
+      // termprices belong to a non-existing unit.
+      // This case happens when deleting a unit, but the associated termprices are not removed
+      if (!newState[id] || !newState[id].units[unitid]) {
+        return newState
       }
 
       // In case of termprice deletion, the "state" still hold the already-deleted termprice
@@ -153,9 +184,11 @@ export function properties (state = {}, action) {
       }
 
       termprices.forEach(termprice => {
-        newState[id].units[termprice.unit_id].termprices[
-          termprice.id
-        ] = termprice
+        if (newState[id] && newState[id].units[termprice.unit_id]) {
+          newState[id].units[termprice.unit_id].termprices[
+            termprice.id
+          ] = termprice
+        }
         return termprice // Only returning to resolve react warning.
       })
       console.log('ADD_TERMPRICES - newState:', newState)
