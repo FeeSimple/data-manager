@@ -1,7 +1,6 @@
 import React from 'react'
 import { Container, Row, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
 import FloorplanRow from './Row'
 

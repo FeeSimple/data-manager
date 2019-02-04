@@ -77,7 +77,7 @@ export function properties (state = {}, action) {
       // the "floorplans" data loaded from chain
       newState[id].floorplans = {}
 
-      if (floorplans.length == 0) {
+      if (floorplans.length === 0) {
         return newState
       }
 
@@ -130,7 +130,7 @@ export function properties (state = {}, action) {
       // the "units" data loaded from chain
       newState[id].units = {}
 
-      if (units.length == 0) {
+      if (units.length === 0) {
         return newState
       }
 
@@ -179,7 +179,7 @@ export function properties (state = {}, action) {
       // the "termprices" data loaded from chain
       newState[id].units[unitid].termprices = {}
 
-      if (termprices.length == 0) {
+      if (termprices.length === 0) {
         return newState
       }
 

@@ -84,13 +84,7 @@ class TermPriceDetailsContainer extends Component {
 
     const { id, unitid } = this.props.match.params
     const { termprice } = this.state
-    const {
-      contracts,
-      accountData,
-      setLoading,
-      setTermPrice,
-      history
-    } = this.props
+    const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     // console.log('term price create - this.state:', this.state)
@@ -149,10 +143,6 @@ class TermPriceDetailsContainer extends Component {
       }
       return state
     })
-  }
-
-  async componentDidMount () {
-    const { eosClient, accountData } = this.props
   }
 
   render () {
