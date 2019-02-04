@@ -18,7 +18,7 @@ class RootContainer extends Component {
     }
 
     return (
-      <div class='main-wrapper'>
+      <div className='main-wrapper'>
         <Navbar />
         {errMsg && <ErrorPopup errMsg={errMsg} />}
         {!isLoading && <App />}
