@@ -1,12 +1,11 @@
 import React from 'react'
 import { Container, Row, Col, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import IconEditGrey from '../../../img/icon-edit-grey.svg'
 import IconAdd from '../../../img/icon-add.svg'
 import TermPriceRow from './Row'
 
 export default props => {
-  const { propertyId, unit, termid, onDelete, onChange, deleteBulk } = props
+  const { propertyId, unit, onDelete, onChange, deleteBulk } = props
   return (
     <div>
       <div className='top-bar'>

@@ -94,7 +94,7 @@ class UnitContainer extends Component {
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
-      if (checkedEntry[id] == true) {
+      if (checkedEntry[id] === true) {
         console.log(`deleteBulk - id: ${id}`)
         await this.deleteOne(propertyId, id)
       }

@@ -22,7 +22,7 @@ export const getKeyPair = async () => {
   let priv = null
   let pub = null
   let keys = await Promise.all(promises)
-  keys.map(k => {
+  keys.forEach(k => {
     priv = k
     pub = ecc.privateToPublic(k)
   })

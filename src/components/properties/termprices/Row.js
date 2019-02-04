@@ -13,8 +13,8 @@ export default props => {
       <td>{termprice.id}</td>
       <td>{termprice.rent}</td>
       <td> {termprice.term}</td>
-      <td> {new Date(parseInt(termprice.start_date)).toLocaleDateString()}</td>
-      <td> {new Date(parseInt(termprice.end_date)).toLocaleDateString()}</td>
+      <td> {new Date(parseInt(termprice.start_date, 10)).toLocaleDateString()}</td>
+      <td> {new Date(parseInt(termprice.end_date, 10)).toLocaleDateString()}</td>
       <td>
         <Link
           to={`/${propertyId}/unit/${unit.id}/termprice/${termprice.id}`}

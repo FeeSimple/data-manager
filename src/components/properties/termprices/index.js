@@ -19,10 +19,8 @@ class TermPriceContainer extends Component {
   }
 
   async componentDidMount () {
-    const { eosClient, accountData, addTermPrices, properties } = this.props
+    const { eosClient, accountData, addTermPrices } = this.props
     const { id, unitid } = this.props.match.params
-    const property = properties[id]
-    const unit = property.units[unitid]
 
     try {
       const { rows } = await eosClient.getTableRows(
@@ -80,7 +78,7 @@ class TermPriceContainer extends Component {
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
-      if (checkedEntry[id] == true) {
+      if (checkedEntry[id] === true) {
         console.log(`deleteBulk - id: ${id}`)
         await this.deleteOne(propertyId, unitId, id)
       }

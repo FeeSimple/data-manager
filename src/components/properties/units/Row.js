@@ -23,11 +23,12 @@ export default props => {
         ${unit.rent_min} - ${unit.rent_max}
       </td>
       <td>{unit.status}</td>
-      <td>{new Date(parseInt(unit.date_available)).toLocaleDateString()}</td>
+      <td>{new Date(parseInt(unit.date_available, 10)).toLocaleDateString()}</td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}/termprice`}>
           <img
             src={IconFinderEye}
+            alt="icon-finder"
             style={{ marginLeft: '24px', width: '27px', height: '27px' }}
           />
         </Link>

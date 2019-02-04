@@ -88,7 +88,6 @@ class TermPriceDetailsContainer extends Component {
       contracts,
       accountData,
       setLoading,
-      setTermPrice,
       history
     } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
@@ -149,10 +148,6 @@ class TermPriceDetailsContainer extends Component {
       }
       return state
     })
-  }
-
-  async componentDidMount () {
-    const { eosClient, accountData } = this.props
   }
 
   render () {
