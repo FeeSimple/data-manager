@@ -84,12 +84,7 @@ class TermPriceDetailsContainer extends Component {
 
     const { id, unitid } = this.props.match.params
     const { termprice } = this.state
-    const {
-      contracts,
-      accountData,
-      setLoading,
-      history
-    } = this.props
+    const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     // console.log('term price create - this.state:', this.state)
