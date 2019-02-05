@@ -48,9 +48,9 @@ class UnitContainer extends Component {
   onDelete = async () => {
     const { propertyId, unitId } = this.state
     if (propertyId !== -1 && unitId !== -1) {
-      this.deleteOne(propertyId, unitId)
+      await this.deleteOne(propertyId, unitId)
     } else {
-      this.deleteBulk(propertyId)
+      await this.deleteBulk(propertyId)
     }
   }
 
