@@ -158,7 +158,7 @@ const FloorplanDetails = ({
           <div className='form-group row'>
             <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
               <ImagesUploader
-                url={process.env.IPFS_IMAGES_UPLOADER_ADDR}
+                url={process.env.REACT_APP_IPFS_IMAGES_UPLOADER_ADDR}
                 optimisticPreviews
                 onLoadEnd={onImagesUploaded}
                 onImageDeleted={onImageDeleted}

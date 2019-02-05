@@ -91,14 +91,13 @@ class FloorplanDetailsContainer extends Component {
     if (imagesToUpload.length > 0) {
       // Mapping values to object keys removes duplicates.
       const imagesObj = {}
-      imagesToUpload.map(multihash => {
+      imagesToUpload.forEach(multihash => {
         imagesObj[multihash] = multihash
-        return multihash
       })
 
       await Promise.all(
-        Object.keys(imagesObj).map(async multihash => {
-          fsmgrcontract.addflplanimg(
+        Object.keys(imagesObj).map(multihash => {
+          return fsmgrcontract.addflplanimg(
             accountData.active,
             floorplan.id,
             ecc.sha256(multihash),
@@ -167,16 +166,22 @@ class FloorplanDetailsContainer extends Component {
 
   async componentDidMount () {
     const { eosClient, accountData } = this.props
+    const propertyId = this.props.match.params.id
 
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      FLOORPLANIMG
-    )
+    if(propertyId !== 'new') {
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        accountData.active,
+        FLOORPLANIMG
+      )
 
-    const imgMultihashes = rows.map(row => row.ipfs_address)
-    this.setState({ imgMultihashes })
+      const imgMultihashes = rows
+        .filter(row => row.floorplan_id === Number(propertyId))
+        .map(row => row.ipfs_address)
+
+      this.setState({ imgMultihashes })
+    }
   }
 
   render () {
