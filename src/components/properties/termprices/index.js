@@ -6,6 +6,7 @@ import { TERMPRICE, FSMGRCONTRACT } from '../../../utils/consts'
 import { addTermPrices, delTermPrice } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 import { setLoading } from '../../../actions'
+import Confirm from '../../layout/Confirm'
 
 class TermPriceContainer extends Component {
   constructor (props) {
@@ -14,7 +15,11 @@ class TermPriceContainer extends Component {
     this.deleteOne = this.deleteOne.bind(this)
     this.deleteBulk = this.deleteBulk.bind(this)
     this.state = {
-      checkedEntry: {}
+      checkedEntry: {},
+      showConfirm: false,
+      propertyId: 0,
+      unitId: 0,
+      termpriceId: 0
     }
   }
 
@@ -43,10 +48,19 @@ class TermPriceContainer extends Component {
     }
   }
 
+  onDelete = async () => {
+    const { propertyId, unitId, termpriceId } = this.state
+    if (propertyId !== -1 && unitId !== -1 && termpriceId !== undefined) {
+      await this.deleteOne(propertyId, unitId, termpriceId)
+    } else {
+      await this.deleteBulk(propertyId, unitId)
+    }
+  }
+
   deleteOne = async (propertyId, unitId, termpriceId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-
+    console.log(`deleteOne - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`)
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -103,6 +117,20 @@ class TermPriceContainer extends Component {
     // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
   }
 
+  handleToggleConfirm = (propertyId, unitId, termpriceId) => {
+    const { showConfirm } = this.state
+    this.setState({ showConfirm: !showConfirm })
+    
+    if (propertyId !== -1 || unitId !== -1 || termpriceId !== -1) {
+      this.setState({ 
+        propertyId: propertyId,
+        unitId: unitId,
+        termpriceId: termpriceId
+      })
+      console.log(`handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`);
+    }
+  }
+
   render () {
     const { properties } = this.props
     const { id, unitid, termid } = this.props.match.params
@@ -113,15 +141,21 @@ class TermPriceContainer extends Component {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
       return (
-        <Table
-          propertyId={property.id}
-          unitid={unitid}
-          unit={unit}
-          termid={termid}
-          onDelete={this.deleteOne}
-          onChange={this.handleInputChange}
-          deleteBulk={this.deleteBulk}
-        />
+        <div>
+          <Table
+            propertyId={property.id}
+            unitid={unitid}
+            unit={unit}
+            termid={termid}
+            onChange={this.handleInputChange}
+            handleToggle={this.handleToggleConfirm}
+          />
+          <Confirm
+            isOpen={this.state.showConfirm}
+            handleToggle={this.handleToggleConfirm}
+            onDelete={this.onDelete}
+          />
+        </div>
       )
     }
   }
