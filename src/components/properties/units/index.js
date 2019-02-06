@@ -18,7 +18,8 @@ class UnitContainer extends Component {
       checkedEntry: {},
       showConfirm: false,
       propertyId: 0,
-      unitId: 0
+      unitId: 0,
+      deleteBulkDisabled: true
     }
   }
 
@@ -83,6 +84,18 @@ class UnitContainer extends Component {
     setLoading(false)
   }
 
+  isCheckedEntry = () => {
+    let checkedEntry = this.state.checkedEntry
+    let ids = Object.keys(checkedEntry)
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        return true
+      }
+    }
+    return false
+  }
+
   handleInputChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
@@ -92,6 +105,10 @@ class UnitContainer extends Component {
     checked[name] = value
     this.setState({
       checkedEntry: checked
+    })
+
+    this.setState({
+      deleteBulkDisabled: !this.isCheckedEntry()
     })
   }
 
@@ -137,6 +154,7 @@ class UnitContainer extends Component {
             property={property}
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
+            deleteBulkDisabled={this.state.deleteBulkDisabled}
           />
           <Confirm
             isOpen={this.state.showConfirm}

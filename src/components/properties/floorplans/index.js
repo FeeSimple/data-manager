@@ -18,7 +18,8 @@ class FloorplansContainer extends Component {
       checkedEntry: {},
       showConfirm: false,
       propertyId: 0,
-      floorplanId: 0
+      floorplanId: 0,
+      deleteBulkDisabled: true
     }
   }
 
@@ -88,6 +89,18 @@ class FloorplansContainer extends Component {
     }
   }
 
+  isCheckedEntry = () => {
+    let checkedEntry = this.state.checkedEntry
+    let ids = Object.keys(checkedEntry)
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        return true
+      }
+    }
+    return false
+  }
+
   handleInputChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
@@ -97,6 +110,10 @@ class FloorplansContainer extends Component {
     checked[name] = value
     this.setState({
       checkedEntry: checked
+    })
+
+    this.setState({
+      deleteBulkDisabled: !this.isCheckedEntry()
     })
   }
 
@@ -127,6 +144,7 @@ class FloorplansContainer extends Component {
             property={property}
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
+            deleteBulkDisabled={this.state.deleteBulkDisabled}
           />
           <Confirm
             isOpen={this.state.showConfirm}

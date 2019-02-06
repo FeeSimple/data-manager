@@ -19,7 +19,8 @@ class TermPriceContainer extends Component {
       showConfirm: false,
       propertyId: 0,
       unitId: 0,
-      termpriceId: 0
+      termpriceId: 0,
+      deleteBulkDisabled: true
     }
   }
 
@@ -101,12 +102,22 @@ class TermPriceContainer extends Component {
     }
   }
 
+  isCheckedEntry = () => {
+    let checkedEntry = this.state.checkedEntry
+    let ids = Object.keys(checkedEntry)
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        return true
+      }
+    }
+    return false
+  }
+
   handleInputChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
-
-    // console.log(`handleInputChange - name: ${name}, value: ${value}`);
 
     let checked = this.state.checkedEntry
     checked[name] = value
@@ -114,7 +125,9 @@ class TermPriceContainer extends Component {
       checkedEntry: checked
     })
 
-    // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
+    this.setState({
+      deleteBulkDisabled: !this.isCheckedEntry()
+    })
   }
 
   handleToggleConfirm = (propertyId, unitId, termpriceId) => {
@@ -149,6 +162,7 @@ class TermPriceContainer extends Component {
             termid={termid}
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
+            deleteBulkDisabled={this.state.deleteBulkDisabled}
           />
           <Confirm
             isOpen={this.state.showConfirm}

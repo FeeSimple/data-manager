@@ -6,7 +6,7 @@ import IconAdd from '../../../img/icon-add.svg'
 import UnitRow from './Row'
 
 export default props => {
-  const { propertyId, property, onChange, handleToggle } = props
+  const { propertyId, property, onChange, handleToggle, deleteBulkDisabled } = props
   return (
     <div>
       <div className='top-bar'>
@@ -192,6 +192,7 @@ export default props => {
                       size='sm'
                       outline
                       color='red'
+                      disabled={deleteBulkDisabled}
                       // onClick={() => deleteBulk(property.id)}
                       onClick={e => handleToggle(property.id, -1)}
                     >
