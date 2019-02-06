@@ -26,6 +26,7 @@ const PropertyDetails = ({
           <Col>
             <button
               className='float-right'
+              hidden={mode !== READING}
               onClick={e => handleToggle(property.id)}
             >
               <img

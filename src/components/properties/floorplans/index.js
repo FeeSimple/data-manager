@@ -154,6 +154,7 @@ class FloorplansContainer extends Component {
             isOpen={this.state.showConfirm}
             handleToggle={this.handleToggleConfirm}
             onDelete={this.onDelete}
+            text='this floor-plan?'
           />
         </div>
       )
