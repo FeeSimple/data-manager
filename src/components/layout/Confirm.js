@@ -1,27 +1,14 @@
 import React from 'react'
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Button,
-  Col,
-  Label
-} from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, Button, Col, Label } from 'reactstrap'
 
 const Confirm = props => {
-  const {
-    isOpen,
-    handleToggle,
-    onDelete,
-    text
-  } = props
+  const { isOpen, handleToggle, onDelete, text } = props
 
   return (
-    <Modal
-      isOpen={isOpen}
-      toggle={handleToggle}
-    >
-      <ModalHeader toggle={e => handleToggle(-1, -1)}>Please confirm</ModalHeader>
+    <Modal isOpen={isOpen} toggle={handleToggle}>
+      <ModalHeader toggle={e => handleToggle(-1, -1)}>
+        Please confirm
+      </ModalHeader>
       <ModalBody>
         <div>
           <Label>Are you sure you want to delete {text}</Label>

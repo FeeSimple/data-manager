@@ -61,7 +61,9 @@ class TermPriceContainer extends Component {
   deleteOne = async (propertyId, unitId, termpriceId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    console.log(`deleteOne - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`)
+    console.log(
+      `deleteOne - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`
+    )
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -133,14 +135,16 @@ class TermPriceContainer extends Component {
   handleToggleConfirm = (propertyId, unitId, termpriceId) => {
     const { showConfirm } = this.state
     this.setState({ showConfirm: !showConfirm })
-    
+
     if (propertyId !== -1 || unitId !== -1 || termpriceId !== -1) {
-      this.setState({ 
+      this.setState({
         propertyId: propertyId,
         unitId: unitId,
         termpriceId: termpriceId
       })
-      console.log(`handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`);
+      console.log(
+        `handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`
+      )
     }
   }
 

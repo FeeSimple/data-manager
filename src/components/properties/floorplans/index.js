@@ -48,7 +48,9 @@ class FloorplansContainer extends Component {
   deleteOne = async (propertyId, floorplanId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    console.log(`deleteOne - propertyId: ${propertyId}, floorplanId: ${floorplanId}`)
+    console.log(
+      `deleteOne - propertyId: ${propertyId}, floorplanId: ${floorplanId}`
+    )
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -120,13 +122,15 @@ class FloorplansContainer extends Component {
   handleToggleConfirm = (propertyId, floorplanId) => {
     const { showConfirm } = this.state
     this.setState({ showConfirm: !showConfirm })
-    
+
     if (propertyId !== -1 || floorplanId !== -1) {
-      this.setState({ 
+      this.setState({
         propertyId: propertyId,
         floorplanId: floorplanId
       })
-      console.log(`handleToggleConfirm - propertyId: ${propertyId}, floorplanId: ${floorplanId}`);
+      console.log(
+        `handleToggleConfirm - propertyId: ${propertyId}, floorplanId: ${floorplanId}`
+      )
     }
   }
 

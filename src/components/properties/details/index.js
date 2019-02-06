@@ -167,13 +167,13 @@ class PropertyDetailsContainer extends Component {
     history.push('/')
   }
 
-  handleToggleConfirm = async (propertyId) => {
+  handleToggleConfirm = async propertyId => {
     const { showConfirm } = this.state
     this.setState({ showConfirm: !showConfirm })
-    
+
     if (propertyId !== -1) {
-      this.setState({ 
-        propertyId: propertyId,
+      this.setState({
+        propertyId: propertyId
       })
 
       console.log(`handleToggleConfirm - propertyId: ${propertyId}`)

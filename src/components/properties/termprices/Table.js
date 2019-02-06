@@ -6,7 +6,14 @@ import IconAdd from '../../../img/icon-add.svg'
 import TermPriceRow from './Row'
 
 export default props => {
-  const { propertyId, unit, termid, onChange, handleToggle, deleteBulkDisabled } = props
+  const {
+    propertyId,
+    unit,
+    termid,
+    onChange,
+    handleToggle,
+    deleteBulkDisabled
+  } = props
   return (
     <div>
       <div className='top-bar'>

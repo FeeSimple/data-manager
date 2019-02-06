@@ -112,7 +112,7 @@ class UnitContainer extends Component {
     })
   }
 
-  deleteBulk = async (propertyId) => {
+  deleteBulk = async propertyId => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
     console.log(`deleteBulk - propertyId: ${propertyId}`)
@@ -130,13 +130,15 @@ class UnitContainer extends Component {
   handleToggleConfirm = (propertyId, unitId) => {
     const { showConfirm } = this.state
     this.setState({ showConfirm: !showConfirm })
-    
+
     if (propertyId !== -1 || unitId !== -1) {
-      this.setState({ 
+      this.setState({
         propertyId: propertyId,
         unitId: unitId
       })
-      console.log(`handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}`);
+      console.log(
+        `handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}`
+      )
     }
   }
 
