@@ -6,6 +6,7 @@ import { FLOORPLAN, FSMGRCONTRACT } from '../../../utils/consts'
 import { addFloorplans, delFloorplan } from '../../../actions/index'
 import { setLoading } from '../../../actions'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
+import Confirm from '../../layout/Confirm'
 
 class FloorplansContainer extends Component {
   constructor (props) {
@@ -14,7 +15,11 @@ class FloorplansContainer extends Component {
     this.deleteOne = this.deleteOne.bind(this)
     this.deleteBulk = this.deleteBulk.bind(this)
     this.state = {
-      checkedEntry: {}
+      checkedEntry: {},
+      showConfirm: false,
+      propertyId: 0,
+      floorplanId: 0,
+      deleteBulkDisabled: true
     }
   }
 
@@ -31,10 +36,21 @@ class FloorplansContainer extends Component {
     addFloorplans(id, rows)
   }
 
+  onDelete = async () => {
+    const { propertyId, floorplanId } = this.state
+    if (propertyId !== -1 && floorplanId !== -1) {
+      this.deleteOne(propertyId, floorplanId)
+    } else {
+      this.deleteBulk(propertyId)
+    }
+  }
+
   deleteOne = async (propertyId, floorplanId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-
+    console.log(
+      `deleteOne - propertyId: ${propertyId}, floorplanId: ${floorplanId}`
+    )
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -75,12 +91,22 @@ class FloorplansContainer extends Component {
     }
   }
 
+  isCheckedEntry = () => {
+    let checkedEntry = this.state.checkedEntry
+    let ids = Object.keys(checkedEntry)
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        return true
+      }
+    }
+    return false
+  }
+
   handleInputChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
-
-    // console.log(`handleInputChange - name: ${name}, value: ${value}`);
 
     let checked = this.state.checkedEntry
     checked[name] = value
@@ -88,7 +114,24 @@ class FloorplansContainer extends Component {
       checkedEntry: checked
     })
 
-    // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
+    this.setState({
+      deleteBulkDisabled: !this.isCheckedEntry()
+    })
+  }
+
+  handleToggleConfirm = (propertyId, floorplanId) => {
+    const { showConfirm } = this.state
+    this.setState({ showConfirm: !showConfirm })
+
+    if (propertyId !== -1 || floorplanId !== -1) {
+      this.setState({
+        propertyId: propertyId,
+        floorplanId: floorplanId
+      })
+      console.log(
+        `handleToggleConfirm - propertyId: ${propertyId}, floorplanId: ${floorplanId}`
+      )
+    }
   }
 
   render () {
@@ -99,13 +142,21 @@ class FloorplansContainer extends Component {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
       return (
-        <Table
-          propertyId={property.id}
-          property={property}
-          onDelete={this.deleteOne}
-          onChange={this.handleInputChange}
-          deleteBulk={this.deleteBulk}
-        />
+        <div>
+          <Table
+            propertyId={property.id}
+            property={property}
+            onChange={this.handleInputChange}
+            handleToggle={this.handleToggleConfirm}
+            deleteBulkDisabled={this.state.deleteBulkDisabled}
+          />
+          <Confirm
+            isOpen={this.state.showConfirm}
+            handleToggle={this.handleToggleConfirm}
+            onDelete={this.onDelete}
+            text='this floor-plan?'
+          />
+        </div>
       )
     }
   }

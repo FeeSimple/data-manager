@@ -168,7 +168,7 @@ class FloorplanDetailsContainer extends Component {
     const { eosClient, accountData } = this.props
     const propertyId = this.props.match.params.id
 
-    if(propertyId !== 'new') {
+    if (propertyId !== 'new') {
       const { rows } = await eosClient.getTableRows(
         true,
         FSMGRCONTRACT,

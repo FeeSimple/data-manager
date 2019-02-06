@@ -9,12 +9,15 @@ import {
 } from '../../../actions'
 import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
+import Confirm from '../../layout/Confirm'
 
 class PropertyDetailsContainer extends Component {
   state = {
     mode: READING,
     prevProperty: {},
-    property: newProperty()
+    property: newProperty(),
+    showConfirm: false,
+    propertyId: null
   }
 
   edit = (e, property) => {
@@ -123,8 +126,8 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  deleteOne = async (e, propertyId) => {
-    e.preventDefault()
+  deleteOne = async () => {
+    const propertyId = this.state.propertyId
 
     const {
       addProperties,
@@ -164,6 +167,19 @@ class PropertyDetailsContainer extends Component {
     history.push('/')
   }
 
+  handleToggleConfirm = async propertyId => {
+    const { showConfirm } = this.state
+    this.setState({ showConfirm: !showConfirm })
+
+    if (propertyId !== -1) {
+      this.setState({
+        propertyId: propertyId
+      })
+
+      console.log(`handleToggleConfirm - propertyId: ${propertyId}`)
+    }
+  }
+
   render () {
     const { isCreating, properties, id } = this.props
     const mode = isCreating ? CREATING : this.state.mode
@@ -177,16 +193,24 @@ class PropertyDetailsContainer extends Component {
           <h1 className='text-center my-5 py-5'>404 - Property not found</h1>
         )}
         {typeof property !== 'undefined' && (
-          <PropertyDetails
-            property={property}
-            mode={mode}
-            onEditClick={this.edit}
-            onSaveClick={this.save}
-            onCreateClick={this.create}
-            onCancelClick={this.cancel}
-            onChange={e => this.handleChange(e)}
-            onDelete={this.deleteOne}
-          />
+          <div>
+            <PropertyDetails
+              property={property}
+              mode={mode}
+              onEditClick={this.edit}
+              onSaveClick={this.save}
+              onCreateClick={this.create}
+              onCancelClick={this.cancel}
+              onChange={e => this.handleChange(e)}
+              handleToggle={this.handleToggleConfirm}
+            />
+            <Confirm
+              isOpen={this.state.showConfirm}
+              handleToggle={this.handleToggleConfirm}
+              onDelete={this.deleteOne}
+              text='this property and its associated units/floor-plans?'
+            />
+          </div>
         )}
       </div>
     )

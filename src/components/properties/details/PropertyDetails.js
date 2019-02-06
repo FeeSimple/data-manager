@@ -14,7 +14,7 @@ const PropertyDetails = ({
   onCreateClick,
   onSaveClick,
   onChange,
-  onDelete
+  handleToggle
 }) => (
   <div>
     <div className='top-bar'>
@@ -26,7 +26,8 @@ const PropertyDetails = ({
           <Col>
             <button
               className='float-right'
-              onClick={e => onDelete(e, property.id)}
+              hidden={mode !== READING}
+              onClick={e => handleToggle(property.id)}
             >
               <img
                 src={IconDelete}

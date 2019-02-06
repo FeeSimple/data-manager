@@ -4,7 +4,7 @@ import IconDelete from '../../../img/icon-delete.svg'
 import { Link } from 'react-router-dom'
 
 export default props => {
-  const { unit, termprice, propertyId, onDelete, onChange } = props
+  const { unit, termprice, propertyId, onChange, handleToggle } = props
   return (
     <tr role='row' className='even'>
       <td>
@@ -32,7 +32,7 @@ export default props => {
       <td>
         <button
           className='table-del'
-          onClick={e => onDelete(propertyId, unit.id, termprice.id)}
+          onClick={e => handleToggle(propertyId, unit.id, termprice.id)}
         >
           <img src={IconDelete} alt='' />
         </button>

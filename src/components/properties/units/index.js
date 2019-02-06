@@ -6,6 +6,7 @@ import { UNIT, FSMGRCONTRACT } from '../../../utils/consts'
 import { addUnits, delUnit } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 import { setLoading } from '../../../actions'
+import Confirm from '../../layout/Confirm'
 
 class UnitContainer extends Component {
   constructor (props) {
@@ -14,7 +15,11 @@ class UnitContainer extends Component {
     this.deleteOne = this.deleteOne.bind(this)
     this.deleteBulk = this.deleteBulk.bind(this)
     this.state = {
-      checkedEntry: {}
+      checkedEntry: {},
+      showConfirm: false,
+      propertyId: 0,
+      unitId: 0,
+      deleteBulkDisabled: true
     }
   }
 
@@ -41,10 +46,19 @@ class UnitContainer extends Component {
     }
   }
 
+  onDelete = async () => {
+    const { propertyId, unitId } = this.state
+    if (propertyId !== -1 && unitId !== -1) {
+      await this.deleteOne(propertyId, unitId)
+    } else {
+      await this.deleteBulk(propertyId)
+    }
+  }
+
   deleteOne = async (propertyId, unitId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-
+    console.log(`deleteOne - propertyId: ${propertyId} ,unitId: ${unitId}`)
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -70,12 +84,22 @@ class UnitContainer extends Component {
     setLoading(false)
   }
 
+  isCheckedEntry = () => {
+    let checkedEntry = this.state.checkedEntry
+    let ids = Object.keys(checkedEntry)
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i]
+      if (checkedEntry[id] == true) {
+        return true
+      }
+    }
+    return false
+  }
+
   handleInputChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
-
-    // console.log(`handleInputChange - name: ${name}, value: ${value}`);
 
     let checked = this.state.checkedEntry
     checked[name] = value
@@ -83,7 +107,9 @@ class UnitContainer extends Component {
       checkedEntry: checked
     })
 
-    // console.log('handleInputChange - this.state.checkedEntry:', this.state.checkedEntry);
+    this.setState({
+      deleteBulkDisabled: !this.isCheckedEntry()
+    })
   }
 
   deleteBulk = async propertyId => {
@@ -101,6 +127,21 @@ class UnitContainer extends Component {
     }
   }
 
+  handleToggleConfirm = (propertyId, unitId) => {
+    const { showConfirm } = this.state
+    this.setState({ showConfirm: !showConfirm })
+
+    if (propertyId !== -1 || unitId !== -1) {
+      this.setState({
+        propertyId: propertyId,
+        unitId: unitId
+      })
+      console.log(
+        `handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}`
+      )
+    }
+  }
+
   render () {
     const { properties } = this.props
     const { id } = this.props.match.params
@@ -109,13 +150,21 @@ class UnitContainer extends Component {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
       return (
-        <Table
-          propertyId={property.id}
-          property={property}
-          onDelete={this.deleteOne}
-          onChange={this.handleInputChange}
-          deleteBulk={this.deleteBulk}
-        />
+        <div>
+          <Table
+            propertyId={property.id}
+            property={property}
+            onChange={this.handleInputChange}
+            handleToggle={this.handleToggleConfirm}
+            deleteBulkDisabled={this.state.deleteBulkDisabled}
+          />
+          <Confirm
+            isOpen={this.state.showConfirm}
+            handleToggle={this.handleToggleConfirm}
+            onDelete={this.onDelete}
+            text='this unit?'
+          />
+        </div>
       )
     }
   }
