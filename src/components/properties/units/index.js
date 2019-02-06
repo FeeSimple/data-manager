@@ -142,6 +142,7 @@ class UnitContainer extends Component {
             isOpen={this.state.showConfirm}
             handleToggle={this.handleToggleConfirm}
             onDelete={this.onDelete}
+            text='this unit?'
           />
         </div>
       )

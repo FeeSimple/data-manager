@@ -208,6 +208,7 @@ class PropertyDetailsContainer extends Component {
               isOpen={this.state.showConfirm}
               handleToggle={this.handleToggleConfirm}
               onDelete={this.deleteOne}
+              text='this property and its associated units/floor-plans?'
             />
           </div>
         )}

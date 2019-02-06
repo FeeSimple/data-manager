@@ -12,7 +12,8 @@ const Confirm = props => {
   const {
     isOpen,
     handleToggle,
-    onDelete
+    onDelete,
+    text
   } = props
 
   return (
@@ -23,7 +24,7 @@ const Confirm = props => {
       <ModalHeader toggle={e => handleToggle(-1, -1)}>Please confirm</ModalHeader>
       <ModalBody>
         <div>
-          <Label>Are you sure you want to delete?</Label>
+          <Label>Are you sure you want to delete {text}</Label>
         </div>
         <div className='form-group row'>
           <Col xs={12} sm={6}>
