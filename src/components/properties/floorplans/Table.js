@@ -6,7 +6,7 @@ import IconAdd from '../../../img/icon-add.svg'
 import FloorplanRow from './Row'
 
 export default props => {
-  const { property, onDelete, onChange, deleteBulk } = props
+  const { property, onChange, handleToggle } = props
   return (
     <div>
       <div className='top-bar'>
@@ -153,8 +153,8 @@ export default props => {
                               key={floorplanId}
                               floorplan={property.floorplans[floorplanId]}
                               property={property}
-                              onDelete={onDelete}
                               onChange={onChange}
+                              handleToggle={handleToggle}
                             />
                           ))}
                       </tbody>
@@ -167,7 +167,7 @@ export default props => {
                       size='sm'
                       outline
                       color='red'
-                      onClick={() => deleteBulk(property.id)}
+                      onClick={e => handleToggle(property.id, -1)}
                     >
                       Delete Checked
                     </Button>
