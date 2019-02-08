@@ -201,6 +201,17 @@ class UnitDetailsContainer extends Component {
     const mode = isCreating ? CREATING : this.state.mode
     let unit =
       mode === EDITING || mode === CREATING ? this.state.unit : units[unitid]
+
+    if (mode === READING) {
+      this.setState({
+        mode: EDITING,
+        unit,
+        prevUnit: {
+          ...unit
+        }
+      })
+    }
+
     return (
       <div>
         {typeof unit === 'undefined' && (

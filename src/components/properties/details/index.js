@@ -187,6 +187,17 @@ class PropertyDetailsContainer extends Component {
       mode === EDITING || mode === CREATING
         ? this.state.property
         : properties[id]
+
+    if (mode === READING) {
+      this.setState({
+        mode: EDITING,
+        property,
+        prevProperty: {
+          ...property
+        }
+      })
+    }
+    
     return (
       <div>
         {typeof property === 'undefined' && (

@@ -200,6 +200,17 @@ class FloorplanDetailsContainer extends Component {
       mode === EDITING || mode === CREATING
         ? this.state.floorplan
         : floorplans[floorplanId]
+
+    if (mode === READING) {
+      this.setState({
+        mode: EDITING,
+        floorplan,
+        prevFloorplan: {
+          ...floorplan
+        }
+      })
+    }
+
     return (
       <div>
         {typeof floorplan === 'undefined' && (

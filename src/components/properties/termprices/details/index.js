@@ -160,6 +160,17 @@ class TermPriceDetailsContainer extends Component {
       mode === EDITING || mode === CREATING
         ? this.state.termprice
         : units[unitid].termprices[termid]
+
+    if (mode === READING) {
+      this.setState({
+        mode: EDITING,
+        termprice,
+        prevTermPrice: {
+          ...termprice
+        }
+      })
+    }
+
     return (
       <div>
         {typeof termprice === 'undefined' && (
