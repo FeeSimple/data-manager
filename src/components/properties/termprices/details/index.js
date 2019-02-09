@@ -15,7 +15,7 @@ class TermPriceDetailsContainer extends Component {
     mode: READING,
     prevTermPrice: {},
 
-    termprice: newTermPrice,
+    termprice: newTermPrice(),
     buffer: null
   }
 
@@ -195,8 +195,8 @@ class TermPriceDetailsContainer extends Component {
 const newTermPrice = () => ({
   rent: 0,
   term: 0,
-  start_date: 0,
-  end_date: 0
+  start_date: new Date().toISOString().split('T')[0],
+  end_date: new Date().toISOString().split('T')[0]
 })
 
 function mapStateToProps ({

@@ -246,7 +246,7 @@ const newUnit = () => ({
   rent_min: 0,
   rent_max: 0,
   status: '',
-  date_available: ''
+  date_available: new Date().toISOString().split('T')[0]
 })
 
 function mapStateToProps ({

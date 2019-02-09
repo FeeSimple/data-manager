@@ -15,11 +15,11 @@ export default props => {
       <td> {termprice.term}</td>
       <td>
         {' '}
-        {new Date(parseInt(termprice.start_date, 10)).toLocaleDateString()}
+        {termprice.start_date}
       </td>
       <td>
         {' '}
-        {new Date(parseInt(termprice.end_date, 10)).toLocaleDateString()}
+        {termprice.end_date}
       </td>
       <td>
         <Link
