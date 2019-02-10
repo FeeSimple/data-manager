@@ -4,18 +4,12 @@ import { withRouter } from 'react-router-dom'
 import ecc from 'eosjs-ecc'
 
 import { setFloorplan, setLoading } from '../../../../actions'
-import FloorplanDetails, {
-  READING,
-  EDITING,
-  CREATING
-} from './FloorplanDetails'
+import FloorplanDetails from './FloorplanDetails'
 import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 
 class FloorplanDetailsContainer extends Component {
   state = {
-    mode: READING,
     prevFloorplan: {},
-
     floorplan: newFloorplan(),
     buffer: null,
     imagesToUpload: [],
@@ -42,18 +36,6 @@ class FloorplanDetailsContainer extends Component {
     newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
 
     this.setState({ imagesToUpload: newImagesToUpload })
-  }
-
-  edit = (e, floorplan) => {
-    e.preventDefault()
-
-    this.setState({
-      mode: EDITING,
-      floorplan,
-      prevFloorplan: {
-        ...floorplan
-      }
-    })
   }
 
   save = async e => {
@@ -124,7 +106,6 @@ class FloorplanDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -195,21 +176,7 @@ class FloorplanDetailsContainer extends Component {
       thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
     }))
 
-    const mode = isCreating ? CREATING : this.state.mode
-    let floorplan =
-      mode === EDITING || mode === CREATING
-        ? this.state.floorplan
-        : floorplans[floorplanId]
-
-    if (mode === READING) {
-      this.setState({
-        mode: EDITING,
-        floorplan,
-        prevFloorplan: {
-          ...floorplan
-        }
-      })
-    }
+    let floorplan = isCreating ? this.state.floorplan : floorplans[floorplanId]
 
     return (
       <div>
@@ -219,8 +186,8 @@ class FloorplanDetailsContainer extends Component {
         {typeof floorplan !== 'undefined' && (
           <FloorplanDetails
             floorplan={floorplan}
-            mode={mode}
-            onEditClick={this.edit}
+            propertyId={id}
+            isCreating={isCreating}
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}
