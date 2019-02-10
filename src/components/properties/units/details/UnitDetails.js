@@ -12,9 +12,8 @@ export const CREATING = 'creating'
 
 const UnitDetails = ({
   unit,
+  isCreating,
   propertyId,
-  mode,
-  onEditClick,
   onCreateClick,
   onSaveClick,
   onChange,
@@ -53,7 +52,6 @@ const UnitDetails = ({
               name='name'
               value={unit.name}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -67,7 +65,6 @@ const UnitDetails = ({
               name='bedrooms'
               value={unit.bedrooms}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -81,7 +78,6 @@ const UnitDetails = ({
               name='bathrooms'
               value={unit.bathrooms}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -95,7 +91,6 @@ const UnitDetails = ({
               name='sq_ft_min'
               value={unit.sq_ft_min}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
           <div className='col-12 col-md-5 col-lg-4'>
@@ -107,7 +102,6 @@ const UnitDetails = ({
               name='sq_ft_max'
               value={unit.sq_ft_max}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -121,7 +115,6 @@ const UnitDetails = ({
               name='rent_min'
               value={unit.rent_min}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
           <div className='col-12 col-md-5 col-lg-4'>
@@ -133,7 +126,6 @@ const UnitDetails = ({
               name='rent_max'
               value={unit.rent_max}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -171,7 +163,6 @@ const UnitDetails = ({
               label='Date Available'
               type='date'
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -180,55 +171,45 @@ const UnitDetails = ({
             <ImageGallery items={galleryItems} />
           </div>
         </div>
-        {mode === EDITING && (
-          <div className='form-group row'>
-            <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-              <ImagesUploader
-                url='http://localhost:9000/multiple'
-                optimisticPreviews
-                onLoadEnd={onImagesUploaded}
-                onImageDeleted={onImageDeleted}
-                label='Upload multiple images'
-                styles={{
-                  label: {
-                    fontFamily: 'Open sans, sans-serif',
-                    fontSize: '14px'
-                  }
-                }}
-              />
-            </div>
+        <div className='form-group row'>
+          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
+            <ImagesUploader
+              url='http://localhost:9000/multiple'
+              optimisticPreviews
+              onLoadEnd={onImagesUploaded}
+              onImageDeleted={onImageDeleted}
+              label='Upload multiple images'
+              styles={{
+                label: {
+                  fontFamily: 'Open sans, sans-serif',
+                  fontSize: '14px'
+                }
+              }}
+            />
           </div>
-        )}
+        </div>
         <div className='form-group m-t-50 row'>
           <div className='col-md-5 col-lg-4 offset-md-1 offset-lg-2 col-6'>
             <button
               type='button'
               className='btn btn-base w100 form-btn'
-              hidden={mode !== READING}
-              onClick={e => onEditClick(e, unit)}
-            >
-              Edit
-            </button>
-            <button
-              type='button'
-              className='btn btn-base w100 form-btn'
-              hidden={mode !== EDITING}
               onClick={e => onSaveClick(e)}
               style={{ marginRight: '0.5em' }}
+              hidden={isCreating}
             >
               Save
             </button>
             <button
               type='button'
               className='btn btn-base w100 form-btn'
-              hidden={mode !== CREATING}
               onClick={e => onCreateClick(e, unit)}
+              hidden={!isCreating}
             >
               Create
             </button>
           </div>
           <div className='col-md-5 col-lg-4 col-6'>
-            <Link to={mode === CREATING ? '/' : `/${propertyId}/unit`}>
+            <Link to={`/${propertyId}/unit`}>
               <button type='button' className='btn btn-gray-o w100 form-btn'>
                 Cancel
               </button>

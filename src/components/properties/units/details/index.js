@@ -9,7 +9,6 @@ import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 
 class UnitDetailsContainer extends Component {
   state = {
-    mode: READING,
     prevUnit: {},
 
     unit: newUnit(),
@@ -122,7 +121,6 @@ class UnitDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -198,19 +196,7 @@ class UnitDetailsContainer extends Component {
       thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
     }))
 
-    const mode = isCreating ? CREATING : this.state.mode
-    let unit =
-      mode === EDITING || mode === CREATING ? this.state.unit : units[unitid]
-
-    if (mode === READING) {
-      this.setState({
-        mode: EDITING,
-        unit,
-        prevUnit: {
-          ...unit
-        }
-      })
-    }
+    let unit = isCreating ? this.state.unit : units[unitid]
 
     return (
       <div>
@@ -220,8 +206,8 @@ class UnitDetailsContainer extends Component {
         {typeof unit !== 'undefined' && (
           <UnitDetails
             unit={unit}
+            isCreating={isCreating}
             propertyId={id}
-            mode={mode}
             onEditClick={this.edit}
             onSaveClick={this.save}
             onCreateClick={this.create}
