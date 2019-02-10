@@ -11,6 +11,7 @@ class UnitDetailsContainer extends Component {
   state = {
     prevUnit: {},
     unit: newUnit(),
+    isLeased: true,
     buffer: null,
     imagesToUpload: [],
     imgMultihashes: []
@@ -154,6 +155,7 @@ class UnitDetailsContainer extends Component {
         ...prevState.unit,
         [name]: value
       }
+      state.isLeased = target.type === 'radio' && value.toLowerCase() === 'leased'
       return state
     })
   }
@@ -194,6 +196,7 @@ class UnitDetailsContainer extends Component {
           <UnitDetails
             unit={unit}
             isCreating={isCreating}
+            isLeased={this.state.isLeased}
             propertyId={id}
             onSaveClick={this.save}
             onCreateClick={this.create}

@@ -9,6 +9,7 @@ import { AvForm, AvField } from 'availity-reactstrap-validation'
 const UnitDetails = ({
   unit,
   isCreating,
+  isLeased,
   propertyId,
   onCreateClick,
   onSaveClick,
@@ -134,6 +135,7 @@ const UnitDetails = ({
                 name='status'
                 id='status'
                 value='Leased'
+                checked={isLeased}
                 onChange={onChange}
               />{' '}
               <label className='form-label'>Leased</label>
