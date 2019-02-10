@@ -13,14 +13,8 @@ export default props => {
       <td>{termprice.id}</td>
       <td>{termprice.rent}</td>
       <td> {termprice.term}</td>
-      <td>
-        {' '}
-        {termprice.start_date}
-      </td>
-      <td>
-        {' '}
-        {termprice.end_date}
-      </td>
+      <td> {termprice.start_date}</td>
+      <td> {termprice.end_date}</td>
       <td>
         <Link
           to={`/${propertyId}/unit/${unit.id}/termprice/${termprice.id}`}

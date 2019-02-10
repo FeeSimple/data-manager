@@ -157,7 +157,8 @@ class UnitDetailsContainer extends Component {
         ...prevState.unit,
         [name]: value
       }
-      state.isLeased = target.type === 'radio' && value.toLowerCase() === 'leased'
+      state.isLeased =
+        target.type === 'radio' && value.toLowerCase() === 'leased'
       return state
     })
   }
@@ -186,7 +187,8 @@ class UnitDetailsContainer extends Component {
         unit: existingUnit,
         isLeased: existingUnit.status.toLowerCase() === 'leased'
       })
-    } else { // Create a new unit
+    } else {
+      // Create a new unit
       this.setState({
         unit: newUnit(),
         isLeased: false

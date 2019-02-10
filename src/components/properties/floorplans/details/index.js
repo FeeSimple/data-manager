@@ -42,7 +42,13 @@ class FloorplanDetailsContainer extends Component {
 
     const propertyId = this.props.match.params.id
     const { floorplan, imagesToUpload } = this.state
-    const { contracts, accountData, setLoading, setFloorplan, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setFloorplan,
+      history
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -175,7 +181,8 @@ class FloorplanDetailsContainer extends Component {
       this.setState({
         floorplan: existingFloorplan
       })
-    } else { // Create a new floorplan
+    } else {
+      // Create a new floorplan
       this.setState({
         floorplan: newFloorplan()
       })

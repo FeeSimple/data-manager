@@ -22,7 +22,13 @@ class PropertyDetailsContainer extends Component {
     e.preventDefault()
 
     const { property } = this.state
-    const { contracts, accountData, setLoading, setProperty, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setProperty,
+      history
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -175,7 +181,8 @@ class PropertyDetailsContainer extends Component {
       this.setState({
         property: existingProperty
       })
-    } else { // Create a new property
+    } else {
+      // Create a new property
       this.setState({
         property: newProperty()
       })
@@ -184,7 +191,7 @@ class PropertyDetailsContainer extends Component {
 
   render () {
     const { isCreating, properties, id } = this.props
-    
+
     return (
       <div>
         <PropertyDetails

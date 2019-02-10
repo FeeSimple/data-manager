@@ -126,7 +126,6 @@ class TermPriceDetailsContainer extends Component {
   }
 
   async componentDidMount () {
-
     const { isCreating, properties } = this.props
     const { id, unitid, termid } = this.props.match.params
     const { units } = properties[id]
@@ -137,7 +136,8 @@ class TermPriceDetailsContainer extends Component {
       this.setState({
         termprice: existingTermprice
       })
-    } else { // Create a new termprice
+    } else {
+      // Create a new termprice
       this.setState({
         termprice: newTermPrice()
       })

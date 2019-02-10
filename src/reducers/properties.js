@@ -136,7 +136,9 @@ export function properties (state = {}, action) {
 
       units.forEach(unit => {
         if (newState[unit.property_id]) {
-          unit.date_available = new Date(parseInt(unit.date_available, 10)).toISOString().split('T')[0]
+          unit.date_available = new Date(parseInt(unit.date_available, 10))
+            .toISOString()
+            .split('T')[0]
           newState[unit.property_id].units[unit.id] = {
             ...unit,
             termprices: {}
@@ -186,8 +188,12 @@ export function properties (state = {}, action) {
 
       termprices.forEach(termprice => {
         if (newState[id] && newState[id].units[termprice.unit_id]) {
-          termprice.start_date = new Date(parseInt(termprice.start_date, 10)).toISOString().split('T')[0]
-          termprice.end_date = new Date(parseInt(termprice.end_date, 10)).toISOString().split('T')[0]
+          termprice.start_date = new Date(parseInt(termprice.start_date, 10))
+            .toISOString()
+            .split('T')[0]
+          termprice.end_date = new Date(parseInt(termprice.end_date, 10))
+            .toISOString()
+            .split('T')[0]
           newState[id].units[termprice.unit_id].termprices[
             termprice.id
           ] = termprice
