@@ -3,32 +3,14 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { setTermPrice, setLoading, setErrMsg } from '../../../../actions'
-import TermPriceDetails, {
-  READING,
-  EDITING,
-  CREATING
-} from './TermPriceDetails'
+import TermPriceDetails from './TermPriceDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
 
 class TermPriceDetailsContainer extends Component {
   state = {
-    mode: READING,
     prevTermPrice: {},
-
     termprice: newTermPrice(),
     buffer: null
-  }
-
-  edit = (e, termprice) => {
-    e.preventDefault()
-
-    this.setState({
-      mode: EDITING,
-      termprice,
-      prevTermPrice: {
-        ...termprice
-      }
-    })
   }
 
   save = async e => {
@@ -97,7 +79,6 @@ class TermPriceDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -155,21 +136,7 @@ class TermPriceDetailsContainer extends Component {
     console.log('termprice details render - this.state:', this.state)
     console.log('termprice details render - isCreating:', isCreating)
 
-    const mode = isCreating ? CREATING : this.state.mode
-    let termprice =
-      mode === EDITING || mode === CREATING
-        ? this.state.termprice
-        : units[unitid].termprices[termid]
-
-    if (mode === READING) {
-      this.setState({
-        mode: EDITING,
-        termprice,
-        prevTermPrice: {
-          ...termprice
-        }
-      })
-    }
+    let termprice = isCreating ? this.state.termprice : units[unitid].termprices[termid]
 
     return (
       <div>
@@ -179,8 +146,9 @@ class TermPriceDetailsContainer extends Component {
         {typeof termprice !== 'undefined' && (
           <TermPriceDetails
             termprice={termprice}
-            mode={mode}
-            onEditClick={this.edit}
+            propertyId={id}
+            unitId={unitid}
+            isCreating={isCreating}
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}

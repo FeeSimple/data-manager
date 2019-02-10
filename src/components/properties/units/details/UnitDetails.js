@@ -6,10 +6,6 @@ import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
 
-export const READING = 'reading'
-export const EDITING = 'editing'
-export const CREATING = 'creating'
-
 const UnitDetails = ({
   unit,
   isCreating,

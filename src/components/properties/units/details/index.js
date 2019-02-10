@@ -4,13 +4,12 @@ import { withRouter } from 'react-router-dom'
 import ecc from 'eosjs-ecc'
 
 import { setUnit, setLoading, setErrMsg } from '../../../../actions'
-import UnitDetails, { READING, EDITING, CREATING } from './UnitDetails'
+import UnitDetails from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 
 class UnitDetailsContainer extends Component {
   state = {
     prevUnit: {},
-
     unit: newUnit(),
     buffer: null,
     imagesToUpload: [],
@@ -37,18 +36,6 @@ class UnitDetailsContainer extends Component {
     newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
 
     this.setState({ imagesToUpload: newImagesToUpload })
-  }
-
-  edit = (e, unit) => {
-    e.preventDefault()
-
-    this.setState({
-      mode: EDITING,
-      unit,
-      prevUnit: {
-        ...unit
-      }
-    })
   }
 
   save = async e => {
@@ -208,7 +195,6 @@ class UnitDetailsContainer extends Component {
             unit={unit}
             isCreating={isCreating}
             propertyId={id}
-            onEditClick={this.edit}
             onSaveClick={this.save}
             onCreateClick={this.create}
             onCancelClick={this.cancel}
