@@ -3,14 +3,9 @@ import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
 import IconDelete from '../../../img/icon-delete.svg'
 
-export const READING = 'reading'
-export const EDITING = 'editing'
-export const CREATING = 'creating'
-
 const PropertyDetails = ({
   property,
-  mode,
-  onEditClick,
+  isCreating,
   onCreateClick,
   onSaveClick,
   onChange,
@@ -26,7 +21,7 @@ const PropertyDetails = ({
           <Col>
             <button
               className='float-right'
-              hidden={mode !== READING}
+              hidden={isCreating}
               onClick={e => handleToggle(property.id)}
             >
               <img
@@ -57,7 +52,6 @@ const PropertyDetails = ({
               name='name'
               value={property.name}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -72,7 +66,6 @@ const PropertyDetails = ({
               type='textarea'
               onChange={onChange}
               value={property.address_1}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -86,7 +79,6 @@ const PropertyDetails = ({
               type='textarea'
               value={property.address_2}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -98,7 +90,6 @@ const PropertyDetails = ({
               className='form-control'
               name='city'
               type='text'
-              disabled={mode === READING}
               onChange={onChange}
               value={property.city}
             />
@@ -112,7 +103,6 @@ const PropertyDetails = ({
               name='postal_code'
               className='form-control'
               type='text'
-              disabled={mode === READING}
               onChange={onChange}
               value={property.postal_code}
             />
@@ -126,7 +116,6 @@ const PropertyDetails = ({
               name='unit_count'
               className='form-control'
               type='text'
-              disabled={mode === READING}
               onChange={onChange}
               value={property.unit_count}
             />
@@ -137,15 +126,7 @@ const PropertyDetails = ({
             <button
               type='button'
               className='btn btn-base w100 form-btn'
-              hidden={mode !== READING}
-              onClick={e => onEditClick(e, property)}
-            >
-              Edit
-            </button>
-            <button
-              type='button'
-              className='btn btn-base w100 form-btn'
-              hidden={mode !== EDITING}
+              hidden={isCreating}
               onClick={e => onSaveClick(e)}
               style={{ marginRight: '0.5em' }}
             >
@@ -154,14 +135,14 @@ const PropertyDetails = ({
             <button
               type='button'
               className='btn btn-base w100 form-btn'
-              hidden={mode !== CREATING}
+              hidden={!isCreating}
               onClick={e => onCreateClick(e, property)}
             >
               Create
             </button>
           </div>
           <div className='col-md-5 col-lg-4 col-6'>
-            <Link to={mode === CREATING ? '/' : `/${property.id}`}>
+            <Link to='/'>
               <button type='button' className='btn btn-gray-o w100 form-btn'>
                 Cancel
               </button>

@@ -3,32 +3,13 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { setTermPrice, setLoading, setErrMsg } from '../../../../actions'
-import TermPriceDetails, {
-  READING,
-  EDITING,
-  CREATING
-} from './TermPriceDetails'
+import TermPriceDetails from './TermPriceDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
 
 class TermPriceDetailsContainer extends Component {
   state = {
-    mode: READING,
-    prevTermPrice: {},
-
-    termprice: newTermPrice,
+    termprice: 'undefined',
     buffer: null
-  }
-
-  edit = (e, termprice) => {
-    e.preventDefault()
-
-    this.setState({
-      mode: EDITING,
-      termprice,
-      prevTermPrice: {
-        ...termprice
-      }
-    })
   }
 
   save = async e => {
@@ -97,7 +78,6 @@ class TermPriceDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -145,38 +125,40 @@ class TermPriceDetailsContainer extends Component {
     })
   }
 
-  render () {
+  async componentDidMount () {
     const { isCreating, properties } = this.props
     const { id, unitid, termid } = this.props.match.params
     const { units } = properties[id]
 
-    console.log('termprice details render - this.props:', this.props)
+    // Edit an existing termprice
+    if (!isCreating) {
+      let existingTermprice = units[unitid].termprices[termid]
+      this.setState({
+        termprice: existingTermprice
+      })
+    } else {
+      // Create a new termprice
+      this.setState({
+        termprice: newTermPrice()
+      })
+    }
+  }
 
-    console.log('termprice details render - this.state:', this.state)
-    console.log('termprice details render - isCreating:', isCreating)
+  render () {
+    const { isCreating } = this.props
+    const { id, unitid } = this.props.match.params
 
-    const mode = isCreating ? CREATING : this.state.mode
-    let termprice =
-      mode === EDITING || mode === CREATING
-        ? this.state.termprice
-        : units[unitid].termprices[termid]
     return (
-      <div>
-        {typeof termprice === 'undefined' && (
-          <h1 className='text-center my-5 py-5'>404 - Term Price not found</h1>
-        )}
-        {typeof termprice !== 'undefined' && (
-          <TermPriceDetails
-            termprice={termprice}
-            mode={mode}
-            onEditClick={this.edit}
-            onSaveClick={this.save}
-            onCreateClick={this.create}
-            onCancelClick={this.cancel}
-            onChange={e => this.handleChange(e)}
-          />
-        )}
-      </div>
+      <TermPriceDetails
+        termprice={this.state.termprice}
+        propertyId={id}
+        unitId={unitid}
+        isCreating={isCreating}
+        onSaveClick={this.save}
+        onCreateClick={this.create}
+        onCancelClick={this.cancel}
+        onChange={e => this.handleChange(e)}
+      />
     )
   }
 }
@@ -184,8 +166,8 @@ class TermPriceDetailsContainer extends Component {
 const newTermPrice = () => ({
   rent: 0,
   term: 0,
-  start_date: 0,
-  end_date: 0
+  start_date: new Date().toISOString().split('T')[0],
+  end_date: new Date().toISOString().split('T')[0]
 })
 
 function mapStateToProps ({

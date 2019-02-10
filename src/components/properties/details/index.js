@@ -7,36 +7,28 @@ import {
   setLoading,
   delProperty
 } from '../../../actions'
-import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
+import PropertyDetails from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 import Confirm from '../../layout/Confirm'
 
 class PropertyDetailsContainer extends Component {
   state = {
-    mode: READING,
-    prevProperty: {},
-    property: newProperty(),
+    property: 'undefined',
     showConfirm: false,
     propertyId: null
-  }
-
-  edit = (e, property) => {
-    e.preventDefault()
-
-    this.setState({
-      mode: EDITING,
-      property,
-      prevProperty: {
-        ...property
-      }
-    })
   }
 
   save = async e => {
     e.preventDefault()
 
     const { property } = this.state
-    const { contracts, accountData, setLoading, setProperty } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setProperty,
+      history
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -60,6 +52,7 @@ class PropertyDetailsContainer extends Component {
     )
 
     setProperty(property)
+    history.push('/')
     setLoading(false)
   }
 
@@ -82,7 +75,6 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -145,7 +137,7 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
+    // this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -180,38 +172,43 @@ class PropertyDetailsContainer extends Component {
     }
   }
 
+  async componentDidMount () {
+    const { isCreating, properties, id } = this.props
+
+    // Edit an existing property
+    if (!isCreating) {
+      let existingProperty = properties[id]
+      this.setState({
+        property: existingProperty
+      })
+    } else {
+      // Create a new property
+      this.setState({
+        property: newProperty()
+      })
+    }
+  }
+
   render () {
     const { isCreating, properties, id } = this.props
-    const mode = isCreating ? CREATING : this.state.mode
-    let property =
-      mode === EDITING || mode === CREATING
-        ? this.state.property
-        : properties[id]
+
     return (
       <div>
-        {typeof property === 'undefined' && (
-          <h1 className='text-center my-5 py-5'>404 - Property not found</h1>
-        )}
-        {typeof property !== 'undefined' && (
-          <div>
-            <PropertyDetails
-              property={property}
-              mode={mode}
-              onEditClick={this.edit}
-              onSaveClick={this.save}
-              onCreateClick={this.create}
-              onCancelClick={this.cancel}
-              onChange={e => this.handleChange(e)}
-              handleToggle={this.handleToggleConfirm}
-            />
-            <Confirm
-              isOpen={this.state.showConfirm}
-              handleToggle={this.handleToggleConfirm}
-              onDelete={this.deleteOne}
-              text='this property and its associated units/floor-plans?'
-            />
-          </div>
-        )}
+        <PropertyDetails
+          property={this.state.property}
+          isCreating={isCreating}
+          onSaveClick={this.save}
+          onCreateClick={this.create}
+          onCancelClick={this.cancel}
+          onChange={e => this.handleChange(e)}
+          handleToggle={this.handleToggleConfirm}
+        />
+        <Confirm
+          isOpen={this.state.showConfirm}
+          handleToggle={this.handleToggleConfirm}
+          onDelete={this.deleteOne}
+          text='this property and its associated units/floor-plans?'
+        />
       </div>
     )
   }
