@@ -10,7 +10,7 @@ import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 class UnitDetailsContainer extends Component {
   state = {
     prevUnit: {},
-    unit: newUnit(),
+    unit: 'undefined',
     isLeased: true,
     buffer: null,
     imagesToUpload: [],
@@ -44,7 +44,7 @@ class UnitDetailsContainer extends Component {
 
     const propertyId = this.props.match.params.id
     const { unit, imagesToUpload } = this.state
-    const { contracts, accountData, setLoading, setUnit } = this.props
+    const { contracts, accountData, setLoading, setUnit, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -92,6 +92,8 @@ class UnitDetailsContainer extends Component {
         })
       )
     }
+
+    history.push(`/${propertyId}/unit`)
 
     setLoading(false)
   }
@@ -172,12 +174,29 @@ class UnitDetailsContainer extends Component {
 
     const imgMultihashes = rows.map(row => row.ipfs_address)
     this.setState({ imgMultihashes })
-  }
 
-  render () {
     const { isCreating, properties } = this.props
     const { id, unitid } = this.props.match.params
     const { units } = properties[id]
+
+    // Edit an existing unit
+    if (!isCreating) {
+      let existingUnit = units[unitid]
+      this.setState({
+        unit: existingUnit,
+        isLeased: existingUnit.status.toLowerCase() === 'leased'
+      })
+    } else { // Create a new unit
+      this.setState({
+        unit: newUnit(),
+        isLeased: false
+      })
+    }
+  }
+
+  render () {
+    const { isCreating } = this.props
+    const { id } = this.props.match.params
     const { imgMultihashes } = this.state
 
     const galleryItems = imgMultihashes.map(multihash => ({
@@ -185,28 +204,21 @@ class UnitDetailsContainer extends Component {
       thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
     }))
 
-    let unit = isCreating ? this.state.unit : units[unitid]
-
     return (
       <div>
-        {typeof unit === 'undefined' && (
-          <h1 className='text-center my-5 py-5'>404 - Unit not found</h1>
-        )}
-        {typeof unit !== 'undefined' && (
-          <UnitDetails
-            unit={unit}
-            isCreating={isCreating}
-            isLeased={this.state.isLeased}
-            propertyId={id}
-            onSaveClick={this.save}
-            onCreateClick={this.create}
-            onCancelClick={this.cancel}
-            onChange={e => this.handleChange(e)}
-            onImagesUploaded={this.onImagesUploaded}
-            onImageDeleted={this.onImageDeleted}
-            galleryItems={galleryItems}
-          />
-        )}
+        <UnitDetails
+          unit={this.state.unit}
+          isCreating={isCreating}
+          isLeased={this.state.isLeased}
+          propertyId={id}
+          onSaveClick={this.save}
+          onCreateClick={this.create}
+          onCancelClick={this.cancel}
+          onChange={e => this.handleChange(e)}
+          onImagesUploaded={this.onImagesUploaded}
+          onImageDeleted={this.onImageDeleted}
+          galleryItems={galleryItems}
+        />
       </div>
     )
   }
@@ -220,7 +232,7 @@ const newUnit = () => ({
   sq_ft_max: 0,
   rent_min: 0,
   rent_max: 0,
-  status: '',
+  status: 'Available',
   date_available: new Date().toISOString().split('T')[0]
 })
 

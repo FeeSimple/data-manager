@@ -146,6 +146,7 @@ const UnitDetails = ({
                 name='status'
                 id='status'
                 value='Available'
+                checked={!isLeased}
                 onChange={onChange}
               />{' '}
               <label className='form-label'>Available</label>
