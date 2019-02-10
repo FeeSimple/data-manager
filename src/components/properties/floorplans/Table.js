@@ -79,10 +79,10 @@ export default props => {
                             aria-controls='TableSorting'
                             rowSpan='1'
                             colSpan='1'
-                            aria-label='Ploor Plan: activate to sort column ascending'
+                            aria-label='Floor Plan: activate to sort column ascending'
                             style={{ width: 148 }}
                           >
-                            Ploor Plan
+                            Floor Plan
                           </th>
                           <th
                             className='sorting'

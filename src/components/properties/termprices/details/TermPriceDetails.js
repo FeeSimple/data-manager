@@ -3,14 +3,11 @@ import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
 
-export const READING = 'reading'
-export const EDITING = 'editing'
-export const CREATING = 'creating'
-
 const TermPriceDetails = ({
   termprice,
-  mode,
-  onEditClick,
+  propertyId,
+  unitId,
+  isCreating,
   onCreateClick,
   onSaveClick,
   onChange
@@ -42,7 +39,6 @@ const TermPriceDetails = ({
               name='rent'
               value={termprice.rent}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -55,7 +51,6 @@ const TermPriceDetails = ({
               name='term'
               value={termprice.term}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -68,7 +63,6 @@ const TermPriceDetails = ({
               name='start_date'
               value={termprice.start_date}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -81,7 +75,6 @@ const TermPriceDetails = ({
               name='end_date'
               value={termprice.end_date}
               onChange={onChange}
-              disabled={mode === READING}
             />
           </div>
         </div>
@@ -90,15 +83,7 @@ const TermPriceDetails = ({
             <button
               type='button'
               className='btn btn-base w100 form-btn'
-              hidden={mode !== READING}
-              onClick={e => onEditClick(e, termprice)}
-            >
-              Edit
-            </button>
-            <button
-              type='button'
-              className='btn btn-base w100 form-btn'
-              hidden={mode !== EDITING}
+              hidden={isCreating}
               onClick={e => onSaveClick(e)}
               style={{ marginRight: '0.5em' }}
             >
@@ -107,14 +92,14 @@ const TermPriceDetails = ({
             <button
               type='button'
               className='btn btn-base w100 form-btn'
-              hidden={mode !== CREATING}
+              hidden={!isCreating}
               onClick={e => onCreateClick(e, termprice)}
             >
               Create
             </button>
           </div>
           <div className='col-md-5 col-lg-4 col-6'>
-            <Link to={mode === CREATING ? '/' : `/${termprice.id}`}>
+            <Link to={`/${propertyId}/unit/${unitId}/termprice`}>
               <button type='button' className='btn btn-gray-o w100 form-btn'>
                 Cancel
               </button>
