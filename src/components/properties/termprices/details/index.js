@@ -8,8 +8,7 @@ import { FSMGRCONTRACT } from '../../../../utils/consts'
 
 class TermPriceDetailsContainer extends Component {
   state = {
-    prevTermPrice: {},
-    termprice: newTermPrice(),
+    termprice: 'undefined',
     buffer: null
   }
 
@@ -126,36 +125,40 @@ class TermPriceDetailsContainer extends Component {
     })
   }
 
-  render () {
+  async componentDidMount () {
+
     const { isCreating, properties } = this.props
     const { id, unitid, termid } = this.props.match.params
     const { units } = properties[id]
 
-    console.log('termprice details render - this.props:', this.props)
+    // Edit an existing termprice
+    if (!isCreating) {
+      let existingTermprice = units[unitid].termprices[termid]
+      this.setState({
+        termprice: existingTermprice
+      })
+    } else { // Create a new termprice
+      this.setState({
+        termprice: newTermPrice()
+      })
+    }
+  }
 
-    console.log('termprice details render - this.state:', this.state)
-    console.log('termprice details render - isCreating:', isCreating)
-
-    let termprice = isCreating ? this.state.termprice : units[unitid].termprices[termid]
+  render () {
+    const { isCreating } = this.props
+    const { id, unitid } = this.props.match.params
 
     return (
-      <div>
-        {typeof termprice === 'undefined' && (
-          <h1 className='text-center my-5 py-5'>404 - Term Price not found</h1>
-        )}
-        {typeof termprice !== 'undefined' && (
-          <TermPriceDetails
-            termprice={termprice}
-            propertyId={id}
-            unitId={unitid}
-            isCreating={isCreating}
-            onSaveClick={this.save}
-            onCreateClick={this.create}
-            onCancelClick={this.cancel}
-            onChange={e => this.handleChange(e)}
-          />
-        )}
-      </div>
+      <TermPriceDetails
+        termprice={this.state.termprice}
+        propertyId={id}
+        unitId={unitid}
+        isCreating={isCreating}
+        onSaveClick={this.save}
+        onCreateClick={this.create}
+        onCancelClick={this.cancel}
+        onChange={e => this.handleChange(e)}
+      />
     )
   }
 }
