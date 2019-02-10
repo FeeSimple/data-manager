@@ -7,29 +7,16 @@ import {
   setLoading,
   delProperty
 } from '../../../actions'
-import PropertyDetails, { READING, EDITING, CREATING } from './PropertyDetails'
+import PropertyDetails from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 import Confirm from '../../layout/Confirm'
 
 class PropertyDetailsContainer extends Component {
   state = {
-    mode: READING,
     prevProperty: {},
     property: newProperty(),
     showConfirm: false,
     propertyId: null
-  }
-
-  edit = (e, property) => {
-    e.preventDefault()
-
-    this.setState({
-      mode: EDITING,
-      property,
-      prevProperty: {
-        ...property
-      }
-    })
   }
 
   save = async e => {
@@ -82,7 +69,6 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -145,7 +131,7 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    this.setState({ mode: READING })
+    // this.setState({ mode: READING })
 
     setLoading(true)
 
@@ -182,21 +168,7 @@ class PropertyDetailsContainer extends Component {
 
   render () {
     const { isCreating, properties, id } = this.props
-    const mode = isCreating ? CREATING : this.state.mode
-    let property =
-      mode === EDITING || mode === CREATING
-        ? this.state.property
-        : properties[id]
-
-    if (mode === READING) {
-      this.setState({
-        mode: EDITING,
-        property,
-        prevProperty: {
-          ...property
-        }
-      })
-    }
+    let property = isCreating ? this.state.property : properties[id]
     
     return (
       <div>
@@ -207,8 +179,7 @@ class PropertyDetailsContainer extends Component {
           <div>
             <PropertyDetails
               property={property}
-              mode={mode}
-              onEditClick={this.edit}
+              isCreating={isCreating}
               onSaveClick={this.save}
               onCreateClick={this.create}
               onCancelClick={this.cancel}
