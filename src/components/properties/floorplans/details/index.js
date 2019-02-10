@@ -9,8 +9,7 @@ import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 
 class FloorplanDetailsContainer extends Component {
   state = {
-    prevFloorplan: {},
-    floorplan: newFloorplan(),
+    floorplan: 'undefined',
     buffer: null,
     imagesToUpload: [],
     imgMultihashes: []
@@ -43,7 +42,7 @@ class FloorplanDetailsContainer extends Component {
 
     const propertyId = this.props.match.params.id
     const { floorplan, imagesToUpload } = this.state
-    const { contracts, accountData, setLoading, setFloorplan } = this.props
+    const { contracts, accountData, setLoading, setFloorplan, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -89,6 +88,8 @@ class FloorplanDetailsContainer extends Component {
         })
       )
     }
+
+    history.push(`/${propertyId}`)
 
     setLoading(false)
   }
@@ -163,12 +164,27 @@ class FloorplanDetailsContainer extends Component {
 
       this.setState({ imgMultihashes })
     }
-  }
 
-  render () {
     const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
+
+    // Edit an existing floorplan
+    if (!isCreating) {
+      let existingFloorplan = floorplans[floorplanId]
+      this.setState({
+        floorplan: existingFloorplan
+      })
+    } else { // Create a new floorplan
+      this.setState({
+        floorplan: newFloorplan()
+      })
+    }
+  }
+
+  render () {
+    const { isCreating } = this.props
+    const { id } = this.props.match.params
     const { imgMultihashes } = this.state
 
     const galleryItems = imgMultihashes.map(multihash => ({
@@ -176,28 +192,19 @@ class FloorplanDetailsContainer extends Component {
       thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
     }))
 
-    let floorplan = isCreating ? this.state.floorplan : floorplans[floorplanId]
-
     return (
-      <div>
-        {typeof floorplan === 'undefined' && (
-          <h1 className='text-center my-5 py-5'>404 - Floorplan not found</h1>
-        )}
-        {typeof floorplan !== 'undefined' && (
-          <FloorplanDetails
-            floorplan={floorplan}
-            propertyId={id}
-            isCreating={isCreating}
-            onSaveClick={this.save}
-            onCreateClick={this.create}
-            onCancelClick={this.cancel}
-            onChange={e => this.handleChange(e)}
-            onImagesUploaded={this.onImagesUploaded}
-            onImageDeleted={this.onImageDeleted}
-            galleryItems={galleryItems}
-          />
-        )}
-      </div>
+      <FloorplanDetails
+        floorplan={this.state.floorplan}
+        propertyId={id}
+        isCreating={isCreating}
+        onSaveClick={this.save}
+        onCreateClick={this.create}
+        onCancelClick={this.cancel}
+        onChange={e => this.handleChange(e)}
+        onImagesUploaded={this.onImagesUploaded}
+        onImageDeleted={this.onImageDeleted}
+        galleryItems={galleryItems}
+      />
     )
   }
 }
