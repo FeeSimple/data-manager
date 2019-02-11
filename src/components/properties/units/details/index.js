@@ -157,8 +157,9 @@ class UnitDetailsContainer extends Component {
         ...prevState.unit,
         [name]: value
       }
-      state.isLeased =
-        target.type === 'radio' && value.toLowerCase() === 'leased'
+      if (target.type === 'radio') {
+        state.isLeased = value.toLowerCase() === 'leased'
+      }
       return state
     })
   }
