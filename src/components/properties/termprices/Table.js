@@ -1,18 +1,81 @@
 import React from 'react'
 import { Container, Row, Col, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import BootstrapTable from 'react-bootstrap-table-next'
+import paginationFactory from 'react-bootstrap-table2-paginator'
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
 import IconAdd from '../../../img/icon-add.svg'
-import TermPriceRow from './Row'
+import IconEditBlue from '../../../img/icon-edit-blue.svg'
+import IconDelete from '../../../img/icon-delete.svg'
 
 export default props => {
-  const {
-    propertyId,
-    unit,
-    termid,
-    onChange,
-    handleToggle,
-    deleteBulkDisabled
-  } = props
+  const { propertyId, unit, onChange, handleToggle, deleteBulkDisabled } = props
+  const { SearchBar } = Search
+  const data = Object.values(unit.termprices)
+  const columns = [
+    {
+      dataField: 'checkboxField',
+      text: '',
+      isDummyField: true,
+      formatter: (cellContent, row) => (
+        <input type='checkbox' name={row.id} onChange={onChange} />
+      ),
+      headerStyle: { width: 40 }
+    },
+    {
+      dataField: 'id',
+      text: 'ID',
+      sort: true,
+      headerStyle: { width: 60 }
+    },
+    {
+      dataField: 'rent',
+      text: 'Rent',
+      sort: true
+    },
+    {
+      dataField: 'term',
+      text: 'Term',
+      sort: true
+    },
+    {
+      dataField: 'start_date',
+      text: 'Start Date',
+      formatter: cellContent =>
+        `${new Date(parseInt(cellContent, 10)).toLocaleDateString()}`,
+      sort: true
+    },
+    {
+      dataField: 'end_date',
+      text: 'End Date',
+      formatter: cellContent =>
+        `${new Date(parseInt(cellContent, 10)).toLocaleDateString()}`,
+      sort: true
+    },
+    {
+      dataField: 'action_buttons_dummy_field',
+      text: '',
+      isDummyField: true,
+      formatter: (cellContent, row) => (
+        <div>
+          <Link
+            to={`/${propertyId}/unit/${unit.id}/termprice/${row.id}`}
+            className='table-edit mr-2'
+          >
+            <img src={IconEditBlue} alt='Edit Entry' />
+          </Link>
+          <img
+            src={IconDelete}
+            height='20'
+            alt='Delete Entry'
+            onClick={e => handleToggle(propertyId, unit.id, row.id)}
+          />
+        </div>
+      ),
+      headerStyle: { width: 70 }
+    }
+  ]
+
   return (
     <div>
       <div className='top-bar'>
@@ -31,135 +94,36 @@ export default props => {
       </div>
       <br />
       <Container>
-        <div className='row'>
-          <div className='col-12 m-t-30 m-b-15'>
-            <div className='table-responsive p-b-15 m-b-5'>
-              <div
-                id='TableSorting_wrapper'
-                className='dataTables_wrapper dt-bootstrap4 no-footer'
-              >
-                <div className='row'>
-                  <div className='col-sm-12'>
-                    <table
-                      id='TableSorting'
-                      className='table table-striped dataTable no-footer'
-                      role='grid'
-                      aria-describedby='TableSorting_info'
-                    >
-                      <thead>
-                        <tr role='row'>
-                          <th
-                            style={{ width: 15 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='ID: activate to sort column ascending'
-                            style={{ width: 51 }}
-                          >
-                            ID
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Unit: activate to sort column ascending'
-                            style={{ width: 60 }}
-                          >
-                            Rent
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Type: activate to sort column ascending'
-                            style={{ width: 60 }}
-                          >
-                            Term
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Sq, Ft.: activate to sort column ascending'
-                            style={{ width: 100 }}
-                          >
-                            Start Date
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Rent: activate to sort column ascending'
-                            style={{ width: 100 }}
-                          >
-                            End Date
-                          </th>
-                          <th
-                            style={{ width: 20 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                          <th
-                            style={{ width: 20 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {unit.termprices &&
-                          Object.keys(unit.termprices).length > 0 &&
-                          Object.keys(unit.termprices).map(termpriceId => (
-                            <TermPriceRow
-                              key={termpriceId}
-                              termprice={unit.termprices[termpriceId]}
-                              unit={unit}
-                              propertyId={propertyId}
-                              handleToggle={handleToggle}
-                              onChange={onChange}
-                            />
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div className='row'>
-                  <div className='col-sm-12'>
-                    <Button
-                      size='sm'
-                      outline
-                      color='red'
-                      disabled={deleteBulkDisabled}
-                      onClick={e => handleToggle(propertyId, unit.id)}
-                    >
-                      Delete Checked
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Row>
+          <Col sm='12'>
+            <ToolkitProvider
+              keyField='id'
+              data={data}
+              columns={columns}
+              search={{ searchFormatted: true }}
+              bootstrap4
+            >
+              {props => (
+                <React.Fragment>
+                  <SearchBar {...props.searchProps} className='mb-3' />
+                  <BootstrapTable
+                    {...props.baseProps}
+                    pagination={paginationFactory()}
+                  />
+                </React.Fragment>
+              )}
+            </ToolkitProvider>
+            <Button
+              size='sm'
+              outline
+              color='red'
+              disabled={deleteBulkDisabled}
+              onClick={e => handleToggle(propertyId, unit.id)}
+            >
+              Delete Checked
+            </Button>
+          </Col>
+        </Row>
       </Container>
     </div>
   )
