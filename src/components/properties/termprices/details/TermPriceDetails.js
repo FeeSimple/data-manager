@@ -39,6 +39,7 @@ const TermPriceDetails = ({
               name='rent'
               value={termprice.rent}
               onChange={onChange}
+              min='0'
             />
           </div>
         </div>
@@ -51,6 +52,7 @@ const TermPriceDetails = ({
               name='term'
               value={termprice.term}
               onChange={onChange}
+              min='0'
             />
           </div>
         </div>

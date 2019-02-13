@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
 import IconDelete from '../../../img/icon-delete.svg'
+import { AvForm, AvField } from 'availity-reactstrap-validation'
 
 const PropertyDetails = ({
   property,
@@ -36,7 +37,7 @@ const PropertyDetails = ({
     </div>
     <br />
     <Container>
-      <form className=''>
+      <AvForm className=''>
         <div className='form-group row'>
           <div className='col-12'>
             <h3 className='bar-header'>Details</h3>
@@ -44,11 +45,14 @@ const PropertyDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Name</label>
-            <input
-              id='name'
+            <AvField
+              label='Name'
               type='text'
-              className='form-control'
+              validate={{
+                required: { value: true, errorMessage: 'Please enter a name' },
+                minLength: { value: 1 }
+              }}
+              id='name'
               name='name'
               value={property.name}
               onChange={onChange}
@@ -57,13 +61,12 @@ const PropertyDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Address 1</label>
-            <input
+            <AvField
+              label='Address 1'
               id='address_1'
-              className='form-control'
               placeholder=''
               name='address_1'
-              type='textarea'
+              type='text'
               onChange={onChange}
               value={property.address_1}
             />
@@ -71,53 +74,59 @@ const PropertyDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Address 2</label>
-            <input
+            <AvField
+              label='Address 2'
               id='address_2'
-              className='form-control'
+              placeholder=''
               name='address_2'
-              type='textarea'
-              value={property.address_2}
+              type='text'
               onChange={onChange}
+              value={property.address_2}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>City</label>
-            <input
+            <AvField
+              label='City'
               id='city'
-              className='form-control'
               name='city'
               type='text'
               onChange={onChange}
               value={property.city}
+              validate={{
+                required: { value: true, errorMessage: 'Please enter a city' },
+                minLength: { value: 1 }
+              }}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Postal Code</label>
-            <input
+            <AvField
+              label='Postal Code'
               id='postal_code'
               name='postal_code'
-              className='form-control'
               type='text'
               onChange={onChange}
               value={property.postal_code}
+              validate={{
+                required: { value: true, errorMessage: 'Please enter a postal code' },
+                minLength: { value: 1 }
+              }}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Unit Count</label>
-            <input
+            <AvField
+              label='Unit Count'
               id='unit_count'
               name='unit_count'
-              className='form-control'
-              type='text'
+              type='number'
               onChange={onChange}
               value={property.unit_count}
+              min='0'
             />
           </div>
         </div>
@@ -149,7 +158,7 @@ const PropertyDetails = ({
             </Link>
           </div>
         </div>
-      </form>
+      </AvForm>
     </Container>
   </div>
 )
