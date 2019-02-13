@@ -28,14 +28,16 @@ class PropertyDetailsContainer extends Component {
     this.setState({ alertShow: !alertShow })
   }
 
-  validator = (property) => {
+  validator = property => {
     let alertContent = []
     if (!property.name || property.name === '') {
       alertContent.push('Empty name')
     }
-    
-    if ((!property.address_1 || property.address_1 === '') &&
-        (!property.address_2 || property.address_2 === '')) {
+
+    if (
+      (!property.address_1 || property.address_1 === '') &&
+      (!property.address_2 || property.address_2 === '')
+    ) {
       alertContent.push('No valid address')
     }
 

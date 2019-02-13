@@ -49,12 +49,12 @@ class UnitDetailsContainer extends Component {
     this.setState({ alertShow: !alertShow })
   }
 
-  validator = (unit) => {
+  validator = unit => {
     let alertContent = []
     if (!unit.name || unit.name === '') {
       alertContent.push('Empty name')
     }
-    
+
     if (!unit.sq_ft_min || unit.sq_ft_min <= 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
@@ -179,7 +179,7 @@ class UnitDetailsContainer extends Component {
         alertContent: result
       })
       return
-    }  
+    }
 
     setLoading(true)
 

@@ -111,7 +111,10 @@ const PropertyDetails = ({
               onChange={onChange}
               value={property.postal_code}
               validate={{
-                required: { value: true, errorMessage: 'Please enter a postal code' },
+                required: {
+                  value: true,
+                  errorMessage: 'Please enter a postal code'
+                },
                 minLength: { value: 1 }
               }}
             />

@@ -22,12 +22,12 @@ class TermPriceDetailsContainer extends Component {
     this.setState({ alertShow: !alertShow })
   }
 
-  validator = (termprice) => {
+  validator = termprice => {
     let alertContent = []
     if (!termprice.rent || termprice.rent <= 0) {
       alertContent.push('Invalid Rent')
     }
-    
+
     if (!termprice.term || termprice.term <= 0) {
       alertContent.push('Invalid Term')
     }

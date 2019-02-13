@@ -47,12 +47,12 @@ class FloorplanDetailsContainer extends Component {
     this.setState({ alertShow: !alertShow })
   }
 
-  validator = (floorplan) => {
+  validator = floorplan => {
     let alertContent = []
     if (!floorplan.name || floorplan.name === '') {
       alertContent.push('Empty name')
     }
-    
+
     if (!floorplan.sq_ft_min || floorplan.sq_ft_min <= 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
@@ -277,10 +277,10 @@ class FloorplanDetailsContainer extends Component {
           galleryItems={galleryItems}
         />
         <Alert
-            isOpen={this.state.alertShow}
-            handleToggle={this.handleToggleAlert}
-            alertHeader={this.state.alertHeader}
-            alertContent={this.state.alertContent}
+          isOpen={this.state.alertShow}
+          handleToggle={this.handleToggleAlert}
+          alertHeader={this.state.alertHeader}
+          alertContent={this.state.alertContent}
         />
       </div>
     )
