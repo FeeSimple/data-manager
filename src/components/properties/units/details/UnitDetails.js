@@ -83,7 +83,7 @@ const UnitDetails = ({
             <AvField
               label='Sq. Ft. Min'
               type='number'
-              min='0'
+              min='0.1'
               id='sq_ft_min'
               name='sq_ft_min'
               value={unit.sq_ft_min}
@@ -94,7 +94,7 @@ const UnitDetails = ({
             <AvField
               label='Sq. Ft. Max'
               type='number'
-              min='0'
+              min='0.1'
               id='sq_ft_max'
               name='sq_ft_max'
               value={unit.sq_ft_max}
@@ -107,7 +107,7 @@ const UnitDetails = ({
             <AvField
               label='Rent Min'
               type='number'
-              min='0'
+              min='0.1'
               id='rent_min'
               name='rent_min'
               value={unit.rent_min}
@@ -118,7 +118,7 @@ const UnitDetails = ({
             <AvField
               label='Rent Max'
               type='number'
-              min='0'
+              min='0.1'
               id='rent_max'
               name='rent_max'
               value={unit.rent_max}
