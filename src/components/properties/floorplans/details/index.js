@@ -6,13 +6,18 @@ import ecc from 'eosjs-ecc'
 import { setFloorplan, setLoading } from '../../../../actions'
 import FloorplanDetails from './FloorplanDetails'
 import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
+import Alert from '../../../layout/Alert'
 
 class FloorplanDetailsContainer extends Component {
   state = {
     floorplan: 'undefined',
     buffer: null,
     imagesToUpload: [],
-    imgMultihashes: []
+    imgMultihashes: [],
+
+    alertShow: false,
+    alertContent: [],
+    alertHeader: ''
   }
 
   onImagesUploaded = (err, resp) => {
@@ -37,6 +42,44 @@ class FloorplanDetailsContainer extends Component {
     this.setState({ imagesToUpload: newImagesToUpload })
   }
 
+  handleToggleAlert = () => {
+    const { alertShow } = this.state
+    this.setState({ alertShow: !alertShow })
+  }
+
+  validator = (floorplan) => {
+    let alertContent = []
+    if (!floorplan.name || floorplan.name === '') {
+      alertContent.push('Empty name')
+    }
+    
+    if (!floorplan.sq_ft_min || floorplan.sq_ft_min <= 0) {
+      alertContent.push('Invalid Sq. Ft. Min')
+    }
+
+    if (!floorplan.sq_ft_max || floorplan.sq_ft_max <= 0) {
+      alertContent.push('Invalid Sq. Ft. Max')
+    }
+
+    if (floorplan.sq_ft_max < floorplan.sq_ft_min) {
+      alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
+    }
+
+    if (!floorplan.rent_min || floorplan.rent_min <= 0) {
+      alertContent.push('Invalid Rent Min')
+    }
+
+    if (!floorplan.rent_max || floorplan.rent_max <= 0) {
+      alertContent.push('Invalid Rent Max')
+    }
+
+    if (floorplan.rent_max < floorplan.rent_min) {
+      alertContent.push('Rent Max < Rent Min')
+    }
+
+    return alertContent
+  }
+
   save = async e => {
     e.preventDefault()
 
@@ -55,6 +98,16 @@ class FloorplanDetailsContainer extends Component {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
+    }
+
+    let result = this.validator(floorplan)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Floorplan editing with invalid input',
+        alertContent: result
+      })
+      return
     }
 
     setLoading(true)
@@ -112,6 +165,16 @@ class FloorplanDetailsContainer extends Component {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
+    }
+
+    let result = this.validator(floorplan)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Floorplan creation with invalid input',
+        alertContent: result
+      })
+      return
     }
 
     setLoading(true)
@@ -200,18 +263,26 @@ class FloorplanDetailsContainer extends Component {
     }))
 
     return (
-      <FloorplanDetails
-        floorplan={this.state.floorplan}
-        propertyId={id}
-        isCreating={isCreating}
-        onSaveClick={this.save}
-        onCreateClick={this.create}
-        onCancelClick={this.cancel}
-        onChange={e => this.handleChange(e)}
-        onImagesUploaded={this.onImagesUploaded}
-        onImageDeleted={this.onImageDeleted}
-        galleryItems={galleryItems}
-      />
+      <div>
+        <FloorplanDetails
+          floorplan={this.state.floorplan}
+          propertyId={id}
+          isCreating={isCreating}
+          onSaveClick={this.save}
+          onCreateClick={this.create}
+          onCancelClick={this.cancel}
+          onChange={e => this.handleChange(e)}
+          onImagesUploaded={this.onImagesUploaded}
+          onImageDeleted={this.onImageDeleted}
+          galleryItems={galleryItems}
+        />
+        <Alert
+            isOpen={this.state.alertShow}
+            handleToggle={this.handleToggleAlert}
+            alertHeader={this.state.alertHeader}
+            alertContent={this.state.alertContent}
+        />
+      </div>
     )
   }
 }
