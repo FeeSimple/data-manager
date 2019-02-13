@@ -5,11 +5,50 @@ import { withRouter } from 'react-router-dom'
 import { setTermPrice, setLoading, setErrMsg } from '../../../../actions'
 import TermPriceDetails from './TermPriceDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
+import Alert from '../../../layout/Alert'
 
 class TermPriceDetailsContainer extends Component {
   state = {
     termprice: 'undefined',
-    buffer: null
+    buffer: null,
+
+    alertShow: false,
+    alertContent: [],
+    alertHeader: ''
+  }
+
+  handleToggleAlert = () => {
+    const { alertShow } = this.state
+    this.setState({ alertShow: !alertShow })
+  }
+
+  validator = termprice => {
+    let alertContent = []
+    if (!termprice.rent || termprice.rent <= 0) {
+      alertContent.push('Invalid Rent')
+    }
+
+    if (!termprice.term || termprice.term <= 0) {
+      alertContent.push('Invalid Term')
+    }
+
+    let startDate = new Date(termprice.start_date).getTime()
+    let endDate = new Date(termprice.end_date).getTime()
+    let currentDate = new Date().getTime()
+    if (startDate < currentDate) {
+      alertContent.push('Start date in the past')
+    }
+    if (endDate < currentDate) {
+      alertContent.push('End date in the past')
+    }
+    if (endDate == startDate) {
+      alertContent.push('End date same as Start date')
+    }
+    if (endDate < startDate) {
+      alertContent.push('End date before Start date')
+    }
+
+    return alertContent
   }
 
   save = async e => {
@@ -30,6 +69,16 @@ class TermPriceDetailsContainer extends Component {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
+    }
+
+    let result = this.validator(termprice)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Term price editing with invalid input',
+        alertContent: result
+      })
+      return
     }
 
     setLoading(true)
@@ -77,6 +126,16 @@ class TermPriceDetailsContainer extends Component {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
+    }
+
+    let result = this.validator(termprice)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Term price creation with invalid input',
+        alertContent: result
+      })
+      return
     }
 
     setLoading(true)
@@ -149,16 +208,24 @@ class TermPriceDetailsContainer extends Component {
     const { id, unitid } = this.props.match.params
 
     return (
-      <TermPriceDetails
-        termprice={this.state.termprice}
-        propertyId={id}
-        unitId={unitid}
-        isCreating={isCreating}
-        onSaveClick={this.save}
-        onCreateClick={this.create}
-        onCancelClick={this.cancel}
-        onChange={e => this.handleChange(e)}
-      />
+      <div>
+        <TermPriceDetails
+          termprice={this.state.termprice}
+          propertyId={id}
+          unitId={unitid}
+          isCreating={isCreating}
+          onSaveClick={this.save}
+          onCreateClick={this.create}
+          onCancelClick={this.cancel}
+          onChange={e => this.handleChange(e)}
+        />
+        <Alert
+          isOpen={this.state.alertShow}
+          handleToggle={this.handleToggleAlert}
+          alertHeader={this.state.alertHeader}
+          alertContent={this.state.alertContent}
+        />
+      </div>
     )
   }
 }

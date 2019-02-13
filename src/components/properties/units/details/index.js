@@ -6,6 +6,7 @@ import ecc from 'eosjs-ecc'
 import { setUnit, setLoading, setErrMsg } from '../../../../actions'
 import UnitDetails from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
+import Alert from '../../../layout/Alert'
 
 class UnitDetailsContainer extends Component {
   state = {
@@ -14,7 +15,11 @@ class UnitDetailsContainer extends Component {
     isLeased: true,
     buffer: null,
     imagesToUpload: [],
-    imgMultihashes: []
+    imgMultihashes: [],
+
+    alertShow: false,
+    alertContent: [],
+    alertHeader: ''
   }
 
   onImagesUploaded = (err, resp) => {
@@ -39,6 +44,50 @@ class UnitDetailsContainer extends Component {
     this.setState({ imagesToUpload: newImagesToUpload })
   }
 
+  handleToggleAlert = () => {
+    const { alertShow } = this.state
+    this.setState({ alertShow: !alertShow })
+  }
+
+  validator = unit => {
+    let alertContent = []
+    if (!unit.name || unit.name === '') {
+      alertContent.push('Empty name')
+    }
+
+    if (!unit.sq_ft_min || unit.sq_ft_min <= 0) {
+      alertContent.push('Invalid Sq. Ft. Min')
+    }
+
+    if (!unit.sq_ft_max || unit.sq_ft_max <= 0) {
+      alertContent.push('Invalid Sq. Ft. Max')
+    }
+
+    if (unit.sq_ft_max < unit.sq_ft_min) {
+      alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
+    }
+
+    if (!unit.rent_min || unit.rent_min <= 0) {
+      alertContent.push('Invalid Rent Min')
+    }
+
+    if (!unit.rent_max || unit.rent_max <= 0) {
+      alertContent.push('Invalid Rent Max')
+    }
+
+    if (unit.rent_max < unit.rent_min) {
+      alertContent.push('Rent Max < Rent Min')
+    }
+
+    let dateAvailable = new Date(unit.date_available).getTime()
+    let currentDate = new Date().getTime()
+    if (dateAvailable < currentDate) {
+      alertContent.push('Date available in the past')
+    }
+
+    return alertContent
+  }
+
   save = async e => {
     e.preventDefault()
 
@@ -51,6 +100,16 @@ class UnitDetailsContainer extends Component {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
+    }
+
+    let result = this.validator(unit)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Unit editing with invalid input',
+        alertContent: result
+      })
+      return
     }
 
     setLoading(true)
@@ -112,6 +171,16 @@ class UnitDetailsContainer extends Component {
       sign: true
     }
 
+    let result = this.validator(unit)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Unit creation with invalid input',
+        alertContent: result
+      })
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -157,8 +226,9 @@ class UnitDetailsContainer extends Component {
         ...prevState.unit,
         [name]: value
       }
-      state.isLeased =
-        target.type === 'radio' && value.toLowerCase() === 'leased'
+      if (target.type === 'radio') {
+        state.isLeased = value.toLowerCase() === 'leased'
+      }
       return state
     })
   }
@@ -220,6 +290,12 @@ class UnitDetailsContainer extends Component {
           onImagesUploaded={this.onImagesUploaded}
           onImageDeleted={this.onImageDeleted}
           galleryItems={galleryItems}
+        />
+        <Alert
+          isOpen={this.state.alertShow}
+          handleToggle={this.handleToggleAlert}
+          alertHeader={this.state.alertHeader}
+          alertContent={this.state.alertContent}
         />
       </div>
     )

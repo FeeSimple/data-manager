@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import ImageGallery from 'react-image-gallery'
 import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
+import { AvForm, AvField } from 'availity-reactstrap-validation'
 
 const FloorplanDetails = ({
   floorplan,
@@ -28,7 +29,7 @@ const FloorplanDetails = ({
     </div>
     <br />
     <Container>
-      <form className=''>
+      <AvForm className=''>
         <div className='form-group row'>
           <div className='col-12'>
             <h3 className='bar-header'>Details</h3>
@@ -36,101 +37,112 @@ const FloorplanDetails = ({
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Name</label>
-            <input
+            <AvField
+              label='Name'
               id='name'
               type='text'
               className='form-control'
               name='name'
               value={floorplan.name}
               onChange={onChange}
+              validate={{
+                required: { value: true, errorMessage: 'Please enter a name' },
+                minLength: { value: 1 }
+              }}
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Bedrooms</label>
-            <input
+            <AvField
+              label='Bedrooms'
               id='bedrooms'
               name='bedrooms'
               className='form-control'
               type='number'
               onChange={onChange}
               value={floorplan.bedrooms}
+              min='0'
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Bathrooms</label>
-            <input
+            <AvField
+              label='Bathrooms'
               id='bathrooms'
               name='bathrooms'
               className='form-control'
               type='number'
               onChange={onChange}
               value={floorplan.bathrooms}
+              min='0'
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-5 col-lg-4 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Sq. Ft. Min</label>
-            <input
+            <AvField
+              label='Sq. Ft. Min'
               id='sq_ft_min'
               name='sq_ft_min'
               className='form-control'
               type='number'
               onChange={onChange}
               value={floorplan.sq_ft_min}
+              min='0.1'
             />
           </div>
           <div className='col-12 col-md-5 col-lg-4'>
-            <label className='form-label'>Sq. Ft. Max</label>
-            <input
+            <AvField
+              label='Sq. Ft. Max'
               id='sq_ft_max'
               name='sq_ft_max'
               className='form-control'
               type='number'
               onChange={onChange}
               value={floorplan.sq_ft_max}
+              min='0.1'
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-5 col-lg-4 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Rent Min</label>
-            <input
+            <AvField
+              label='Rent Min'
               id='rent_min'
               name='rent_min'
               className='form-control'
               type='number'
               onChange={onChange}
               value={floorplan.rent_min}
+              min='0.1'
             />
           </div>
           <div className='col-12 col-md-5 col-lg-4'>
-            <label className='form-label'>Rent Max</label>
-            <input
+            <AvField
+              label='Rent Max'
               id='rent_max'
               name='rent_max'
               className='form-control'
               type='number'
               onChange={onChange}
               value={floorplan.rent_max}
+              min='0.1'
             />
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <label className='form-label'>Deposit</label>
-            <input
+            <AvField
+              label='Deposit'
               id='deposit'
               name='deposit'
               className='form-control'
               type='number'
               onChange={onChange}
               value={floorplan.deposit}
+              min='0'
             />
           </div>
         </div>
@@ -187,7 +199,7 @@ const FloorplanDetails = ({
             </Link>
           </div>
         </div>
-      </form>
+      </AvForm>
     </Container>
   </div>
 )

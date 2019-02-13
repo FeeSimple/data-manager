@@ -10,12 +10,46 @@ import {
 import PropertyDetails from './PropertyDetails'
 import { FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 import Confirm from '../../layout/Confirm'
+import Alert from '../../layout/Alert'
 
 class PropertyDetailsContainer extends Component {
   state = {
     property: 'undefined',
     showConfirm: false,
-    propertyId: null
+    propertyId: null,
+
+    alertShow: false,
+    alertContent: [],
+    alertHeader: ''
+  }
+
+  handleToggleAlert = () => {
+    const { alertShow } = this.state
+    this.setState({ alertShow: !alertShow })
+  }
+
+  validator = property => {
+    let alertContent = []
+    if (!property.name || property.name === '') {
+      alertContent.push('Empty name')
+    }
+
+    if (
+      (!property.address_1 || property.address_1 === '') &&
+      (!property.address_2 || property.address_2 === '')
+    ) {
+      alertContent.push('No valid address')
+    }
+
+    if (!property.city || property.city === '') {
+      alertContent.push('Empty city')
+    }
+
+    if (!property.postal_code || property.postal_code === '') {
+      alertContent.push('Empty postal code')
+    }
+
+    return alertContent
   }
 
   save = async e => {
@@ -35,6 +69,16 @@ class PropertyDetailsContainer extends Component {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
+    }
+
+    let result = this.validator(property)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Property editing with invalid input',
+        alertContent: result
+      })
+      return
     }
 
     setLoading(true)
@@ -74,6 +118,16 @@ class PropertyDetailsContainer extends Component {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
+    }
+
+    let result = this.validator(property)
+    if (result.length !== 0) {
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Property creation with invalid input',
+        alertContent: result
+      })
+      return
     }
 
     setLoading(true)
@@ -208,6 +262,12 @@ class PropertyDetailsContainer extends Component {
           handleToggle={this.handleToggleConfirm}
           onDelete={this.deleteOne}
           text='this property and its associated units/floor-plans?'
+        />
+        <Alert
+          isOpen={this.state.alertShow}
+          handleToggle={this.handleToggleAlert}
+          alertHeader={this.state.alertHeader}
+          alertContent={this.state.alertContent}
         />
       </div>
     )
