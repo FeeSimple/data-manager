@@ -17,10 +17,22 @@ export default props => {
         {unit.bedrooms} beds / {unit.bathrooms} baths
       </td>
       <td>
-        {unit.sq_ft_min} - {unit.sq_ft_max}
+        {
+          unit.sq_ft_min === unit.sq_ft_max ? 
+            unit.sq_ft_min : 
+              unit.sq_ft_min === 0 ? 
+                unit.sq_ft_max : 
+                  unit.sq_ft_min.toString() + ' - ' + unit.sq_ft_max.toString()
+        }  
       </td>
       <td>
-        ${unit.rent_min} - ${unit.rent_max}
+        {
+          unit.rent_min === unit.rent_max ? 
+            '$' + unit.rent_min.toString() :
+              unit.rent_min === 0 ? 
+                '$' + unit.rent_max.toString() :
+                  '$' + unit.rent_min.toString() + ' - ' + '$' + unit.rent_max.toString()
+        }  
       </td>
       <td>{unit.status}</td>
       <td>{unit.date_available}</td>

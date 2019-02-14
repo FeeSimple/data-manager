@@ -49,15 +49,15 @@ class FloorplanDetailsContainer extends Component {
 
   validator = floorplan => {
     let alertContent = []
-    if (!floorplan.name || floorplan.name === '') {
+    if (floorplan.name === '') {
       alertContent.push('Empty name')
     }
 
-    if (!floorplan.sq_ft_min || floorplan.sq_ft_min <= 0) {
+    if (floorplan.sq_ft_min < 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
 
-    if (!floorplan.sq_ft_max || floorplan.sq_ft_max <= 0) {
+    if (floorplan.sq_ft_max <= 0) {
       alertContent.push('Invalid Sq. Ft. Max')
     }
 
@@ -65,11 +65,11 @@ class FloorplanDetailsContainer extends Component {
       alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
     }
 
-    if (!floorplan.rent_min || floorplan.rent_min <= 0) {
+    if (floorplan.rent_min < 0) {
       alertContent.push('Invalid Rent Min')
     }
 
-    if (!floorplan.rent_max || floorplan.rent_max <= 0) {
+    if (floorplan.rent_max <= 0) {
       alertContent.push('Invalid Rent Max')
     }
 

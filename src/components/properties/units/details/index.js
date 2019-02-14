@@ -51,15 +51,15 @@ class UnitDetailsContainer extends Component {
 
   validator = unit => {
     let alertContent = []
-    if (!unit.name || unit.name === '') {
+    if (unit.name === '') {
       alertContent.push('Empty name')
     }
 
-    if (!unit.sq_ft_min || unit.sq_ft_min <= 0) {
+    if (unit.sq_ft_min < 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
 
-    if (!unit.sq_ft_max || unit.sq_ft_max <= 0) {
+    if (unit.sq_ft_max <= 0) {
       alertContent.push('Invalid Sq. Ft. Max')
     }
 
@@ -67,11 +67,11 @@ class UnitDetailsContainer extends Component {
       alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
     }
 
-    if (!unit.rent_min || unit.rent_min <= 0) {
+    if (unit.rent_min < 0) {
       alertContent.push('Invalid Rent Min')
     }
 
-    if (!unit.rent_max || unit.rent_max <= 0) {
+    if (unit.rent_max <= 0) {
       alertContent.push('Invalid Rent Max')
     }
 

@@ -30,22 +30,19 @@ class PropertyDetailsContainer extends Component {
 
   validator = property => {
     let alertContent = []
-    if (!property.name || property.name === '') {
+    if (property.name === '') {
       alertContent.push('Empty name')
     }
 
-    if (
-      (!property.address_1 || property.address_1 === '') &&
-      (!property.address_2 || property.address_2 === '')
-    ) {
+    if (property.address_1 === '' && property.address_2 === '') {
       alertContent.push('No valid address')
     }
 
-    if (!property.city || property.city === '') {
+    if (property.city === '') {
       alertContent.push('Empty city')
     }
 
-    if (!property.postal_code || property.postal_code === '') {
+    if (property.postal_code === '') {
       alertContent.push('Empty postal code')
     }
 
