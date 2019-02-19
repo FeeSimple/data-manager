@@ -243,18 +243,20 @@ class PropertyDetailsContainer extends Component {
 
   render () {
     const { isCreating, properties, id } = this.props
-
+    const property=this.state.property
     return (
       <div>
-        <PropertyDetails
-          property={this.state.property}
-          isCreating={isCreating}
-          onSaveClick={this.save}
-          onCreateClick={this.create}
-          onCancelClick={this.cancel}
-          onChange={e => this.handleChange(e)}
-          handleToggle={this.handleToggleConfirm}
-        />
+        { property &&
+          <PropertyDetails
+            property={property}
+            isCreating={isCreating}
+            onSaveClick={this.save}
+            onCreateClick={this.create}
+            onCancelClick={this.cancel}
+            onChange={e => this.handleChange(e)}
+            handleToggle={this.handleToggleConfirm}
+          />
+        }
         <Confirm
           isOpen={this.state.showConfirm}
           handleToggle={this.handleToggleConfirm}
