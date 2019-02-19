@@ -66,6 +66,7 @@ export default props => {
           </Link>
           <img
             src={IconDelete}
+            className='c-pointer'
             height='20'
             alt='Delete Entry'
             onClick={e => handleToggle(propertyId, unit.id, row.id)}
@@ -96,6 +97,16 @@ export default props => {
       <Container>
         <Row>
           <Col sm='12'>
+          <Button
+              size='sm'
+              outline
+              color='red'
+              className='tbl-btn-close'
+              disabled={deleteBulkDisabled}
+              onClick={e => handleToggle(propertyId, unit.id)}
+            >
+              Delete Checked
+            </Button>
             <ToolkitProvider
               keyField='id'
               data={data}
@@ -113,16 +124,6 @@ export default props => {
                 </React.Fragment>
               )}
             </ToolkitProvider>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(propertyId, unit.id)}
-            >
-              Delete Checked
-            </Button>
           </Col>
         </Row>
       </Container>

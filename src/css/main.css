@@ -425,7 +425,9 @@ h1, h2, h3, h4, h5, h6 {
   background-position: left 3px center;
   background-repeat: no-repeat;
   padding-left: 26px;
-  background-size: 20px auto; }
+  background-size: 20px auto;
+  margin-top: 10px;
+  margin-bottom: 15px; }
 
 .react-bootstrap-table tbody tr:nth-child(odd) {
   background: #f6f8fa; }
@@ -441,7 +443,6 @@ h1, h2, h3, h4, h5, h6 {
   border: 2px solid #dee2e6; }
 
 /*---------------
-5KPr55J2UQNUh3xP5Q6ebqqV6MK5usrXxG4qqRfpaLieGa8VpCm 
 Dropzone
 ----------------*/
 .dpz-active {
@@ -492,6 +493,9 @@ Dropzone
 
 .tc {
   text-align: center; }
+
+.c-pointer {
+  cursor: pointer; }
 
 /*------------------------------------------
     Responsive Grid Media Queries Settings

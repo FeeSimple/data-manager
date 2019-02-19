@@ -415,6 +415,8 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   background-repeat: no-repeat;
   padding-left: 26px;
   background-size: 20px auto;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 .react-bootstrap-table tbody tr:nth-child(odd) {background: #f6f8fa;}
 .react-bootstrap-table thead tr{border-bottom: 2px solid #dbe3eb;}
@@ -426,7 +428,6 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   border: 2px solid #dee2e6;
 }
 /*---------------
-5KPr55J2UQNUh3xP5Q6ebqqV6MK5usrXxG4qqRfpaLieGa8VpCm 
 Dropzone
 ----------------*/
 .dpz-active {
@@ -467,6 +468,7 @@ Dropzone
 .clr-base{color: $clr-base;}
 .prop-btn{border-width: 2px; min-width: 95px;}
 .tc{text-align: center;}
+.c-pointer{cursor: pointer;}
 /*------------------------------------------
     Responsive Grid Media Queries Settings
     1600+   -     Extra Large Screen
