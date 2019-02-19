@@ -48,6 +48,7 @@ class TermPriceContainer extends Component {
   }
 
   onDelete = async () => {
+    this.handleToggleConfirm(-1, -1, -1);
     const { propertyId, unitId, termpriceId } = this.state
     if (propertyId !== -1 && unitId !== -1 && termpriceId !== undefined) {
       await this.deleteOne(propertyId, unitId, termpriceId)

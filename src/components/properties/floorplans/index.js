@@ -37,6 +37,7 @@ class FloorplansContainer extends Component {
   }
 
   onDelete = async () => {
+    this.handleToggleConfirm(-1, -1);
     const { propertyId, floorplanId } = this.state
     if (propertyId !== -1 && floorplanId !== -1) {
       this.deleteOne(propertyId, floorplanId)

@@ -170,6 +170,7 @@ class PropertyDetailsContainer extends Component {
   }
 
   deleteOne = async () => {
+    this.handleToggleConfirm(-1);
     const propertyId = this.state.propertyId
 
     const {

@@ -47,6 +47,7 @@ class UnitContainer extends Component {
   }
 
   onDelete = async () => {
+    this.handleToggleConfirm(-1, -1);
     const { propertyId, unitId } = this.state
     if (propertyId !== -1 && unitId !== -1) {
       await this.deleteOne(propertyId, unitId)
