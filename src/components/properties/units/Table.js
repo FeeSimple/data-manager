@@ -133,7 +133,7 @@ export default props => {
               </Link>
               <Link
                 to={`/${props.propertyId}/unit`}
-                className='btn btn-base-o prop-btn'
+                className='btn btn-base-o prop-btn m-l-5'
               >
                 Units
               </Link>
@@ -162,7 +162,7 @@ export default props => {
             >
               {props => (
                 <React.Fragment>
-                  <SearchBar {...props.searchProps} className='mb-3' />
+                  <SearchBar {...props.searchProps} className='mb-3 tbl-search-input' />
                   <BootstrapTable
                     {...props.baseProps}
                     pagination={paginationFactory()}
@@ -174,6 +174,7 @@ export default props => {
               size='sm'
               outline
               color='red'
+              className='tbl-btn-close'
               disabled={deleteBulkDisabled}
               onClick={e => handleToggle(property.id, -1)}
             >

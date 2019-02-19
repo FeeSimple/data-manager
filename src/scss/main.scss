@@ -368,7 +368,66 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .table-striped{border: 2px solid $clr-gray; margin: 15px 0;}
 
 /*---------------
-  Dropzone
+  Table redesing
+----------------*/
+.tbl-search-input.form-control {
+  width: 250px;
+  max-width: 100%;
+  float: right;
+	padding: .3rem .75rem;
+	font-size: .9rem;
+	line-height: 1.3;
+	color: #9b9b9b;
+  background: #fff url("../img/icon-search.svg") no-repeat;
+  background-size: 20px auto;
+  background-position: right 8px center;
+	border: 2px solid #dbe3eb;
+}
+.tbl-search-input.form-control:focus {
+	color: #9b9b9b;
+	border-color: $clr-base;
+	outline: 0;
+	box-shadow: none;
+}
+.react-bs-table-sizePerPage-dropdown .dropdown-toggle{
+  border: 2px solid #dbe3eb; 
+  background: none;
+  color: #9b9b9b;
+}
+.react-bs-table-sizePerPage-dropdown .dropdown-toggle:hover,
+.react-bs-table-sizePerPage-dropdown .dropdown-toggle:active,
+.react-bs-table-sizePerPage-dropdown .dropdown-toggle:focus{
+  background: none !important;
+  outline: none !important;
+  color: #9b9b9b;
+  box-shadow: none !important;
+  border-color: $clr-base;
+}
+
+.react-bootstrap-table-page-btns-ul .page-item.active .page-link {
+	color: #fff;
+	background-color: #104378;
+	border-color: #104378;
+}
+.tbl-btn-close{
+  background-image: url('../img/icon-delete.svg');
+  background-position: left 3px center;
+  background-repeat: no-repeat;
+  padding-left: 26px;
+  background-size: 20px auto;
+}
+.react-bootstrap-table tbody tr:nth-child(odd) {background: #f6f8fa;}
+.react-bootstrap-table thead tr{border-bottom: 2px solid #dbe3eb;}
+.react-bootstrap-table tbody tr td,
+.react-bootstrap-table thead tr th{
+  border: none;
+}
+.react-bootstrap-table .table-bordered {
+  border: 2px solid #dee2e6;
+}
+/*---------------
+5KPr55J2UQNUh3xP5Q6ebqqV6MK5usrXxG4qqRfpaLieGa8VpCm 
+Dropzone
 ----------------*/
 .dpz-active {
   border-style: solid;

@@ -105,7 +105,7 @@ export default props => {
             >
               {props => (
                 <React.Fragment>
-                  <SearchBar {...props.searchProps} className='mb-3' />
+                  <SearchBar {...props.searchProps} className='mb-3 tbl-search-input' />
                   <BootstrapTable
                     {...props.baseProps}
                     pagination={paginationFactory()}
@@ -117,6 +117,7 @@ export default props => {
               size='sm'
               outline
               color='red'
+              className='tbl-btn-close'
               disabled={deleteBulkDisabled}
               onClick={e => handleToggle(propertyId, unit.id)}
             >
