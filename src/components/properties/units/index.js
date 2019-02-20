@@ -5,7 +5,7 @@ import Table from './Table'
 import { UNIT, FSMGRCONTRACT } from '../../../utils/consts'
 import { addUnits, delUnit } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
-import { setLoading } from '../../../actions'
+import { setLoading, setOpResult } from '../../../actions'
 import Confirm from '../../layout/Confirm'
 
 class UnitContainer extends Component {
@@ -57,7 +57,7 @@ class UnitContainer extends Component {
   }
 
   deleteOne = async (propertyId, unitId) => {
-    const { contracts, accountData, setLoading, history } = this.props
+    const { contracts, accountData, setLoading, history, setOpResult } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
     console.log(`deleteOne - propertyId: ${propertyId} ,unitId: ${unitId}`)
     const options = {
@@ -68,11 +68,14 @@ class UnitContainer extends Component {
 
     setLoading(true)
 
+    let isError = false
+
     try {
       await fsmgrcontract.delunit(accountData.active, unitId, options)
       console.log('fsmgrcontract.delunit - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.delunit - error:', err)
+      isError = true
     }
 
     try {
@@ -80,6 +83,22 @@ class UnitContainer extends Component {
       history.push(`/${propertyId}/unit`)
     } catch (err) {
       console.log('delUnit error:', err)
+    }
+
+    if (isError) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: "Failed to delete the unit",
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Unit deleted`,
+        type: 'success',
+      })
     }
 
     setLoading(false)
@@ -182,5 +201,5 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addUnits, setLoading, delUnit })(UnitContainer)
+  connect(mapStateToProps, { addUnits, setLoading, delUnit, setOpResult })(UnitContainer)
 )
