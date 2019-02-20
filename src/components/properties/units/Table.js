@@ -34,12 +34,13 @@ export default props => {
       dataField: 'id',
       text: 'ID',
       sort: true,
-      headerStyle: { width: 60 }
+      headerStyle: { width: 40 }
     },
     {
       dataField: 'name',
       text: 'Unit',
-      sort: true
+      sort: true,
+      headerStyle: { width: 60 }
     },
     {
       dataField: 'bedrooms',
@@ -61,13 +62,13 @@ export default props => {
       text: 'Rent',
       formatter: (cellContent, row) => `$${row.rent_min} - $${row.rent_max}`,
       sort: true,
-      headerStyle: { width: 147 }
+      headerStyle: { width: 98 }
     },
     {
       dataField: 'status',
       text: 'Status',
       sort: true,
-      headerStyle: { width: 147 }
+      headerStyle: { width: 98 }
     },
     {
       dataField: 'date_available',
@@ -90,7 +91,7 @@ export default props => {
           />
         </Link>
       ),
-      headerStyle: { width: 139 }
+      headerStyle: { width: 98 }
     },
     {
       dataField: 'action_buttons_dummy_field',
