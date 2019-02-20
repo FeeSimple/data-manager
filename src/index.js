@@ -10,6 +10,10 @@ import Eos from 'eosjs'
 import getScatter from './utils/getScatter'
 import { getFallbackEos } from './utils'
 import './css/style.css'
+// React Bootstrap Table CSS
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css'
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css'
 import './css/main.css'
 
 // import logger from 'redux-logger'

@@ -1,11 +1,91 @@
 import React from 'react'
-import { Container, Row, Button } from 'reactstrap'
+import { Container, Row, Col, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import BootstrapTable from 'react-bootstrap-table-next'
+import paginationFactory from 'react-bootstrap-table2-paginator'
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+// import FloorplanRow from './Row'
 import IconAdd from '../../../img/icon-add.svg'
-import FloorplanRow from './Row'
+import IconDelete from '../../../img/icon-delete.svg'
+import IconEditBlue from '../../../img/icon-edit-blue.svg'
 
 export default props => {
   const { property, onChange, handleToggle, deleteBulkDisabled } = props
+  const { SearchBar } = Search
+  const columns = [
+    {
+      dataField: 'checkboxField',
+      text: '',
+      isDummyField: true,
+      formatter: (cellContent, row) => (
+        <input type='checkbox' name={row.id} onChange={onChange} />
+      ),
+      headerStyle: { width: '40px' }
+    },
+    {
+      dataField: 'id',
+      text: 'ID',
+      sort: true
+    },
+    {
+      dataField: 'name',
+      text: 'Floor Plan',
+      sort: true
+    },
+    {
+      dataField: 'bathrooms',
+      text: 'Type',
+      isDummyField: true,
+      formatter: (cellContent, row) =>
+        `${row.bedrooms} beds / ${row.bathrooms} baths`,
+      sort: true
+    },
+    {
+      dataField: 'sq_ft_min',
+      text: 'Sq. Ft.',
+      isDummyField: true,
+      formatter: (cellContent, row) => `${row.sq_ft_min} - ${row.sq_ft_max}`,
+      sort: true
+    },
+    {
+      dataField: 'rent_min',
+      text: 'Rent',
+      isDummyField: true,
+      formatter: (cellContent, row) => `$${row.rent_min} - $${row.rent_max}`,
+      sort: true
+    },
+    {
+      dataField: 'unit_count_dummy_field',
+      text: '# Of Units',
+      isDummyField: true,
+      formatter: () => `${property.unit_count}`,
+      sort: true
+    },
+    {
+      dataField: 'action_button_edit_dummy_field',
+      text: '',
+      isDummyField: true,
+      headerStyle: { width: '70px' },
+      formatter: (cellContent, row) => (
+        <div>
+          <Link
+            to={`/${property.id}/floorplan/${row.id}`}
+            className='table-edit mr-2'
+          >
+            <img src={IconEditBlue} alt='Edit Entry' />
+          </Link>
+          <img
+            src={IconDelete}
+            className='c-pointer'
+            height='20'
+            alt='Delete Entry'
+            onClick={e => handleToggle(property.id, row.id)}
+          />
+        </div>
+      )
+    }
+  ]
+
   return (
     <div>
       <div className='top-bar'>
@@ -20,7 +100,7 @@ export default props => {
               </Link>
               <Link
                 to={`/${property.id}/unit`}
-                className='btn btn-gray-o prop-btn'
+                className='btn btn-gray-o prop-btn m-l-5'
               >
                 Units
               </Link>
@@ -38,145 +118,40 @@ export default props => {
       </div>
       <br />
       <Container>
-        <div className='row'>
-          <div className='col-12 m-t-30 m-b-15'>
-            <div className='table-responsive p-b-15 m-b-5'>
-              <div
-                id='TableSorting_wrapper'
-                className='dataTables_wrapper dt-bootstrap4 no-footer'
-              >
-                <div className='row'>
-                  <div className='col-sm-12'>
-                    <table
-                      id='TableSorting'
-                      className='table table-striped dataTable no-footer'
-                      role='grid'
-                      aria-describedby='TableSorting_info'
-                    >
-                      <thead>
-                        <tr role='row'>
-                          <th
-                            style={{ width: 15 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='ID: activate to sort column ascending'
-                            style={{ width: 51 }}
-                          >
-                            ID
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Floor Plan: activate to sort column ascending'
-                            style={{ width: 148 }}
-                          >
-                            Floor Plan
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Type: activate to sort column ascending'
-                            style={{ width: 147 }}
-                          >
-                            Type
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Sq, Ft.: activate to sort column ascending'
-                            style={{ width: 95 }}
-                          >
-                            Sq, Ft.
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='Rent: activate to sort column ascending'
-                            style={{ width: 147 }}
-                          >
-                            Rent
-                          </th>
-                          <th
-                            className='sorting'
-                            tabIndex='0'
-                            aria-controls='TableSorting'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label='# Of Units: activate to sort column ascending'
-                            style={{ width: 139 }}
-                          >
-                            # Of Units
-                          </th>
-                          <th
-                            style={{ width: 20 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                          <th
-                            style={{ width: 20 }}
-                            className='sorting_disabled'
-                            rowSpan='1'
-                            colSpan='1'
-                            aria-label=''
-                          />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {property.floorplans &&
-                          Object.keys(property.floorplans).length > 0 &&
-                          Object.keys(property.floorplans).map(floorplanId => (
-                            <FloorplanRow
-                              key={floorplanId}
-                              floorplan={property.floorplans[floorplanId]}
-                              property={property}
-                              onChange={onChange}
-                              handleToggle={handleToggle}
-                            />
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div className='row'>
-                  <div className='col-sm-12'>
-                    <Button
-                      size='sm'
-                      outline
-                      color='red'
-                      disabled={deleteBulkDisabled}
-                      onClick={e => handleToggle(property.id, -1)}
-                    >
-                      Delete Checked
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Row>
+          <Col sm='12'>
+            <Button
+              size='sm'
+              outline
+              color='red'
+              className='tbl-btn-close'
+              disabled={deleteBulkDisabled}
+              onClick={e => handleToggle(property.id, -1)}
+            >
+              Delete Checked
+            </Button>
+            <ToolkitProvider
+              keyField='id'
+              data={Object.values(property.floorplans)}
+              columns={columns}
+              search={{ searchFormatted: true }}
+              bootstrap4
+            >
+              {props => (
+                <React.Fragment>
+                  <SearchBar
+                    {...props.searchProps}
+                    className='mb-3 tbl-search-input'
+                  />
+                  <BootstrapTable
+                    {...props.baseProps}
+                    pagination={paginationFactory()}
+                  />
+                </React.Fragment>
+              )}
+            </ToolkitProvider>
+          </Col>
+        </Row>
       </Container>
     </div>
   )
