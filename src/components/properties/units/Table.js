@@ -173,7 +173,10 @@ export default props => {
             >
               {props => (
                 <React.Fragment>
-                  <SearchBar {...props.searchProps} className='mb-3 tbl-search-input' />
+                  <SearchBar
+                    {...props.searchProps}
+                    className='mb-3 tbl-search-input'
+                  />
                   <BootstrapTable
                     {...props.baseProps}
                     pagination={paginationFactory()}

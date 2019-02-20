@@ -120,7 +120,7 @@ export default props => {
       <Container>
         <Row>
           <Col sm='12'>
-          <Button
+            <Button
               size='sm'
               outline
               color='red'
@@ -139,7 +139,10 @@ export default props => {
             >
               {props => (
                 <React.Fragment>
-                  <SearchBar {...props.searchProps} className='mb-3 tbl-search-input' />
+                  <SearchBar
+                    {...props.searchProps}
+                    className='mb-3 tbl-search-input'
+                  />
                   <BootstrapTable
                     {...props.baseProps}
                     pagination={paginationFactory()}
