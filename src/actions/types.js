@@ -10,6 +10,8 @@ export const DELETE_PROPERTY = 'DELETE_PROPERTY'
 export const SET_ACTIVE = 'SET_ACTIVE'
 export const SET_INFO = 'SET_INFO'
 
+export const SET_OP_RESULT = 'SET_OP_RESULT'
+
 export const SET_LOADING = 'SET_LOADING'
 export const SET_ERROR_POPUP = 'SET_ERROR_POPUP'
 

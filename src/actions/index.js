@@ -7,6 +7,7 @@ import {
   SET_FSMGRCONTRACT,
   SET_NETWORK,
   SET_ACTIVE,
+  SET_OP_RESULT,
   SET_INFO,
   SET_LOADING,
   SET_ERROR_POPUP,
@@ -109,6 +110,14 @@ export function setActive (activeAccount) {
   return {
     type: SET_ACTIVE,
     payload: activeAccount
+  }
+}
+
+export function setOpResult (opResult) {
+  console.log('setOpResult:', opResult)
+  return {
+    type: SET_OP_RESULT,
+    payload: opResult
   }
 }
 
