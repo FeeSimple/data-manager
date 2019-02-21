@@ -19,6 +19,7 @@ class UnitContainer extends Component {
       showConfirm: false,
       propertyId: 0,
       unitId: 0,
+      unitName: '',
       deleteBulkDisabled: true
     }
   }
@@ -48,15 +49,15 @@ class UnitContainer extends Component {
 
   onDelete = async () => {
     this.handleToggleConfirm(-1, -1);
-    const { propertyId, unitId } = this.state
+    const { propertyId, unitId, unitName } = this.state
     if (propertyId !== -1 && unitId !== -1) {
-      await this.deleteOne(propertyId, unitId)
+      await this.deleteOne(propertyId, unitId, unitName)
     } else {
       await this.deleteBulk(propertyId)
     }
   }
 
-  deleteOne = async (propertyId, unitId) => {
+  deleteOne = async (propertyId, unitId, unitName) => {
     const { setLoading, setOpResult } = this.props
 
     setLoading(true)
@@ -67,14 +68,14 @@ class UnitContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: "Failed to delete the unit",
+        text: `Failed to delete Unit "${unitName}"`,
         type: 'error'
       })
     } else {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `Unit deleted`,
+        text: `Unit "${unitName}" deleted successfully`,
         type: 'success',
       })
     }
@@ -139,6 +140,17 @@ class UnitContainer extends Component {
     })
   }
 
+  getUnitName = (unitId) => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    if (!property) return ''
+    let unit = property.units[unitId]
+    if (!unit) return ''
+    console.log(`unit id: ${unitId}, unit name: ${unit.name}`);
+    return unit.name
+  }
+
   deleteBulk = async propertyId => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
@@ -149,7 +161,7 @@ class UnitContainer extends Component {
 
     setLoading(true)
 
-    let errorMsg = ''
+    let failedUnits = ''
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
@@ -157,16 +169,16 @@ class UnitContainer extends Component {
         console.log(`Unit deleteBulk - id: ${id}`)
         let deleteOK = await this.doDelete(propertyId, id)
         if (!deleteOK) {
-          errorMsg += ``
+          failedUnits += `"${this.getUnitName(id)}", `
         }
       }
     }
 
-    if (errorMsg !== '') {
+    if (failedUnits !== '') {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: errorMsg,
+        text: `Failed to delete the following units: ${failedUnits}` ,
         type: 'error'
       })
     } else {
@@ -181,18 +193,16 @@ class UnitContainer extends Component {
     setLoading(false)
   }
 
-  handleToggleConfirm = (propertyId, unitId) => {
+  handleToggleConfirm = (propertyId, unitId, unitName) => {
     const { showConfirm } = this.state
     this.setState({ showConfirm: !showConfirm })
 
     if (propertyId !== -1 || unitId !== -1) {
       this.setState({
         propertyId: propertyId,
-        unitId: unitId
+        unitId: unitId,
+        unitName: unitName
       })
-      console.log(
-        `handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}`
-      )
     }
   }
 
