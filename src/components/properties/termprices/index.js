@@ -5,7 +5,7 @@ import Table from './Table'
 import { TERMPRICE, FSMGRCONTRACT } from '../../../utils/consts'
 import { addTermPrices, delTermPrice } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
-import { setLoading } from '../../../actions'
+import { setLoading, setOpResult } from '../../../actions'
 import Confirm from '../../layout/Confirm'
 
 class TermPriceContainer extends Component {
@@ -57,25 +57,64 @@ class TermPriceContainer extends Component {
     }
   }
 
+  getTerm = (propertyId, unitId, termpriceId) => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    if (!property) return ''
+    const unit = property.units[unitId]
+    if (!unit) return ''
+    let termprice = unit.termprices[termpriceId]
+    if (!termprice) return ''
+    console.log(`term id: ${termpriceId}, term: ${termprice.term}`);
+    return termprice.term
+  }
+
   deleteOne = async (propertyId, unitId, termpriceId) => {
-    const { contracts, accountData, setLoading, history } = this.props
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let deleteOK = await this.doDelete(propertyId, unitId, termpriceId)
+    let term = this.getTerm(propertyId, unitId, termpriceId)
+
+    if (!deleteOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete term price "${term}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Term price "${term}" deleted successfully`,
+        type: 'success',
+      })
+    }
+
+    setLoading(false)
+  }
+
+  doDelete = async (propertyId, unitId, termpriceId) => {
+    const { contracts, accountData, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    console.log(
-      `deleteOne - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`
-    )
+    
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
     }
 
-    setLoading(true)
+    let deleteOK = true
 
     try {
       await fsmgrcontract.deltmpricing(accountData.active, termpriceId, options)
       console.log('fsmgrcontract.deltmpricing - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.deltmpricing - error:', err)
+      deleteOK = false
     }
 
     try {
@@ -83,24 +122,52 @@ class TermPriceContainer extends Component {
       history.push(`/${propertyId}/unit/${unitId}/termprice`)
     } catch (err) {
       console.log('delTermPrice error:', err)
+      deleteOK = false
     }
 
-    setLoading(false)
+    return deleteOK
   }
 
   deleteBulk = async (propertyId, unitId) => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
-    console.log(`deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`)
-    console.log('deleteBulk - ids: ', ids)
+    console.log(`Term price deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`)
+    console.log('Term price deleteBulk - ids: ', ids)
+
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let failedTermPrices = ''
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
       if (checkedEntry[id] === true) {
-        console.log(`deleteBulk - id: ${id}`)
-        await this.deleteOne(propertyId, unitId, id)
+        console.log(`Term price deleteBulk - id: ${id}`)
+        let deleteOK = await this.doDelete(propertyId, unitId, id)
+        if (!deleteOK) {
+          failedTermPrices += `"${this.getTerm(propertyId, unitId, id)}", `
+        }
       }
     }
+
+    if (failedTermPrices !== '') {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete the following term prices: ${failedTermPrices}` ,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Selected term prices are deleted successfully`,
+        type: 'success',
+      })
+    }
+
+    setLoading(false)
   }
 
   isCheckedEntry = () => {
@@ -190,7 +257,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addTermPrices, setLoading, delTermPrice })(
+  connect(mapStateToProps, { addTermPrices, setLoading, delTermPrice, setOpResult })(
     TermPriceContainer
   )
 )
