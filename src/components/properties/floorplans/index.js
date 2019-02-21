@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import Table from './Table'
 import { FLOORPLAN, FSMGRCONTRACT } from '../../../utils/consts'
 import { addFloorplans, delFloorplan } from '../../../actions/index'
-import { setLoading } from '../../../actions'
+import { setLoading, setOpResult } from '../../../actions'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 import Confirm from '../../layout/Confirm'
 
@@ -46,7 +46,18 @@ class FloorplansContainer extends Component {
     }
   }
 
-  deleteOne = async (propertyId, floorplanId) => {
+  getFloorplanName = (floorplanId) => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    if (!property) return ''
+    let floorplan = property.floorplans[floorplanId]
+    if (!floorplan) return ''
+    console.log(`floorplan id: ${floorplanId}, floorplan name: ${floorplan.name}`);
+    return floorplan.name
+  }
+
+  doDelete = async (propertyId, floorplanId) => {
     const { contracts, accountData, setLoading, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
     console.log(
@@ -58,13 +69,14 @@ class FloorplansContainer extends Component {
       sign: true
     }
 
-    setLoading(true)
+    let deleteOK = true
 
     try {
       await fsmgrcontract.delfloorplan(accountData.active, floorplanId, options)
       console.log('fsmgrcontract.delfloorplan - floorplanId:', floorplanId)
     } catch (err) {
       console.log('fsmgrcontract.delfloorplan - error:', err)
+      deleteOK = false
     }
 
     try {
@@ -72,6 +84,34 @@ class FloorplansContainer extends Component {
       history.push(`/${propertyId}`)
     } catch (err) {
       console.log('delFloorplan error:', err)
+      deleteOK = false
+    }
+
+    return deleteOK
+  }
+
+  deleteOne = async (propertyId, floorplanId) => {
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let deleteOK = await this.doDelete(propertyId, floorplanId)
+    let floorplanName = this.getFloorplanName(floorplanId)
+
+    if (!deleteOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete floorplan "${floorplanName}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Floorplan "${floorplanName}" deleted successfully`,
+        type: 'success',
+      })
     }
 
     setLoading(false)
@@ -80,16 +120,43 @@ class FloorplansContainer extends Component {
   deleteBulk = async propertyId => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
-    console.log(`deleteBulk - propertyId: ${propertyId}`)
-    console.log('deleteBulk - ids: ', ids)
+    console.log(`Floorplan deleteBulk - propertyId: ${propertyId}`)
+    console.log('Floorplan deleteBulk - ids: ', ids)
+
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let failedFloorplans = ''
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
       if (checkedEntry[id] === true) {
-        console.log(`deleteBulk - id: ${id}`)
-        await this.deleteOne(propertyId, id)
+        console.log(`Floorplan deleteBulk - id: ${id}`)
+        let deleteOK = await this.doDelete(propertyId, id)
+        if (!deleteOK) {
+          failedFloorplans += `"${this.getFloorplanName(id)}", `
+        }
       }
     }
+
+    if (failedFloorplans !== '') {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete the following floorplans: ${failedFloorplans}` ,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Selected floorplans are deleted successfully`,
+        type: 'success',
+      })
+    }
+
+    setLoading(false)
   }
 
   isCheckedEntry = () => {
@@ -174,7 +241,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addFloorplans, setLoading, delFloorplan })(
+  connect(mapStateToProps, { addFloorplans, setLoading, delFloorplan, setOpResult })(
     FloorplansContainer
   )
 )
