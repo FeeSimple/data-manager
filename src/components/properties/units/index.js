@@ -57,35 +57,13 @@ class UnitContainer extends Component {
   }
 
   deleteOne = async (propertyId, unitId) => {
-    const { contracts, accountData, setLoading, history, setOpResult } = this.props
-    const fsmgrcontract = contracts[FSMGRCONTRACT]
-    console.log(`deleteOne - propertyId: ${propertyId} ,unitId: ${unitId}`)
-    const options = {
-      authorization: `${accountData.active}@active`,
-      broadcast: true,
-      sign: true
-    }
+    const { setLoading, setOpResult } = this.props
 
     setLoading(true)
 
-    let isError = false
+    let deleteOK = await this.doDelete(propertyId, unitId)
 
-    try {
-      await fsmgrcontract.delunit(accountData.active, unitId, options)
-      console.log('fsmgrcontract.delunit - unitId:', unitId)
-    } catch (err) {
-      console.log('fsmgrcontract.delunit - error:', err)
-      isError = true
-    }
-
-    try {
-      delUnit(propertyId, unitId)
-      history.push(`/${propertyId}/unit`)
-    } catch (err) {
-      console.log('delUnit error:', err)
-    }
-
-    if (isError) {
+    if (!deleteOK) {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
@@ -102,6 +80,35 @@ class UnitContainer extends Component {
     }
 
     setLoading(false)
+  }
+
+  doDelete = async (propertyId, unitId) => {
+    const { contracts, accountData } = this.props
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    let deleteOK = true
+
+    try {
+      await fsmgrcontract.delunit(accountData.active, unitId, options)
+      console.log('fsmgrcontract.delunit - unitId:', unitId)
+    } catch (err) {
+      console.log('fsmgrcontract.delunit - error:', err)
+      deleteOK = false
+    }
+
+    try {
+      delUnit(propertyId, unitId)
+    } catch (err) {
+      console.log('delUnit error:', err)
+      deleteOK = false
+    }
+
+    return deleteOK
   }
 
   isCheckedEntry = () => {
@@ -135,16 +142,43 @@ class UnitContainer extends Component {
   deleteBulk = async propertyId => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
-    console.log(`deleteBulk - propertyId: ${propertyId}`)
-    console.log('deleteBulk - ids: ', ids)
+    console.log(`Unit deleteBulk - propertyId: ${propertyId}`)
+    console.log('Unit deleteBulk - ids: ', ids)
+
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let errorMsg = ''
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
       if (checkedEntry[id] === true) {
-        console.log(`deleteBulk - id: ${id}`)
-        await this.deleteOne(propertyId, id)
+        console.log(`Unit deleteBulk - id: ${id}`)
+        let deleteOK = await this.doDelete(propertyId, id)
+        if (!deleteOK) {
+          errorMsg += ``
+        }
       }
     }
+
+    if (errorMsg !== '') {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: errorMsg,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Selected units are deleted successfully`,
+        type: 'success',
+      })
+    }
+
+    setLoading(false)
   }
 
   handleToggleConfirm = (propertyId, unitId) => {
