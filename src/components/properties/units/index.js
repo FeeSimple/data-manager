@@ -5,7 +5,7 @@ import Table from './Table'
 import { UNIT, FSMGRCONTRACT } from '../../../utils/consts'
 import { addUnits, delUnit } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
-import { setLoading } from '../../../actions'
+import { setLoading, setOpResult } from '../../../actions'
 import Confirm from '../../layout/Confirm'
 
 class UnitContainer extends Component {
@@ -19,6 +19,7 @@ class UnitContainer extends Component {
       showConfirm: false,
       propertyId: 0,
       unitId: 0,
+      unitName: '',
       deleteBulkDisabled: true
     }
   }
@@ -47,41 +48,68 @@ class UnitContainer extends Component {
   }
 
   onDelete = async () => {
-    const { propertyId, unitId } = this.state
+    this.handleToggleConfirm(-1, -1)
+    const { propertyId, unitId, unitName } = this.state
     if (propertyId !== -1 && unitId !== -1) {
-      await this.deleteOne(propertyId, unitId)
+      await this.deleteOne(propertyId, unitId, unitName)
     } else {
       await this.deleteBulk(propertyId)
     }
   }
 
-  deleteOne = async (propertyId, unitId) => {
-    const { contracts, accountData, setLoading, history } = this.props
+  deleteOne = async (propertyId, unitId, unitName) => {
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let operationOK = await this.doDelete(propertyId, unitId)
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete Unit "${unitName}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Unit "${unitName}" deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
+  }
+
+  doDelete = async (propertyId, unitId) => {
+    const { contracts, accountData } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    console.log(`deleteOne - propertyId: ${propertyId} ,unitId: ${unitId}`)
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
     }
 
-    setLoading(true)
+    let operationOK = true
 
     try {
       await fsmgrcontract.delunit(accountData.active, unitId, options)
       console.log('fsmgrcontract.delunit - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.delunit - error:', err)
+      operationOK = false
     }
 
     try {
       delUnit(propertyId, unitId)
-      history.push(`/${propertyId}/unit`)
     } catch (err) {
       console.log('delUnit error:', err)
+      operationOK = false
     }
 
-    setLoading(false)
+    return operationOK
   }
 
   isCheckedEntry = () => {
@@ -112,33 +140,69 @@ class UnitContainer extends Component {
     })
   }
 
+  getUnitName = unitId => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    if (!property) return ''
+    let unit = property.units[unitId]
+    if (!unit) return ''
+    console.log(`unit id: ${unitId}, unit name: ${unit.name}`)
+    return unit.name
+  }
+
   deleteBulk = async propertyId => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
-    console.log(`deleteBulk - propertyId: ${propertyId}`)
-    console.log('deleteBulk - ids: ', ids)
+    console.log(`Unit deleteBulk - propertyId: ${propertyId}`)
+    console.log('Unit deleteBulk - ids: ', ids)
+
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let failedUnits = ''
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
       if (checkedEntry[id] === true) {
-        console.log(`deleteBulk - id: ${id}`)
-        await this.deleteOne(propertyId, id)
+        console.log(`Unit deleteBulk - id: ${id}`)
+        let operationOK = await this.doDelete(propertyId, id)
+        if (!operationOK) {
+          failedUnits += `"${this.getUnitName(id)}", `
+        }
       }
     }
+
+    if (failedUnits !== '') {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete the following units: ${failedUnits}`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Selected units are deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
   }
 
-  handleToggleConfirm = (propertyId, unitId) => {
+  handleToggleConfirm = (propertyId, unitId, unitName) => {
     const { showConfirm } = this.state
     this.setState({ showConfirm: !showConfirm })
 
     if (propertyId !== -1 || unitId !== -1) {
       this.setState({
         propertyId: propertyId,
-        unitId: unitId
+        unitId: unitId,
+        unitName: unitName
       })
-      console.log(
-        `handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}`
-      )
     }
   }
 
@@ -181,5 +245,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addUnits, setLoading, delUnit })(UnitContainer)
+  connect(mapStateToProps, { addUnits, setLoading, delUnit, setOpResult })(
+    UnitContainer
+  )
 )
