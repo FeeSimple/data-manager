@@ -6,13 +6,12 @@ import App from './App'
 import Navbar from './layout/Navbar'
 import Footer from './layout/Footer'
 import LoadingView from './layout/LoadingView'
-import SweetAlert from 'sweetalert-react';
-import 'sweetalert/dist/sweetalert.css';
+import SweetAlert from 'sweetalert-react'
+import 'sweetalert/dist/sweetalert.css'
 import 'react-images-uploader-fs/styles.css'
 import { setOpResult } from '../actions'
 
 class RootContainer extends Component {
-  
   handleOnConfirm = () => {
     this.props.setOpResult({
       show: false,
@@ -35,12 +34,16 @@ class RootContainer extends Component {
         <Navbar />
         {!isLoading && <App />}
         {isLoading && <LoadingView />}
-        {opResult && opResult.data &&  
-          <SweetAlert
-            show={opResult.data.show} type={opResult.data.type} 
-            title={opResult.data.title} text={opResult.data.text} 
-            onConfirm={this.handleOnConfirm}/>
-        }
+        {opResult &&
+          opResult.data && (
+            <SweetAlert
+              show={opResult.data.show}
+              type={opResult.data.type}
+              title={opResult.data.title}
+              text={opResult.data.text}
+              onConfirm={this.handleOnConfirm}
+            />
+          )}
         <Footer />
       </div>
     )
@@ -51,4 +54,6 @@ function mapStateToProps ({ isLoading, eosClient, opResult }) {
   return { isLoading, eosClient, opResult }
 }
 
-export default withRouter(connect(mapStateToProps, {setOpResult})(RootContainer))
+export default withRouter(
+  connect(mapStateToProps, { setOpResult })(RootContainer)
+)

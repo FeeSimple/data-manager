@@ -3,7 +3,12 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import ecc from 'eosjs-ecc'
 
-import { setUnit, setLoading, setErrMsg, setOpResult } from '../../../../actions'
+import {
+  setUnit,
+  setLoading,
+  setErrMsg,
+  setOpResult
+} from '../../../../actions'
 import UnitDetails from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
@@ -93,7 +98,14 @@ class UnitDetailsContainer extends Component {
 
     const propertyId = this.props.match.params.id
     const { unit, imagesToUpload } = this.state
-    const { contracts, accountData, setLoading, setOpResult, setUnit, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setOpResult,
+      setUnit,
+      history
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -173,7 +185,7 @@ class UnitDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `Unit "${unit.name}" edited successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -183,7 +195,13 @@ class UnitDetailsContainer extends Component {
   create = async e => {
     e.preventDefault()
 
-    const { contracts, accountData, setLoading, setOpResult, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setOpResult,
+      history
+    } = this.props
     const propertyId = this.props.match.params.id
     const { unit } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
@@ -249,7 +267,7 @@ class UnitDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `New Unit "${unit.name}" created successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 

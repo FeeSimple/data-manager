@@ -117,7 +117,7 @@ class PropertyDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `Property "${property.name}" edited successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -197,7 +197,7 @@ class PropertyDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `New Property "${property.name}" created successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -221,15 +221,15 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
-  getPropertyName = (propertyId) => {
-    const property=this.state.property
+  getPropertyName = propertyId => {
+    const property = this.state.property
     if (!property) return ''
-    console.log(`property id: ${propertyId}, property name: ${property.name}`);
+    console.log(`property id: ${propertyId}, property name: ${property.name}`)
     return property.name
   }
 
   deleteOne = async () => {
-    this.handleToggleConfirm(-1);
+    this.handleToggleConfirm(-1)
     const propertyId = this.state.propertyId
 
     const {
@@ -285,7 +285,7 @@ class PropertyDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `Property "${propertyName}" deleted successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -324,10 +324,10 @@ class PropertyDetailsContainer extends Component {
 
   render () {
     const { isCreating, properties, id } = this.props
-    const property=this.state.property
+    const property = this.state.property
     return (
       <div>
-        { property &&
+        {property && (
           <PropertyDetails
             property={property}
             isCreating={isCreating}
@@ -337,7 +337,7 @@ class PropertyDetailsContainer extends Component {
             onChange={e => this.handleChange(e)}
             handleToggle={this.handleToggleConfirm}
           />
-        }
+        )}
         <Confirm
           isOpen={this.state.showConfirm}
           handleToggle={this.handleToggleConfirm}

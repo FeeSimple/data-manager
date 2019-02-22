@@ -37,7 +37,7 @@ class FloorplansContainer extends Component {
   }
 
   onDelete = async () => {
-    this.handleToggleConfirm(-1, -1);
+    this.handleToggleConfirm(-1, -1)
     const { propertyId, floorplanId } = this.state
     if (propertyId !== -1 && floorplanId !== -1) {
       this.deleteOne(propertyId, floorplanId)
@@ -46,14 +46,16 @@ class FloorplansContainer extends Component {
     }
   }
 
-  getFloorplanName = (floorplanId) => {
+  getFloorplanName = floorplanId => {
     const { properties } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
     if (!property) return ''
     let floorplan = property.floorplans[floorplanId]
     if (!floorplan) return ''
-    console.log(`floorplan id: ${floorplanId}, floorplan name: ${floorplan.name}`);
+    console.log(
+      `floorplan id: ${floorplanId}, floorplan name: ${floorplan.name}`
+    )
     return floorplan.name
   }
 
@@ -110,7 +112,7 @@ class FloorplansContainer extends Component {
         show: true,
         title: 'Success',
         text: `Floorplan "${floorplanName}" deleted successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -144,7 +146,7 @@ class FloorplansContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to delete the following floorplans: ${failedFloorplans}` ,
+        text: `Failed to delete the following floorplans: ${failedFloorplans}`,
         type: 'error'
       })
     } else {
@@ -152,7 +154,7 @@ class FloorplansContainer extends Component {
         show: true,
         title: 'Success',
         text: `Selected floorplans are deleted successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -241,7 +243,10 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addFloorplans, setLoading, delFloorplan, setOpResult })(
-    FloorplansContainer
-  )
+  connect(mapStateToProps, {
+    addFloorplans,
+    setLoading,
+    delFloorplan,
+    setOpResult
+  })(FloorplansContainer)
 )

@@ -48,7 +48,7 @@ class TermPriceContainer extends Component {
   }
 
   onDelete = async () => {
-    this.handleToggleConfirm(-1, -1, -1);
+    this.handleToggleConfirm(-1, -1, -1)
     const { propertyId, unitId, termpriceId } = this.state
     if (propertyId !== -1 && unitId !== -1 && termpriceId !== undefined) {
       await this.deleteOne(propertyId, unitId, termpriceId)
@@ -66,7 +66,7 @@ class TermPriceContainer extends Component {
     if (!unit) return ''
     let termprice = unit.termprices[termpriceId]
     if (!termprice) return ''
-    console.log(`term id: ${termpriceId}, term: ${termprice.term}`);
+    console.log(`term id: ${termpriceId}, term: ${termprice.term}`)
     return termprice.term
   }
 
@@ -90,7 +90,7 @@ class TermPriceContainer extends Component {
         show: true,
         title: 'Success',
         text: `Term price "${term}" deleted successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -100,7 +100,7 @@ class TermPriceContainer extends Component {
   doDelete = async (propertyId, unitId, termpriceId) => {
     const { contracts, accountData, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    
+
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
@@ -131,7 +131,9 @@ class TermPriceContainer extends Component {
   deleteBulk = async (propertyId, unitId) => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
-    console.log(`Term price deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`)
+    console.log(
+      `Term price deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`
+    )
     console.log('Term price deleteBulk - ids: ', ids)
 
     const { setLoading, setOpResult } = this.props
@@ -155,7 +157,7 @@ class TermPriceContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to delete the following term prices: ${failedTermPrices}` ,
+        text: `Failed to delete the following term prices: ${failedTermPrices}`,
         type: 'error'
       })
     } else {
@@ -163,7 +165,7 @@ class TermPriceContainer extends Component {
         show: true,
         title: 'Success',
         text: `Selected term prices are deleted successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -257,7 +259,10 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addTermPrices, setLoading, delTermPrice, setOpResult })(
-    TermPriceContainer
-  )
+  connect(mapStateToProps, {
+    addTermPrices,
+    setLoading,
+    delTermPrice,
+    setOpResult
+  })(TermPriceContainer)
 )

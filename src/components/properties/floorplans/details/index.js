@@ -170,7 +170,7 @@ class FloorplanDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `Floorplan "${floorplan.name}" edited successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -180,7 +180,13 @@ class FloorplanDetailsContainer extends Component {
   create = async e => {
     e.preventDefault()
 
-    const { contracts, accountData, setLoading, history, setOpResult } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      history,
+      setOpResult
+    } = this.props
     const propertyId = this.props.match.params.id
     const { floorplan } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
@@ -238,12 +244,11 @@ class FloorplanDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `New Floorplan "${floorplan.name}" created successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
     setLoading(false)
-    
   }
 
   handleChange (event) {

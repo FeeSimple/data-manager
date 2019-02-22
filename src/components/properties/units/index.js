@@ -48,7 +48,7 @@ class UnitContainer extends Component {
   }
 
   onDelete = async () => {
-    this.handleToggleConfirm(-1, -1);
+    this.handleToggleConfirm(-1, -1)
     const { propertyId, unitId, unitName } = this.state
     if (propertyId !== -1 && unitId !== -1) {
       await this.deleteOne(propertyId, unitId, unitName)
@@ -76,7 +76,7 @@ class UnitContainer extends Component {
         show: true,
         title: 'Success',
         text: `Unit "${unitName}" deleted successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -140,14 +140,14 @@ class UnitContainer extends Component {
     })
   }
 
-  getUnitName = (unitId) => {
+  getUnitName = unitId => {
     const { properties } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
     if (!property) return ''
     let unit = property.units[unitId]
     if (!unit) return ''
-    console.log(`unit id: ${unitId}, unit name: ${unit.name}`);
+    console.log(`unit id: ${unitId}, unit name: ${unit.name}`)
     return unit.name
   }
 
@@ -178,7 +178,7 @@ class UnitContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to delete the following units: ${failedUnits}` ,
+        text: `Failed to delete the following units: ${failedUnits}`,
         type: 'error'
       })
     } else {
@@ -186,7 +186,7 @@ class UnitContainer extends Component {
         show: true,
         title: 'Success',
         text: `Selected units are deleted successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -245,5 +245,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addUnits, setLoading, delUnit, setOpResult })(UnitContainer)
+  connect(mapStateToProps, { addUnits, setLoading, delUnit, setOpResult })(
+    UnitContainer
+  )
 )

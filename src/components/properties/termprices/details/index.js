@@ -2,7 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { setTermPrice, setLoading, setOpResult, setErrMsg } from '../../../../actions'
+import {
+  setTermPrice,
+  setLoading,
+  setOpResult,
+  setErrMsg
+} from '../../../../actions'
 import TermPriceDetails from './TermPriceDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
@@ -123,7 +128,7 @@ class TermPriceDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `Term Price "${termprice.term}" edited successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -135,7 +140,13 @@ class TermPriceDetailsContainer extends Component {
 
     const { id, unitid } = this.props.match.params
     const { termprice } = this.state
-    const { contracts, accountData, setLoading, history, setOpResult } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      history,
+      setOpResult
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     // console.log('term price create - this.state:', this.state)
@@ -201,7 +212,7 @@ class TermPriceDetailsContainer extends Component {
         show: true,
         title: 'Success',
         text: `New Term Price "${termprice.term}" created successfully`,
-        type: 'success',
+        type: 'success'
       })
     }
 
@@ -289,7 +300,10 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setTermPrice, setLoading, setErrMsg, setOpResult })(
-    TermPriceDetailsContainer
-  )
+  connect(mapStateToProps, {
+    setTermPrice,
+    setLoading,
+    setErrMsg,
+    setOpResult
+  })(TermPriceDetailsContainer)
 )
