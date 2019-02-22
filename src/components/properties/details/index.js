@@ -5,6 +5,7 @@ import {
   setProperty,
   addProperties,
   setLoading,
+  setOpResult,
   delProperty
 } from '../../../actions'
 import PropertyDetails from './PropertyDetails'
@@ -30,22 +31,19 @@ class PropertyDetailsContainer extends Component {
 
   validator = property => {
     let alertContent = []
-    if (!property.name || property.name === '') {
+    if (property.name === '') {
       alertContent.push('Empty name')
     }
 
-    if (
-      (!property.address_1 || property.address_1 === '') &&
-      (!property.address_2 || property.address_2 === '')
-    ) {
+    if (property.address_1 === '' && property.address_2 === '') {
       alertContent.push('No valid address')
     }
 
-    if (!property.city || property.city === '') {
+    if (property.city === '') {
       alertContent.push('Empty city')
     }
 
-    if (!property.postal_code || property.postal_code === '') {
+    if (property.postal_code === '') {
       alertContent.push('Empty postal code')
     }
 
@@ -60,6 +58,7 @@ class PropertyDetailsContainer extends Component {
       contracts,
       accountData,
       setLoading,
+      setOpResult,
       setProperty,
       history
     } = this.props
@@ -82,21 +81,46 @@ class PropertyDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modproperty(
-      accountData.active,
-      property.id,
-      property.name,
-      property.address_1,
-      property.address_2,
-      property.city,
-      property.region,
-      property.postal_code,
-      property.unit_count,
-      options
-    )
 
-    setProperty(property)
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.modproperty(
+        accountData.active,
+        property.id,
+        property.name,
+        property.address_1,
+        property.address_2,
+        property.city,
+        property.region,
+        property.postal_code,
+        property.unit_count,
+        options
+      )
+
+      setProperty(property)
+    } catch (err) {
+      operationOK = false
+    }
+
     history.push('/')
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to edit Property "${property.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Property "${property.name}" edited successfully`,
+        type: 'success'
+      })
+    }
+
     setLoading(false)
   }
 
@@ -109,6 +133,7 @@ class PropertyDetailsContainer extends Component {
       eosClient,
       accountData,
       setLoading,
+      setOpResult,
       history
     } = this.props
     const { property } = this.state
@@ -132,27 +157,51 @@ class PropertyDetailsContainer extends Component {
 
     setLoading(true)
 
-    await fsmgrcontract.addproperty(
-      accountData.active,
-      property.name,
-      property.address_1,
-      property.address_2,
-      property.city,
-      property.region,
-      property.postal_code,
-      property.unit_count,
-      options
-    )
+    let operationOK = true
 
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      PROPERTY
-    )
-    addProperties(rows)
-    setLoading(false)
+    try {
+      await fsmgrcontract.addproperty(
+        accountData.active,
+        property.name,
+        property.address_1,
+        property.address_2,
+        property.city,
+        property.region,
+        property.postal_code,
+        property.unit_count,
+        options
+      )
+
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        accountData.active,
+        PROPERTY
+      )
+      addProperties(rows)
+    } catch (err) {
+      operationOK = false
+    }
+
     history.push('/')
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to create new Property "${property.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `New Property "${property.name}" created successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
   }
 
   handleChange (event) {
@@ -172,7 +221,15 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
+  getPropertyName = propertyId => {
+    const property = this.state.property
+    if (!property) return ''
+    console.log(`property id: ${propertyId}, property name: ${property.name}`)
+    return property.name
+  }
+
   deleteOne = async () => {
+    this.handleToggleConfirm(-1)
     const propertyId = this.state.propertyId
 
     const {
@@ -181,6 +238,7 @@ class PropertyDetailsContainer extends Component {
       eosClient,
       accountData,
       setLoading,
+      setOpResult,
       history
     } = this.props
 
@@ -191,15 +249,17 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    // this.setState({ mode: READING })
 
     setLoading(true)
+
+    let operationOK = true
 
     try {
       await fsmgrcontract.delproperty(accountData.active, propertyId, options)
       console.log('fsmgrcontract.delproperty - propertyId:', propertyId)
     } catch (err) {
       console.log('fsmgrcontract.delproperty - error:', err)
+      operationOK = false
     }
 
     const { rows } = await eosClient.getTableRows(
@@ -209,8 +269,27 @@ class PropertyDetailsContainer extends Component {
       PROPERTY
     )
     addProperties(rows)
-    setLoading(false)
     history.push('/')
+
+    let propertyName = this.getPropertyName(propertyId)
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete property "${propertyName}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Property "${propertyName}" deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
   }
 
   handleToggleConfirm = async propertyId => {
@@ -245,18 +324,20 @@ class PropertyDetailsContainer extends Component {
 
   render () {
     const { isCreating, properties, id } = this.props
-
+    const property = this.state.property
     return (
       <div>
-        <PropertyDetails
-          property={this.state.property}
-          isCreating={isCreating}
-          onSaveClick={this.save}
-          onCreateClick={this.create}
-          onCancelClick={this.cancel}
-          onChange={e => this.handleChange(e)}
-          handleToggle={this.handleToggleConfirm}
-        />
+        {property && (
+          <PropertyDetails
+            property={property}
+            isCreating={isCreating}
+            onSaveClick={this.save}
+            onCreateClick={this.create}
+            onCancelClick={this.cancel}
+            onChange={e => this.handleChange(e)}
+            handleToggle={this.handleToggleConfirm}
+          />
+        )}
         <Confirm
           isOpen={this.state.showConfirm}
           handleToggle={this.handleToggleConfirm}
@@ -299,6 +380,7 @@ export default withRouter(
     setProperty,
     addProperties,
     delProperty,
-    setLoading
+    setLoading,
+    setOpResult
   })(PropertyDetailsContainer)
 )

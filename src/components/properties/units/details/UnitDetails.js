@@ -83,7 +83,7 @@ const UnitDetails = ({
             <AvField
               label='Sq. Ft. Min'
               type='number'
-              min='0.1'
+              min='0'
               id='sq_ft_min'
               name='sq_ft_min'
               value={unit.sq_ft_min}
@@ -107,7 +107,7 @@ const UnitDetails = ({
             <AvField
               label='Rent Min'
               type='number'
-              min='0.1'
+              min='0'
               id='rent_min'
               name='rent_min'
               value={unit.rent_min}

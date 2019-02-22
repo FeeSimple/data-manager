@@ -3,7 +3,12 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import ecc from 'eosjs-ecc'
 
-import { setUnit, setLoading, setErrMsg } from '../../../../actions'
+import {
+  setUnit,
+  setLoading,
+  setErrMsg,
+  setOpResult
+} from '../../../../actions'
 import UnitDetails from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
@@ -51,15 +56,15 @@ class UnitDetailsContainer extends Component {
 
   validator = unit => {
     let alertContent = []
-    if (!unit.name || unit.name === '') {
+    if (unit.name === '') {
       alertContent.push('Empty name')
     }
 
-    if (!unit.sq_ft_min || unit.sq_ft_min <= 0) {
+    if (unit.sq_ft_min < 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
 
-    if (!unit.sq_ft_max || unit.sq_ft_max <= 0) {
+    if (unit.sq_ft_max <= 0) {
       alertContent.push('Invalid Sq. Ft. Max')
     }
 
@@ -67,11 +72,11 @@ class UnitDetailsContainer extends Component {
       alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
     }
 
-    if (!unit.rent_min || unit.rent_min <= 0) {
+    if (unit.rent_min < 0) {
       alertContent.push('Invalid Rent Min')
     }
 
-    if (!unit.rent_max || unit.rent_max <= 0) {
+    if (unit.rent_max <= 0) {
       alertContent.push('Invalid Rent Max')
     }
 
@@ -93,7 +98,14 @@ class UnitDetailsContainer extends Component {
 
     const propertyId = this.props.match.params.id
     const { unit, imagesToUpload } = this.state
-    const { contracts, accountData, setLoading, setUnit, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setOpResult,
+      setUnit,
+      history
+    } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     const options = {
@@ -113,23 +125,30 @@ class UnitDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modunit(
-      accountData.active,
-      unit.id,
-      propertyId,
-      unit.name,
-      unit.bedrooms,
-      unit.bathrooms,
-      unit.sq_ft_min,
-      unit.sq_ft_max,
-      unit.rent_min,
-      unit.rent_max,
-      unit.status,
-      new Date(unit.date_available).getTime(),
-      options
-    )
 
-    setUnit(propertyId, unit)
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.modunit(
+        accountData.active,
+        unit.id,
+        propertyId,
+        unit.name,
+        unit.bedrooms,
+        unit.bathrooms,
+        unit.sq_ft_min,
+        unit.sq_ft_max,
+        unit.rent_min,
+        unit.rent_max,
+        unit.status,
+        new Date(unit.date_available).getTime(),
+        options
+      )
+
+      setUnit(propertyId, unit)
+    } catch (err) {
+      operationOK = false
+    }
 
     if (imagesToUpload.length > 0) {
       // Mapping values to object keys removes duplicates.
@@ -154,13 +173,35 @@ class UnitDetailsContainer extends Component {
 
     history.push(`/${propertyId}/unit`)
 
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to edit Unit "${unit.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Unit "${unit.name}" edited successfully`,
+        type: 'success'
+      })
+    }
+
     setLoading(false)
   }
 
   create = async e => {
     e.preventDefault()
 
-    const { contracts, accountData, setLoading, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setOpResult,
+      history
+    } = this.props
     const propertyId = this.props.match.params.id
     const { unit } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
@@ -183,6 +224,8 @@ class UnitDetailsContainer extends Component {
 
     setLoading(true)
 
+    let operationOK = true
+
     try {
       await fsmgrcontract.addunit(
         accountData.active,
@@ -201,6 +244,7 @@ class UnitDetailsContainer extends Component {
     } catch (err) {
       setErrMsg('Failed to create new unit')
       console.log('fsmgrcontract.addunit - error:', err)
+      operationOK = false
     }
 
     try {
@@ -208,6 +252,23 @@ class UnitDetailsContainer extends Component {
       history.push(`/${propertyId}/unit`)
     } catch (err) {
       console.log('setUnit error:', err)
+      operationOK = false
+    }
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to create new Unit "${unit.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `New Unit "${unit.name}" created successfully`,
+        type: 'success'
+      })
     }
 
     setLoading(false)
@@ -325,7 +386,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setUnit, setLoading, setErrMsg })(
+  connect(mapStateToProps, { setUnit, setLoading, setOpResult, setErrMsg })(
     UnitDetailsContainer
   )
 )
