@@ -58,6 +58,7 @@ class PropertyDetailsContainer extends Component {
       contracts,
       accountData,
       setLoading,
+      setOpResult,
       setProperty,
       history
     } = this.props
@@ -80,21 +81,46 @@ class PropertyDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modproperty(
-      accountData.active,
-      property.id,
-      property.name,
-      property.address_1,
-      property.address_2,
-      property.city,
-      property.region,
-      property.postal_code,
-      property.unit_count,
-      options
-    )
 
-    setProperty(property)
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.modproperty(
+        accountData.active,
+        property.id,
+        property.name,
+        property.address_1,
+        property.address_2,
+        property.city,
+        property.region,
+        property.postal_code,
+        property.unit_count,
+        options
+      )
+
+      setProperty(property)
+    } catch (err) {
+      operationOK = false
+    }
+
     history.push('/')
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to edit Property "${property.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Property "${property.name}" edited successfully`,
+        type: 'success',
+      })
+    }
+
     setLoading(false)
   }
 
@@ -107,6 +133,7 @@ class PropertyDetailsContainer extends Component {
       eosClient,
       accountData,
       setLoading,
+      setOpResult,
       history
     } = this.props
     const { property } = this.state
@@ -130,27 +157,51 @@ class PropertyDetailsContainer extends Component {
 
     setLoading(true)
 
-    await fsmgrcontract.addproperty(
-      accountData.active,
-      property.name,
-      property.address_1,
-      property.address_2,
-      property.city,
-      property.region,
-      property.postal_code,
-      property.unit_count,
-      options
-    )
+    let operationOK = true
 
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      PROPERTY
-    )
-    addProperties(rows)
-    setLoading(false)
+    try {
+      await fsmgrcontract.addproperty(
+        accountData.active,
+        property.name,
+        property.address_1,
+        property.address_2,
+        property.city,
+        property.region,
+        property.postal_code,
+        property.unit_count,
+        options
+      )
+
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        accountData.active,
+        PROPERTY
+      )
+      addProperties(rows)
+    } catch (err) {
+      operationOK = false
+    }
+
     history.push('/')
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to create new Property "${property.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `New Property "${property.name}" created successfully`,
+        type: 'success',
+      })
+    }
+
+    setLoading(false)
   }
 
   handleChange (event) {

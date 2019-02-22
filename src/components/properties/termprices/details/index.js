@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { setTermPrice, setLoading, setErrMsg } from '../../../../actions'
+import { setTermPrice, setLoading, setOpResult, setErrMsg } from '../../../../actions'
 import TermPriceDetails from './TermPriceDetails'
 import { FSMGRCONTRACT } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
@@ -60,6 +60,7 @@ class TermPriceDetailsContainer extends Component {
       contracts,
       accountData,
       setLoading,
+      setOpResult,
       setTermPrice,
       history
     } = this.props
@@ -83,6 +84,8 @@ class TermPriceDetailsContainer extends Component {
 
     setLoading(true)
 
+    let operationOK = true
+
     try {
       await fsmgrcontract.modtmpricing(
         accountData.active,
@@ -97,6 +100,7 @@ class TermPriceDetailsContainer extends Component {
     } catch (err) {
       setErrMsg('Failed to save termprice')
       console.log('fsmgrcontract.modtmpricing - error:', err)
+      operationOK = false
     }
 
     try {
@@ -104,6 +108,23 @@ class TermPriceDetailsContainer extends Component {
       history.push(`/${id}/unit/${unitid}/termprice`)
     } catch (err) {
       console.log('setTermPrice error:', err)
+      operationOK = false
+    }
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to edit Term Price "${termprice.term}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Term Price "${termprice.term}" edited successfully`,
+        type: 'success',
+      })
     }
 
     setLoading(false)
@@ -114,7 +135,7 @@ class TermPriceDetailsContainer extends Component {
 
     const { id, unitid } = this.props.match.params
     const { termprice } = this.state
-    const { contracts, accountData, setLoading, history } = this.props
+    const { contracts, accountData, setLoading, history, setOpResult } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
     // console.log('term price create - this.state:', this.state)
@@ -140,6 +161,8 @@ class TermPriceDetailsContainer extends Component {
 
     setLoading(true)
 
+    let operationOK = true
+
     try {
       await fsmgrcontract.addtmpricing(
         accountData.active,
@@ -153,6 +176,7 @@ class TermPriceDetailsContainer extends Component {
     } catch (err) {
       setErrMsg('Failed to create new termprice')
       console.log('fsmgrcontract.addtmpricing - error:', err)
+      operationOK = false
     }
 
     try {
@@ -162,6 +186,23 @@ class TermPriceDetailsContainer extends Component {
       history.push(`/${id}/unit/${unitid}/termprice`)
     } catch (err) {
       console.log('setTermPrice error:', err)
+      operationOK = false
+    }
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to create new Term Price "${termprice.term}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `New Term Price "${termprice.term}" created successfully`,
+        type: 'success',
+      })
     }
 
     setLoading(false)
@@ -248,7 +289,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setTermPrice, setLoading, setErrMsg })(
+  connect(mapStateToProps, { setTermPrice, setLoading, setErrMsg, setOpResult })(
     TermPriceDetailsContainer
   )
 )
