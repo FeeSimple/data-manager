@@ -69,14 +69,14 @@ class FloorplansContainer extends Component {
       sign: true
     }
 
-    let deleteOK = true
+    let operationOK = true
 
     try {
       await fsmgrcontract.delfloorplan(accountData.active, floorplanId, options)
       console.log('fsmgrcontract.delfloorplan - floorplanId:', floorplanId)
     } catch (err) {
       console.log('fsmgrcontract.delfloorplan - error:', err)
-      deleteOK = false
+      operationOK = false
     }
 
     try {
@@ -84,10 +84,10 @@ class FloorplansContainer extends Component {
       history.push(`/${propertyId}`)
     } catch (err) {
       console.log('delFloorplan error:', err)
-      deleteOK = false
+      operationOK = false
     }
 
-    return deleteOK
+    return operationOK
   }
 
   deleteOne = async (propertyId, floorplanId) => {
@@ -95,10 +95,10 @@ class FloorplansContainer extends Component {
 
     setLoading(true)
 
-    let deleteOK = await this.doDelete(propertyId, floorplanId)
+    let operationOK = await this.doDelete(propertyId, floorplanId)
     let floorplanName = this.getFloorplanName(floorplanId)
 
-    if (!deleteOK) {
+    if (!operationOK) {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
@@ -133,8 +133,8 @@ class FloorplansContainer extends Component {
       let id = ids[i]
       if (checkedEntry[id] === true) {
         console.log(`Floorplan deleteBulk - id: ${id}`)
-        let deleteOK = await this.doDelete(propertyId, id)
-        if (!deleteOK) {
+        let operationOK = await this.doDelete(propertyId, id)
+        if (!operationOK) {
           failedFloorplans += `"${this.getFloorplanName(id)}", `
         }
       }

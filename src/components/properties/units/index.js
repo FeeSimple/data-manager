@@ -62,9 +62,9 @@ class UnitContainer extends Component {
 
     setLoading(true)
 
-    let deleteOK = await this.doDelete(propertyId, unitId)
+    let operationOK = await this.doDelete(propertyId, unitId)
 
-    if (!deleteOK) {
+    if (!operationOK) {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
@@ -92,24 +92,24 @@ class UnitContainer extends Component {
       sign: true
     }
 
-    let deleteOK = true
+    let operationOK = true
 
     try {
       await fsmgrcontract.delunit(accountData.active, unitId, options)
       console.log('fsmgrcontract.delunit - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.delunit - error:', err)
-      deleteOK = false
+      operationOK = false
     }
 
     try {
       delUnit(propertyId, unitId)
     } catch (err) {
       console.log('delUnit error:', err)
-      deleteOK = false
+      operationOK = false
     }
 
-    return deleteOK
+    return operationOK
   }
 
   isCheckedEntry = () => {
@@ -167,8 +167,8 @@ class UnitContainer extends Component {
       let id = ids[i]
       if (checkedEntry[id] === true) {
         console.log(`Unit deleteBulk - id: ${id}`)
-        let deleteOK = await this.doDelete(propertyId, id)
-        if (!deleteOK) {
+        let operationOK = await this.doDelete(propertyId, id)
+        if (!operationOK) {
           failedUnits += `"${this.getUnitName(id)}", `
         }
       }

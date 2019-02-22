@@ -75,10 +75,10 @@ class TermPriceContainer extends Component {
 
     setLoading(true)
 
-    let deleteOK = await this.doDelete(propertyId, unitId, termpriceId)
+    let operationOK = await this.doDelete(propertyId, unitId, termpriceId)
     let term = this.getTerm(propertyId, unitId, termpriceId)
 
-    if (!deleteOK) {
+    if (!operationOK) {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
@@ -107,14 +107,14 @@ class TermPriceContainer extends Component {
       sign: true
     }
 
-    let deleteOK = true
+    let operationOK = true
 
     try {
       await fsmgrcontract.deltmpricing(accountData.active, termpriceId, options)
       console.log('fsmgrcontract.deltmpricing - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.deltmpricing - error:', err)
-      deleteOK = false
+      operationOK = false
     }
 
     try {
@@ -122,10 +122,10 @@ class TermPriceContainer extends Component {
       history.push(`/${propertyId}/unit/${unitId}/termprice`)
     } catch (err) {
       console.log('delTermPrice error:', err)
-      deleteOK = false
+      operationOK = false
     }
 
-    return deleteOK
+    return operationOK
   }
 
   deleteBulk = async (propertyId, unitId) => {
@@ -144,8 +144,8 @@ class TermPriceContainer extends Component {
       let id = ids[i]
       if (checkedEntry[id] === true) {
         console.log(`Term price deleteBulk - id: ${id}`)
-        let deleteOK = await this.doDelete(propertyId, unitId, id)
-        if (!deleteOK) {
+        let operationOK = await this.doDelete(propertyId, unitId, id)
+        if (!operationOK) {
           failedTermPrices += `"${this.getTerm(propertyId, unitId, id)}", `
         }
       }

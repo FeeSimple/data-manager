@@ -201,14 +201,14 @@ class PropertyDetailsContainer extends Component {
 
     setLoading(true)
 
-    let deleteOK = true
+    let operationOK = true
 
     try {
       await fsmgrcontract.delproperty(accountData.active, propertyId, options)
       console.log('fsmgrcontract.delproperty - propertyId:', propertyId)
     } catch (err) {
       console.log('fsmgrcontract.delproperty - error:', err)
-      deleteOK = false
+      operationOK = false
     }
 
     const { rows } = await eosClient.getTableRows(
@@ -222,7 +222,7 @@ class PropertyDetailsContainer extends Component {
 
     let propertyName = this.getPropertyName(propertyId)
 
-    if (!deleteOK) {
+    if (!operationOK) {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
