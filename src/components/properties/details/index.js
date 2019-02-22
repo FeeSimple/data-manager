@@ -5,6 +5,7 @@ import {
   setProperty,
   addProperties,
   setLoading,
+  setOpResult,
   delProperty
 } from '../../../actions'
 import PropertyDetails from './PropertyDetails'
@@ -169,6 +170,13 @@ class PropertyDetailsContainer extends Component {
     })
   }
 
+  getPropertyName = (propertyId) => {
+    const property=this.state.property
+    if (!property) return ''
+    console.log(`property id: ${propertyId}, property name: ${property.name}`);
+    return property.name
+  }
+
   deleteOne = async () => {
     this.handleToggleConfirm(-1);
     const propertyId = this.state.propertyId
@@ -179,6 +187,7 @@ class PropertyDetailsContainer extends Component {
       eosClient,
       accountData,
       setLoading,
+      setOpResult,
       history
     } = this.props
 
@@ -189,15 +198,17 @@ class PropertyDetailsContainer extends Component {
       broadcast: true,
       sign: true
     }
-    // this.setState({ mode: READING })
 
     setLoading(true)
+
+    let deleteOK = true
 
     try {
       await fsmgrcontract.delproperty(accountData.active, propertyId, options)
       console.log('fsmgrcontract.delproperty - propertyId:', propertyId)
     } catch (err) {
       console.log('fsmgrcontract.delproperty - error:', err)
+      deleteOK = false
     }
 
     const { rows } = await eosClient.getTableRows(
@@ -207,8 +218,27 @@ class PropertyDetailsContainer extends Component {
       PROPERTY
     )
     addProperties(rows)
-    setLoading(false)
     history.push('/')
+
+    let propertyName = this.getPropertyName(propertyId)
+
+    if (!deleteOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete property "${propertyName}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Property "${propertyName}" deleted successfully`,
+        type: 'success',
+      })
+    }
+
+    setLoading(false)
   }
 
   handleToggleConfirm = async propertyId => {
@@ -299,6 +329,7 @@ export default withRouter(
     setProperty,
     addProperties,
     delProperty,
-    setLoading
+    setLoading,
+    setOpResult
   })(PropertyDetailsContainer)
 )
