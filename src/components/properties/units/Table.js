@@ -16,7 +16,8 @@ export default props => {
     property,
     onChange,
     handleToggle,
-    deleteBulkDisabled
+    deleteBulkDisabled,
+    showTable
   } = props
   const { SearchBar } = Search
   const data = Object.values(property.units)
@@ -152,7 +153,8 @@ export default props => {
         </Container>
       </div>
       <br />
-      <Container>
+      { showTable &&
+        <Container>
         <Row>
           <Col sm='12' className='mt-4 mb-4'>
             <Button
@@ -188,6 +190,7 @@ export default props => {
           </Col>
         </Row>
       </Container>
+    }
     </div>
   )
 }

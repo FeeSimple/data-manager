@@ -20,11 +20,16 @@ class TermPriceContainer extends Component {
       propertyId: 0,
       unitId: 0,
       termpriceId: 0,
-      deleteBulkDisabled: true
+      deleteBulkDisabled: true,
+      isAdding: true
     }
   }
 
   async componentDidMount () {
+    this.setState({
+      isAdding: true
+    })
+
     const { eosClient, accountData, addTermPrices } = this.props
     const { id, unitid } = this.props.match.params
 
@@ -45,6 +50,10 @@ class TermPriceContainer extends Component {
     } catch (err) {
       console.log('Get table "termpricing" failed - err:', err)
     }
+
+    this.setState({
+      isAdding: false
+    })
   }
 
   onDelete = async () => {
@@ -217,7 +226,7 @@ class TermPriceContainer extends Component {
   }
 
   render () {
-    const { properties } = this.props
+    const { properties, setOpResult } = this.props
     const { id, unitid, termid } = this.props.match.params
     const property = properties[id]
     const unit = property.units[unitid]
@@ -225,6 +234,20 @@ class TermPriceContainer extends Component {
     if (!property || !unit) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
+      const noTermPrices = Object.keys(unit.termprices).length === 0
+      const showAlert = noTermPrices && !this.state.isAdding
+
+      if (showAlert) {
+        setOpResult({
+          show: true,
+          title: '',
+          text: 'No term prices yet. Please add a term price',
+          type: 'info'
+        })
+      }
+
+      const showTable = !this.state.isAdding && !noTermPrices
+
       return (
         <div>
           <Table
@@ -235,6 +258,7 @@ class TermPriceContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
+            showTable={showTable}
           />
           <Confirm
             isOpen={this.state.showConfirm}

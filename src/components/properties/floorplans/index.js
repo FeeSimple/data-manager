@@ -19,21 +19,40 @@ class FloorplansContainer extends Component {
       showConfirm: false,
       propertyId: 0,
       floorplanId: 0,
-      deleteBulkDisabled: true
+      deleteBulkDisabled: true,
+      isAdding: true
     }
   }
 
   async componentDidMount () {
+    this.setState({
+      isAdding: true
+    })
+
     const { eosClient, accountData, addFloorplans } = this.props
     const { id } = this.props.match.params
 
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      FLOORPLAN
-    )
-    addFloorplans(id, rows)
+    try {
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        accountData.active,
+        FLOORPLAN
+      )
+      console.log('Get table "floorplan" result:', rows)
+
+      try {
+        addFloorplans(id, rows)
+      } catch (err) {
+        console.log('addFloorplans error:', err)
+      }
+    } catch (err) {
+      console.log('Get table "floorplan" failed - err:', err)
+    }
+
+    this.setState({
+      isAdding: false
+    })
   }
 
   onDelete = async () => {
@@ -205,12 +224,26 @@ class FloorplansContainer extends Component {
   }
 
   render () {
-    const { properties } = this.props
+    const { properties, setOpResult } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
     if (!property) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
+      const noFloorplans = Object.keys(property.floorplans).length === 0
+      const showAlert = noFloorplans && !this.state.isAdding
+
+      if (showAlert) {
+        setOpResult({
+          show: true,
+          title: '',
+          text: 'No floorplans yet. Please add a floorplan',
+          type: 'info'
+        })
+      }
+
+      const showTable = !this.state.isAdding && !noFloorplans
+
       return (
         <div>
           <Table
@@ -219,6 +252,7 @@ class FloorplansContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
+            showTable={showTable}
           />
           <Confirm
             isOpen={this.state.showConfirm}

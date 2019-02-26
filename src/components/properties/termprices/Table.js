@@ -9,7 +9,7 @@ import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 
 export default props => {
-  const { propertyId, unit, onChange, handleToggle, deleteBulkDisabled } = props
+  const { propertyId, unit, onChange, handleToggle, deleteBulkDisabled, showTable } = props
   const { SearchBar } = Search
   const data = Object.values(unit.termprices)
   const columns = [
@@ -94,8 +94,9 @@ export default props => {
         </Container>
       </div>
       <br />
-      <Container>
-        <Row>
+      { showTable &&
+        <Container>
+          <Row>
           <Col sm='12'>
             <Button
               size='sm'
@@ -129,7 +130,8 @@ export default props => {
             </ToolkitProvider>
           </Col>
         </Row>
-      </Container>
+        </Container>
+      }
     </div>
   )
 }
