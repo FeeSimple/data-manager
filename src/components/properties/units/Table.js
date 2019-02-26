@@ -153,44 +153,44 @@ export default props => {
         </Container>
       </div>
       <br />
-      { showTable &&
+      {showTable && (
         <Container>
-        <Row>
-          <Col sm='12' className='mt-4 mb-4'>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(property.id, -1)}
-            >
-              Delete Checked
-            </Button>
-            <ToolkitProvider
-              keyField='id'
-              data={Object.values(property.units)}
-              columns={columns}
-              search={{ searchFormatted: true }}
-              bootstrap4
-            >
-              {props => (
-                <React.Fragment>
-                  <SearchBar
-                    {...props.searchProps}
-                    className='mb-3 tbl-search-input'
-                  />
-                  <BootstrapTable
-                    {...props.baseProps}
-                    pagination={paginationFactory()}
-                  />
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          </Col>
-        </Row>
-      </Container>
-    }
+          <Row>
+            <Col sm='12' className='mt-4 mb-4'>
+              <Button
+                size='sm'
+                outline
+                color='red'
+                className='tbl-btn-close'
+                disabled={deleteBulkDisabled}
+                onClick={e => handleToggle(property.id, -1)}
+              >
+                Delete Checked
+              </Button>
+              <ToolkitProvider
+                keyField='id'
+                data={Object.values(property.units)}
+                columns={columns}
+                search={{ searchFormatted: true }}
+                bootstrap4
+              >
+                {props => (
+                  <React.Fragment>
+                    <SearchBar
+                      {...props.searchProps}
+                      className='mb-3 tbl-search-input'
+                    />
+                    <BootstrapTable
+                      {...props.baseProps}
+                      pagination={paginationFactory()}
+                    />
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            </Col>
+          </Row>
+        </Container>
+      )}
     </div>
   )
 }

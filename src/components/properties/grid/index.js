@@ -14,14 +14,14 @@ class GridContainer extends Component {
     const noProperties = Object.keys(properties).length === 0
     const showAlert = noProperties
 
-      if (showAlert) {
-        setOpResult({
-          show: true,
-          title: '',
-          text: 'No properties yet. Please add a property',
-          type: 'info'
-        })
-      }
+    if (showAlert) {
+      setOpResult({
+        show: true,
+        title: '',
+        text: 'No properties yet. Please add a property',
+        type: 'info'
+      })
+    }
 
     const showTable = !noProperties
 
@@ -42,11 +42,11 @@ class GridContainer extends Component {
             </Row>
           </Container>
         </div>
-        { showTable &&
+        {showTable && (
           <Container>
             <Grid properties={properties} />
           </Container>
-        }
+        )}
       </div>
     )
   }
@@ -56,4 +56,6 @@ function mapStateToProps ({ properties, scatter, eosjs }) {
   return { properties, scatter, eosjs }
 }
 
-export default withRouter(connect(mapStateToProps, {setOpResult})(GridContainer))
+export default withRouter(
+  connect(mapStateToProps, { setOpResult })(GridContainer)
+)

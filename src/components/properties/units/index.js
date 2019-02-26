@@ -209,7 +209,7 @@ class UnitContainer extends Component {
     if (propertyId !== -1 || unitId !== -1) {
       this.setState({
         propertyId: propertyId,
-        unitId: unitId,
+        unitId: unitId
       })
     }
   }
@@ -235,7 +235,7 @@ class UnitContainer extends Component {
       }
 
       const showTable = !this.state.isAdding && !noUnits
-      
+
       return (
         <div>
           <Table
