@@ -19,12 +19,16 @@ class UnitContainer extends Component {
       showConfirm: false,
       propertyId: 0,
       unitId: 0,
-      unitName: '',
-      deleteBulkDisabled: true
+      deleteBulkDisabled: true,
+      isAdding: true
     }
   }
 
   async componentDidMount () {
+    this.setState({
+      isAdding: true
+    })
+
     const { eosClient, accountData, addUnits } = this.props
     const { id } = this.props.match.params
 
@@ -45,24 +49,29 @@ class UnitContainer extends Component {
     } catch (err) {
       console.log('Get table "unit" failed - err:', err)
     }
+
+    this.setState({
+      isAdding: false
+    })
   }
 
   onDelete = async () => {
     this.handleToggleConfirm(-1, -1)
-    const { propertyId, unitId, unitName } = this.state
+    const { propertyId, unitId } = this.state
     if (propertyId !== -1 && unitId !== -1) {
-      await this.deleteOne(propertyId, unitId, unitName)
+      await this.deleteOne(propertyId, unitId)
     } else {
       await this.deleteBulk(propertyId)
     }
   }
 
-  deleteOne = async (propertyId, unitId, unitName) => {
+  deleteOne = async (propertyId, unitId) => {
     const { setLoading, setOpResult } = this.props
 
     setLoading(true)
 
     let operationOK = await this.doDelete(propertyId, unitId)
+    let unitName = this.getUnitName(unitId)
 
     if (!operationOK) {
       setOpResult({
@@ -193,26 +202,40 @@ class UnitContainer extends Component {
     setLoading(false)
   }
 
-  handleToggleConfirm = (propertyId, unitId, unitName) => {
+  handleToggleConfirm = (propertyId, unitId) => {
     const { showConfirm } = this.state
     this.setState({ showConfirm: !showConfirm })
 
     if (propertyId !== -1 || unitId !== -1) {
       this.setState({
         propertyId: propertyId,
-        unitId: unitId,
-        unitName: unitName
+        unitId: unitId
       })
     }
   }
 
   render () {
-    const { properties } = this.props
+    const { properties, setOpResult } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
+
     if (!property) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
+      const noUnits = Object.keys(property.units).length === 0
+      const showAlert = noUnits && !this.state.isAdding
+
+      if (showAlert) {
+        setOpResult({
+          show: true,
+          title: '',
+          text: 'No units yet. Please add a unit',
+          type: 'info'
+        })
+      }
+
+      const showTable = !this.state.isAdding && !noUnits
+
       return (
         <div>
           <Table
@@ -221,6 +244,7 @@ class UnitContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
+            showTable={showTable}
           />
           <Confirm
             isOpen={this.state.showConfirm}
