@@ -10,7 +10,13 @@ import IconDelete from '../../../img/icon-delete.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 
 export default props => {
-  const { property, onChange, handleToggle, deleteBulkDisabled } = props
+  const {
+    property,
+    onChange,
+    handleToggle,
+    deleteBulkDisabled,
+    showTable
+  } = props
   const { SearchBar } = Search
   const columns = [
     {
@@ -117,42 +123,44 @@ export default props => {
         </Container>
       </div>
       <br />
-      <Container>
-        <Row>
-          <Col sm='12'>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(property.id, -1)}
-            >
-              Delete Checked
-            </Button>
-            <ToolkitProvider
-              keyField='id'
-              data={Object.values(property.floorplans)}
-              columns={columns}
-              search={{ searchFormatted: true }}
-              bootstrap4
-            >
-              {props => (
-                <React.Fragment>
-                  <SearchBar
-                    {...props.searchProps}
-                    className='mb-3 tbl-search-input'
-                  />
-                  <BootstrapTable
-                    {...props.baseProps}
-                    pagination={paginationFactory()}
-                  />
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          </Col>
-        </Row>
-      </Container>
+      {showTable && (
+        <Container>
+          <Row>
+            <Col sm='12'>
+              <Button
+                size='sm'
+                outline
+                color='red'
+                className='tbl-btn-close'
+                disabled={deleteBulkDisabled}
+                onClick={e => handleToggle(property.id, -1)}
+              >
+                Delete Checked
+              </Button>
+              <ToolkitProvider
+                keyField='id'
+                data={Object.values(property.floorplans)}
+                columns={columns}
+                search={{ searchFormatted: true }}
+                bootstrap4
+              >
+                {props => (
+                  <React.Fragment>
+                    <SearchBar
+                      {...props.searchProps}
+                      className='mb-3 tbl-search-input'
+                    />
+                    <BootstrapTable
+                      {...props.baseProps}
+                      pagination={paginationFactory()}
+                    />
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            </Col>
+          </Row>
+        </Container>
+      )}
     </div>
   )
 }

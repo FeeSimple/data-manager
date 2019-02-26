@@ -5,10 +5,26 @@ import { connect } from 'react-redux'
 import IconAdd from '../../../img/icon-add.svg'
 import Grid from './Grid'
 import { Col, Row, Container } from 'reactstrap'
+import { setOpResult } from '../../../actions'
 
 class GridContainer extends Component {
   render () {
-    const { properties } = this.props
+    const { properties, setOpResult } = this.props
+
+    const noProperties = Object.keys(properties).length === 0
+    const showAlert = noProperties
+
+    if (showAlert) {
+      setOpResult({
+        show: true,
+        title: '',
+        text: 'No properties yet. Please add a property',
+        type: 'info'
+      })
+    }
+
+    const showTable = !noProperties
+
     return (
       <div>
         <div className='top-bar'>
@@ -26,9 +42,11 @@ class GridContainer extends Component {
             </Row>
           </Container>
         </div>
-        <Container>
-          <Grid properties={properties} />
-        </Container>
+        {showTable && (
+          <Container>
+            <Grid properties={properties} />
+          </Container>
+        )}
       </div>
     )
   }
@@ -38,4 +56,6 @@ function mapStateToProps ({ properties, scatter, eosjs }) {
   return { properties, scatter, eosjs }
 }
 
-export default withRouter(connect(mapStateToProps)(GridContainer))
+export default withRouter(
+  connect(mapStateToProps, { setOpResult })(GridContainer)
+)
