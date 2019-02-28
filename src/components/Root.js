@@ -22,10 +22,10 @@ class RootContainer extends Component {
   }
 
   render () {
-    const { eosClient, isLoading } = this.props
+    const { eosClient, isLoading, accountData } = this.props
     let opResult = this.props.opResult
-
-    if (eosClient.locked === true) {
+    console.log('Root render - accountData:', accountData);
+    if (!accountData || !accountData.active) {
       return <LoginContainer />
     }
 
@@ -50,8 +50,8 @@ class RootContainer extends Component {
   }
 }
 
-function mapStateToProps ({ isLoading, eosClient, opResult }) {
-  return { isLoading, eosClient, opResult }
+function mapStateToProps ({ isLoading, eosClient, opResult, accountData }) {
+  return { isLoading, eosClient, opResult, accountData }
 }
 
 export default withRouter(
