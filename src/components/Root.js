@@ -24,7 +24,7 @@ class RootContainer extends Component {
   render () {
     const { eosClient, isLoading, accountData } = this.props
     let opResult = this.props.opResult
-    console.log('Root render - accountData:', accountData);
+    console.log('Root render - accountData:', accountData)
     if (!accountData || !accountData.active) {
       return <LoginContainer />
     }
