@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Root from './components/Root'
-import { createStore } from 'redux'
-import reducer from './reducers'
+import { persistor, store } from './store'
+import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { setEosClient, setScatter } from './actions'
@@ -21,13 +21,12 @@ import './css/main.css'
 
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-const store = createStore(
-  reducer
-  // composeEnhancers(
-  //   applyMiddleware(logger)
-  // )
-)
-
+// const store = createStore(
+//   reducer
+//   // composeEnhancers(
+//   //   applyMiddleware(logger)
+//   // )
+// )
 // Fallback eosjs
 const eos = getFallbackEos(Eos)
 store.dispatch(setEosClient({ ...eos, locked: true }))
@@ -41,6 +40,7 @@ getScatter
     console.error('Error setting up scatter.', error)
   })
 
+// Do not wrap <Root /> with <PersistGate/> as no route can be made
 ReactDOM.render(
   <div>
     <BrowserRouter>
