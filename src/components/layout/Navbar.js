@@ -6,7 +6,7 @@ import Logo from '../../img/logo.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconUser from '../../img/icon-user.svg'
 import IconLogout from '../../img/icon-logout.svg'
-import { setInfo } from '../../actions/index'
+import { setInfo, setActive } from '../../actions/index'
 import { beautifyRam } from '../../utils/beautify'
 
 class NavbarContainer extends Component {
@@ -60,6 +60,11 @@ class NavbarContainer extends Component {
     return ram
   }
 
+  handleLogout = () => {
+    this.props.setActive(null)
+    this.props.setInfo(null)
+  }
+
   render () {
     return (
       <div className='menu-holder'>
@@ -88,9 +93,12 @@ class NavbarContainer extends Component {
                   </Link>
                 </li>
                 <li>
-                  <a href=''>
-                    <img src={IconLogout} alt='' />
-                  </a>
+                  <Link to='/'>
+                    <img
+                      src={IconLogout} alt=''
+                      onClick={this.handleLogout}
+                    />
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -107,6 +115,7 @@ function mapStateToProps ({ eosClient, accountData }) {
 
 export default withRouter(
   connect(mapStateToProps, {
-    setInfo
+    setInfo,
+    setActive
   })(NavbarContainer)
 )
