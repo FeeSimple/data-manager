@@ -132,7 +132,7 @@ const UserSendForm = props => {
             }
           >
             {isProcessing ? (
-              <Spinner name='three-bounce' color='white' noFadeIn />
+              <Spinner name='three-bounce' color='white' fadeIn='none' />
             ) : (
               <span>Submit</span>
             )}
