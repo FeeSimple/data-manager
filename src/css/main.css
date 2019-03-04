@@ -34,10 +34,14 @@ h1, h2, h3, h4, h5, h6 {
 .main-wrapper {
   position: relative;
   padding-bottom: 65px;
+  padding-left: 180px;
   min-height: 100vh; }
   .main-wrapper.home {
     background-color: #104378;
-    color: #ffffff; }
+    color: #ffffff;
+    padding-left: 0; }
+    .main-wrapper.home .fs-footer {
+      left: 15px; }
 
 .logo-container {
   display: inline-block;
@@ -64,51 +68,72 @@ h1, h2, h3, h4, h5, h6 {
 .menu-holder {
   background-color: #104378;
   padding: 15px 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 180px;
   color: #fff; }
   .menu-holder .logo {
-    float: left; }
-  .menu-holder .storage {
-    margin: 15px 0 0 25px;
-    float: left;
-    font-size: 17px; }
-    .menu-holder .storage small {
-      font-size: 13px;
-      color: #2b8acb; }
-    .menu-holder .storage .badge {
-      background-color: #54799f;
-      padding: 6px 10px;
-      font-size: 13px; }
-  .menu-holder #main-menu {
-    float: right;
-    list-style: none;
-    padding-top: 11px; }
-    .menu-holder #main-menu li {
+    display: block;
+    text-align: center; }
+    .menu-holder .logo img {
+      height: 70px;
+      width: auto; }
+  .menu-holder .logout {
+    display: block;
+    position: fixed;
+    left: 15px;
+    bottom: 10px;
+    line-height: 23px;
+    color: #fff; }
+    .menu-holder .logout:hover, .menu-holder .logout:active, .menu-holder .logout:focus {
+      text-decoration: none;
+      opacity: 0.8; }
+    .menu-holder .logout img {
+      height: 23px;
       float: left;
-      margin-left: 25px; }
+      margin-right: 6px;
+      width: auto; }
+  .menu-holder #main-menu {
+    list-style: none;
+    padding-top: 11px;
+    padding-left: 0; }
+    .menu-holder #main-menu li {
+      display: block;
+      padding: 7px 0; }
       .menu-holder #main-menu li:first-child {
-        margin-left: 0; }
+        border-top: 1px solid #2b8acb; }
+      .menu-holder #main-menu li:last-child {
+        border-top: 1px solid #2b8acb;
+        padding-top: 14px;
+        margin-top: 7px; }
       .menu-holder #main-menu li a {
         display: block;
-        line-height: 30px;
-        font-size: 18px;
+        line-height: 23px;
+        font-size: 15px;
         font-weight: 600;
-        color: #fff; }
-        .menu-holder #main-menu li a:hover, .menu-holder #main-menu li a:active {
+        color: #fff;
+        white-space: nowrap; }
+        .menu-holder #main-menu li a:hover, .menu-holder #main-menu li a:active, .menu-holder #main-menu li a:focus {
           text-decoration: none;
           opacity: 0.8; }
         .menu-holder #main-menu li a img {
-          height: 30px;
-          width: auto; }
+          height: 23px;
+          width: auto;
+          float: left;
+          margin-right: 6px; }
 
 .top-bar {
   background-color: rgba(222, 222, 223, 0.75);
   padding: 15px 0; }
   .top-bar h3 {
-    font-size: 20px;
-    margin: 5px 0;
+    font-size: 16px;
+    margin: 6px 0;
     font-weight: 400; }
     .top-bar h3 a {
-      color: #4abaee; }
+      color: #605e5e; }
       .top-bar h3 a img {
         width: 25px;
         margin-right: 5px;
@@ -116,6 +141,16 @@ h1, h2, h3, h4, h5, h6 {
       .top-bar h3 a:hover, .top-bar h3 a:active {
         text-decoration: none;
         opacity: 0.8; }
+  .top-bar .storage {
+    margin: 2px 0 0 0; }
+    .top-bar .storage .badge {
+      padding: 6px 8px;
+      font-size: 13px;
+      background-color: rgba(0, 177, 239, 0.2);
+      border: 2px solid #00b1ef; }
+
+.top-bar.whitebar {
+  background-color: transparent; }
 
 .properties-ul {
   list-style: none;
@@ -247,7 +282,7 @@ h1, h2, h3, h4, h5, h6 {
 .fs-footer {
   bottom: 13px;
   text-align: center;
-  left: 15px;
+  left: 195px;
   right: 15px;
   position: absolute; }
 
@@ -428,6 +463,8 @@ h1, h2, h3, h4, h5, h6 {
   background-size: 20px auto;
   margin-top: 10px;
   margin-bottom: 15px; }
+  .tbl-btn-close.disabled {
+    opacity: 0; }
 
 .react-bootstrap-table tbody tr:nth-child(odd) {
   background: #f6f8fa; }
@@ -497,6 +534,12 @@ Dropzone
 .c-pointer {
   cursor: pointer; }
 
+.del-btn-fx {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 3px; }
+
 /*------------------------------------------
     Responsive Grid Media Queries Settings
     1600+   -     Extra Large Screen
@@ -515,9 +558,7 @@ Dropzone
 /*--- below large screen -----*/
 @media all and (max-width: 1200px) {
   .tc-md {
-    text-align: center; }
-  .menu-holder #main-menu li > a > span {
-    display: none; } }
+    text-align: center; } }
 
 /*------------------------Medium------------------------------------*/
 /*---   Medium screen+   -----*/
@@ -530,8 +571,50 @@ Dropzone
 @media all and (max-width: 991px) {
   .tc-sm {
     text-align: center; }
-  .menu-holder .storage small {
-    display: none; } }
+  .main-wrapper {
+    padding-left: 0; }
+  .menu-holder {
+    padding: 15px 0;
+    position: relative;
+    bottom: auto;
+    width: auto; }
+    .menu-holder .logo {
+      display: inline-block; }
+      .menu-holder .logo img {
+        height: 40px;
+        width: auto; }
+    .menu-holder .logout {
+      display: block;
+      position: absolute;
+      left: auto;
+      bottom: auto;
+      top: 9px;
+      right: 0; }
+      .menu-holder .logout img {
+        margin-right: 15px; }
+      .menu-holder .logout span {
+        display: none; }
+    .menu-holder #main-menu {
+      list-style: none;
+      float: right;
+      padding: 0;
+      margin: 9px 22px 0 0; }
+      .menu-holder #main-menu li {
+        display: inline-block;
+        padding: 0;
+        margin-right: 10px; }
+        .menu-holder #main-menu li:first-child {
+          border-top: none; }
+        .menu-holder #main-menu li:last-child {
+          border-top: none;
+          padding-top: 0;
+          margin-top: 0; }
+        .menu-holder #main-menu li a img {
+          margin-right: 0; }
+        .menu-holder #main-menu li a span {
+          display: none; }
+  .fs-footer {
+    left: 15px; } }
 
 /*-----------------------Small-------------------------------------*/
 /*---   Small screen+   -----*/
@@ -556,46 +639,27 @@ Dropzone
     max-width: 90%; }
     .logo-container img {
       max-width: 100%; }
+  .storage .storage-text {
+    display: none; }
   .btn-home {
     font-size: 14px; }
   .main-wrapper {
     padding-bottom: 80px; }
   .properties-ul li {
-    width: 48%; }
-  .menu-holder .logo {
-    margin-top: 10px; }
-    .menu-holder .logo img {
-      width: auto;
-      height: 40px; }
-  .menu-holder .storage {
-    margin: 15px 0 0 15px; }
-    .menu-holder .storage .storage-text {
-      font-size: 14px; } }
+    width: 48%; } }
 
 /*-----------------------Very Small--------------------------------*/
 /*--- Extra Small screen only -----*/
 /*--- Very Small screen -----*/
-@media all and (max-width: 580px) {
-  .menu-holder .storage .storage-text {
-    display: none; }
-  .menu-holder #main-menu li {
-    margin-left: 15px; } }
-
 @media all and (max-width: 479px) {
   .properties-ul {
     text-align: center; }
     .properties-ul li {
       display: inline-block;
       float: none;
-      width: 98%; }
-  .menu-holder .storage {
-    display: none; } }
+      width: 98%; } }
 
 @media all and (max-width: 380px) {
-  .menu-holder .logo {
-    margin-top: 15px; }
-    .menu-holder .logo img {
-      height: 30px; }
   .top-bar h3 {
     font-size: 18px; } }
 

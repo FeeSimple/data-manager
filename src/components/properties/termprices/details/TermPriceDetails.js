@@ -1,6 +1,7 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import Storage from '../../../layout/Storage'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
 
 const TermPriceDetails = ({
@@ -15,12 +16,15 @@ const TermPriceDetails = ({
   <div>
     <div className='top-bar'>
       <Container>
-        <Row>
-          <Col>
-            <h3 className='float-left'> Unit</h3>
-          </Col>
-        </Row>
-      </Container>
+          <Row>
+            <Col>
+              <h3 className='float-left'>Unit</h3>
+            </Col>
+            <Col>
+              <Storage />
+            </Col>
+          </Row>
+        </Container>
     </div>
     <br />
     <Container>

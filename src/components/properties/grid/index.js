@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import Grid from './Grid'
 import { Col, Row, Container } from 'reactstrap'
@@ -32,6 +33,17 @@ class GridContainer extends Component {
             <Row>
               <Col>
                 <h3 className='float-left'>Properties</h3>
+              </Col>
+              <Col>
+                <Storage />
+              </Col>
+            </Row>
+          </Container>
+        </div>
+        <div className='top-bar whitebar'>
+          <Container>
+            <Row>
+              <Col>
                 <h3 className='float-right'>
                   <Link to='/new'>
                     <img src={IconAdd} alt='' />
@@ -43,9 +55,7 @@ class GridContainer extends Component {
           </Container>
         </div>
         {showTable && (
-          <Container>
-            <Grid properties={properties} />
-          </Container>
+          <Grid properties={properties} />
         )}
       </div>
     )

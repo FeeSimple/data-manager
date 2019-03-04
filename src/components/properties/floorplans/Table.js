@@ -5,6 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
 // import FloorplanRow from './Row'
+import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
@@ -95,12 +96,21 @@ export default props => {
   return (
     <div>
       <div className='top-bar'>
+          <Container>
+            <Row>
+              <Col>
+                <h3 className='float-left'>{property.name}</h3>
+              </Col>
+              <Col>
+                <Storage />
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      <div className='top-bar whitebar'>
         <Container>
           <Row>
-            <div className='col-12 col-md-4 m-xs-b-10'>
-              <h3>{property.name} </h3>
-            </div>
-            <div className='col-10 col-md-4 tc tl-xs'>
+            <div className='col-9 col-md-7'>
               <Link to={`/${property.id}`} className='btn btn-base-o prop-btn'>
                 Floor Plan
               </Link>
@@ -111,7 +121,7 @@ export default props => {
                 Units
               </Link>
             </div>
-            <div className='col-2 col-md-4'>
+            <div className='col-3  col-md-5'>
               <h3 className='float-right'>
                 <Link to={`/${props.propertyId}/floorplan/new`}>
                   <img src={IconAdd} alt='' />
@@ -122,7 +132,6 @@ export default props => {
           </Row>
         </Container>
       </div>
-      <br />
       {showTable && (
         <Container>
           <Row>

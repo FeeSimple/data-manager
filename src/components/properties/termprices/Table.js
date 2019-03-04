@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
@@ -90,6 +91,18 @@ export default props => {
         <Container>
           <Row>
             <Col>
+              <h3 className='float-left'>Term Pricing</h3>
+            </Col>
+            <Col>
+              <Storage />
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <div className='top-bar whitebar'>
+        <Container>
+          <Row>
+            <Col>
               <h3 className='float-right'>
                 <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
                   <img src={IconAdd} alt='' />
@@ -100,7 +113,6 @@ export default props => {
           </Row>
         </Container>
       </div>
-      <br />
       {showTable && (
         <Container>
           <Row>
