@@ -19,43 +19,47 @@ class NavbarContainer extends Component {
   }
 
   async componentDidMount () {
-    const { eosClient, accountData, setEosClient, setFsMgrContract } = this.props
-
-    if (accountData && accountData.active && accountData.info) {
-      let privKey = accountData.info.privKey
-      let eosClient = getImportedKeyEos(Eos, privKey)
-      setEosClient(eosClient)
-      setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
-      setOpResult({
-        show: false,
-        title: '',
-        text: '',
-        type: 'error'
-      })
-      console.log('Navbar componentDidMount - setEosClient and setFsMgrContract');
-    }
+    const { eosClient, accountData, setEosClient, setFsMgrContract, contracts } = this.props
 
     let account = accountData.active
-    eosClient.getAccount(account).then(result => {
-      const created = result.created
-      const ram = result.ram_quota
-      const ramAvailable = beautifyRam(result.ram_quota - result.ram_usage)
-      const bandwidth = result.delegated_bandwidth
-      const pubkey = result.permissions[0].required_auth.keys[0].key
-      const info = {
-        account,
-        created,
-        ram,
-        ramAvailable,
-        bandwidth,
-        pubkey
+    let result = await eosClient.getAccount(account)
+    const created = result.created
+    const ram = result.ram_quota
+    const ramAvailable = beautifyRam(result.ram_quota - result.ram_usage)
+    const bandwidth = result.delegated_bandwidth
+    const pubkey = result.permissions[0].required_auth.keys[0].key
+    const info = {
+      account,
+      created,
+      ram,
+      ramAvailable,
+      bandwidth,
+      pubkey
+    }
+
+    // Store into redux
+    setInfo(info)
+
+    this.setState({ data: info })
+
+    // Token to realize re-render after page refresh or page close/re-open
+    if (eosClient.locked) {
+      const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+      if (accountData && accountData.active && accountData.info && !fsmgrcontract.transaction) {
+        let privKey = accountData.info.privKey
+        let eosClient = getImportedKeyEos(Eos, privKey)
+        setEosClient(eosClient)
+        setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
+        setOpResult({
+          show: false,
+          title: '',
+          text: '',
+          type: 'error'
+        })
+        console.log('Navbar componentDidMount - setEosClient and setFsMgrContract');
       }
-
-      // Store into redux
-      setInfo(info)
-
-      this.setState({ data: info })
-    })
+    }
   }
 
   beautifyRam (ram) {
@@ -124,8 +128,8 @@ class NavbarContainer extends Component {
   }
 }
 
-function mapStateToProps ({ eosClient, accountData }) {
-  return { eosClient, accountData }
+function mapStateToProps ({ eosClient, accountData, contracts }) {
+  return { eosClient, accountData, contracts }
 }
 
 export default withRouter(
