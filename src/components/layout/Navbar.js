@@ -6,8 +6,11 @@ import Logo from '../../img/logo.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconUser from '../../img/icon-user.svg'
 import IconLogout from '../../img/icon-logout.svg'
-import { setInfo, setActive } from '../../actions/index'
+import { setInfo, setActive, setFsMgrContract, setEosClient, setOpResult } from '../../actions/index'
 import { beautifyRam } from '../../utils/beautify'
+import { getImportedKeyEos } from '../../utils/index'
+import Eos from 'eosjs'
+import { FSMGRCONTRACT } from '../../utils/consts'
 
 class NavbarContainer extends Component {
   constructor () {
@@ -15,8 +18,23 @@ class NavbarContainer extends Component {
     this.state = { data: [] }
   }
 
-  componentDidMount () {
-    const { eosClient, accountData } = this.props
+  async componentDidMount () {
+    const { eosClient, accountData, setEosClient, setFsMgrContract } = this.props
+
+    if (accountData && accountData.active && accountData.info) {
+      let privKey = accountData.info.privKey
+      let eosClient = getImportedKeyEos(Eos, privKey)
+      setEosClient(eosClient)
+      setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
+      setOpResult({
+        show: false,
+        title: '',
+        text: '',
+        type: 'error'
+      })
+      console.log('Navbar componentDidMount - setEosClient and setFsMgrContract');
+    }
+
     let account = accountData.active
     eosClient.getAccount(account).then(result => {
       const created = result.created
@@ -113,6 +131,7 @@ function mapStateToProps ({ eosClient, accountData }) {
 export default withRouter(
   connect(mapStateToProps, {
     setInfo,
-    setActive
+    setActive,
+    setFsMgrContract, setEosClient
   })(NavbarContainer)
 )

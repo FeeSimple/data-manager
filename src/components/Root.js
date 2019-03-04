@@ -34,7 +34,7 @@ class RootContainer extends Component {
   }
 
   componentDidMount() {
-    this.setupBeforeUnloadListener();
+    // this.setupBeforeUnloadListener();
   }
 
   render () {
