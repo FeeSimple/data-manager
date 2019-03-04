@@ -41,25 +41,6 @@ class NavbarContainer extends Component {
     setInfo(info)
 
     this.setState({ data: info })
-
-    // Token to realize re-render after page refresh or page close/re-open
-    if (eosClient.locked) {
-      const fsmgrcontract = contracts[FSMGRCONTRACT]
-
-      if (accountData && accountData.active && accountData.info && !fsmgrcontract.transaction) {
-        let privKey = accountData.info.privKey
-        let eosClient = getImportedKeyEos(Eos, privKey)
-        setEosClient(eosClient)
-        setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
-        setOpResult({
-          show: false,
-          title: '',
-          text: '',
-          type: 'error'
-        })
-        console.log('Navbar componentDidMount - setEosClient and setFsMgrContract');
-      }
-    }
   }
 
   beautifyRam (ram) {

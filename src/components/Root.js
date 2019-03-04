@@ -9,7 +9,7 @@ import LoadingView from './layout/LoadingView'
 import SweetAlert from 'sweetalert-react'
 import 'sweetalert/dist/sweetalert.css'
 import 'react-images-uploader-fs/styles.css'
-import { setOpResult, setInfo, setActive } from '../actions'
+import { setOpResult, setInfo, setActive, setLoading } from '../actions'
 
 class RootContainer extends Component {
   handleOnConfirm = () => {
@@ -38,10 +38,14 @@ class RootContainer extends Component {
   }
 
   render () {
-    const { eosClient, isLoading, accountData } = this.props
+    const { eosClient, isLoading, accountData, setLoading } = this.props
     let opResult = this.props.opResult
     if (!accountData || !accountData.active) {
       return <LoginContainer />
+    }
+
+    if (eosClient.locked) {
+      setLoading(false)
     }
 
     return (
@@ -70,5 +74,5 @@ function mapStateToProps ({ isLoading, eosClient, opResult, accountData }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setOpResult, setInfo, setActive })(RootContainer)
+  connect(mapStateToProps, { setOpResult, setInfo, setActive, setLoading })(RootContainer)
 )
