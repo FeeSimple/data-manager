@@ -96,17 +96,17 @@ export default props => {
   return (
     <div>
       <div className='top-bar'>
-          <Container>
-            <Row>
-              <Col>
-                <h3 className='float-left'>{property.name}</h3>
-              </Col>
-              <Col>
-                <Storage />
-              </Col>
-            </Row>
-          </Container>
-        </div>
+        <Container>
+          <Row>
+            <Col>
+              <h3 className='float-left'>{property.name}</h3>
+            </Col>
+            <Col>
+              <Storage />
+            </Col>
+          </Row>
+        </Container>
+      </div>
       <div className='top-bar whitebar'>
         <Container>
           <Row>

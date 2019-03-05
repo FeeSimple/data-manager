@@ -22,15 +22,15 @@ const UnitDetails = ({
   <div>
     <div className='top-bar'>
       <Container>
-          <Row>
-            <Col>
-              <h3 className='float-left'>Unit</h3>
-            </Col>
-            <Col>
-              <Storage />
-            </Col>
-          </Row>
-        </Container>
+        <Row>
+          <Col>
+            <h3 className='float-left'>Unit</h3>
+          </Col>
+          <Col>
+            <Storage />
+          </Col>
+        </Row>
+      </Container>
     </div>
     <br />
     <Container>

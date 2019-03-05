@@ -79,22 +79,22 @@ class NavbarContainer extends Component {
               <ul id='main-menu'>
                 <li>
                   <Link to='/'>
-                    <img src={IconProperties} alt='' /> 
+                    <img src={IconProperties} alt='' />
                     <span> Properties</span>
                   </Link>
                 </li>
                 <li>
                   <Link to='/user'>
-                    <img src={IconWallet} alt='' /> 
+                    <img src={IconWallet} alt='' />
                     <span> Wallet</span>
                   </Link>
                 </li>
                 <li>
                   <Link to='/'>
-                    <img src={IconMarketplace} alt='' /> 
+                    <img src={IconMarketplace} alt='' />
                     <span> Marketplace</span>
                   </Link>
-                </li>                
+                </li>
                 <li>
                   <Link to='/'>
                     <img src={IconUser} alt='' />

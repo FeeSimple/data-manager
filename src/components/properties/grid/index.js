@@ -54,9 +54,7 @@ class GridContainer extends Component {
             </Row>
           </Container>
         </div>
-        {showTable && (
-          <Grid properties={properties} />
-        )}
+        {showTable && <Grid properties={properties} />}
       </div>
     )
   }

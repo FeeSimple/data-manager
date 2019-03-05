@@ -21,15 +21,15 @@ const FloorplanDetails = ({
   <div>
     <div className='top-bar'>
       <Container>
-          <Row>
-            <Col>
-              <h3 className='float-left'>Floorplan</h3>
-            </Col>
-            <Col>
-              <Storage />
-            </Col>
-          </Row>
-        </Container>
+        <Row>
+          <Col>
+            <h3 className='float-left'>Floorplan</h3>
+          </Col>
+          <Col>
+            <Storage />
+          </Col>
+        </Row>
+      </Container>
     </div>
     <br />
     <Container>

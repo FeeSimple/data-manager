@@ -62,12 +62,10 @@ class NavbarContainer extends Component {
 
   render () {
     return (
-        <div className='storage a-right'>
-            <span className='storage-text'>Manage Storage </span>
-            <span className='badge badge-pill'>
-                {this.state.data.ramAvailable}
-            </span>
-        </div>
+      <div className='storage a-right'>
+        <span className='storage-text'>Manage Storage </span>
+        <span className='badge badge-pill'>{this.state.data.ramAvailable}</span>
+      </div>
     )
   }
 }
