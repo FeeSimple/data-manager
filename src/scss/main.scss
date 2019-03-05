@@ -41,10 +41,15 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .main-wrapper{
   position: relative;
   padding-bottom: 65px;
+  padding-left: 180px;
   min-height: 100vh;
   &.home{
     background-color: $clr-bg;
     color: #ffffff;
+    padding-left: 0;
+    .fs-footer{
+      left: 15px;
+    }
   }
 }
 .logo-container{
@@ -75,47 +80,71 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .menu-holder{
   background-color: $clr-bg;
   padding: 15px 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 180px;
   color: $clr-white;
   .logo{
-    float: left;
-  }
-  .storage{
-    margin: 15px 0 0 25px;
-    float: left;
-    font-size: 17px;
-    small{
-      font-size: 13px;
-      color: $clr-seconday;
-    }
-    .badge{
-      background-color: #54799f;
-      padding: 6px 10px;
-      font-size: 13px;
+    display: block;
+    text-align: center;
+    img{
+      height: 70px;
+      width: auto;
     }
   }
+  .logout{
+    display: block;
+    position: fixed;
+    left: 15px;
+    bottom: 10px;
+    line-height: 23px;
+    color: $clr-white;
+    &:hover,&:active,&:focus{
+      text-decoration: none;
+      opacity: 0.8;
+    }
+      img{
+        height: 23px;
+        float: left;
+        margin-right: 6px;
+        width: auto
+      }
+    } 
+
   #main-menu{
-    float: right;
     list-style: none;
     padding-top: 11px;
+    padding-left: 0;
     li{
-      float: left;
-      margin-left: 25px;
+      display: block;
+      padding: 7px 0;
       &:first-child{
-        margin-left: 0;
+        border-top: 1px solid $clr-seconday;
+      }
+      &:last-child{
+        border-top: 1px solid $clr-seconday;
+        padding-top: 14px;
+        margin-top: 7px;
       }
       a{
         display: block;
-        line-height: 30px;
-        font-size: 18px;
+        line-height: 23px;
+        font-size: 15px;
         font-weight: 600;
         color: $clr-white;
-        &:hover,&:active{
+        white-space: nowrap;
+        &:hover,&:active,&:focus{
           text-decoration: none;
           opacity: 0.8;
         }
         img{
-          height: 30px;
+          height: 23px;
           width: auto;
+          float: left;
+          margin-right: 6px;
         }
       }
     }
@@ -126,11 +155,11 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   background-color: rgba(222, 222, 223, 0.75);
   padding: 15px 0;
   h3{
-    font-size: 20px;
-    margin: 5px 0;
+    font-size: 16px;
+    margin: 6px 0;
     font-weight: 400;
     a{
-      color: #4abaee;
+      color: $primary-text-color;
       img{
         width: 25px;
         margin-right: 5px;
@@ -142,6 +171,20 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
       }
     }
   }
+
+  .storage{
+    margin: 2px 0 0 0;
+    .badge{
+      padding: 6px 8px;
+      font-size: 13px;
+      background-color: rgba($clr-base,0.2);
+      border: 2px solid $clr-base;
+    }
+  }
+}
+
+.top-bar.whitebar{
+  background-color: transparent;
 }
 
 .properties-ul{
@@ -252,7 +295,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .fs-footer{
   bottom: 13px;
   text-align: center;
-  left: 15px;
+  left: 195px;
   right: 15px;
   position: absolute;
 }
@@ -359,9 +402,8 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   color: $clr-white;
   background-color: $clr-seconday;
   border-color: $clr-seconday;
-}
-.badge-fs{background-color: #0c325a;padding: 5px 7px;}
-
+} 
+.badge-fs {background-color: #0c325a;padding: 5px 7px;}
 .btn-home{padding: 10px 12px; width: 100%; font-size: 16px; font-weight: 600;margin-bottom: 15px;}
 .input-home{background-color: transparent; color: $clr-white;margin-bottom: 15px;font-size: 16px;height: 44px;}
 .form-btn{padding: 8px 10px; border-width: 2px;font-size: 14px;}
@@ -417,6 +459,9 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   background-size: 20px auto;
   margin-top: 10px;
   margin-bottom: 15px;
+  &.disabled{
+    opacity: 0;
+  }
 }
 .react-bootstrap-table tbody tr:nth-child(odd) {background: #f6f8fa;}
 .react-bootstrap-table thead tr{border-bottom: 2px solid #dbe3eb;}
@@ -469,6 +514,7 @@ Dropzone
 .prop-btn{border-width: 2px; min-width: 95px;}
 .tc{text-align: center;}
 .c-pointer{cursor: pointer;}
+.del-btn-fx{background: none; border: none; cursor: pointer; margin-top: 3px;}
 /*------------------------------------------
     Responsive Grid Media Queries Settings
     1600+   -     Extra Large Screen
@@ -504,13 +550,6 @@ Dropzone
 /*--- below large screen -----*/
 @media all and (max-width: 1200px) {
   .tc-md{text-align: center;}
-  .menu-holder{
-    #main-menu{
-      li{
-        >a>span{ display: none}
-      }
-    }
-  }
 }
 
 /*------------------------Medium------------------------------------*/
@@ -526,14 +565,64 @@ Dropzone
 
 /*--- below medium screen -----*/
 @media all and (max-width: 991px) {
-    .tc-sm{text-align: center;}
-    .menu-holder{
-      .storage{
-        small{
-          display: none;
+  .tc-sm{text-align: center;}
+  .main-wrapper{padding-left: 0;}
+  .menu-holder{
+    padding: 15px 0;
+    position: relative;
+    bottom: auto;
+    width: auto;
+    .logo{
+      display: inline-block;
+      img{
+        height: 40px;
+        width: auto;
+      }
+    }
+    .logout{
+      display: block;
+      position: absolute;
+      left: auto;
+      bottom: auto;
+      top: 9px;
+      right: 0;
+        img{
+          margin-right: 15px;
+        }
+        span{display: none;}
+    } 
+
+    #main-menu{
+      list-style: none;
+      float: right;
+      padding: 0;
+      margin: 9px 22px 0 0;
+      li{
+        display: inline-block;
+        padding: 0;
+        margin-right: 10px;
+        &:first-child{
+          border-top: none;
+        }
+        &:last-child{
+          border-top: none;
+          padding-top: 0;
+          margin-top: 0;
+        }
+        a{
+          img{
+            margin-right: 0;
+          }
+          span{
+            display: none;
+          }
         }
       }
     }
+  }
+  .fs-footer{
+    left: 15px;
+  }
 }
 
 /*-----------------------Small-------------------------------------*/
@@ -561,25 +650,14 @@ Dropzone
     max-width: 90%;
     img{max-width: 100%;}
   }
+  .storage{
+    .storage-text{display: none;}
+  }
   .btn-home{font-size: 14px;}
   .main-wrapper {padding-bottom: 80px;}
   .properties-ul{
     li{
       width: 48%;
-    }
-  }
-
-  .menu-holder{
-    .logo{
-      margin-top: 10px;
-      img{
-        width: auto;
-        height: 40px;
-      }
-    }
-    .storage{
-      margin: 15px 0 0 15px;
-      .storage-text{font-size: 14px}
     }
   }
 }
@@ -592,17 +670,7 @@ Dropzone
 
 /*--- Very Small screen -----*/
 @media all and (max-width: 580px) {
-  .menu-holder{
-    .storage{
-      .storage-text{display: none}
-    }
-    #main-menu{
-      li{
-        margin-left: 15px;
-
-      }
-    }
-  }
+  
 }
 @media all and (max-width: 479px) {
   .properties-ul{
@@ -613,21 +681,8 @@ Dropzone
       width: 98%;
     }
   }
-  .menu-holder{
-    .storage{
-      display: none;
-    }
-  }
 }
 @media all and (max-width: 380px) {
-  .menu-holder{
-    .logo{
-      margin-top: 15px;
-      img{
-        height: 30px;
-      }
-    }
-  }
   .top-bar h3 {
     font-size: 18px;
   }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import Storage from '../../../layout/Storage'
 import ImageGallery from 'react-image-gallery'
 import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
@@ -23,6 +24,9 @@ const FloorplanDetails = ({
         <Row>
           <Col>
             <h3 className='float-left'>Floorplan</h3>
+          </Col>
+          <Col>
+            <Storage />
           </Col>
         </Row>
       </Container>
