@@ -16,10 +16,24 @@ export default props => {
         {floorplan.bedrooms} beds / {floorplan.bathrooms} baths
       </td>
       <td>
-        {floorplan.sq_ft_min} - {floorplan.sq_ft_max}
+        {floorplan.sq_ft_min === floorplan.sq_ft_max
+          ? floorplan.sq_ft_min
+          : floorplan.sq_ft_min === 0
+            ? floorplan.sq_ft_max
+            : floorplan.sq_ft_min.toString() +
+              ' - ' +
+              floorplan.sq_ft_max.toString()}
       </td>
       <td>
-        ${floorplan.rent_min} - ${floorplan.rent_max}
+        {floorplan.rent_min === floorplan.rent_max
+          ? '$' + floorplan.rent_min.toString()
+          : floorplan.rent_min === 0
+            ? '$' + floorplan.rent_max.toString()
+            : '$' +
+              floorplan.rent_min.toString() +
+              ' - ' +
+              '$' +
+              floorplan.rent_max.toString()}
       </td>
       <td>{property.unit_count}</td>
       <td>

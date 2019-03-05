@@ -5,7 +5,7 @@ import Table from './Table'
 import { UNIT, FSMGRCONTRACT } from '../../../utils/consts'
 import { addUnits, delUnit } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
-import { setLoading } from '../../../actions'
+import { setLoading, setOpResult } from '../../../actions'
 import Confirm from '../../layout/Confirm'
 
 class UnitContainer extends Component {
@@ -19,11 +19,16 @@ class UnitContainer extends Component {
       showConfirm: false,
       propertyId: 0,
       unitId: 0,
-      deleteBulkDisabled: true
+      deleteBulkDisabled: true,
+      isAdding: true
     }
   }
 
   async componentDidMount () {
+    this.setState({
+      isAdding: true
+    })
+
     const { eosClient, accountData, addUnits } = this.props
     const { id } = this.props.match.params
 
@@ -44,9 +49,14 @@ class UnitContainer extends Component {
     } catch (err) {
       console.log('Get table "unit" failed - err:', err)
     }
+
+    this.setState({
+      isAdding: false
+    })
   }
 
   onDelete = async () => {
+    this.handleToggleConfirm(-1, -1)
     const { propertyId, unitId } = this.state
     if (propertyId !== -1 && unitId !== -1) {
       await this.deleteOne(propertyId, unitId)
@@ -56,32 +66,59 @@ class UnitContainer extends Component {
   }
 
   deleteOne = async (propertyId, unitId) => {
-    const { contracts, accountData, setLoading, history } = this.props
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let operationOK = await this.doDelete(propertyId, unitId)
+    let unitName = this.getUnitName(unitId)
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete Unit "${unitName}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Unit "${unitName}" deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
+  }
+
+  doDelete = async (propertyId, unitId) => {
+    const { contracts, accountData } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    console.log(`deleteOne - propertyId: ${propertyId} ,unitId: ${unitId}`)
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
     }
 
-    setLoading(true)
+    let operationOK = true
 
     try {
       await fsmgrcontract.delunit(accountData.active, unitId, options)
       console.log('fsmgrcontract.delunit - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.delunit - error:', err)
+      operationOK = false
     }
 
     try {
       delUnit(propertyId, unitId)
-      history.push(`/${propertyId}/unit`)
     } catch (err) {
       console.log('delUnit error:', err)
+      operationOK = false
     }
 
-    setLoading(false)
+    return operationOK
   }
 
   isCheckedEntry = () => {
@@ -112,19 +149,57 @@ class UnitContainer extends Component {
     })
   }
 
+  getUnitName = unitId => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    if (!property) return ''
+    let unit = property.units[unitId]
+    if (!unit) return ''
+    console.log(`unit id: ${unitId}, unit name: ${unit.name}`)
+    return unit.name
+  }
+
   deleteBulk = async propertyId => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
-    console.log(`deleteBulk - propertyId: ${propertyId}`)
-    console.log('deleteBulk - ids: ', ids)
+    console.log(`Unit deleteBulk - propertyId: ${propertyId}`)
+    console.log('Unit deleteBulk - ids: ', ids)
+
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let failedUnits = ''
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
       if (checkedEntry[id] === true) {
-        console.log(`deleteBulk - id: ${id}`)
-        await this.deleteOne(propertyId, id)
+        console.log(`Unit deleteBulk - id: ${id}`)
+        let operationOK = await this.doDelete(propertyId, id)
+        if (!operationOK) {
+          failedUnits += `"${this.getUnitName(id)}", `
+        }
       }
     }
+
+    if (failedUnits !== '') {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete the following units: ${failedUnits}`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Selected units are deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
   }
 
   handleToggleConfirm = (propertyId, unitId) => {
@@ -136,19 +211,31 @@ class UnitContainer extends Component {
         propertyId: propertyId,
         unitId: unitId
       })
-      console.log(
-        `handleToggleConfirm - propertyId: ${propertyId}, unitId: ${unitId}`
-      )
     }
   }
 
   render () {
-    const { properties } = this.props
+    const { properties, setOpResult } = this.props
     const { id } = this.props.match.params
     const property = properties[id]
+
     if (!property) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
+      const noUnits = Object.keys(property.units).length === 0
+      const showAlert = noUnits && !this.state.isAdding
+
+      if (showAlert) {
+        setOpResult({
+          show: true,
+          title: '',
+          text: 'No units yet. Please add a unit',
+          type: 'info'
+        })
+      }
+
+      const showTable = !this.state.isAdding && !noUnits
+
       return (
         <div>
           <Table
@@ -157,6 +244,7 @@ class UnitContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
+            showTable={showTable}
           />
           <Confirm
             isOpen={this.state.showConfirm}
@@ -181,5 +269,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addUnits, setLoading, delUnit })(UnitContainer)
+  connect(mapStateToProps, { addUnits, setLoading, delUnit, setOpResult })(
+    UnitContainer
+  )
 )

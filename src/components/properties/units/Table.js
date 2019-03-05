@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
@@ -16,7 +17,8 @@ export default props => {
     property,
     onChange,
     handleToggle,
-    deleteBulkDisabled
+    deleteBulkDisabled,
+    showTable
   } = props
   const { SearchBar } = Search
   const data = Object.values(property.units)
@@ -123,10 +125,19 @@ export default props => {
       <div className='top-bar'>
         <Container>
           <Row>
-            <div className='col-12 col-md-4 m-xs-b-10'>
-              <h3>{property.name} </h3>
-            </div>
-            <div className='col-10 col-md-4 tc tl-xs'>
+            <Col>
+              <h3 className='float-left'>{property.name}</h3>
+            </Col>
+            <Col>
+              <Storage />
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <div className='top-bar whitebar'>
+        <Container>
+          <Row>
+            <div className='col-9 col-md-8'>
               <Link
                 to={`/${props.propertyId}`}
                 className='btn btn-gray-o prop-btn'
@@ -140,7 +151,7 @@ export default props => {
                 Units
               </Link>
             </div>
-            <div className='col-2 col-md-4'>
+            <div className='col-3 col-md-4'>
               <h3 className='float-right'>
                 <Link to={`/${props.propertyId}/unit/new`}>
                   <img src={IconAdd} alt='' />
@@ -151,43 +162,44 @@ export default props => {
           </Row>
         </Container>
       </div>
-      <br />
-      <Container>
-        <Row>
-          <Col sm='12' className='mt-4 mb-4'>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(property.id, -1)}
-            >
-              Delete Checked
-            </Button>
-            <ToolkitProvider
-              keyField='id'
-              data={Object.values(property.units)}
-              columns={columns}
-              search={{ searchFormatted: true }}
-              bootstrap4
-            >
-              {props => (
-                <React.Fragment>
-                  <SearchBar
-                    {...props.searchProps}
-                    className='mb-3 tbl-search-input'
-                  />
-                  <BootstrapTable
-                    {...props.baseProps}
-                    pagination={paginationFactory()}
-                  />
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          </Col>
-        </Row>
-      </Container>
+      {showTable && (
+        <Container>
+          <Row>
+            <Col sm='12' className='mt-4 mb-4'>
+              <Button
+                size='sm'
+                outline
+                color='red'
+                className='tbl-btn-close'
+                disabled={deleteBulkDisabled}
+                onClick={e => handleToggle(property.id, -1)}
+              >
+                Delete Checked
+              </Button>
+              <ToolkitProvider
+                keyField='id'
+                data={Object.values(property.units)}
+                columns={columns}
+                search={{ searchFormatted: true }}
+                bootstrap4
+              >
+                {props => (
+                  <React.Fragment>
+                    <SearchBar
+                      {...props.searchProps}
+                      className='mb-3 tbl-search-input'
+                    />
+                    <BootstrapTable
+                      {...props.baseProps}
+                      pagination={paginationFactory()}
+                    />
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            </Col>
+          </Row>
+        </Container>
+      )}
     </div>
   )
 }

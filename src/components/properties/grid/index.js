@@ -2,13 +2,30 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import Grid from './Grid'
 import { Col, Row, Container } from 'reactstrap'
+import { setOpResult } from '../../../actions'
 
 class GridContainer extends Component {
   render () {
-    const { properties } = this.props
+    const { properties, setOpResult } = this.props
+
+    const noProperties = Object.keys(properties).length === 0
+    const showAlert = noProperties
+
+    if (showAlert) {
+      setOpResult({
+        show: true,
+        title: '',
+        text: 'No properties yet. Please add a property',
+        type: 'info'
+      })
+    }
+
+    const showTable = !noProperties
+
     return (
       <div>
         <div className='top-bar'>
@@ -16,6 +33,17 @@ class GridContainer extends Component {
             <Row>
               <Col>
                 <h3 className='float-left'>Properties</h3>
+              </Col>
+              <Col>
+                <Storage />
+              </Col>
+            </Row>
+          </Container>
+        </div>
+        <div className='top-bar whitebar'>
+          <Container>
+            <Row>
+              <Col>
                 <h3 className='float-right'>
                   <Link to='/new'>
                     <img src={IconAdd} alt='' />
@@ -26,9 +54,7 @@ class GridContainer extends Component {
             </Row>
           </Container>
         </div>
-        <Container>
-          <Grid properties={properties} />
-        </Container>
+        {showTable && <Grid properties={properties} />}
       </div>
     )
   }
@@ -38,4 +64,6 @@ function mapStateToProps ({ properties, scatter, eosjs }) {
   return { properties, scatter, eosjs }
 }
 
-export default withRouter(connect(mapStateToProps)(GridContainer))
+export default withRouter(
+  connect(mapStateToProps, { setOpResult })(GridContainer)
+)

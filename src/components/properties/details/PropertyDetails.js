@@ -21,14 +21,14 @@ const PropertyDetails = ({
           </Col>
           <Col>
             <button
-              className='float-right'
+              className='float-right del-btn-fx'
               hidden={isCreating}
               onClick={e => handleToggle(property.id)}
             >
               <img
                 src={IconDelete}
                 alt=''
-                style={{ width: '30px', height: '30px' }}
+                style={{ width: '24px', height: '24px' }}
               />
             </button>
           </Col>

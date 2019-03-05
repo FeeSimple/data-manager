@@ -8,7 +8,7 @@ export default function Footer () {
         className='badge badge-pill badge-fs bold'
         style={{ color: 'white' }}
       >
-        v0.01
+        v0.25
       </span>{' '}
       Part of the FeeSimple network.
       <span className='created-by'>

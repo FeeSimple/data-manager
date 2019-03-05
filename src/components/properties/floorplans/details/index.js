@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import ecc from 'eosjs-ecc'
 
-import { setFloorplan, setLoading } from '../../../../actions'
+import { setFloorplan, setLoading, setOpResult } from '../../../../actions'
 import FloorplanDetails from './FloorplanDetails'
 import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
@@ -49,15 +49,15 @@ class FloorplanDetailsContainer extends Component {
 
   validator = floorplan => {
     let alertContent = []
-    if (!floorplan.name || floorplan.name === '') {
+    if (floorplan.name === '') {
       alertContent.push('Empty name')
     }
 
-    if (!floorplan.sq_ft_min || floorplan.sq_ft_min <= 0) {
+    if (floorplan.sq_ft_min < 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
 
-    if (!floorplan.sq_ft_max || floorplan.sq_ft_max <= 0) {
+    if (floorplan.sq_ft_max <= 0) {
       alertContent.push('Invalid Sq. Ft. Max')
     }
 
@@ -65,11 +65,11 @@ class FloorplanDetailsContainer extends Component {
       alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
     }
 
-    if (!floorplan.rent_min || floorplan.rent_min <= 0) {
+    if (floorplan.rent_min < 0) {
       alertContent.push('Invalid Rent Min')
     }
 
-    if (!floorplan.rent_max || floorplan.rent_max <= 0) {
+    if (floorplan.rent_max <= 0) {
       alertContent.push('Invalid Rent Max')
     }
 
@@ -89,6 +89,7 @@ class FloorplanDetailsContainer extends Component {
       contracts,
       accountData,
       setLoading,
+      setOpResult,
       setFloorplan,
       history
     } = this.props
@@ -111,22 +112,29 @@ class FloorplanDetailsContainer extends Component {
     }
 
     setLoading(true)
-    await fsmgrcontract.modfloorplan(
-      accountData.active,
-      floorplan.id,
-      propertyId,
-      floorplan.name,
-      floorplan.bedrooms,
-      floorplan.bathrooms,
-      floorplan.sq_ft_min,
-      floorplan.sq_ft_max,
-      floorplan.rent_min,
-      floorplan.rent_max,
-      floorplan.deposit,
-      options
-    )
 
-    setFloorplan(propertyId, floorplan)
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.modfloorplan(
+        accountData.active,
+        floorplan.id,
+        propertyId,
+        floorplan.name,
+        floorplan.bedrooms,
+        floorplan.bathrooms,
+        floorplan.sq_ft_min,
+        floorplan.sq_ft_max,
+        floorplan.rent_min,
+        floorplan.rent_max,
+        floorplan.deposit,
+        options
+      )
+
+      setFloorplan(propertyId, floorplan)
+    } catch (err) {
+      operationOK = false
+    }
 
     if (imagesToUpload.length > 0) {
       // Mapping values to object keys removes duplicates.
@@ -150,13 +158,35 @@ class FloorplanDetailsContainer extends Component {
 
     history.push(`/${propertyId}`)
 
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to edit Floorplan "${floorplan.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Floorplan "${floorplan.name}" edited successfully`,
+        type: 'success'
+      })
+    }
+
     setLoading(false)
   }
 
   create = async e => {
     e.preventDefault()
 
-    const { contracts, accountData, setLoading, history } = this.props
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      history,
+      setOpResult
+    } = this.props
     const propertyId = this.props.match.params.id
     const { floorplan } = this.state
     const fsmgrcontract = contracts[FSMGRCONTRACT]
@@ -179,23 +209,46 @@ class FloorplanDetailsContainer extends Component {
 
     setLoading(true)
 
-    await fsmgrcontract.addfloorplan(
-      accountData.active,
-      propertyId,
-      floorplan.name,
-      floorplan.bedrooms,
-      floorplan.bathrooms,
-      floorplan.sq_ft_min,
-      floorplan.sq_ft_max,
-      floorplan.rent_min,
-      floorplan.rent_max,
-      floorplan.deposit,
-      options
-    )
+    let operationOK = true
 
-    setFloorplan(propertyId, floorplan)
+    try {
+      await fsmgrcontract.addfloorplan(
+        accountData.active,
+        propertyId,
+        floorplan.name,
+        floorplan.bedrooms,
+        floorplan.bathrooms,
+        floorplan.sq_ft_min,
+        floorplan.sq_ft_max,
+        floorplan.rent_min,
+        floorplan.rent_max,
+        floorplan.deposit,
+        options
+      )
+
+      setFloorplan(propertyId, floorplan)
+      history.push(`/${propertyId}`)
+    } catch (err) {
+      operationOK = false
+    }
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to create new Floorplan "${floorplan.name}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `New Floorplan "${floorplan.name}" created successfully`,
+        type: 'success'
+      })
+    }
+
     setLoading(false)
-    history.push(`/${propertyId}`)
   }
 
   handleChange (event) {
@@ -309,7 +362,7 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setFloorplan, setLoading })(
+  connect(mapStateToProps, { setFloorplan, setLoading, setOpResult })(
     FloorplanDetailsContainer
   )
 )

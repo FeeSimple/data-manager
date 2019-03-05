@@ -5,7 +5,7 @@ import Table from './Table'
 import { TERMPRICE, FSMGRCONTRACT } from '../../../utils/consts'
 import { addTermPrices, delTermPrice } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
-import { setLoading } from '../../../actions'
+import { setLoading, setOpResult } from '../../../actions'
 import Confirm from '../../layout/Confirm'
 
 class TermPriceContainer extends Component {
@@ -20,11 +20,16 @@ class TermPriceContainer extends Component {
       propertyId: 0,
       unitId: 0,
       termpriceId: 0,
-      deleteBulkDisabled: true
+      deleteBulkDisabled: true,
+      isAdding: true
     }
   }
 
   async componentDidMount () {
+    this.setState({
+      isAdding: true
+    })
+
     const { eosClient, accountData, addTermPrices } = this.props
     const { id, unitid } = this.props.match.params
 
@@ -45,9 +50,14 @@ class TermPriceContainer extends Component {
     } catch (err) {
       console.log('Get table "termpricing" failed - err:', err)
     }
+
+    this.setState({
+      isAdding: false
+    })
   }
 
   onDelete = async () => {
+    this.handleToggleConfirm(-1, -1, -1)
     const { propertyId, unitId, termpriceId } = this.state
     if (propertyId !== -1 && unitId !== -1 && termpriceId !== undefined) {
       await this.deleteOne(propertyId, unitId, termpriceId)
@@ -56,25 +66,64 @@ class TermPriceContainer extends Component {
     }
   }
 
+  getTerm = (propertyId, unitId, termpriceId) => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    if (!property) return ''
+    const unit = property.units[unitId]
+    if (!unit) return ''
+    let termprice = unit.termprices[termpriceId]
+    if (!termprice) return ''
+    console.log(`term id: ${termpriceId}, term: ${termprice.term}`)
+    return termprice.term
+  }
+
   deleteOne = async (propertyId, unitId, termpriceId) => {
-    const { contracts, accountData, setLoading, history } = this.props
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let operationOK = await this.doDelete(propertyId, unitId, termpriceId)
+    let term = this.getTerm(propertyId, unitId, termpriceId)
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete term price "${term}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Term price "${term}" deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
+  }
+
+  doDelete = async (propertyId, unitId, termpriceId) => {
+    const { contracts, accountData, history } = this.props
     const fsmgrcontract = contracts[FSMGRCONTRACT]
-    console.log(
-      `deleteOne - propertyId: ${propertyId}, unitId: ${unitId}, termpriceId: ${termpriceId}`
-    )
+
     const options = {
       authorization: `${accountData.active}@active`,
       broadcast: true,
       sign: true
     }
 
-    setLoading(true)
+    let operationOK = true
 
     try {
       await fsmgrcontract.deltmpricing(accountData.active, termpriceId, options)
       console.log('fsmgrcontract.deltmpricing - unitId:', unitId)
     } catch (err) {
       console.log('fsmgrcontract.deltmpricing - error:', err)
+      operationOK = false
     }
 
     try {
@@ -82,24 +131,54 @@ class TermPriceContainer extends Component {
       history.push(`/${propertyId}/unit/${unitId}/termprice`)
     } catch (err) {
       console.log('delTermPrice error:', err)
+      operationOK = false
     }
 
-    setLoading(false)
+    return operationOK
   }
 
   deleteBulk = async (propertyId, unitId) => {
     let checkedEntry = this.state.checkedEntry
     let ids = Object.keys(checkedEntry)
-    console.log(`deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`)
-    console.log('deleteBulk - ids: ', ids)
+    console.log(
+      `Term price deleteBulk - propertyId: ${propertyId}, unitId: ${unitId}`
+    )
+    console.log('Term price deleteBulk - ids: ', ids)
+
+    const { setLoading, setOpResult } = this.props
+
+    setLoading(true)
+
+    let failedTermPrices = ''
 
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i]
       if (checkedEntry[id] === true) {
-        console.log(`deleteBulk - id: ${id}`)
-        await this.deleteOne(propertyId, unitId, id)
+        console.log(`Term price deleteBulk - id: ${id}`)
+        let operationOK = await this.doDelete(propertyId, unitId, id)
+        if (!operationOK) {
+          failedTermPrices += `"${this.getTerm(propertyId, unitId, id)}", `
+        }
       }
     }
+
+    if (failedTermPrices !== '') {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete the following term prices: ${failedTermPrices}`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Selected term prices are deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
   }
 
   isCheckedEntry = () => {
@@ -147,7 +226,7 @@ class TermPriceContainer extends Component {
   }
 
   render () {
-    const { properties } = this.props
+    const { properties, setOpResult } = this.props
     const { id, unitid, termid } = this.props.match.params
     const property = properties[id]
     const unit = property.units[unitid]
@@ -155,6 +234,20 @@ class TermPriceContainer extends Component {
     if (!property || !unit) {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
+      const noTermPrices = Object.keys(unit.termprices).length === 0
+      const showAlert = noTermPrices && !this.state.isAdding
+
+      if (showAlert) {
+        setOpResult({
+          show: true,
+          title: '',
+          text: 'No term prices yet. Please add a term price',
+          type: 'info'
+        })
+      }
+
+      const showTable = !this.state.isAdding && !noTermPrices
+
       return (
         <div>
           <Table
@@ -165,6 +258,7 @@ class TermPriceContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
+            showTable={showTable}
           />
           <Confirm
             isOpen={this.state.showConfirm}
@@ -189,7 +283,10 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addTermPrices, setLoading, delTermPrice })(
-    TermPriceContainer
-  )
+  connect(mapStateToProps, {
+    addTermPrices,
+    setLoading,
+    delTermPrice,
+    setOpResult
+  })(TermPriceContainer)
 )

@@ -4,12 +4,20 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 
 export default props => {
-  const { propertyId, unit, onChange, handleToggle, deleteBulkDisabled } = props
+  const {
+    propertyId,
+    unit,
+    onChange,
+    handleToggle,
+    deleteBulkDisabled,
+    showTable
+  } = props
   const { SearchBar } = Search
   const data = Object.values(unit.termprices)
   const columns = [
@@ -83,6 +91,18 @@ export default props => {
         <Container>
           <Row>
             <Col>
+              <h3 className='float-left'>Term Pricing</h3>
+            </Col>
+            <Col>
+              <Storage />
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <div className='top-bar whitebar'>
+        <Container>
+          <Row>
+            <Col>
               <h3 className='float-right'>
                 <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
                   <img src={IconAdd} alt='' />
@@ -93,43 +113,44 @@ export default props => {
           </Row>
         </Container>
       </div>
-      <br />
-      <Container>
-        <Row>
-          <Col sm='12'>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(propertyId, unit.id)}
-            >
-              Delete Checked
-            </Button>
-            <ToolkitProvider
-              keyField='id'
-              data={data}
-              columns={columns}
-              search={{ searchFormatted: true }}
-              bootstrap4
-            >
-              {props => (
-                <React.Fragment>
-                  <SearchBar
-                    {...props.searchProps}
-                    className='mb-3 tbl-search-input'
-                  />
-                  <BootstrapTable
-                    {...props.baseProps}
-                    pagination={paginationFactory()}
-                  />
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          </Col>
-        </Row>
-      </Container>
+      {showTable && (
+        <Container>
+          <Row>
+            <Col sm='12'>
+              <Button
+                size='sm'
+                outline
+                color='red'
+                className='tbl-btn-close'
+                disabled={deleteBulkDisabled}
+                onClick={e => handleToggle(propertyId, unit.id)}
+              >
+                Delete Checked
+              </Button>
+              <ToolkitProvider
+                keyField='id'
+                data={data}
+                columns={columns}
+                search={{ searchFormatted: true }}
+                bootstrap4
+              >
+                {props => (
+                  <React.Fragment>
+                    <SearchBar
+                      {...props.searchProps}
+                      className='mb-3 tbl-search-input'
+                    />
+                    <BootstrapTable
+                      {...props.baseProps}
+                      pagination={paginationFactory()}
+                    />
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            </Col>
+          </Row>
+        </Container>
+      )}
     </div>
   )
 }

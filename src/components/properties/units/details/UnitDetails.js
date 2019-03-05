@@ -1,6 +1,7 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import Storage from '../../../layout/Storage'
 import ImageGallery from 'react-image-gallery'
 import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
@@ -23,7 +24,10 @@ const UnitDetails = ({
       <Container>
         <Row>
           <Col>
-            <h3 className='float-left'> Unit</h3>
+            <h3 className='float-left'>Unit</h3>
+          </Col>
+          <Col>
+            <Storage />
           </Col>
         </Row>
       </Container>
@@ -83,7 +87,7 @@ const UnitDetails = ({
             <AvField
               label='Sq. Ft. Min'
               type='number'
-              min='0.1'
+              min='0'
               id='sq_ft_min'
               name='sq_ft_min'
               value={unit.sq_ft_min}
@@ -107,7 +111,7 @@ const UnitDetails = ({
             <AvField
               label='Rent Min'
               type='number'
-              min='0.1'
+              min='0'
               id='rent_min'
               name='rent_min'
               value={unit.rent_min}

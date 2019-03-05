@@ -4,6 +4,7 @@ import { scatter } from './scatter'
 import { eosClient } from './eosclient'
 import { contracts } from './contracts'
 import { accountData } from './accountData'
+import { opResult } from './opResult'
 import { SET_LOADING, SET_ERROR_POPUP } from '../actions/types'
 
 function isLoading (state = false, action) {
@@ -32,6 +33,7 @@ export default combineReducers({
   scatter,
   contracts,
   accountData,
+  opResult,
   isLoading,
   errMsg
 })
