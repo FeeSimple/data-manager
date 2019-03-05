@@ -9,7 +9,7 @@ import LoadingView from './layout/LoadingView'
 import SweetAlert from 'sweetalert-react'
 import 'sweetalert/dist/sweetalert.css'
 import 'react-images-uploader-fs/styles.css'
-import { setOpResult } from '../actions'
+import { setOpResult, setInfo, setActive, setLoading } from '../actions'
 
 class RootContainer extends Component {
   handleOnConfirm = () => {
@@ -21,12 +21,31 @@ class RootContainer extends Component {
     })
   }
 
+  handleBeforeUnload = () => {
+    this.props.setActive(null)
+    this.props.setInfo(null)
+  }
+
+  setupBeforeUnloadListener = () => {
+    window.addEventListener('beforeunload', ev => {
+      ev.preventDefault()
+      return this.handleBeforeUnload()
+    })
+  }
+
+  componentDidMount () {
+    // this.setupBeforeUnloadListener();
+  }
+
   render () {
-    const { eosClient, isLoading, accountData } = this.props
+    const { eosClient, isLoading, accountData, setLoading } = this.props
     let opResult = this.props.opResult
-    console.log('Root render - accountData:', accountData)
     if (!accountData || !accountData.active) {
       return <LoginContainer />
+    }
+
+    if (eosClient.locked) {
+      setLoading(false)
     }
 
     return (
@@ -55,5 +74,7 @@ function mapStateToProps ({ isLoading, eosClient, opResult, accountData }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setOpResult })(RootContainer)
+  connect(mapStateToProps, { setOpResult, setInfo, setActive, setLoading })(
+    RootContainer
+  )
 )

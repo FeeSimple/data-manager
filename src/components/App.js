@@ -10,8 +10,49 @@ import Unit from './properties/units'
 import UnitDetails from './properties/units/details'
 import TermPrice from './properties/termprices'
 import TermPriceDetails from './properties/termprices/details'
+import { getImportedKeyEos } from '../utils/index'
+import Eos from 'eosjs'
+import { FSMGRCONTRACT } from '../utils/consts'
+import { setFsMgrContract, setEosClient, setOpResult } from '../actions/index'
 
 class AppContainer extends Component {
+  async componentDidMount () {
+    const {
+      eosClient,
+      accountData,
+      setEosClient,
+      setFsMgrContract,
+      setOpResult,
+      contracts
+    } = this.props
+
+    // Token to realize re-render after page refresh or page close/re-open
+    if (eosClient.locked) {
+      const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+      if (
+        accountData &&
+        accountData.active &&
+        accountData.info &&
+        !fsmgrcontract.transaction
+      ) {
+        let privKey = accountData.info.privKey
+        let eosClient = getImportedKeyEos(Eos, privKey)
+        setEosClient(eosClient)
+        setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
+        setOpResult({
+          show: false,
+          title: '',
+          text: '',
+          type: 'error'
+        })
+        console.log(
+          'AppContainer componentDidMount - setEosClient and setFsMgrContract'
+        )
+      }
+    }
+  }
+
   render () {
     return (
       <Switch>
@@ -75,8 +116,14 @@ class AppContainer extends Component {
   }
 }
 
-function mapStateToProps ({ isLoading, eosClient }) {
-  return { isLoading, eosClient }
+function mapStateToProps ({ isLoading, eosClient, accountData, contracts }) {
+  return { isLoading, eosClient, accountData, contracts }
 }
 
-export default withRouter(connect(mapStateToProps)(AppContainer))
+export default withRouter(
+  connect(mapStateToProps, {
+    setFsMgrContract,
+    setEosClient,
+    setOpResult
+  })(AppContainer)
+)

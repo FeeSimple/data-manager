@@ -88,7 +88,7 @@ const ManageRamForm = props => {
             disabled={touched.xfsAmount && errors.xfsAmount}
           >
             {isProcessing ? (
-              <Spinner name='three-bounce' color='white' noFadeIn />
+              <Spinner name='three-bounce' color='white' fadeIn='none' />
             ) : (
               <span>Submit</span>
             )}

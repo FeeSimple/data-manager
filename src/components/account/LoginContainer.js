@@ -166,7 +166,8 @@ class LoginContainer extends Component {
         created,
         ram,
         bandwidth,
-        pubkey
+        pubkey,
+        privKey
       }
 
       setInfo(info)

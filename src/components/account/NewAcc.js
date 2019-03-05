@@ -58,7 +58,7 @@ const NewAccForm = props => {
             disabled={touched.accountName && errors.accountName}
           >
             {isProcessing ? (
-              <Spinner name='three-bounce' color='white' noFadeIn />
+              <Spinner name='three-bounce' color='white' fadeIn='none' />
             ) : (
               <span>Submit</span>
             )}

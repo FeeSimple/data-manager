@@ -21,7 +21,8 @@ export const getImportedKeyEos = (Eos, privKey) => {
   return Eos({
     httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
     chainId: network.chainId,
-    keyProvider: privKey
+    keyProvider: privKey,
+    expireInSeconds: 120
   })
 }
 
@@ -36,7 +37,8 @@ export const getEosAdmin = Eos => {
   return Eos({
     httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
     chainId: network.chainId,
-    keyProvider: process.env.REACT_APP_ADMIN_ACCOUNT_PRIV
+    keyProvider: process.env.REACT_APP_ADMIN_ACCOUNT_PRIV,
+    expireInSeconds: 120
   })
 }
 
@@ -44,7 +46,8 @@ export const getFallbackEos = Eos => {
   const network = getNetworkData()
   return Eos({
     httpEndpoint: `${network.protocol}://${network.host}:${network.port}`,
-    chainId: network.chainId
+    chainId: network.chainId,
+    expireInSeconds: 120
   })
 }
 

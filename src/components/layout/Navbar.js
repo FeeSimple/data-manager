@@ -7,8 +7,13 @@ import IconProperties from '../../img/icon-properties.svg'
 import IconWallet from '../../img/icon-wallet.svg'
 import IconMarketplace from '../../img/icon-marketplace.svg'
 import IconUser from '../../img/icon-user.svg'
-import IconLogout from '../../img/icon-sign-out.svg'
-import { setInfo, setActive } from '../../actions/index'
+import IconLogout from '../../img/icon-logout.svg'
+import {
+  setInfo,
+  setActive,
+  setFsMgrContract,
+  setEosClient
+} from '../../actions/index'
 import { beautifyRam } from '../../utils/beautify'
 
 class NavbarContainer extends Component {
@@ -17,29 +22,35 @@ class NavbarContainer extends Component {
     this.state = { data: [] }
   }
 
-  componentDidMount () {
-    const { eosClient, accountData } = this.props
+  async componentDidMount () {
+    const {
+      eosClient,
+      accountData,
+      setEosClient,
+      setFsMgrContract,
+      contracts
+    } = this.props
+
     let account = accountData.active
-    eosClient.getAccount(account).then(result => {
-      const created = result.created
-      const ram = result.ram_quota
-      const ramAvailable = beautifyRam(result.ram_quota - result.ram_usage)
-      const bandwidth = result.delegated_bandwidth
-      const pubkey = result.permissions[0].required_auth.keys[0].key
-      const info = {
-        account,
-        created,
-        ram,
-        ramAvailable,
-        bandwidth,
-        pubkey
-      }
+    let result = await eosClient.getAccount(account)
+    const created = result.created
+    const ram = result.ram_quota
+    const ramAvailable = beautifyRam(result.ram_quota - result.ram_usage)
+    const bandwidth = result.delegated_bandwidth
+    const pubkey = result.permissions[0].required_auth.keys[0].key
+    const info = {
+      account,
+      created,
+      ram,
+      ramAvailable,
+      bandwidth,
+      pubkey
+    }
 
-      // Store into redux
-      setInfo(info)
+    // Store into redux
+    setInfo(info)
 
-      this.setState({ data: info })
-    })
+    this.setState({ data: info })
   }
 
   beautifyRam (ram) {
@@ -102,8 +113,8 @@ class NavbarContainer extends Component {
                   </Link>
                 </li>
               </ul>
-              <Link to='/' className='logout'>
-                <img src={IconLogout} alt='' onClick={this.handleLogout} />
+              <Link to='/' onClick={this.handleLogout} className='logout'>
+                <img src={IconLogout} alt=''/>
                 <span> Sign Out</span>
               </Link>
             </div>
@@ -114,13 +125,15 @@ class NavbarContainer extends Component {
   }
 }
 
-function mapStateToProps ({ eosClient, accountData }) {
-  return { eosClient, accountData }
+function mapStateToProps ({ eosClient, accountData, contracts }) {
+  return { eosClient, accountData, contracts }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
     setInfo,
-    setActive
+    setActive,
+    setFsMgrContract,
+    setEosClient
   })(NavbarContainer)
 )

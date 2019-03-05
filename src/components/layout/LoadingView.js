@@ -8,7 +8,7 @@ export default function LoadingView () {
         className='justify-content-center align-items-center mx-auto'
         name='three-bounce'
         color='#00B1EF'
-        noFadeIn
+        fadeIn='none'
         style={{
           width: 100,
           margin: 250
