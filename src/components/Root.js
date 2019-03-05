@@ -27,13 +27,13 @@ class RootContainer extends Component {
   }
 
   setupBeforeUnloadListener = () => {
-    window.addEventListener("beforeunload", (ev) => {
-        ev.preventDefault();
-        return this.handleBeforeUnload();
+    window.addEventListener('beforeunload', ev => {
+      ev.preventDefault()
+      return this.handleBeforeUnload()
     })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     // this.setupBeforeUnloadListener();
   }
 
@@ -74,5 +74,7 @@ function mapStateToProps ({ isLoading, eosClient, opResult, accountData }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setOpResult, setInfo, setActive, setLoading })(RootContainer)
+  connect(mapStateToProps, { setOpResult, setInfo, setActive, setLoading })(
+    RootContainer
+  )
 )

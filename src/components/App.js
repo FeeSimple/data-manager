@@ -16,15 +16,26 @@ import { FSMGRCONTRACT } from '../utils/consts'
 import { setFsMgrContract, setEosClient, setOpResult } from '../actions/index'
 
 class AppContainer extends Component {
-
   async componentDidMount () {
-    const { eosClient, accountData, setEosClient, setFsMgrContract, setOpResult, contracts } = this.props
+    const {
+      eosClient,
+      accountData,
+      setEosClient,
+      setFsMgrContract,
+      setOpResult,
+      contracts
+    } = this.props
 
     // Token to realize re-render after page refresh or page close/re-open
     if (eosClient.locked) {
       const fsmgrcontract = contracts[FSMGRCONTRACT]
 
-      if (accountData && accountData.active && accountData.info && !fsmgrcontract.transaction) {
+      if (
+        accountData &&
+        accountData.active &&
+        accountData.info &&
+        !fsmgrcontract.transaction
+      ) {
         let privKey = accountData.info.privKey
         let eosClient = getImportedKeyEos(Eos, privKey)
         setEosClient(eosClient)
@@ -35,7 +46,9 @@ class AppContainer extends Component {
           text: '',
           type: 'error'
         })
-        console.log('AppContainer componentDidMount - setEosClient and setFsMgrContract');
+        console.log(
+          'AppContainer componentDidMount - setEosClient and setFsMgrContract'
+        )
       }
     }
   }
@@ -107,6 +120,10 @@ function mapStateToProps ({ isLoading, eosClient, accountData, contracts }) {
   return { isLoading, eosClient, accountData, contracts }
 }
 
-export default withRouter(connect(mapStateToProps, {
-  setFsMgrContract, setEosClient, setOpResult
-})(AppContainer))
+export default withRouter(
+  connect(mapStateToProps, {
+    setFsMgrContract,
+    setEosClient,
+    setOpResult
+  })(AppContainer)
+)
