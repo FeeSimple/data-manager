@@ -113,8 +113,8 @@ class NavbarContainer extends Component {
                   </Link>
                 </li>
               </ul>
-              <Link to='/' className='logout'>
-                <img src={IconLogout} alt='' onClick={this.handleLogout} />
+              <Link to='/' onClick={this.handleLogout} className='logout'>
+                <img src={IconLogout} alt=''/>
                 <span> Sign Out</span>
               </Link>
             </div>
