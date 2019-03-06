@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { setInfo, setActive } from '../../actions/index'
 import { beautifyRam } from '../../utils/beautify'
 
-class NavbarContainer extends Component {
+class StorageContainer extends Component {
   constructor () {
     super()
     this.state = { data: [] }
@@ -78,5 +78,5 @@ export default withRouter(
   connect(mapStateToProps, {
     setInfo,
     setActive
-  })(NavbarContainer)
+  })(StorageContainer)
 )
