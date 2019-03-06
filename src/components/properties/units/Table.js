@@ -11,6 +11,17 @@ import IconDelete from '../../../img/icon-delete.svg'
 import IconFinderEye from '../../../img/iconfinder_eye.png'
 import UnitRow from './Row'
 
+function noUnitTxt(column, colIndex) {
+  return (
+    <span style={{fontSize: '11px'}}>
+    This_property_has_no_units. 
+    Would_you_like_to_<a href='unit/new'>add</a>_one?
+    </span>
+  );
+}
+
+const footerBgColor = 'rgba(222, 222, 223, 0.75)'
+
 export default props => {
   const {
     propertyId,
@@ -30,19 +41,31 @@ export default props => {
       formatter: (cellContent, row) => (
         <input type='checkbox' name={row.id} onChange={onChange} />
       ),
-      headerStyle: { width: 40 }
+      headerStyle: { width: 40 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'id',
       text: 'ID',
       sort: true,
-      headerStyle: { width: 40 }
+      headerStyle: { width: 40 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'name',
       text: 'Unit',
       sort: true,
-      headerStyle: { width: 60 }
+      headerStyle: { width: 60 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'bedrooms',
@@ -50,27 +73,45 @@ export default props => {
       sort: true,
       formatter: (cellContent, row) =>
         `${row.bedrooms} beds / ${row.bathrooms} baths`,
-      headerStyle: { width: 130 }
+      headerStyle: { width: 130 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'sq_ft_min',
       text: 'Sq. Ft.',
       formatter: (cellContent, row) => `${row.sq_ft_min} - ${row.sq_ft_max}`,
       sort: true,
-      headerStyle: { width: 98 }
+      headerStyle: { width: 98 },
+      footer: ``,
+      footerStyle: {
+        backgroundColor: footerBgColor,
+        colSpan: '50'
+      },
+      footerFormatter: noUnitTxt
     },
     {
       dataField: 'rent_min',
       text: 'Rent',
       formatter: (cellContent, row) => `$${row.rent_min} - $${row.rent_max}`,
       sort: true,
-      headerStyle: { width: 98 }
+      headerStyle: { width: 98 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'status',
       text: 'Status',
       sort: true,
-      headerStyle: { width: 98 }
+      headerStyle: { width: 98 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'date_available',
@@ -78,7 +119,11 @@ export default props => {
       formatter: (cellContent, row) =>
         `${new Date(parseInt(row.date_available, 10)).toLocaleDateString()}`,
       sort: true,
-      headerStyle: { width: 150 }
+      headerStyle: { width: 150 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'termPricingDummyField',
@@ -93,7 +138,11 @@ export default props => {
           />
         </Link>
       ),
-      headerStyle: { width: 150 }
+      headerStyle: { width: 150 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     },
     {
       dataField: 'action_buttons_dummy_field',
@@ -116,7 +165,11 @@ export default props => {
           />
         </div>
       ),
-      headerStyle: { width: 70 }
+      headerStyle: { width: 70 },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
     }
   ]
 
@@ -162,7 +215,6 @@ export default props => {
           </Row>
         </Container>
       </div>
-      {showTable && (
         <Container>
           <Row>
             <Col sm='12' className='mt-4 mb-4'>
@@ -199,7 +251,6 @@ export default props => {
             </Col>
           </Row>
         </Container>
-      )}
     </div>
   )
 }
