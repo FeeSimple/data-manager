@@ -6,25 +6,12 @@ import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import Grid from './Grid'
 import { Col, Row, Container } from 'reactstrap'
-import { setOpResult } from '../../../actions'
 
 class GridContainer extends Component {
   render () {
-    const { properties, setOpResult } = this.props
+    const { properties } = this.props
 
-    const noProperties = Object.keys(properties).length === 0
-    const showAlert = noProperties
-
-    if (showAlert) {
-      setOpResult({
-        show: true,
-        title: '',
-        text: 'No properties yet. Please add a property',
-        type: 'info'
-      })
-    }
-
-    const showTable = !noProperties
+    const showTable = Object.keys(properties).length !== 0
 
     return (
       <div>
@@ -54,7 +41,7 @@ class GridContainer extends Component {
             </Row>
           </Container>
         </div>
-        {showTable && <Grid properties={properties} />}
+        <Grid properties={properties} showTable={showTable} />
       </div>
     )
   }
@@ -65,5 +52,5 @@ function mapStateToProps ({ properties, scatter, eosjs }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setOpResult })(GridContainer)
+  connect(mapStateToProps, {})(GridContainer)
 )

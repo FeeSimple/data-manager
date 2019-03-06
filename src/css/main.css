@@ -188,6 +188,11 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   color: #2b8acb; }
 
+.no-property-txt {
+  font-size: 12px;
+  text-align: center;
+  color: #AFACAF; }
+
 .tooltip [class$="inner"] {
   background-color: rgba(222, 222, 223, 0.75);
   border: 1px solid background-color;
