@@ -235,18 +235,7 @@ class TermPriceContainer extends Component {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
       const noTermPrices = Object.keys(unit.termprices).length === 0
-      const showAlert = noTermPrices && !this.state.isAdding
-
-      if (showAlert) {
-        setOpResult({
-          show: true,
-          title: '',
-          text: 'No term prices yet. Please add a term price',
-          type: 'info'
-        })
-      }
-
-      const showTable = !this.state.isAdding && !noTermPrices
+      const showFooter = !this.state.isAdding && noTermPrices
 
       return (
         <div>
@@ -258,7 +247,7 @@ class TermPriceContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
-            showTable={showTable}
+            showFooter={showFooter}
           />
           <Confirm
             isOpen={this.state.showConfirm}
