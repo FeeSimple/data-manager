@@ -10,15 +10,135 @@ import IconAdd from '../../../img/icon-add.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 
+function noFloorplanTxt(column, colIndex) {
+  const hrefLink = `${window.location.href}/floorplan/new`
+  return (
+    <span style={{fontSize: '11px'}}>
+    This_property_has_no_floorplans. 
+    Would_you_like_to_<a href={hrefLink}>add</a>_one?
+    </span>
+  );
+}
+
+const footerBgColor = 'rgba(222, 222, 223, 0.75)'
+
 export default props => {
   const {
     property,
     onChange,
     handleToggle,
     deleteBulkDisabled,
-    showTable
+    showFooter
   } = props
   const { SearchBar } = Search
+  const columnsFooter = [
+    {
+      dataField: 'checkboxField',
+      text: '',
+      isDummyField: true,
+      formatter: (cellContent, row) => (
+        <input type='checkbox' name={row.id} onChange={onChange} />
+      ),
+      headerStyle: { width: '40px' },
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
+    },
+    {
+      dataField: 'id',
+      text: 'ID',
+      sort: true,
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
+    },
+    {
+      dataField: 'name',
+      text: 'Floor Plan',
+      sort: true,
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
+    },
+    {
+      dataField: 'bathrooms',
+      text: 'Type',
+      isDummyField: true,
+      formatter: (cellContent, row) =>
+        `${row.bedrooms} beds / ${row.bathrooms} baths`,
+      sort: true,
+      footer: ``,
+      footerStyle: {
+        backgroundColor: footerBgColor,
+        colSpan: '50'
+      },
+      footerFormatter: noFloorplanTxt
+    },
+    {
+      dataField: 'sq_ft_min',
+      text: 'Sq. Ft.',
+      isDummyField: true,
+      formatter: (cellContent, row) => `${row.sq_ft_min} - ${row.sq_ft_max}`,
+      sort: true,
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
+    },
+    {
+      dataField: 'rent_min',
+      text: 'Rent',
+      isDummyField: true,
+      formatter: (cellContent, row) => `$${row.rent_min} - $${row.rent_max}`,
+      sort: true,
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
+    },
+    {
+      dataField: 'unit_count_dummy_field',
+      text: '# Of Units',
+      isDummyField: true,
+      formatter: () => `${property.unit_count}`,
+      sort: true,
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
+    },
+    {
+      dataField: 'action_button_edit_dummy_field',
+      text: '',
+      isDummyField: true,
+      headerStyle: { width: '70px' },
+      formatter: (cellContent, row) => (
+        <div>
+          <Link
+            to={`/${property.id}/floorplan/${row.id}`}
+            className='table-edit mr-2'
+          >
+            <img src={IconEditBlue} alt='Edit Entry' />
+          </Link>
+          <img
+            src={IconDelete}
+            className='c-pointer'
+            height='20'
+            alt='Delete Entry'
+            onClick={e => handleToggle(property.id, row.id)}
+          />
+        </div>
+      ),
+      footer: '',
+      footerStyle: {
+        backgroundColor: footerBgColor
+      }
+    }
+  ]
+
   const columns = [
     {
       dataField: 'checkboxField',
@@ -132,8 +252,7 @@ export default props => {
           </Row>
         </Container>
       </div>
-      {showTable && (
-        <Container>
+      <Container>
           <Row>
             <Col sm='12'>
               <Button
@@ -149,7 +268,7 @@ export default props => {
               <ToolkitProvider
                 keyField='id'
                 data={Object.values(property.floorplans)}
-                columns={columns}
+                columns={showFooter? columnsFooter : columns}
                 search={{ searchFormatted: true }}
                 bootstrap4
               >
@@ -169,7 +288,6 @@ export default props => {
             </Col>
           </Row>
         </Container>
-      )}
     </div>
   )
 }

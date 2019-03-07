@@ -231,18 +231,7 @@ class FloorplansContainer extends Component {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
       const noFloorplans = Object.keys(property.floorplans).length === 0
-      const showAlert = noFloorplans && !this.state.isAdding
-
-      if (showAlert) {
-        setOpResult({
-          show: true,
-          title: '',
-          text: 'No floorplans yet. Please add a floorplan',
-          type: 'info'
-        })
-      }
-
-      const showTable = !this.state.isAdding && !noFloorplans
+      const showFooter = !this.state.isAdding && noFloorplans
 
       return (
         <div>
@@ -252,7 +241,7 @@ class FloorplansContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
-            showTable={showTable}
+            showFooter={showFooter}
           />
           <Confirm
             isOpen={this.state.showConfirm}
