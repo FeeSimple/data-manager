@@ -10,10 +10,11 @@ import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 
 function noTermPriceTxt(column, colIndex) {
+  const hrefLink = `${window.location.href}/new`
   return (
     <span style={{fontSize: '11px'}}>
     This_unit_has_no_term_prices. 
-    Would_you_like_to_<a href='termprice/new'>add</a>_one?
+    Would_you_like_to_<a href={hrefLink}>add</a>_one?
     </span>
   );
 }

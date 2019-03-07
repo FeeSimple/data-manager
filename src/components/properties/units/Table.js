@@ -12,10 +12,11 @@ import IconFinderEye from '../../../img/iconfinder_eye.png'
 import UnitRow from './Row'
 
 function noUnitTxt(column, colIndex) {
+  const hrefLink = `${window.location.href}/new`
   return (
     <span style={{fontSize: '11px'}}>
     This_property_has_no_units. 
-    Would_you_like_to_<a href='unit/new'>add</a>_one?
+    Would_you_like_to_<a href={hrefLink}>add</a>_one?
     </span>
   );
 }
