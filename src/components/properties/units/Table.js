@@ -29,11 +29,11 @@ export default props => {
     onChange,
     handleToggle,
     deleteBulkDisabled,
-    showTable
+    showFooter
   } = props
   const { SearchBar } = Search
   const data = Object.values(property.units)
-  const columns = [
+  const columnsFooter = [
     {
       dataField: 'checkboxField',
       text: '',
@@ -173,6 +173,104 @@ export default props => {
     }
   ]
 
+  const columns = [
+    {
+      dataField: 'checkboxField',
+      text: '',
+      isDummyField: true,
+      formatter: (cellContent, row) => (
+        <input type='checkbox' name={row.id} onChange={onChange} />
+      ),
+      headerStyle: { width: 40 }
+    },
+    {
+      dataField: 'id',
+      text: 'ID',
+      sort: true,
+      headerStyle: { width: 40 }
+    },
+    {
+      dataField: 'name',
+      text: 'Unit',
+      sort: true,
+      headerStyle: { width: 60 }
+    },
+    {
+      dataField: 'bedrooms',
+      text: 'Type',
+      sort: true,
+      formatter: (cellContent, row) =>
+        `${row.bedrooms} beds / ${row.bathrooms} baths`,
+      headerStyle: { width: 130 }
+    },
+    {
+      dataField: 'sq_ft_min',
+      text: 'Sq. Ft.',
+      formatter: (cellContent, row) => `${row.sq_ft_min} - ${row.sq_ft_max}`,
+      sort: true,
+      headerStyle: { width: 98 }
+    },
+    {
+      dataField: 'rent_min',
+      text: 'Rent',
+      formatter: (cellContent, row) => `$${row.rent_min} - $${row.rent_max}`,
+      sort: true,
+      headerStyle: { width: 98 }
+    },
+    {
+      dataField: 'status',
+      text: 'Status',
+      sort: true,
+      headerStyle: { width: 98 }
+    },
+    {
+      dataField: 'date_available',
+      text: 'Date Available',
+      formatter: (cellContent, row) =>
+        `${new Date(parseInt(row.date_available, 10)).toLocaleDateString()}`,
+      sort: true,
+      headerStyle: { width: 150 }
+    },
+    {
+      dataField: 'termPricingDummyField',
+      text: 'Term Pricing',
+      isDummyField: true,
+      formatter: (cellContent, row) => (
+        <Link to={`/${property.id}/unit/${row.id}/termprice`}>
+          <img
+            src={IconFinderEye}
+            alt='icon-finder'
+            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
+          />
+        </Link>
+      ),
+      headerStyle: { width: 150 }
+    },
+    {
+      dataField: 'action_buttons_dummy_field',
+      text: '',
+      isDummyField: true,
+      formatter: (cellContent, row) => (
+        <div>
+          <Link
+            to={`/${property.id}/unit/${row.id}`}
+            className='table-edit mr-2'
+          >
+            <img src={IconEditBlue} alt='Edit Entry' />
+          </Link>
+          <img
+            src={IconDelete}
+            className='c-pointer'
+            height='20'
+            alt='Delete Entry'
+            onClick={e => handleToggle(property.id, row.id)}
+          />
+        </div>
+      ),
+      headerStyle: { width: 70 }
+    }
+  ]
+
   return (
     <div>
       <div className='top-bar'>
@@ -231,7 +329,7 @@ export default props => {
               <ToolkitProvider
                 keyField='id'
                 data={Object.values(property.units)}
-                columns={columns}
+                columns={showFooter? columnsFooter : columns}
                 search={{ searchFormatted: true }}
                 bootstrap4
               >
