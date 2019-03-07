@@ -223,18 +223,7 @@ class UnitContainer extends Component {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     } else {
       const noUnits = Object.keys(property.units).length === 0
-      const showAlert = noUnits && !this.state.isAdding
-
-      if (showAlert) {
-        setOpResult({
-          show: true,
-          title: '',
-          text: 'No units yet. Please add a unit',
-          type: 'info'
-        })
-      }
-
-      const showTable = !this.state.isAdding && !noUnits
+      const showFooter = !this.state.isAdding && noUnits
 
       return (
         <div>
@@ -244,7 +233,7 @@ class UnitContainer extends Component {
             onChange={this.handleInputChange}
             handleToggle={this.handleToggleConfirm}
             deleteBulkDisabled={this.state.deleteBulkDisabled}
-            showTable={showTable}
+            showFooter={showFooter}
           />
           <Confirm
             isOpen={this.state.showConfirm}

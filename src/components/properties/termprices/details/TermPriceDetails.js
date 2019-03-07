@@ -18,7 +18,7 @@ const TermPriceDetails = ({
       <Container>
         <Row>
           <Col>
-            <h3 className='float-left'>Unit</h3>
+            <h3 className='float-left'>Term Price</h3>
           </Col>
           <Col>
             <Storage />
