@@ -10,20 +10,20 @@ export default function (props) {
       <Row>
         <Col>
           <ul className='properties-ul'>
-            { showTable ?
-                Object.keys(properties).map(id => {
-                  const property = properties[id]
-                  return (
-                    <li key={id}>
-                      <Item property={property} />
-                    </li>
-                  )
-                })
-                :
-                <li key={0}>
-                  <ItemEmpty />
-                </li>
-            }
+            {showTable ? (
+              Object.keys(properties).map(id => {
+                const property = properties[id]
+                return (
+                  <li key={id}>
+                    <Item property={property} />
+                  </li>
+                )
+              })
+            ) : (
+              <li key={0}>
+                <ItemEmpty />
+              </li>
+            )}
           </ul>
         </Col>
       </Row>

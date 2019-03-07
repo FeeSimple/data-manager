@@ -24,12 +24,8 @@ export default function (props) {
         <div className='ms-row'>
           <div className='ms-col'>
             <div className='panel-fs-footer'>
-              <div className='no-property-txt'>
-                You have no properties.
-              </div>
-              <div className='no-property-txt'> 
-                Would you like to add one?
-              </div>
+              <div className='no-property-txt'>You have no properties.</div>
+              <div className='no-property-txt'>Would you like to add one?</div>
             </div>
           </div>
         </div>

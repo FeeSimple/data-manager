@@ -51,6 +51,4 @@ function mapStateToProps ({ properties, scatter, eosjs }) {
   return { properties, scatter, eosjs }
 }
 
-export default withRouter(
-  connect(mapStateToProps, {})(GridContainer)
-)
+export default withRouter(connect(mapStateToProps, {})(GridContainer))

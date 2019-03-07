@@ -11,14 +11,13 @@ import IconDelete from '../../../img/icon-delete.svg'
 import IconFinderEye from '../../../img/iconfinder_eye.png'
 import UnitRow from './Row'
 
-function noUnitTxt(column, colIndex) {
+function noUnitTxt (column, colIndex) {
   const hrefLink = `${window.location.href}/new`
   return (
-    <span style={{fontSize: '11px'}}>
-    This_property_has_no_units. 
-    Would_you_like_to_<a href={hrefLink}>add</a>_one?
+    <span style={{ fontSize: '11px' }}>
+      This_property_has_no_units. Would_you_like_to_<a href={hrefLink}>add</a>_one?
     </span>
-  );
+  )
 }
 
 const footerBgColor = 'rgba(222, 222, 223, 0.75)'
@@ -314,42 +313,42 @@ export default props => {
           </Row>
         </Container>
       </div>
-        <Container>
-          <Row>
-            <Col sm='12' className='mt-4 mb-4'>
-              <Button
-                size='sm'
-                outline
-                color='red'
-                className='tbl-btn-close'
-                disabled={deleteBulkDisabled}
-                onClick={e => handleToggle(property.id, -1)}
-              >
-                Delete Checked
-              </Button>
-              <ToolkitProvider
-                keyField='id'
-                data={Object.values(property.units)}
-                columns={showFooter? columnsFooter : columns}
-                search={{ searchFormatted: true }}
-                bootstrap4
-              >
-                {props => (
-                  <React.Fragment>
-                    <SearchBar
-                      {...props.searchProps}
-                      className='mb-3 tbl-search-input'
-                    />
-                    <BootstrapTable
-                      {...props.baseProps}
-                      pagination={paginationFactory()}
-                    />
-                  </React.Fragment>
-                )}
-              </ToolkitProvider>
-            </Col>
-          </Row>
-        </Container>
+      <Container>
+        <Row>
+          <Col sm='12' className='mt-4 mb-4'>
+            <Button
+              size='sm'
+              outline
+              color='red'
+              className='tbl-btn-close'
+              disabled={deleteBulkDisabled}
+              onClick={e => handleToggle(property.id, -1)}
+            >
+              Delete Checked
+            </Button>
+            <ToolkitProvider
+              keyField='id'
+              data={Object.values(property.units)}
+              columns={showFooter ? columnsFooter : columns}
+              search={{ searchFormatted: true }}
+              bootstrap4
+            >
+              {props => (
+                <React.Fragment>
+                  <SearchBar
+                    {...props.searchProps}
+                    className='mb-3 tbl-search-input'
+                  />
+                  <BootstrapTable
+                    {...props.baseProps}
+                    pagination={paginationFactory()}
+                  />
+                </React.Fragment>
+              )}
+            </ToolkitProvider>
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
 }
