@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
-import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
@@ -194,44 +193,25 @@ export default props => {
   return (
     <div>
       <div className='top-bar'>
-        <Container>
+        <div className='container-fluid'>
           <Row>
-            <Col>
-              <h3 className='float-left'>Term Pricing</h3>
-            </Col>
-            <Col>
-              <Storage />
-            </Col>
+            <div className='col-7 col-md-8'>
+            <h3 className='float-left'>Term Pricing</h3>
+            </div>
+            <div className='col-5 col-md-4'>
+                <h3 className='float-right'>
+                  <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
+                    <img src={IconAdd} alt='' />
+                    <span className='hide-xs'>Term Price</span>
+                  </Link>
+                </h3>
+            </div>
           </Row>
-        </Container>
-      </div>
-      <div className='top-bar whitebar'>
-        <Container>
-          <Row>
-            <Col>
-              <h3 className='float-right'>
-                <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
-                  <img src={IconAdd} alt='' />
-                  <span>New Term Price</span>
-                </Link>
-              </h3>
-            </Col>
-          </Row>
-        </Container>
+        </div>
       </div>
       <Container>
         <Row>
           <Col sm='12'>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(propertyId, unit.id)}
-            >
-              Delete Checked
-            </Button>
             <ToolkitProvider
               keyField='id'
               data={data}
@@ -252,6 +232,20 @@ export default props => {
                 </React.Fragment>
               )}
             </ToolkitProvider>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button
+                size='sm'
+                outline
+                color='red'
+                className='tbl-btn-close'
+                disabled={deleteBulkDisabled}
+                onClick={e => handleToggle(propertyId, unit.id)}
+              >
+                Delete Checked
+            </Button>
           </Col>
         </Row>
       </Container>

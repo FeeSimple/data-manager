@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
-import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
@@ -274,58 +273,44 @@ export default props => {
   return (
     <div>
       <div className='top-bar'>
-        <Container>
+        <div className='container-fluid'>
           <Row>
-            <Col>
+            <div className='col-7 col-md-8'>
               <h3 className='float-left'>{property.name}</h3>
-            </Col>
-            <Col>
-              <Storage />
-            </Col>
-          </Row>
-        </Container>
-      </div>
-      <div className='top-bar whitebar'>
-        <Container>
-          <Row>
-            <div className='col-9 col-md-8'>
-              <Link
-                to={`/${props.propertyId}`}
-                className='btn btn-gray-o prop-btn'
-              >
-                Floor Plan
-              </Link>
-              <Link
-                to={`/${props.propertyId}/unit`}
-                className='btn btn-base-o prop-btn m-l-5'
-              >
-                Units
-              </Link>
             </div>
-            <div className='col-3 col-md-4'>
+            <div className='col-5 col-md-4'>
               <h3 className='float-right'>
-                <Link to={`/${props.propertyId}/unit/new`}>
-                  <img src={IconAdd} alt='' />
-                  <span className='hide-xs'>New Unit</span>
-                </Link>
-              </h3>
+                  <Link to={`/${props.propertyId}/floorplan/new`}>
+                    <img src={IconAdd} alt='' />
+                    F<span className='hide-xs'>loor</span> 
+                  </Link>  
+                  <Link to={`/${props.propertyId}/unit/new`}>
+                    <img src={IconAdd} alt='' />
+                    U<span className='hide-xs'>nit</span>
+                  </Link>
+                </h3>
             </div>
           </Row>
-        </Container>
+        </div>
       </div>
       <Container>
         <Row>
-          <Col sm='12' className='mt-4 mb-4'>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(property.id, -1)}
-            >
-              Delete Checked
-            </Button>
+          <Col sm='12'>
+            <div className='floor-btns'>
+                <Link
+                  to={`/${props.propertyId}`}
+                  className='btn btn-gray-o prop-btn'
+                >
+                  Floor Plan
+                </Link>
+                <Link
+                  to={`/${props.propertyId}/unit`}
+                  className='btn btn-base prop-btn m-l-5'
+                >
+                  Units
+                </Link>
+            </div>
+            
             <ToolkitProvider
               keyField='id'
               data={Object.values(property.units)}
@@ -346,6 +331,20 @@ export default props => {
                 </React.Fragment>
               )}
             </ToolkitProvider>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button
+                size='sm'
+                outline
+                color='red'
+                className='tbl-btn-close'
+                disabled={deleteBulkDisabled}
+                onClick={e => handleToggle(property.id, -1)}
+              >
+                Delete Checked
+              </Button>
           </Col>
         </Row>
       </Container>

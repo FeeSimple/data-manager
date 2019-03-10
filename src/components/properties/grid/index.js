@@ -16,30 +16,21 @@ class GridContainer extends Component {
     return (
       <div>
         <div className='top-bar'>
-          <Container>
+          <div className='container-fluid'>
             <Row>
               <Col>
                 <h3 className='float-left'>Properties</h3>
               </Col>
               <Col>
-                <Storage />
-              </Col>
-            </Row>
-          </Container>
-        </div>
-        <div className='top-bar whitebar'>
-          <Container>
-            <Row>
-              <Col>
                 <h3 className='float-right'>
-                  <Link to='/new'>
-                    <img src={IconAdd} alt='' />
-                    <span className='hide-xs'>New Property</span>
-                  </Link>
-                </h3>
+                    <Link to='/new'>
+                      <img src={IconAdd} alt='' />
+                      <span className='hide-xs'>New Property</span>
+                    </Link>
+                  </h3>
               </Col>
             </Row>
-          </Container>
+          </div>
         </div>
         <Grid properties={properties} showTable={showTable} />
       </div>
