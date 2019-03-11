@@ -71,7 +71,7 @@ export const User = ({
     </Nav>
     <TabContent activeTab={activeTab}>
       <TabPane tabId={USERTAB.INFO}>
-        <br></br>
+        <br />
         <UserInfo
           user={user}
           handleToggleModalRam={handleToggleModalRam}
@@ -108,7 +108,7 @@ export const User = ({
         />
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
-        <br></br>
+        <br />
         <UserSend
           user={user}
           handleUserSend={handleUserSend}

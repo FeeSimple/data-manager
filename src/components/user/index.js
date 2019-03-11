@@ -338,7 +338,7 @@ class UserContainer extends Component {
               gettingActions={this.state.gettingActions}
             />
           </Container>
-      </div>
+        </div>
       </div>
     )
   }

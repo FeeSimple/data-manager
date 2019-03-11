@@ -62,7 +62,7 @@ const UserActivity = ({ activityList }) => (
       <LoadingView />
     ) : (
       <div>
-        <br></br>
+        <br />
         <ToolkitProvider
           keyField='id'
           data={activityList}
@@ -78,18 +78,21 @@ const UserActivity = ({ activityList }) => (
               />
               <BootstrapTable
                 {...props.baseProps}
-                pagination={paginationFactory({ 
+                pagination={paginationFactory({
                   sizePerPage: 5,
-                  sizePerPageList: [ 
+                  sizePerPageList: [
                     {
-                      text: '5', value: 5
-                    }, 
+                      text: '5',
+                      value: 5
+                    },
                     {
-                      text: '10', value: 10
-                    }, 
+                      text: '10',
+                      value: 10
+                    },
                     {
-                      text: 'All', value: activityList.length
-                    } 
+                      text: 'All',
+                      value: activityList.length
+                    }
                   ]
                 })}
               />
