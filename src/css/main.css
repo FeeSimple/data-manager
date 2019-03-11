@@ -119,7 +119,7 @@ h1, h2, h3, h4, h5, h6 {
         display: block;
         line-height: 23px;
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 400;
         color: #fff;
         white-space: nowrap; }
         .menu-holder #main-menu li a:hover, .menu-holder #main-menu li a:active, .menu-holder #main-menu li a:focus {
@@ -129,7 +129,7 @@ h1, h2, h3, h4, h5, h6 {
           height: 23px;
           width: auto;
           float: left;
-          margin-right: 6px; }
+          margin-right: 10px; }
   .menu-holder .storage {
     margin: 40px 0 0 0;
     text-align: center; }
