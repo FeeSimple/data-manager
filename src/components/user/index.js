@@ -10,6 +10,7 @@ import {
   getActionsProcessed
 } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
+import { Col, Row, Container } from 'reactstrap'
 
 class UserContainer extends Component {
   constructor (props) {
@@ -298,32 +299,47 @@ class UserContainer extends Component {
       return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
     }
     return (
-      <User
-        user={user}
-        activeTab={this.state.activeTab}
-        toggleTab={this.toggleTab}
-        showModalRam={this.state.showModalRam}
-        handleToggleModalRam={this.handleToggleModalRam}
-        handleManageRam={this.handleManageRam}
-        isBuy={this.state.isBuy}
-        setBuy={this.setBuy}
-        setSell={this.setSell}
-        showModalCpuBw={this.state.showModalCpuBw}
-        handleToggleModalCpuBw={this.handleToggleModalCpuBw}
-        handleToggleModalCpu={this.handleToggleModalCpu}
-        handleToggleModalBw={this.handleToggleModalBw}
-        isCpu={this.state.isCpu}
-        isStake={this.state.isStake}
-        setStake={this.setStake}
-        setUnstake={this.setUnstake}
-        handleManageCpuBw={this.handleManageCpuBw}
-        isProcessing={this.state.isProcessing}
-        resourceHandleErr={this.state.resourceHandleErr}
-        handleUserSend={this.handleUserSend}
-        userSendErr={this.state.userSendErr}
-        activityList={this.state.activityList}
-        gettingActions={this.state.gettingActions}
-      />
+      <div>
+        <div className='top-bar'>
+          <Container>
+            <Row>
+              <Col>
+                <h3 className='float-left'>Wallet</h3>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+        <div className='top-bar whitebar'>
+          <Container>
+            <User
+              user={user}
+              activeTab={this.state.activeTab}
+              toggleTab={this.toggleTab}
+              showModalRam={this.state.showModalRam}
+              handleToggleModalRam={this.handleToggleModalRam}
+              handleManageRam={this.handleManageRam}
+              isBuy={this.state.isBuy}
+              setBuy={this.setBuy}
+              setSell={this.setSell}
+              showModalCpuBw={this.state.showModalCpuBw}
+              handleToggleModalCpuBw={this.handleToggleModalCpuBw}
+              handleToggleModalCpu={this.handleToggleModalCpu}
+              handleToggleModalBw={this.handleToggleModalBw}
+              isCpu={this.state.isCpu}
+              isStake={this.state.isStake}
+              setStake={this.setStake}
+              setUnstake={this.setUnstake}
+              handleManageCpuBw={this.handleManageCpuBw}
+              isProcessing={this.state.isProcessing}
+              resourceHandleErr={this.state.resourceHandleErr}
+              handleUserSend={this.handleUserSend}
+              userSendErr={this.state.userSendErr}
+              activityList={this.state.activityList}
+              gettingActions={this.state.gettingActions}
+            />
+          </Container>
+      </div>
+      </div>
     )
   }
 }

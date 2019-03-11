@@ -11,13 +11,13 @@ const columns = [
     dataField: 'index',
     text: '#',
     sort: false,
-    headerStyle: { width: 10 }
+    headerStyle: { width: 7 }
   },
   {
     dataField: 'time',
     text: 'Time',
     sort: true,
-    headerStyle: { width: 40 }
+    headerStyle: { width: 50 }
   },
   {
     dataField: 'action',
@@ -78,7 +78,20 @@ const UserActivity = ({ activityList }) => (
               />
               <BootstrapTable
                 {...props.baseProps}
-                pagination={paginationFactory()}
+                pagination={paginationFactory({ 
+                  sizePerPage: 5,
+                  sizePerPageList: [ 
+                    {
+                      text: '5', value: 5
+                    }, 
+                    {
+                      text: '10', value: 10
+                    }, 
+                    {
+                      text: 'All', value: activityList.length
+                    } 
+                  ]
+                })}
               />
             </React.Fragment>
           )}

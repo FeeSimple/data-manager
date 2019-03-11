@@ -68,24 +68,20 @@ export const User = ({
           <Button>Send</Button>
         </NavLink>
       </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.ACTIVITY })}
-          onClick={() => {
-            toggleTab(USERTAB.ACTIVITY)
-          }}
-        >
-          <Button>Activity</Button>
-        </NavLink>
-      </NavItem>
     </Nav>
     <TabContent activeTab={activeTab}>
       <TabPane tabId={USERTAB.INFO}>
+        <br></br>
         <UserInfo
           user={user}
           handleToggleModalRam={handleToggleModalRam}
           handleToggleModalCpu={handleToggleModalCpu}
           handleToggleModalBw={handleToggleModalBw}
+        />
+
+        <UserActivity
+          activityList={activityList}
+          gettingActions={gettingActions}
         />
 
         <ManageRam
@@ -112,17 +108,12 @@ export const User = ({
         />
       </TabPane>
       <TabPane tabId={USERTAB.SEND}>
+        <br></br>
         <UserSend
           user={user}
           handleUserSend={handleUserSend}
           userSendErr={userSendErr}
           isProcessing={isProcessing}
-        />
-      </TabPane>
-      <TabPane tabId={USERTAB.ACTIVITY}>
-        <UserActivity
-          activityList={activityList}
-          gettingActions={gettingActions}
         />
       </TabPane>
     </TabContent>
