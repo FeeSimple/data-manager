@@ -27,7 +27,7 @@ const UserInfo = ({
   handleToggleModalCpu,
   handleToggleModalBw
 }) => (
-  <div className='col-lg-8 offset-md-1 offset-lg-2'>
+  <div className='col-lg-12 offset-md-1 offset-lg-0'>
     <Card>
       <ListGroup>
         <ListGroupItem>
