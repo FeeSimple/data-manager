@@ -607,10 +607,14 @@ Dropzone
   .main-wrapper {
     padding-left: 0; }
   .menu-holder {
-    padding: 15px 0;
+    padding: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
     position: relative;
     bottom: auto;
     width: auto; }
+    .menu-holder .fix-mobile-nav {
+      max-width: none; }
     .menu-holder .logo {
       display: inline-block;
       margin: 0; }
@@ -658,6 +662,9 @@ Dropzone
         font-size: 13px; }
       .menu-holder .storage .storage-text {
         display: none; }
+  .top-bar {
+    padding-left: 15px;
+    padding-right: 15px; }
   .fs-footer {
     left: 15px; } }
 
@@ -698,6 +705,12 @@ Dropzone
 /*-----------------------Very Small--------------------------------*/
 /*--- Extra Small screen only -----*/
 /*--- Very Small screen -----*/
+@media all and (max-width: 580px) {
+  .top-bar,
+  .menu-holder {
+    padding-left: 0px;
+    padding-right: 0px; } }
+
 @media all and (max-width: 479px) {
   .properties-ul {
     text-align: center; }

@@ -610,7 +610,12 @@ Dropzone
   .tc-sm{text-align: center;}
   .main-wrapper{padding-left: 0;}
   .menu-holder{
-    padding: 15px 0;
+    .fix-mobile-nav{
+      max-width: none;
+    }
+    padding: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
     position: relative;
     bottom: auto;
     width: auto;
@@ -676,6 +681,10 @@ Dropzone
       }
     }
   }
+  .top-bar{
+    padding-left: 15px;
+    padding-right: 15px;
+  }
   .fs-footer{
     left: 15px;
   }
@@ -728,7 +737,11 @@ Dropzone
 
 /*--- Very Small screen -----*/
 @media all and (max-width: 580px) {
-  
+  .top-bar,
+  .menu-holder{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
 @media all and (max-width: 479px) {
   .properties-ul{

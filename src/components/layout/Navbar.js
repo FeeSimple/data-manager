@@ -81,7 +81,7 @@ class NavbarContainer extends Component {
   render () {
     return (
       <div className='menu-holder'>
-        <div className='container'>
+        <div className='container fix-mobile-nav'>
           <div className='row'>
             <div className='col-12'>
               <Link to='/' className='logo'>

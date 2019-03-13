@@ -282,7 +282,7 @@ export default props => {
               <h3 className='float-right'>
                   <Link to={`/${props.propertyId}/floorplan/new`}>
                     <img src={IconAdd} alt='' />
-                    F<span className='hide-xs'>loor</span> 
+                    F<span className='hide-xs'>loor Plans</span> 
                   </Link>  
                   <Link to={`/${props.propertyId}/unit/new`}>
                     <img src={IconAdd} alt='' />
@@ -301,7 +301,7 @@ export default props => {
                   to={`/${props.propertyId}`}
                   className='btn btn-gray-o prop-btn'
                 >
-                  Floor Plan
+                  Floor Plans
                 </Link>
                 <Link
                   to={`/${props.propertyId}/unit`}
