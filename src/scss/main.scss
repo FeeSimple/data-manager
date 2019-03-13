@@ -138,7 +138,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
         display: block;
         line-height: 23px;
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 400;
         color: $clr-white;
         white-space: nowrap;
         &:hover,&:active,&:focus{
@@ -149,7 +149,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
           height: 23px;
           width: auto;
           float: left;
-          margin-right: 6px;
+          margin-right: 10px;
         }
       }
     }
