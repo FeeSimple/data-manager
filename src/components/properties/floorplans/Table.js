@@ -5,7 +5,6 @@ import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
 // import FloorplanRow from './Row'
-import Storage from '../../layout/Storage'
 import IconAdd from '../../../img/icon-add.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
@@ -217,23 +216,33 @@ export default props => {
   return (
     <div>
       <div className='top-bar'>
-        <Container>
+        <div className='container-fluid'>
           <Row>
-            <Col>
+            <div className='col-7 col-md-7'>
               <h3 className='float-left'>{property.name}</h3>
-            </Col>
-            <Col>
-              <Storage />
-            </Col>
+            </div>
+            <div className='col-5  col-md-5'>
+              <h3 className='float-right'>
+                <Link to={`/${props.propertyId}/floorplan/new`}>
+                  <img src={IconAdd} alt='' />
+                  F<span className='hide-xs'>loor Plans</span>
+                </Link>{' '}
+
+                <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
+                  <img src={IconAdd} alt='' />
+                  U<span className='hide-xs'>nit</span>
+                </Link>
+              </h3>
+            </div>
           </Row>
-        </Container>
+        </div>
       </div>
-      <div className='top-bar whitebar'>
-        <Container>
-          <Row>
-            <div className='col-9 col-md-7'>
-              <Link to={`/${property.id}`} className='btn btn-base-o prop-btn'>
-                Floor Plan
+      <Container>
+        <Row>
+          <Col sm='12'>
+            <div className='floor-btns'>
+              <Link to={`/${property.id}`} className='btn btn-base prop-btn'>
+                Floor Plans
               </Link>
               <Link
                 to={`/${property.id}/unit`}
@@ -242,30 +251,6 @@ export default props => {
                 Units
               </Link>
             </div>
-            <div className='col-3  col-md-5'>
-              <h3 className='float-right'>
-                <Link to={`/${props.propertyId}/floorplan/new`}>
-                  <img src={IconAdd} alt='' />
-                  <span className='hide-xs'>New Floor Plan</span>
-                </Link>
-              </h3>
-            </div>
-          </Row>
-        </Container>
-      </div>
-      <Container>
-        <Row>
-          <Col sm='12'>
-            <Button
-              size='sm'
-              outline
-              color='red'
-              className='tbl-btn-close'
-              disabled={deleteBulkDisabled}
-              onClick={e => handleToggle(property.id, -1)}
-            >
-              Delete Checked
-            </Button>
             <ToolkitProvider
               keyField='id'
               data={Object.values(property.floorplans)}
@@ -286,6 +271,20 @@ export default props => {
                 </React.Fragment>
               )}
             </ToolkitProvider>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button
+              size='sm'
+              outline
+              color='red'
+              className='tbl-btn-close'
+              disabled={deleteBulkDisabled}
+              onClick={e => handleToggle(property.id, -1)}
+            >
+              Delete Checked
+            </Button>
           </Col>
         </Row>
       </Container>

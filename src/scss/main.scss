@@ -41,7 +41,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .main-wrapper{
   position: relative;
   padding-bottom: 65px;
-  padding-left: 180px;
+  padding-left: 200px;
   min-height: 100vh;
   &.home{
     background-color: $clr-bg;
@@ -79,21 +79,29 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 
 .menu-holder{
   background-color: $clr-bg;
-  padding: 15px 0;
+  padding: 15px 0 35px;
   position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
   z-index: 10;
-  width: 180px;
+  width: 200px;
   color: $clr-white;
   .logo{
+    margin: 20px 0 25px;
     display: block;
     text-align: center;
     img{
-      height: 70px;
+      height: 65px;
       width: auto;
     }
+  }
+  .nav-title{
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 0;
   }
   .logout{
     display: block;
@@ -101,6 +109,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
     left: 15px;
     bottom: 10px;
     line-height: 23px;
+    font-size: 16px;
     color: $clr-white;
     &:hover,&:active,&:focus{
       text-decoration: none;
@@ -113,27 +122,23 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
         width: auto
       }
     } 
-
   #main-menu{
     list-style: none;
-    padding-top: 11px;
     padding-left: 0;
+    border-top: 2px solid $clr-seconday;
+    border-bottom: 2px solid $clr-seconday;
     li{
       display: block;
-      padding: 7px 0;
+      padding: 0;
+      margin-bottom: 25px;
       &:first-child{
-        border-top: 1px solid $clr-seconday;
-      }
-      &:last-child{
-        border-top: 1px solid $clr-seconday;
-        padding-top: 14px;
-        margin-top: 7px;
+        margin-top: 25px;
       }
       a{
         display: block;
         line-height: 23px;
-        font-size: 15px;
-        font-weight: 600;
+        font-size: 16px;
+        font-weight: 400;
         color: $clr-white;
         white-space: nowrap;
         &:hover,&:active,&:focus{
@@ -144,19 +149,37 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
           height: 23px;
           width: auto;
           float: left;
-          margin-right: 6px;
+          margin-right: 10px;
         }
       }
+    }
+  }
+
+  .storage{
+    margin: 40px 0 0 0;
+    text-align: center;
+    .storage-text{
+      font-size: 16px;
+      display: block;
+      margin-bottom: 15px;
+    }
+    .badge{
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 400;
+      background-color: rgba($clr-base,0.35);
+      border: 2px solid $clr-base;
     }
   }
 }
 
 .top-bar{
   background-color: rgba(222, 222, 223, 0.75);
-  padding: 15px 0;
+  padding: 15px;
+  margin-bottom: 16px;
   h3{
-    font-size: 16px;
-    margin: 6px 0;
+    font-size: 20px;
+    margin: 5px 0;
     font-weight: 400;
     a{
       color: $primary-text-color;
@@ -171,20 +194,9 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
       }
     }
   }
-
-  .storage{
-    margin: 2px 0 0 0;
-    .badge{
-      padding: 6px 8px;
-      font-size: 13px;
-      background-color: rgba($clr-base,0.2);
-      border: 2px solid $clr-base;
-    }
-  }
 }
-
-.top-bar.whitebar{
-  background-color: transparent;
+.floor-btns{
+  float: left;
 }
 
 .properties-ul{
@@ -311,11 +323,19 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 -------------------------------------------*/
 .form-control{border: 2px solid #dbe3eb; height: 42px; box-shadow: none; }
 .panel-fs{border-color: #dbe3eb; border-width: 2px; margin-bottom: 0;
+    border-radius: 0.60rem;
     >.panel-heading {
     background-color: transparent;
     border-color: #dbe3eb;
     border-width: 2px;
     font-size: 15px;
+  }
+  .card-header{
+    border-bottom-width: 2px;
+    a{
+      color: #404040;
+      font-size: 14px;
+    }
   }
   .panel-fs-div{
     width: 100%;
@@ -328,6 +348,8 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
     .btn{
       width: 50%;
       float: left;
+      font-size: 13px;
+      font-weight: 600;
     }
     a:first-child{
        border-radius: 4px 0 0 4px;
@@ -463,7 +485,6 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   background-repeat: no-repeat;
   padding-left: 26px;
   background-size: 20px auto;
-  margin-top: 10px;
   margin-bottom: 15px;
   &.disabled{
     opacity: 0;
@@ -474,6 +495,10 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 .react-bootstrap-table tbody tr td,
 .react-bootstrap-table thead tr th{
   border: none;
+}
+.react-bootstrap-table{
+  width: 100%;
+  overflow-x: auto;
 }
 .react-bootstrap-table .table-bordered {
   border: 2px solid #dee2e6;
@@ -567,6 +592,17 @@ Dropzone
 /*--- Medium screen only -----*/
 @media all and (min-width: 992px) and (max-width: 1200px){
     .tc-md-o{text-align: center;}
+    .panel-fs{
+      .panel-fs-footer{
+        a:first-child{
+          width: 58%;
+        }
+        a:last-child{
+          width: 42%;
+        }
+      }
+    }
+
 }
 
 /*--- below medium screen -----*/
@@ -574,14 +610,20 @@ Dropzone
   .tc-sm{text-align: center;}
   .main-wrapper{padding-left: 0;}
   .menu-holder{
-    padding: 15px 0;
+    .fix-mobile-nav{
+      max-width: none;
+    }
+    padding: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
     position: relative;
     bottom: auto;
     width: auto;
     .logo{
       display: inline-block;
+      margin: 0;
       img{
-        height: 40px;
+        height: 55px;
         width: auto;
       }
     }
@@ -597,22 +639,21 @@ Dropzone
         }
         span{display: none;}
     } 
+    .nav-title{display: none;}
 
     #main-menu{
+      white-space: nowrap;
       list-style: none;
       float: right;
       padding: 0;
       margin: 9px 22px 0 0;
+      border-top: none;
+      border-bottom: none;
       li{
         display: inline-block;
         padding: 0;
-        margin-right: 10px;
+        margin: 0 10px 0 0;
         &:first-child{
-          border-top: none;
-        }
-        &:last-child{
-          border-top: none;
-          padding-top: 0;
           margin-top: 0;
         }
         a{
@@ -623,6 +664,20 @@ Dropzone
             display: none;
           }
         }
+      }
+    }
+
+    .storage{
+      margin: 0;
+      position: absolute;
+      right: 145px;
+      top: 8px;
+      .badge{
+        padding: 4px 10px;
+        font-size: 13px;
+      }
+      .storage-text{
+        display: none;
       }
     }
   }
@@ -656,11 +711,13 @@ Dropzone
     max-width: 90%;
     img{max-width: 100%;}
   }
-  .storage{
-    .storage-text{display: none;}
-  }
   .btn-home{font-size: 14px;}
   .main-wrapper {padding-bottom: 80px;}
+  .floor-btns{
+    margin-bottom: 15px;
+  }
+  .tbl-search-input.form-control {
+    width: 100%;}
   .properties-ul{
     li{
       width: 48%;
@@ -676,7 +733,11 @@ Dropzone
 
 /*--- Very Small screen -----*/
 @media all and (max-width: 580px) {
-  
+  .top-bar,
+  .menu-holder{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
 @media all and (max-width: 479px) {
   .properties-ul{
@@ -691,6 +752,13 @@ Dropzone
 @media all and (max-width: 380px) {
   .top-bar h3 {
     font-size: 18px;
+  }
+
+  .menu-holder{
+    .storage{
+      right: 15px;
+      top: 39px;
+    }
   }
 }
 /*----------------------------- The End ---------------------------*/

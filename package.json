@@ -15,7 +15,7 @@
   "dependencies": {
     "availity-reactstrap-validation": "^2.4.0",
     "dotenv": "^6.1.0",
-    "eosjs": "^16.0.0",
+    "eosjs": "^16.0.9",
     "eosjs-ecc": "^4.0.3",
     "express": "^4.16.3",
     "formik": "^1.0.3",

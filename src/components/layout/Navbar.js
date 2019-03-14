@@ -81,12 +81,13 @@ class NavbarContainer extends Component {
   render () {
     return (
       <div className='menu-holder'>
-        <div className='container'>
+        <div className='container fix-mobile-nav'>
           <div className='row'>
             <div className='col-12'>
               <Link to='/' className='logo'>
                 <img src={Logo} alt='Logo' />
               </Link>
+              <span className='nav-title'> team_open_re</span>
               <ul id='main-menu'>
                 <li>
                   <Link to='/'>
@@ -106,13 +107,15 @@ class NavbarContainer extends Component {
                     <span> Marketplace</span>
                   </Link>
                 </li>
-                <li>
-                  <Link to='/'>
-                    <img src={IconUser} alt='' />
-                    <span> team_open_re</span>
-                  </Link>
-                </li>
               </ul>
+
+              <div className='storage'>
+                <span className='storage-text'>Manage Storage </span>
+                <span className='badge badge-pill'>
+                  {this.state.data.ramAvailable}
+                </span>
+              </div>
+
               <Link to='/' onClick={this.handleLogout} className='logout'>
                 <img src={IconLogout} alt='' />
                 <span> Sign Out</span>
