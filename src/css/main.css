@@ -146,7 +146,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .top-bar {
   background-color: rgba(222, 222, 223, 0.75);
-  padding: 15px 0;
+  padding: 15px;
   margin-bottom: 16px; }
   .top-bar h3 {
     font-size: 20px;
@@ -662,9 +662,6 @@ Dropzone
         font-size: 13px; }
       .menu-holder .storage .storage-text {
         display: none; }
-  .top-bar {
-    padding-left: 15px;
-    padding-right: 15px; }
   .fs-footer {
     left: 15px; } }
 

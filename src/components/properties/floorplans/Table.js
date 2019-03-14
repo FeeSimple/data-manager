@@ -227,7 +227,7 @@ export default props => {
                   <img src={IconAdd} alt='' />
                   F<span className='hide-xs'>loor Plans</span> 
                 </Link>  
-                <Link to={`/${props.propertyId}/unit/new`}>
+                <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
                   <img src={IconAdd} alt='' />
                   U<span className='hide-xs'>nit</span>
                 </Link>
