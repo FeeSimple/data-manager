@@ -34,7 +34,8 @@ class LoginContainer extends Component {
     accountPubKey: '',
     accountPrivKey: '',
     newAccountCreationErr: false,
-    isProcessing: false
+    isProcessing: false,
+    usingScatter: false
   }
 
   handleImportPrivKey = privKey => {
@@ -44,7 +45,8 @@ class LoginContainer extends Component {
     eosClient.getKeyAccounts(pubKey).then(result => {
       this.setState({
         availableAccounts: result.account_names,
-        privKey
+        privKey,
+        usingScatter: false
       })
       this.handleToggleSelAcc()
     })
@@ -109,7 +111,8 @@ class LoginContainer extends Component {
 
     this.setState({
       availableAccounts,
-      usingScatter: true
+      usingScatter: true,
+      privKey: null
     })
     this.handleToggleSelAcc()
   }
@@ -129,30 +132,17 @@ class LoginContainer extends Component {
       scatter
     } = this.props
 
-    let { eosClient } = this.props
+    let eosClient = null
     setLoading(true)
 
     if (this.state.usingScatter) {
       const network = getNetworkData()
       eosClient = scatter.eos(network, Eos, {}, 'https')
-      setActive(account)
       setScatter(scatter)
-      setEosClient(eosClient)
-
-      setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
-      const { rows } = await eosClient.getTableRows(
-        true,
-        FSMGRCONTRACT,
-        account,
-        PROPERTY
-      )
-      addProperties(rows)
-      setLoading(false)
-      return
+    } else {
+      const { privKey } = this.state
+      eosClient = getImportedKeyEos(Eos, privKey)
     }
-
-    const { privKey } = this.state
-    eosClient = getImportedKeyEos(Eos, privKey)
 
     setActive(account)
     setEosClient(eosClient)
@@ -167,7 +157,8 @@ class LoginContainer extends Component {
         ram,
         bandwidth,
         pubkey,
-        privKey
+        privKey: this.state.usingScatter ? null : this.state.privKey,
+        usingScatter: this.state.usingScatter
       }
 
       setInfo(info)

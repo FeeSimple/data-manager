@@ -45,7 +45,9 @@ class RootContainer extends Component {
     }
 
     if (eosClient.locked) {
-      setLoading(false)
+      if (accountData.info && !accountData.info.usingScatter) {
+        setLoading(false)
+      }
     }
 
     return (
