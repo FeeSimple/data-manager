@@ -225,8 +225,9 @@ export default props => {
               <h3 className='float-right'>
                 <Link to={`/${props.propertyId}/floorplan/new`}>
                   <img src={IconAdd} alt='' />
-                  F<span className='hide-xs'>loor Plans</span> 
-                </Link>  
+                  F<span className='hide-xs'>loor Plans</span>
+                </Link>{' '}
+
                 <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
                   <img src={IconAdd} alt='' />
                   U<span className='hide-xs'>nit</span>
@@ -241,14 +242,14 @@ export default props => {
           <Col sm='12'>
             <div className='floor-btns'>
               <Link to={`/${property.id}`} className='btn btn-base prop-btn'>
-                  Floor Plans
-                </Link>
-                <Link
-                  to={`/${property.id}/unit`}
-                  className='btn btn-gray-o prop-btn m-l-5'
-                >
-                  Units
-                </Link>
+                Floor Plans
+              </Link>
+              <Link
+                to={`/${property.id}/unit`}
+                className='btn btn-gray-o prop-btn m-l-5'
+              >
+                Units
+              </Link>
             </div>
             <ToolkitProvider
               keyField='id'
@@ -274,7 +275,7 @@ export default props => {
         </Row>
         <Row>
           <Col>
-          <Button
+            <Button
               size='sm'
               outline
               color='red'

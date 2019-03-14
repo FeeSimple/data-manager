@@ -196,15 +196,15 @@ export default props => {
         <div className='container-fluid'>
           <Row>
             <div className='col-7 col-md-8'>
-            <h3 className='float-left'>Term Pricing</h3>
+              <h3 className='float-left'>Term Pricing</h3>
             </div>
             <div className='col-5 col-md-4'>
-                <h3 className='float-right'>
-                  <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
-                    <img src={IconAdd} alt='' />
-                    <span className='hide-xs'>Term Price</span>
-                  </Link>
-                </h3>
+              <h3 className='float-right'>
+                <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
+                  <img src={IconAdd} alt='' />
+                  <span className='hide-xs'>Term Price</span>
+                </Link>
+              </h3>
             </div>
           </Row>
         </div>
@@ -237,14 +237,14 @@ export default props => {
         <Row>
           <Col>
             <Button
-                size='sm'
-                outline
-                color='red'
-                className='tbl-btn-close'
-                disabled={deleteBulkDisabled}
-                onClick={e => handleToggle(propertyId, unit.id)}
-              >
-                Delete Checked
+              size='sm'
+              outline
+              color='red'
+              className='tbl-btn-close'
+              disabled={deleteBulkDisabled}
+              onClick={e => handleToggle(propertyId, unit.id)}
+            >
+              Delete Checked
             </Button>
           </Col>
         </Row>

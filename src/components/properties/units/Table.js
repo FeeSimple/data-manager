@@ -280,15 +280,16 @@ export default props => {
             </div>
             <div className='col-5 col-md-4'>
               <h3 className='float-right'>
-                  <Link to={`/${props.propertyId}/floorplan/new`}>
-                    <img src={IconAdd} alt='' />
-                    F<span className='hide-xs'>loor Plans</span> 
-                  </Link>  
-                  <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
-                    <img src={IconAdd} alt='' />
-                    U<span className='hide-xs'>nit</span>
-                  </Link>
-                </h3>
+                <Link to={`/${props.propertyId}/floorplan/new`}>
+                  <img src={IconAdd} alt='' />
+                  F<span className='hide-xs'>loor Plans</span>
+                </Link>{' '}
+
+                <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
+                  <img src={IconAdd} alt='' />
+                  U<span className='hide-xs'>nit</span>
+                </Link>
+              </h3>
             </div>
           </Row>
         </div>
@@ -297,20 +298,20 @@ export default props => {
         <Row>
           <Col sm='12'>
             <div className='floor-btns'>
-                <Link
-                  to={`/${props.propertyId}`}
-                  className='btn btn-gray-o prop-btn'
-                >
-                  Floor Plans
-                </Link>
-                <Link
-                  to={`/${props.propertyId}/unit`}
-                  className='btn btn-base prop-btn m-l-5'
-                >
-                  Units
-                </Link>
+              <Link
+                to={`/${props.propertyId}`}
+                className='btn btn-gray-o prop-btn'
+              >
+                Floor Plans
+              </Link>
+              <Link
+                to={`/${props.propertyId}/unit`}
+                className='btn btn-base prop-btn m-l-5'
+              >
+                Units
+              </Link>
             </div>
-            
+
             <ToolkitProvider
               keyField='id'
               data={Object.values(property.units)}
@@ -336,15 +337,15 @@ export default props => {
         <Row>
           <Col>
             <Button
-                size='sm'
-                outline
-                color='red'
-                className='tbl-btn-close'
-                disabled={deleteBulkDisabled}
-                onClick={e => handleToggle(property.id, -1)}
-              >
-                Delete Checked
-              </Button>
+              size='sm'
+              outline
+              color='red'
+              className='tbl-btn-close'
+              disabled={deleteBulkDisabled}
+              onClick={e => handleToggle(property.id, -1)}
+            >
+              Delete Checked
+            </Button>
           </Col>
         </Row>
       </Container>

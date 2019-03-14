@@ -111,7 +111,9 @@ class NavbarContainer extends Component {
 
               <div className='storage'>
                 <span className='storage-text'>Manage Storage </span>
-                <span className='badge badge-pill'>{this.state.data.ramAvailable}</span>
+                <span className='badge badge-pill'>
+                  {this.state.data.ramAvailable}
+                </span>
               </div>
 
               <Link to='/' onClick={this.handleLogout} className='logout'>

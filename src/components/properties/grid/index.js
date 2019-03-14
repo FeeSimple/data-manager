@@ -23,11 +23,11 @@ class GridContainer extends Component {
               </Col>
               <Col>
                 <h3 className='float-right'>
-                    <Link to='/new'>
-                      <img src={IconAdd} alt='' />
-                      <span className='hide-xs'>New Property</span>
-                    </Link>
-                  </h3>
+                  <Link to='/new'>
+                    <img src={IconAdd} alt='' />
+                    <span className='hide-xs'>New Property</span>
+                  </Link>
+                </h3>
               </Col>
             </Row>
           </div>

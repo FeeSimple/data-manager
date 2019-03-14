@@ -15,13 +15,13 @@ const TermPriceDetails = ({
   <div>
     <div className='top-bar'>
       <div className='container-fluid'>
-          <Row>
-            <Col>
-              <h3 className='float-left'>Term Price</h3>
-            </Col>
-          </Row>
-        </div>
+        <Row>
+          <Col>
+            <h3 className='float-left'>Term Price</h3>
+          </Col>
+        </Row>
       </div>
+    </div>
     <br />
     <Container>
       <AvForm className=''>
