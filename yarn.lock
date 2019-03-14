@@ -2815,7 +2815,7 @@ eosjs-ecc@4.0.4, eosjs-ecc@^4.0.3:
     ecurve "^1.0.5"
     randombytes "^2.0.5"
 
-eosjs@^16.0.0:
+eosjs@^16.0.9:
   version "16.0.9"
   resolved "https://registry.yarnpkg.com/eosjs/-/eosjs-16.0.9.tgz#ee3790f2f038079e71981f20354be8d1d98de873"
   integrity sha512-aYgzbgH2RhnmYVzEmK4AD6UIboJI54PGYQUesv2i8rCqYhWij+xQx7PtALJ481cxZnQgmFn8s2KMkgG07P5/Ug==

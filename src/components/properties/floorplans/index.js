@@ -172,7 +172,7 @@ class FloorplansContainer extends Component {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `Selected floorplans are deleted successfully`,
+        text: `The selected floorplans have been deleted successfully`,
         type: 'success'
       })
     }
