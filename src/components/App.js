@@ -13,7 +13,8 @@ import TermPriceDetails from './properties/termprices/details'
 import { getImportedKeyEos } from '../utils/index'
 import Eos from 'eosjs'
 import { FSMGRCONTRACT } from '../utils/consts'
-import { setFsMgrContract, setEosClient, setOpResult } from '../actions/index'
+import getScatterAsync from '../utils/getScatterAsync'
+import { setFsMgrContract, setEosClient, setOpResult, setScatter } from '../actions/index'
 
 class AppContainer extends Component {
   async componentDidMount () {
@@ -21,24 +22,45 @@ class AppContainer extends Component {
       eosClient,
       accountData,
       setEosClient,
+      setScatter,
       setFsMgrContract,
       setOpResult,
       contracts
     } = this.props
 
+    let eosClientNew = null
+
     // Token to realize re-render after page refresh or page close/re-open
     if (eosClient.locked) {
       const fsmgrcontract = contracts[FSMGRCONTRACT]
+      if (accountData.info.usingScatter) {
+        let {scatter, eos} = await getScatterAsync()
+        if (!scatter) {
+          setOpResult({
+            show: true,
+            title: 'Scatter Desktop not available',
+            text: 'Please run Scatter Desktop',
+            type: 'error'
+          })
+          return
+        }
+        setScatter(scatter)
+        eosClientNew = eos
+      } else {
+        if (
+          accountData &&
+          accountData.active &&
+          accountData.info &&
+          !fsmgrcontract.transaction
+        ) {
+          let privKey = accountData.info.privKey
+          eosClientNew = getImportedKeyEos(Eos, privKey)
+        }
+      }
 
-      if (
-        accountData &&
-        accountData.active &&
-        accountData.info &&
-        !fsmgrcontract.transaction
-      ) {
-        let privKey = accountData.info.privKey
-        let eosClient = getImportedKeyEos(Eos, privKey)
-        setEosClient(eosClient)
+      if (eosClientNew) {
+        console.log('AppContainer - eosClientNew:', eosClientNew);
+        setEosClient(eosClientNew)
         setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
         setOpResult({
           show: false,
@@ -46,9 +68,6 @@ class AppContainer extends Component {
           text: '',
           type: 'error'
         })
-        console.log(
-          'AppContainer componentDidMount - setEosClient and setFsMgrContract'
-        )
       }
     }
   }
@@ -124,6 +143,7 @@ export default withRouter(
   connect(mapStateToProps, {
     setFsMgrContract,
     setEosClient,
-    setOpResult
+    setOpResult,
+    setScatter
   })(AppContainer)
 )

@@ -21,8 +21,10 @@ import {
   setFsMgrContract,
   setEosClient,
   setScatter,
-  setLoading
+  setLoading,
+  setOpResult
 } from '../../actions/index'
+import getScatterAsync from '../../utils/getScatterAsync'
 
 class LoginContainer extends Component {
   state = {
@@ -98,11 +100,23 @@ class LoginContainer extends Component {
   }
 
   handleScatterClick = async () => {
-    const { scatter } = this.props
+    // const { scatter } = this.props
+    // if (!scatter) {
+    //   console.info('no scatter detected.')
+    //   return
+    // }
+    let {scatter, eos} = await getScatterAsync()
     if (!scatter) {
-      console.info('no scatter detected.')
+      this.props.setOpResult({
+        show: true,
+        title: 'Scatter Desktop not available',
+        text: 'Please run Scatter Desktop',
+        type: 'error'
+      })
       return
     }
+    setScatter(scatter)
+    setEosClient(eos)
     const network = getNetworkData()
     const identity = await scatter.getIdentity({ accounts: [network] })
     const availableAccounts = identity.accounts
@@ -136,9 +150,7 @@ class LoginContainer extends Component {
     setLoading(true)
 
     if (this.state.usingScatter) {
-      const network = getNetworkData()
-      eosClient = scatter.eos(network, Eos, {}, 'https')
-      setScatter(scatter)
+      eosClient = this.props.eosClient
     } else {
       const { privKey } = this.state
       eosClient = getImportedKeyEos(Eos, privKey)
@@ -232,6 +244,7 @@ export default withRouter(
     setFsMgrContract,
     setEosClient,
     setScatter,
-    setLoading
+    setLoading,
+    setOpResult
   })(LoginContainer)
 )

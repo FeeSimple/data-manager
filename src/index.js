@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { setEosClient, setScatter } from './actions'
 import Eos from 'eosjs'
-import getScatter from './utils/getScatter'
+// import getScatter from './utils/getScatter'
 import { getFallbackEos } from './utils'
 import './css/style.css'
 // React Bootstrap Table CSS
@@ -31,14 +31,14 @@ import './css/main.css'
 const eos = getFallbackEos(Eos)
 store.dispatch(setEosClient({ ...eos, locked: true }))
 
-getScatter
-  .then(async results => {
-    const { scatter } = results
-    store.dispatch(setScatter(scatter))
-  })
-  .catch(error => {
-    console.error('Error setting up scatter.', error)
-  })
+// getScatter
+//   .then(async results => {
+//     const { scatter } = results
+//     store.dispatch(setScatter(scatter))
+//   })
+//   .catch(error => {
+//     console.error('Error setting up scatter.', error)
+//   })
 
 // Do not wrap <Root /> with <PersistGate/> as no route can be made
 ReactDOM.render(

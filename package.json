@@ -15,7 +15,7 @@
   "dependencies": {
     "availity-reactstrap-validation": "^2.4.0",
     "dotenv": "^6.1.0",
-    "eosjs": "^16.0.0",
+    "eosjs": "^16.0.9",
     "eosjs-ecc": "^4.0.3",
     "express": "^4.16.3",
     "formik": "^1.0.3",
@@ -40,6 +40,9 @@
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
+    "scatterjs-core": "^2.7.16",
+    "scatterjs-plugin-eosjs": "^1.5.1",
+    "scatterjs-plugin-eosjs2": "^1.1.6",
     "sweetalert-react": "^0.4.11"
   },
   "devDependencies": {
