@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+import Spinner from 'react-spinkit'
 // import FloorplanRow from './Row'
 import IconAdd from '../../../img/icon-add.svg'
 import IconDelete from '../../../img/icon-delete.svg'
@@ -20,7 +21,17 @@ function noFloorplanTxt (column, colIndex) {
   )
 }
 
-const footerBgColor = 'rgba(222, 222, 223, 0.75)'
+const footerBgColor = 'rgba(222, 222, 223, 0.75)';
+const NoDataIndication = () => {
+  const hrefLinkFloor = `${window.location.href}/floorplan/new`
+  return (
+    <div className="w-100 text-center">
+      <span>
+        This property has no floorplans. Would you like to <a href={hrefLinkFloor}>add</a> one?
+      </span>
+    </div>
+  );
+};
 
 export default props => {
   const {
@@ -254,7 +265,8 @@ export default props => {
             <ToolkitProvider
               keyField='id'
               data={Object.values(property.floorplans)}
-              columns={showFooter ? columnsFooter : columns}
+              //columns={showFooter ? columnsFooter : columns}
+              columns={columns}
               search={{ searchFormatted: true }}
               bootstrap4
             >
@@ -266,6 +278,7 @@ export default props => {
                   />
                   <BootstrapTable
                     {...props.baseProps}
+                    noDataIndication = {showFooter ? () => <NoDataIndication /> : <Spinner color='#00B1EF' fadeIn='none'/>}
                     pagination={paginationFactory()}
                   />
                 </React.Fragment>
