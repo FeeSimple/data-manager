@@ -14,7 +14,12 @@ import { getImportedKeyEos } from '../utils/index'
 import Eos from 'eosjs'
 import { FSMGRCONTRACT } from '../utils/consts'
 import getScatterAsync from '../utils/getScatterAsync'
-import { setFsMgrContract, setEosClient, setOpResult, setScatter } from '../actions/index'
+import {
+  setFsMgrContract,
+  setEosClient,
+  setOpResult,
+  setScatter
+} from '../actions/index'
 
 class AppContainer extends Component {
   async componentDidMount () {
@@ -34,7 +39,7 @@ class AppContainer extends Component {
     if (eosClient.locked) {
       const fsmgrcontract = contracts[FSMGRCONTRACT]
       if (accountData.info.usingScatter) {
-        let {scatter, eos} = await getScatterAsync()
+        let { scatter, eos } = await getScatterAsync()
         if (!scatter) {
           setOpResult({
             show: true,
