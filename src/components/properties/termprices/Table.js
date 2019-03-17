@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+import Spinner from 'react-spinkit'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
@@ -17,7 +18,16 @@ function noTermPriceTxt (column, colIndex) {
   )
 }
 
-const footerBgColor = 'rgba(222, 222, 223, 0.75)'
+const NoDataIndication = () => {
+  const hrefLink = `${window.location.href}/new`;
+  return (
+    <div className="w-100 text-center">
+      <span>
+        This unit has no term prices. Would you like to <a href={hrefLink}>add</a> one?
+      </span>
+    </div>
+  );
+};
 
 export default props => {
   const {
@@ -30,101 +40,6 @@ export default props => {
   } = props
   const { SearchBar } = Search
   const data = Object.values(unit.termprices)
-  const columnsFooter = [
-    {
-      dataField: 'checkboxField',
-      text: '',
-      isDummyField: true,
-      formatter: (cellContent, row) => (
-        <input type='checkbox' name={row.id} onChange={onChange} />
-      ),
-      headerStyle: { width: 40 },
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'id',
-      text: 'ID',
-      sort: true,
-      headerStyle: { width: 60 },
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'rent',
-      text: 'Rent',
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'term',
-      text: 'Term',
-      sort: true,
-      footer: ``,
-      footerStyle: {
-        backgroundColor: footerBgColor,
-        colSpan: '50'
-      },
-      footerFormatter: noTermPriceTxt
-    },
-    {
-      dataField: 'start_date',
-      text: 'Start Date',
-      formatter: cellContent =>
-        `${new Date(parseInt(cellContent, 10)).toLocaleDateString()}`,
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'end_date',
-      text: 'End Date',
-      formatter: cellContent =>
-        `${new Date(parseInt(cellContent, 10)).toLocaleDateString()}`,
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'action_buttons_dummy_field',
-      text: '',
-      isDummyField: true,
-      formatter: (cellContent, row) => (
-        <div>
-          <Link
-            to={`/${propertyId}/unit/${unit.id}/termprice/${row.id}`}
-            className='table-edit mr-2'
-          >
-            <img src={IconEditBlue} alt='Edit Entry' />
-          </Link>
-          <img
-            src={IconDelete}
-            className='c-pointer'
-            height='20'
-            alt='Delete Entry'
-            onClick={e => handleToggle(propertyId, unit.id, row.id)}
-          />
-        </div>
-      ),
-      headerStyle: { width: 70 },
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    }
-  ]
-
   const columns = [
     {
       dataField: 'checkboxField',
@@ -215,7 +130,8 @@ export default props => {
             <ToolkitProvider
               keyField='id'
               data={data}
-              columns={showFooter ? columnsFooter : columns}
+              //columns={showFooter ? columnsFooter : columns}
+              columns={columns}
               search={{ searchFormatted: true }}
               bootstrap4
             >
@@ -227,6 +143,7 @@ export default props => {
                   />
                   <BootstrapTable
                     {...props.baseProps}
+                    noDataIndication = {showFooter ? () => <NoDataIndication /> : <Spinner color='#00B1EF' fadeIn='none'/>}
                     pagination={paginationFactory()}
                   />
                 </React.Fragment>
