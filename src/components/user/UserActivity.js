@@ -8,51 +8,45 @@ const { SearchBar } = Search
 
 const columns = [
   {
-    dataField: 'index',
-    text: '#',
-    sort: false,
-    headerStyle: { width: 7 }
-  },
-  {
     dataField: 'time',
     text: 'Time',
     sort: true,
-    headerStyle: { width: 50 }
+    headerStyle: { width: 75 }
   },
   {
     dataField: 'action',
     text: 'Action',
     sort: true,
-    headerStyle: { width: 40 }
+    headerStyle: { width: 35 }
   },
   {
     dataField: 'quantity',
     text: 'Quantity',
     sort: true,
-    headerStyle: { width: 50 }
+    headerStyle: { width: 60 }
   },
   {
     dataField: 'ramUsage',
-    text: 'RAM Cost',
+    text: 'RAM',
     sort: true,
-    headerStyle: { width: 50 }
+    headerStyle: { width: 35 }
   },
   {
     dataField: 'cpuBwUsage',
-    text: 'CPU & Bandwidth Cost',
+    text: 'CPU & Bandwidth',
     sort: true,
-    headerStyle: { width: 90 }
+    headerStyle: { width: 70 }
   },
   {
     dataField: 'date_available',
-    text: 'Transaction Link',
+    text: 'Transaction',
     formatter: (cellContent, row) => (
       <a href={row.txLink} target='_blank' className='table-edit'>
         {row.txId}
       </a>
     ),
     sort: false,
-    headerStyle: { width: 50 }
+    headerStyle: { width: 40 }
   }
 ]
 

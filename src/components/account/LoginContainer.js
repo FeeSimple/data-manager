@@ -21,8 +21,10 @@ import {
   setFsMgrContract,
   setEosClient,
   setScatter,
-  setLoading
+  setLoading,
+  setOpResult
 } from '../../actions/index'
+import getScatterAsync from '../../utils/getScatterAsync'
 
 class LoginContainer extends Component {
   state = {
@@ -34,7 +36,8 @@ class LoginContainer extends Component {
     accountPubKey: '',
     accountPrivKey: '',
     newAccountCreationErr: false,
-    isProcessing: false
+    isProcessing: false,
+    usingScatter: false
   }
 
   handleImportPrivKey = privKey => {
@@ -44,7 +47,8 @@ class LoginContainer extends Component {
     eosClient.getKeyAccounts(pubKey).then(result => {
       this.setState({
         availableAccounts: result.account_names,
-        privKey
+        privKey,
+        usingScatter: false
       })
       this.handleToggleSelAcc()
     })
@@ -96,11 +100,18 @@ class LoginContainer extends Component {
   }
 
   handleScatterClick = async () => {
-    const { scatter } = this.props
+    let { scatter, eos } = await getScatterAsync()
     if (!scatter) {
-      console.info('no scatter detected.')
+      this.props.setOpResult({
+        show: true,
+        title: 'Scatter Desktop not available',
+        text: 'Please run Scatter Desktop',
+        type: 'error'
+      })
       return
     }
+    setScatter(scatter)
+    setEosClient(eos)
     const network = getNetworkData()
     const identity = await scatter.getIdentity({ accounts: [network] })
     const availableAccounts = identity.accounts
@@ -109,7 +120,8 @@ class LoginContainer extends Component {
 
     this.setState({
       availableAccounts,
-      usingScatter: true
+      usingScatter: true,
+      privKey: null
     })
     this.handleToggleSelAcc()
   }
@@ -129,30 +141,15 @@ class LoginContainer extends Component {
       scatter
     } = this.props
 
-    let { eosClient } = this.props
+    let eosClient = null
     setLoading(true)
 
     if (this.state.usingScatter) {
-      const network = getNetworkData()
-      eosClient = scatter.eos(network, Eos, {}, 'https')
-      setActive(account)
-      setScatter(scatter)
-      setEosClient(eosClient)
-
-      setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
-      const { rows } = await eosClient.getTableRows(
-        true,
-        FSMGRCONTRACT,
-        account,
-        PROPERTY
-      )
-      addProperties(rows)
-      setLoading(false)
-      return
+      eosClient = this.props.eosClient
+    } else {
+      const { privKey } = this.state
+      eosClient = getImportedKeyEos(Eos, privKey)
     }
-
-    const { privKey } = this.state
-    eosClient = getImportedKeyEos(Eos, privKey)
 
     setActive(account)
     setEosClient(eosClient)
@@ -167,7 +164,8 @@ class LoginContainer extends Component {
         ram,
         bandwidth,
         pubkey,
-        privKey
+        privKey: this.state.usingScatter ? null : this.state.privKey,
+        usingScatter: this.state.usingScatter
       }
 
       setInfo(info)
@@ -241,6 +239,7 @@ export default withRouter(
     setFsMgrContract,
     setEosClient,
     setScatter,
-    setLoading
+    setLoading,
+    setOpResult
   })(LoginContainer)
 )
