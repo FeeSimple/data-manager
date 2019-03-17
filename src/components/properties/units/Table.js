@@ -12,15 +12,16 @@ import IconFinderEye from '../../../img/iconfinder_eye.png'
 import UnitRow from './Row'
 
 const NoDataIndication = () => {
-  const hrefLink = `${window.location.href}/new`;
+  const hrefLink = `${window.location.href}/new`
   return (
-    <div className="w-100 text-center">
+    <div className='w-100 text-center'>
       <span>
-        This property has no units. Would you like to <a href={hrefLink}>add</a> one?
+        This property has no units. Would you like to <a href={hrefLink}>add</a>{' '}
+        one?
       </span>
     </div>
-  );
-};
+  )
+}
 
 export default props => {
   const {
@@ -145,7 +146,6 @@ export default props => {
                   <img src={IconAdd} alt='' />
                   F<span className='hide-xs'>loor Plans</span>
                 </Link>{' '}
-
                 <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
                   <img src={IconAdd} alt='' />
                   U<span className='hide-xs'>nit</span>
@@ -176,8 +176,8 @@ export default props => {
             <ToolkitProvider
               keyField='id'
               data={Object.values(property.units)}
-              //columns={showFooter ? columnsFooter : columns}
-              columns= {columns}
+              // columns={showFooter ? columnsFooter : columns}
+              columns={columns}
               search={{ searchFormatted: true }}
               bootstrap4
             >
@@ -189,7 +189,13 @@ export default props => {
                   />
                   <BootstrapTable
                     {...props.baseProps}
-                    noDataIndication = {showFooter ? () => <NoDataIndication /> : <Spinner color='#00B1EF' fadeIn='none'/>}
+                    noDataIndication={
+                      showFooter
+                        ? () => <NoDataIndication />
+                        : (
+                          <Spinner color='#00B1EF' fadeIn='none' />
+                        )
+                    }
                     pagination={paginationFactory()}
                   />
                 </React.Fragment>

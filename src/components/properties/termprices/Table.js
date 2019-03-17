@@ -19,15 +19,16 @@ function noTermPriceTxt (column, colIndex) {
 }
 
 const NoDataIndication = () => {
-  const hrefLink = `${window.location.href}/new`;
+  const hrefLink = `${window.location.href}/new`
   return (
-    <div className="w-100 text-center">
+    <div className='w-100 text-center'>
       <span>
-        This unit has no term prices. Would you like to <a href={hrefLink}>add</a> one?
+        This unit has no term prices. Would you like to{' '}
+        <a href={hrefLink}>add</a> one?
       </span>
     </div>
-  );
-};
+  )
+}
 
 export default props => {
   const {
@@ -130,7 +131,7 @@ export default props => {
             <ToolkitProvider
               keyField='id'
               data={data}
-              //columns={showFooter ? columnsFooter : columns}
+              // columns={showFooter ? columnsFooter : columns}
               columns={columns}
               search={{ searchFormatted: true }}
               bootstrap4
@@ -143,7 +144,13 @@ export default props => {
                   />
                   <BootstrapTable
                     {...props.baseProps}
-                    noDataIndication = {showFooter ? () => <NoDataIndication /> : <Spinner color='#00B1EF' fadeIn='none'/>}
+                    noDataIndication={
+                      showFooter
+                        ? () => <NoDataIndication />
+                        : (
+                          <Spinner color='#00B1EF' fadeIn='none' />
+                        )
+                    }
                     pagination={paginationFactory()}
                   />
                 </React.Fragment>
