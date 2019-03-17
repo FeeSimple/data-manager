@@ -586,7 +586,13 @@ Dropzone
 /*------------------------Medium------------------------------------*/
 /*---   Medium screen+   -----*/
 @media all and (min-width: 992px) {
-
+  .loading-container{
+    position: fixed;
+    left: 200px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
 }
 
 /*--- Medium screen only -----*/
@@ -632,7 +638,7 @@ Dropzone
       position: absolute;
       left: auto;
       bottom: auto;
-      top: 9px;
+      top: 17px;
       right: 0;
         img{
           margin-right: 15px;
@@ -646,13 +652,13 @@ Dropzone
       list-style: none;
       float: right;
       padding: 0;
-      margin: 9px 22px 0 0;
+      margin: 17px 22px 0 0;
       border-top: none;
       border-bottom: none;
       li{
         display: inline-block;
         padding: 0;
-        margin: 0 10px 0 0;
+        margin: 0 15px 0 0;
         &:first-child{
           margin-top: 0;
         }
@@ -670,8 +676,8 @@ Dropzone
     .storage{
       margin: 0;
       position: absolute;
-      right: 145px;
-      top: 8px;
+      right: 165px;
+      top: 15px;
       .badge{
         padding: 4px 10px;
         font-size: 13px;
@@ -748,17 +754,16 @@ Dropzone
       width: 98%;
     }
   }
+
+  .menu-holder{
+    .storage{
+      display: none;
+    }
+  }
 }
 @media all and (max-width: 380px) {
   .top-bar h3 {
     font-size: 18px;
-  }
-
-  .menu-holder{
-    .storage{
-      right: 15px;
-      top: 39px;
-    }
   }
 }
 /*----------------------------- The End ---------------------------*/

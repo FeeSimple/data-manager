@@ -4,23 +4,23 @@ import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+import Spinner from 'react-spinkit'
 // import FloorplanRow from './Row'
 import IconAdd from '../../../img/icon-add.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 
-function noFloorplanTxt (column, colIndex) {
-  const hrefLink = `${window.location.href}/floorplan/new`
+const NoDataIndication = () => {
+  const hrefLinkFloor = `${window.location.href}/floorplan/new`
   return (
-    <span style={{ fontSize: '11px' }}>
-      This_property_has_no_floorplans. Would_you_like_to_<a href={hrefLink}>
-        add
-      </a>_one?
-    </span>
+    <div className='w-100 text-center'>
+      <span>
+        This property has no floorplans. Would you like to{' '}
+        <a href={hrefLinkFloor}>add</a> one?
+      </span>
+    </div>
   )
 }
-
-const footerBgColor = 'rgba(222, 222, 223, 0.75)'
 
 export default props => {
   const {
@@ -31,114 +31,6 @@ export default props => {
     showFooter
   } = props
   const { SearchBar } = Search
-  const columnsFooter = [
-    {
-      dataField: 'checkboxField',
-      text: '',
-      isDummyField: true,
-      formatter: (cellContent, row) => (
-        <input type='checkbox' name={row.id} onChange={onChange} />
-      ),
-      headerStyle: { width: '40px' },
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'id',
-      text: 'ID',
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'name',
-      text: 'Floor Plan',
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'bathrooms',
-      text: 'Type',
-      isDummyField: true,
-      formatter: (cellContent, row) =>
-        `${row.bedrooms} beds / ${row.bathrooms} baths`,
-      sort: true,
-      footer: ``,
-      footerStyle: {
-        backgroundColor: footerBgColor,
-        colSpan: '50'
-      },
-      footerFormatter: noFloorplanTxt
-    },
-    {
-      dataField: 'sq_ft_min',
-      text: 'Sq. Ft.',
-      isDummyField: true,
-      formatter: (cellContent, row) => `${row.sq_ft_min} - ${row.sq_ft_max}`,
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'rent_min',
-      text: 'Rent',
-      isDummyField: true,
-      formatter: (cellContent, row) => `$${row.rent_min} - $${row.rent_max}`,
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'unit_count_dummy_field',
-      text: '# Of Units',
-      isDummyField: true,
-      formatter: () => `${property.unit_count}`,
-      sort: true,
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    },
-    {
-      dataField: 'action_button_edit_dummy_field',
-      text: '',
-      isDummyField: true,
-      headerStyle: { width: '70px' },
-      formatter: (cellContent, row) => (
-        <div>
-          <Link
-            to={`/${property.id}/floorplan/${row.id}`}
-            className='table-edit mr-2'
-          >
-            <img src={IconEditBlue} alt='Edit Entry' />
-          </Link>
-          <img
-            src={IconDelete}
-            className='c-pointer'
-            height='20'
-            alt='Delete Entry'
-            onClick={e => handleToggle(property.id, row.id)}
-          />
-        </div>
-      ),
-      footer: '',
-      footerStyle: {
-        backgroundColor: footerBgColor
-      }
-    }
-  ]
-
   const columns = [
     {
       dataField: 'checkboxField',
@@ -227,7 +119,6 @@ export default props => {
                   <img src={IconAdd} alt='' />
                   F<span className='hide-xs'>loor Plans</span>
                 </Link>{' '}
-
                 <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
                   <img src={IconAdd} alt='' />
                   U<span className='hide-xs'>nit</span>
@@ -254,7 +145,7 @@ export default props => {
             <ToolkitProvider
               keyField='id'
               data={Object.values(property.floorplans)}
-              columns={showFooter ? columnsFooter : columns}
+              columns={columns}
               search={{ searchFormatted: true }}
               bootstrap4
             >
@@ -266,6 +157,13 @@ export default props => {
                   />
                   <BootstrapTable
                     {...props.baseProps}
+                    noDataIndication={
+                      showFooter
+                        ? () => <NoDataIndication />
+                        : (
+                          <Spinner color='#00B1EF' fadeIn='none' />
+                        )
+                    }
                     pagination={paginationFactory()}
                   />
                 </React.Fragment>
