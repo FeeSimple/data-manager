@@ -100,11 +100,6 @@ class LoginContainer extends Component {
   }
 
   handleScatterClick = async () => {
-    // const { scatter } = this.props
-    // if (!scatter) {
-    //   console.info('no scatter detected.')
-    //   return
-    // }
     let {scatter, eos} = await getScatterAsync()
     if (!scatter) {
       this.props.setOpResult({

@@ -31,15 +31,6 @@ import './css/main.css'
 const eos = getFallbackEos(Eos)
 store.dispatch(setEosClient({ ...eos, locked: true }))
 
-// getScatter
-//   .then(async results => {
-//     const { scatter } = results
-//     store.dispatch(setScatter(scatter))
-//   })
-//   .catch(error => {
-//     console.error('Error setting up scatter.', error)
-//   })
-
 // Do not wrap <Root /> with <PersistGate/> as no route can be made
 ReactDOM.render(
   <div>

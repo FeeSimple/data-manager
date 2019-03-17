@@ -46,6 +46,7 @@ class AppContainer extends Component {
         }
         setScatter(scatter)
         eosClientNew = eos
+        console.log('AppContainer - usingScatter')
       } else {
         if (
           accountData &&
@@ -55,13 +56,13 @@ class AppContainer extends Component {
         ) {
           let privKey = accountData.info.privKey
           eosClientNew = getImportedKeyEos(Eos, privKey)
+          console.log('AppContainer - using privkey')
         }
       }
 
       if (eosClientNew) {
-        console.log('AppContainer - eosClientNew:', eosClientNew);
         setEosClient(eosClientNew)
-        setFsMgrContract(await eosClient.contract(FSMGRCONTRACT))
+        setFsMgrContract(await eosClientNew.contract(FSMGRCONTRACT))
         setOpResult({
           show: false,
           title: '',
