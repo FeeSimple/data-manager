@@ -40,6 +40,9 @@
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
+    "scatterjs-core": "^2.7.16",
+    "scatterjs-plugin-eosjs": "^1.5.1",
+    "scatterjs-plugin-eosjs2": "^1.1.6",
     "sweetalert-react": "^0.4.11"
   },
   "devDependencies": {
