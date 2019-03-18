@@ -34,7 +34,7 @@ class UserContainer extends Component {
       userSendErr: false,
 
       activityList: [],
-      gettingActions: false
+      gettingActions: true
     }
   }
 

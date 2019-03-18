@@ -3,6 +3,7 @@ import LoadingView from '../layout/LoadingView'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+import Spinner from 'react-spinkit'
 
 const { SearchBar } = Search
 
@@ -50,12 +51,19 @@ const columns = [
   }
 ]
 
-const UserActivity = ({ activityList }) => (
+const NoDataIndication = () => {
+  return (
+    <div className='w-100 text-center'>
+      <span>
+        No transaction at all
+      </span>
+    </div>
+  )
+}
+
+const UserActivity = ({ activityList, gettingActions }) => (
   <div className='col-lg-12'>
-    {activityList.length === 0 ? (
-      <LoadingView />
-    ) : (
-      <div>
+    <div>
         <br />
         <ToolkitProvider
           keyField='id'
@@ -72,6 +80,13 @@ const UserActivity = ({ activityList }) => (
               />
               <BootstrapTable
                 {...props.baseProps}
+                noDataIndication={
+                  gettingActions === true ? 
+                    <Spinner color='#00B1EF' fadeIn='none' />
+                  : activityList.length === 0 && (
+                      () => <NoDataIndication />
+                    )
+                }
                 pagination={paginationFactory({
                   sizePerPage: 5,
                   sizePerPageList: [
@@ -93,8 +108,7 @@ const UserActivity = ({ activityList }) => (
             </React.Fragment>
           )}
         </ToolkitProvider>
-      </div>
-    )}
+    </div>
   </div>
 )
 

@@ -56,26 +56,35 @@ const UnitDetails = ({
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
             <AvField
               label='Bedrooms'
-              type='number'
+              type='select'
               min='0'
               id='bedrooms'
               name='bedrooms'
               value={unit.bedrooms}
               onChange={onChange}
-            />
+            >
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </AvField>
           </div>
         </div>
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
             <AvField
               label='Bathrooms'
-              type='number'
+              type='select'
               min='0'
               id='bathrooms'
               name='bathrooms'
               value={unit.bathrooms}
               onChange={onChange}
-            />
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </AvField>
           </div>
         </div>
         <div className='form-group row'>
