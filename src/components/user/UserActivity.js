@@ -54,9 +54,7 @@ const columns = [
 const NoDataIndication = () => {
   return (
     <div className='w-100 text-center'>
-      <span>
-        No transaction at all
-      </span>
+      <span>No transaction at all</span>
     </div>
   )
 }
@@ -64,50 +62,50 @@ const NoDataIndication = () => {
 const UserActivity = ({ activityList, gettingActions }) => (
   <div className='col-lg-12'>
     <div>
-        <br />
-        <ToolkitProvider
-          keyField='id'
-          data={activityList}
-          columns={columns}
-          search={{ searchFormatted: true }}
-          bootstrap4
-        >
-          {props => (
-            <React.Fragment>
-              <SearchBar
-                {...props.searchProps}
-                className='mb-3 tbl-search-input'
-              />
-              <BootstrapTable
-                {...props.baseProps}
-                noDataIndication={
-                  gettingActions === true ? 
-                    <Spinner color='#00B1EF' fadeIn='none' />
-                  : activityList.length === 0 && (
-                      () => <NoDataIndication />
-                    )
-                }
-                pagination={paginationFactory({
-                  sizePerPage: 5,
-                  sizePerPageList: [
-                    {
-                      text: '5',
-                      value: 5
-                    },
-                    {
-                      text: '10',
-                      value: 10
-                    },
-                    {
-                      text: 'All',
-                      value: activityList.length
-                    }
-                  ]
-                })}
-              />
-            </React.Fragment>
-          )}
-        </ToolkitProvider>
+      <br />
+      <ToolkitProvider
+        keyField='id'
+        data={activityList}
+        columns={columns}
+        search={{ searchFormatted: true }}
+        bootstrap4
+      >
+        {props => (
+          <React.Fragment>
+            <SearchBar
+              {...props.searchProps}
+              className='mb-3 tbl-search-input'
+            />
+            <BootstrapTable
+              {...props.baseProps}
+              noDataIndication={
+                gettingActions === true ? (
+                  <Spinner color='#00B1EF' fadeIn='none' />
+                ) : (
+                  activityList.length === 0 && (() => <NoDataIndication />)
+                )
+              }
+              pagination={paginationFactory({
+                sizePerPage: 5,
+                sizePerPageList: [
+                  {
+                    text: '5',
+                    value: 5
+                  },
+                  {
+                    text: '10',
+                    value: 10
+                  },
+                  {
+                    text: 'All',
+                    value: activityList.length
+                  }
+                ]
+              })}
+            />
+          </React.Fragment>
+        )}
+      </ToolkitProvider>
     </div>
   </div>
 )
