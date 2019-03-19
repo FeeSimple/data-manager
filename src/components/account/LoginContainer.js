@@ -25,6 +25,8 @@ import {
   setOpResult
 } from '../../actions/index'
 import getScatterAsync from '../../utils/getScatterAsync'
+import SweetAlert from 'sweetalert-react'
+import 'sweetalert/dist/sweetalert.css'
 
 class LoginContainer extends Component {
   state = {
@@ -100,7 +102,13 @@ class LoginContainer extends Component {
   }
 
   handleScatterClick = async () => {
+    this.setState({
+      isProcessing: true
+    })
     let { scatter, eos } = await getScatterAsync()
+    this.setState({
+      isProcessing: false
+    })
     if (!scatter) {
       this.props.setOpResult({
         show: true,
@@ -194,16 +202,25 @@ class LoginContainer extends Component {
     this.setState({ showNewAccModal: !showNewAccModal })
   }
 
+  handleOnConfirm = () => {
+    this.props.setOpResult({
+      show: false,
+      title: '',
+      text: '',
+      type: 'error'
+    })
+  }
+
   render () {
     const accounts = this.state.availableAccounts
-    const { scatter } = this.props
+    const { scatter, opResult } = this.props
     return (
       <div>
         <Login
           handleImportPrivKey={this.handleImportPrivKey}
           onScatterClick={this.handleScatterClick}
-          scatterDetected={Object.keys(scatter).length > 0}
           onNewAccountClick={this.handleNewAccountClick}
+          isProcessing={this.state.isProcessing}
         />
         <SelectAcc
           isOpen={this.state.showSelectAccModal}
@@ -222,13 +239,23 @@ class LoginContainer extends Component {
           newAccountCreationErr={this.state.newAccountCreationErr}
           isProcessing={this.state.isProcessing}
         />
+        {opResult &&
+          opResult.data && (
+            <SweetAlert
+              show={opResult.data.show}
+              type={opResult.data.type}
+              title={opResult.data.title}
+              text={opResult.data.text}
+              onConfirm={this.handleOnConfirm}
+            />
+        )}
       </div>
     )
   }
 }
 
-function mapStateToProps ({ eosClient, scatter }) {
-  return { eosClient, scatter }
+function mapStateToProps ({ eosClient, scatter, opResult }) {
+  return { eosClient, scatter, opResult }
 }
 
 export default withRouter(

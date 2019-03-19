@@ -3,6 +3,7 @@ import LogoLarge from '../../img/logo-large.svg'
 import OpenReLogoWhite from '../../img/openre-logo-white.svg'
 import { withFormik } from 'formik'
 import { Button, Input, Container, Row, Col, Form } from 'reactstrap'
+import Spinner from 'react-spinkit'
 
 const LoginForm = props => {
   const {
@@ -14,7 +15,7 @@ const LoginForm = props => {
     handleSubmit,
     onScatterClick,
     onNewAccountClick,
-    scatterDetected
+    isProcessing
   } = props
 
   return (
@@ -34,10 +35,13 @@ const LoginForm = props => {
                 <Col xs={12} sm={6}>
                   <Button
                     onClick={onScatterClick}
-                    disabled={!scatterDetected}
                     className='btn-base btn-home'
                   >
-                    Unlock with Scatter
+                    {isProcessing ? (
+                      <Spinner name='three-bounce' color='white' fadeIn='none' />
+                    ) : (
+                      <span>Unlock with Scatter</span>
+                    )}
                   </Button>
                 </Col>
                 <Col xs={12} sm={6}>
