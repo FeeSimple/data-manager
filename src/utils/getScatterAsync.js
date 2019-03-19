@@ -12,7 +12,8 @@ export default async function getScatterAsync () {
   try {
     let connected = await ScatterJS.connect('MyAppName', { networkScat })
     if (!connected) {
-      return null
+      console.log('getScatterAsync - Error: not connected');
+      return { scatter: null, eos: null }
     } else {
       await ScatterJS.login()
       const scatter = ScatterJS.scatter
@@ -24,6 +25,6 @@ export default async function getScatterAsync () {
     }
   } catch (err) {
     console.log('getScatterAsync - Error:', err)
-    return null
+    return { scatter: null, eos: null }
   }
 }
