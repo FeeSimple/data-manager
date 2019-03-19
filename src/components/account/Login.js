@@ -38,7 +38,11 @@ const LoginForm = props => {
                     className='btn-base btn-home'
                   >
                     {isProcessing ? (
-                      <Spinner name='three-bounce' color='white' fadeIn='none' />
+                      <Spinner
+                        name='three-bounce'
+                        color='white'
+                        fadeIn='none'
+                      />
                     ) : (
                       <span>Unlock with Scatter</span>
                     )}
