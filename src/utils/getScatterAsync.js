@@ -7,7 +7,7 @@ ScatterJS.plugins(new ScatterEOS())
 
 export default async function getScatterAsync () {
   const network = getNetworkData()
-  // Must use "networkScat" for ScatterJS.connect. Otherwise, it won't work 
+  // Must use "networkScat" for ScatterJS.connect. Otherwise, it won't work
   const networkScat = ScatterJS.Network.fromJson(network)
   try {
     let connected = await ScatterJS.connect('MyAppName', { networkScat })
