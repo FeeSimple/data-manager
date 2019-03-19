@@ -59,11 +59,16 @@ const FloorplanDetails = ({
               id='bedrooms'
               name='bedrooms'
               className='form-control'
-              type='number'
+              type='select'
               onChange={onChange}
               value={floorplan.bedrooms}
               min='0'
-            />
+            >
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </AvField>
           </div>
         </div>
         <div className='form-group row'>
@@ -73,11 +78,15 @@ const FloorplanDetails = ({
               id='bathrooms'
               name='bathrooms'
               className='form-control'
-              type='number'
+              type='select'
               onChange={onChange}
               value={floorplan.bathrooms}
               min='0'
-            />
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </AvField>
           </div>
         </div>
         <div className='form-group row'>

@@ -248,7 +248,7 @@ class LoginContainer extends Component {
               text={opResult.data.text}
               onConfirm={this.handleOnConfirm}
             />
-        )}
+          )}
       </div>
     )
   }
