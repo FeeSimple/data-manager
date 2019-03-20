@@ -309,7 +309,7 @@ class UserContainer extends Component {
             </Row>
           </Container>
         </div>
-        <div className='top-bar whitebar'>
+        <div className='whitebar'>
           <Container>
             <User
               user={user}

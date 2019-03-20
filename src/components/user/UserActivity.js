@@ -12,7 +12,7 @@ const columns = [
     dataField: 'time',
     text: 'Time',
     sort: true,
-    headerStyle: { width: 75 }
+    headerStyle: { width: 45 }
   },
   {
     dataField: 'action',
@@ -24,19 +24,27 @@ const columns = [
     dataField: 'quantity',
     text: 'Quantity',
     sort: true,
-    headerStyle: { width: 60 }
+    headerStyle: { width: 40 }
   },
   {
     dataField: 'ramUsage',
-    text: 'RAM',
+    text: 'RAM Cost',
     sort: true,
-    headerStyle: { width: 35 }
+    headerStyle: { width: 45 }
   },
   {
     dataField: 'cpuBwUsage',
-    text: 'CPU & Bandwidth',
+    text: 'CPU Used',
     sort: true,
-    headerStyle: { width: 70 }
+    headerStyle: { width: 45 },
+    formatter: (cellContent, row) => <span>{row.cpuBwUsage.split('&')[0]}</span>
+  },
+  {
+    dataField: 'cpuBwUsage',
+    text: 'Bandwidth Used',
+    sort: true,
+    headerStyle: { width: 60 },
+    formatter: (cellContent, row) => <span>{row.cpuBwUsage.split('&')[1]}</span>
   },
   {
     dataField: 'date_available',
