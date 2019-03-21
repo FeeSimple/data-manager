@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import ImageGallery from 'react-image-gallery'
 import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
+import { StyledPreview } from './DropZone'
 
 const FloorplanDetails = ({
   floorplan,
@@ -165,7 +166,7 @@ const FloorplanDetails = ({
           )}
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <ImagesUploader
+            {/* <ImagesUploader
               url={process.env.REACT_APP_IPFS_IMAGES_UPLOADER_ADDR}
               optimisticPreviews
               onLoadEnd={onImagesUploaded}
@@ -177,7 +178,8 @@ const FloorplanDetails = ({
                   fontSize: '14px'
                 }
               }}
-            />
+            /> */}
+            <StyledPreview />
           </div>
         </div>
         <div className='form-group m-t-50 row'>
