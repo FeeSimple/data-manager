@@ -22,7 +22,7 @@ class FloorplanDetailsContainer extends Component {
     alertHeader: ''
   }
 
-  handleUploadedImg = (acceptedFiles) => {
+  handleUploadedImg = acceptedFiles => {
     acceptedFiles.map(file => {
       // console.log('file:', file);
       const reader = new window.FileReader()
@@ -32,37 +32,36 @@ class FloorplanDetailsContainer extends Component {
         console.log('file buffer', fileBuf)
 
         ipfs.files.add(fileBuf, (error, result) => {
-          if(error) {
+          if (error) {
             console.error(error)
             return
           }
           let imgIpfsHash = result[0].hash
-          console.log('ipfs.files.add - imgIpfsHash: ', imgIpfsHash);
+          console.log('ipfs.files.add - imgIpfsHash: ', imgIpfsHash)
           // this.simpleStorageInstance.set(result[0].hash, { from: this.state.account }).then((r) => {
           //   return this.setState({ ipfsHash: result[0].hash })
           //   console.log('ifpsHash', this.state.ipfsHash)
           // })
-    
+
           // this.setState({ ipfsHash: result[0].hash })
 
           let curImagesToUpload = this.state.imagesToUpload
           curImagesToUpload.push(imgIpfsHash)
 
           this.setState({ imagesToUpload: curImagesToUpload })
-    
+
           // ipfs.files.cat(result[0].hash, (error, res) => {
           //   if(error) {
           //     console.error(error)
           //     return
           //   }
-            
+
           //   // Convert the image buffer to base64-encoded string so that it can be displayed with HTML "img" tag
           //   // this.setState({ buffer: "data:image/png;base64," + Buffer(res).toString('base64') })
-    
+
           //   console.log('ipfs.files.cat - res: ', Buffer(res).toString('base64'));
           // })
         })
-
       }
     })
   }
@@ -339,16 +338,15 @@ class FloorplanDetailsContainer extends Component {
         FLOORPLANIMG
       )
 
-      console.log('get table FLOORPLANIMG:', rows);
+      console.log('get table FLOORPLANIMG:', rows)
 
       const imgMultihashes = rows
         .filter(row => row.floorplan_id === Number(floorplanId))
         .map(row => row.ipfs_address)
 
-      console.log('componentDidMount - imgMultihashes:', imgMultihashes);
+      console.log('componentDidMount - imgMultihashes:', imgMultihashes)
 
       this.setState({ imgMultihashes })
-
     } else {
       // Create a new floorplan
       this.setState({
@@ -363,10 +361,14 @@ class FloorplanDetailsContainer extends Component {
     const { imgMultihashes } = this.state
 
     let galleryItems = []
-    for (let i=0; i < imgMultihashes.length; i++) {
+    for (let i = 0; i < imgMultihashes.length; i++) {
       let imgItem = {
-        original: `http://138.197.194.220:5001/api/v0/cat?arg=${imgMultihashes[i]}&stream-channels=true`,
-        thumbnail: `http://138.197.194.220:5001/api/v0/cat?arg=${imgMultihashes[i]}&stream-channels=true`
+        original: `http://138.197.194.220:5001/api/v0/cat?arg=${
+          imgMultihashes[i]
+        }&stream-channels=true`,
+        thumbnail: `http://138.197.194.220:5001/api/v0/cat?arg=${
+          imgMultihashes[i]
+        }&stream-channels=true`
       }
       galleryItems.push(imgItem)
     }

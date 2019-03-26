@@ -57,14 +57,14 @@ class RootContainer extends Component {
         {isLoading && <LoadingView />}
         {opResult &&
           opResult.data && (
-            <SweetAlert
-              show={opResult.data.show}
-              type={opResult.data.type}
-              title={opResult.data.title}
-              text={opResult.data.text}
-              onConfirm={this.handleOnConfirm}
-            />
-          )}
+          <SweetAlert
+            show={opResult.data.show}
+            type={opResult.data.type}
+            title={opResult.data.title}
+            text={opResult.data.text}
+            onConfirm={this.handleOnConfirm}
+          />
+        )}
         <Footer />
       </div>
     )
