@@ -29,7 +29,7 @@ class FloorplanDetailsContainer extends Component {
       reader.readAsArrayBuffer(file)
       reader.onloadend = () => {
         let fileBuf = Buffer(reader.result)
-        console.log('file buffer', fileBuf)
+        // console.log('file buffer', fileBuf)
 
         ipfs.files.add(fileBuf, (error, result) => {
           if (error) {
@@ -49,18 +49,6 @@ class FloorplanDetailsContainer extends Component {
           curImagesToUpload.push(imgIpfsHash)
 
           this.setState({ imagesToUpload: curImagesToUpload })
-
-          // ipfs.files.cat(result[0].hash, (error, res) => {
-          //   if(error) {
-          //     console.error(error)
-          //     return
-          //   }
-
-          //   // Convert the image buffer to base64-encoded string so that it can be displayed with HTML "img" tag
-          //   // this.setState({ buffer: "data:image/png;base64," + Buffer(res).toString('base64') })
-
-          //   console.log('ipfs.files.cat - res: ', Buffer(res).toString('base64'));
-          // })
         })
       }
     })
@@ -178,6 +166,7 @@ class FloorplanDetailsContainer extends Component {
       )
 
       setFloorplan(propertyId, floorplan)
+      console.log(`Floorplan ${floorplan.id} of the property ${propertyId} edited OK`);
     } catch (err) {
       operationOK = false
     }
@@ -189,17 +178,32 @@ class FloorplanDetailsContainer extends Component {
         imagesObj[multihash] = multihash
       })
 
-      await Promise.all(
-        Object.keys(imagesObj).map(multihash => {
-          return fsmgrcontract.addflplanimg(
+      for (let i=0; i<imagesToUpload.length; i++) {
+        try {
+          await fsmgrcontract.addflplanimg(
             accountData.active,
             floorplan.id,
-            ecc.sha256(multihash),
-            multihash,
+            ecc.sha256(imagesToUpload[i]),
+            imagesToUpload[i],
             options
           )
-        })
-      )
+          console.log(`fsmgrcontract.addflplanimg - OK (ipfs address:${imagesToUpload[i]})`);
+        } catch (err) {
+
+        }
+      }
+
+      // await Promise.all(
+      //   Object.keys(imagesObj).map(multihash => {
+      //     return fsmgrcontract.addflplanimg(
+      //       accountData.active,
+      //       floorplan.id,
+      //       ecc.sha256(multihash),
+      //       multihash,
+      //       options
+      //     )
+      //   })
+      // )
 
       // Clear images after done
       this.setState({
@@ -363,10 +367,10 @@ class FloorplanDetailsContainer extends Component {
     let galleryItems = []
     for (let i = 0; i < imgMultihashes.length; i++) {
       let imgItem = {
-        original: `http://138.197.194.220:5001/api/v0/cat?arg=${
+        original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
           imgMultihashes[i]
         }&stream-channels=true`,
-        thumbnail: `http://138.197.194.220:5001/api/v0/cat?arg=${
+        thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
           imgMultihashes[i]
         }&stream-channels=true`
       }
