@@ -1,6 +1,5 @@
 import React, {useMemo, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
-import ipfs from './ipfs'
 
 const baseStyle = {
   width: 100,
@@ -89,7 +88,8 @@ const img = {
 };
 
 
-export function StyledPreview(props) {
+export function StyledPreview(props) { 
+  const { handleUploadedImg } = props
   const [files, setFiles] = useState([]);
   const {
     getRootProps, getInputProps, 
@@ -102,42 +102,8 @@ export function StyledPreview(props) {
       setFiles(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)
       })));
-      acceptedFiles.map(file => {
-        console.log('file:', file);
-        const reader = new window.FileReader()
-        reader.readAsArrayBuffer(file)
-        reader.onloadend = () => {
-          let fileBuf = Buffer(reader.result)
-          console.log('file buffer', fileBuf)
-
-          ipfs.files.add(fileBuf, (error, result) => {
-            if(error) {
-              console.error(error)
-              return
-            }
-            console.log('ipfs.files.add - res: ', result);
-            // this.simpleStorageInstance.set(result[0].hash, { from: this.state.account }).then((r) => {
-            //   return this.setState({ ipfsHash: result[0].hash })
-            //   console.log('ifpsHash', this.state.ipfsHash)
-            // })
       
-            // this.setState({ ipfsHash: result[0].hash })
-      
-            ipfs.files.cat(result[0].hash, (error, res) => {
-              if(error) {
-                console.error(error)
-                return
-              }
-              
-              // Convert the image buffer to base64-encoded string so that it can be displayed with HTML "img" tag
-              // this.setState({ buffer: "data:image/png;base64," + Buffer(res).toString('base64') })
-      
-              console.log('ipfs.files.cat - res: ', Buffer(res).toString('base64'));
-            })
-          })
-
-        }
-      })
+      handleUploadedImg(acceptedFiles)
     }
   });
   

@@ -15,6 +15,7 @@ const FloorplanDetails = ({
   onSaveClick,
   onChange,
   onImagesUploaded,
+  handleUploadedImg,
   onImageDeleted,
   galleryItems
 }) => (
@@ -179,7 +180,7 @@ const FloorplanDetails = ({
                 }
               }}
             /> */}
-            <StyledPreview />
+            {!isCreating && <StyledPreview handleUploadedImg={handleUploadedImg} />}
           </div>
         </div>
         <div className='form-group m-t-50 row'>
