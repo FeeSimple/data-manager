@@ -55,8 +55,7 @@ class RootContainer extends Component {
         <Navbar />
         {!isLoading && <App />}
         {isLoading && <LoadingView />}
-        {opResult &&
-          opResult.data && (
+        {opResult && opResult.data && (
           <SweetAlert
             show={opResult.data.show}
             type={opResult.data.type}
@@ -76,7 +75,8 @@ function mapStateToProps ({ isLoading, eosClient, opResult, accountData }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setOpResult, setInfo, setActive, setLoading })(
-    RootContainer
-  )
+  connect(
+    mapStateToProps,
+    { setOpResult, setInfo, setActive, setLoading }
+  )(RootContainer)
 )

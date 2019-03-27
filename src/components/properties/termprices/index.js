@@ -272,10 +272,13 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    addTermPrices,
-    setLoading,
-    delTermPrice,
-    setOpResult
-  })(TermPriceContainer)
+  connect(
+    mapStateToProps,
+    {
+      addTermPrices,
+      setLoading,
+      delTermPrice,
+      setOpResult
+    }
+  )(TermPriceContainer)
 )

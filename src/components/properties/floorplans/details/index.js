@@ -10,57 +10,49 @@ import Alert from '../../../layout/Alert'
 
 import ipfs from './ipfs'
 
+let totalUploadedFiles = 0
+let ipfsUploadedFiles = 0
+
 class FloorplanDetailsContainer extends Component {
   state = {
     floorplan: 'undefined',
     buffer: null,
-    imagesToUpload: [],
-    imgMultihashes: [],
+    imgIpfsAddrListFromUpload: [],
+    imgIpfsAddrListFromTable: [],
 
     alertShow: false,
     alertContent: [],
     alertHeader: ''
   }
 
+  // It takes long time to upload img to IPFS and thus must popup waiting notification when clicking "Save"
+  // while the img-uploading process is still in progress
   handleUploadedImg = acceptedFiles => {
+    totalUploadedFiles = acceptedFiles.length
+    ipfsUploadedFiles = 0
+
     acceptedFiles.map(file => {
       // console.log('file:', file);
       const reader = new window.FileReader()
       reader.readAsArrayBuffer(file)
       reader.onloadend = () => {
         let fileBuf = Buffer(reader.result)
-        console.log('file buffer', fileBuf)
+        // console.log('file buffer', fileBuf)
 
         ipfs.files.add(fileBuf, (error, result) => {
+          ipfsUploadedFiles++
+
           if (error) {
             console.error(error)
             return
           }
-          let imgIpfsHash = result[0].hash
-          console.log('ipfs.files.add - imgIpfsHash: ', imgIpfsHash)
-          // this.simpleStorageInstance.set(result[0].hash, { from: this.state.account }).then((r) => {
-          //   return this.setState({ ipfsHash: result[0].hash })
-          //   console.log('ifpsHash', this.state.ipfsHash)
-          // })
+          let ipfsAddress = result[0].hash
+          console.log('ipfs.files.add - ipfs-address: ', ipfsAddress)
 
-          // this.setState({ ipfsHash: result[0].hash })
+          let curImagesToUpload = this.state.imgIpfsAddrListFromUpload
+          curImagesToUpload.push(ipfsAddress)
 
-          let curImagesToUpload = this.state.imagesToUpload
-          curImagesToUpload.push(imgIpfsHash)
-
-          this.setState({ imagesToUpload: curImagesToUpload })
-
-          // ipfs.files.cat(result[0].hash, (error, res) => {
-          //   if(error) {
-          //     console.error(error)
-          //     return
-          //   }
-
-          //   // Convert the image buffer to base64-encoded string so that it can be displayed with HTML "img" tag
-          //   // this.setState({ buffer: "data:image/png;base64," + Buffer(res).toString('base64') })
-
-          //   console.log('ipfs.files.cat - res: ', Buffer(res).toString('base64'));
-          // })
+          this.setState({ imgIpfsAddrListFromUpload: curImagesToUpload })
         })
       }
     })
@@ -75,17 +67,17 @@ class FloorplanDetailsContainer extends Component {
       url => url.split('/')[url.split('/').length - 2]
     )
 
-    const { imagesToUpload } = this.state
-    const newImagesToUpload = [...imagesToUpload, ...multihashes]
-    this.setState({ imagesToUpload: newImagesToUpload })
+    const { imgIpfsAddrListFromUpload } = this.state
+    const newImagesToUpload = [...imgIpfsAddrListFromUpload, ...multihashes]
+    this.setState({ imgIpfsAddrListFromUpload: newImagesToUpload })
   }
 
   onImageDeleted = url => {
-    const { imagesToUpload } = this.state
-    const newImagesToUpload = [...imagesToUpload]
-    newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
+    const { imgIpfsAddrListFromUpload } = this.state
+    const newImagesToUpload = [...imgIpfsAddrListFromUpload]
+    newImagesToUpload.splice(imgIpfsAddrListFromUpload.indexOf(url), 1)
 
-    this.setState({ imagesToUpload: newImagesToUpload })
+    this.setState({ imgIpfsAddrListFromUpload: newImagesToUpload })
   }
 
   handleToggleAlert = () => {
@@ -130,7 +122,7 @@ class FloorplanDetailsContainer extends Component {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
-    const { floorplan, imagesToUpload } = this.state
+    const { floorplan, imgIpfsAddrListFromUpload } = this.state
     const {
       contracts,
       accountData,
@@ -157,6 +149,16 @@ class FloorplanDetailsContainer extends Component {
       return
     }
 
+    if (totalUploadedFiles !== 0 && totalUploadedFiles !== ipfsUploadedFiles) {
+      console.log('IPFS image uploading is still in progress')
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Please wait',
+        alertContent: ['IPFS image uploading is still in progress']
+      })
+      return
+    }
+
     setLoading(true)
 
     let operationOK = true
@@ -178,32 +180,41 @@ class FloorplanDetailsContainer extends Component {
       )
 
       setFloorplan(propertyId, floorplan)
+      console.log(
+        `Floorplan ${floorplan.id} of the property ${propertyId} edited OK`
+      )
     } catch (err) {
       operationOK = false
     }
 
-    if (imagesToUpload.length > 0) {
+    if (imgIpfsAddrListFromUpload.length > 0) {
       // Mapping values to object keys removes duplicates.
-      const imagesObj = {}
-      imagesToUpload.forEach(multihash => {
-        imagesObj[multihash] = multihash
+      const imgIpfsAddressMap = {}
+      imgIpfsAddrListFromUpload.forEach(ipfsAddr => {
+        imgIpfsAddressMap[ipfsAddr] = ipfsAddr
       })
 
-      await Promise.all(
-        Object.keys(imagesObj).map(multihash => {
-          return fsmgrcontract.addflplanimg(
+      let imgIpfsAddressListCleaned = Object.values(imgIpfsAddressMap)
+      for (let i = 0; i < imgIpfsAddressListCleaned.length; i++) {
+        try {
+          await fsmgrcontract.addflplanimg(
             accountData.active,
             floorplan.id,
-            ecc.sha256(multihash),
-            multihash,
+            ecc.sha256(imgIpfsAddressListCleaned[i]),
+            imgIpfsAddressListCleaned[i],
             options
           )
-        })
-      )
+          console.log(
+            `fsmgrcontract.addflplanimg - OK (ipfs address:${
+              imgIpfsAddressListCleaned[i]
+            })`
+          )
+        } catch (err) {}
+      }
 
       // Clear images after done
       this.setState({
-        imagesToUpload: []
+        imgIpfsAddrListFromUpload: []
       })
     }
 
@@ -340,13 +351,16 @@ class FloorplanDetailsContainer extends Component {
 
       console.log('get table FLOORPLANIMG:', rows)
 
-      const imgMultihashes = rows
+      const imgIpfsAddrListFromTable = rows
         .filter(row => row.floorplan_id === Number(floorplanId))
         .map(row => row.ipfs_address)
 
-      console.log('componentDidMount - imgMultihashes:', imgMultihashes)
+      console.log(
+        'componentDidMount - imgIpfsAddrListFromTable:',
+        imgIpfsAddrListFromTable
+      )
 
-      this.setState({ imgMultihashes })
+      this.setState({ imgIpfsAddrListFromTable })
     } else {
       // Create a new floorplan
       this.setState({
@@ -358,16 +372,16 @@ class FloorplanDetailsContainer extends Component {
   render () {
     const { isCreating } = this.props
     const { id } = this.props.match.params
-    const { imgMultihashes } = this.state
+    const { imgIpfsAddrListFromTable } = this.state
 
     let galleryItems = []
-    for (let i = 0; i < imgMultihashes.length; i++) {
+    for (let i = 0; i < imgIpfsAddrListFromTable.length; i++) {
       let imgItem = {
-        original: `http://138.197.194.220:5001/api/v0/cat?arg=${
-          imgMultihashes[i]
+        original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
+          imgIpfsAddrListFromTable[i]
         }&stream-channels=true`,
-        thumbnail: `http://138.197.194.220:5001/api/v0/cat?arg=${
-          imgMultihashes[i]
+        thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
+          imgIpfsAddrListFromTable[i]
         }&stream-channels=true`
       }
       galleryItems.push(imgItem)
@@ -421,7 +435,8 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setFloorplan, setLoading, setOpResult })(
-    FloorplanDetailsContainer
-  )
+  connect(
+    mapStateToProps,
+    { setFloorplan, setLoading, setOpResult }
+  )(FloorplanDetailsContainer)
 )

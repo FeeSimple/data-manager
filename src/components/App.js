@@ -146,10 +146,13 @@ function mapStateToProps ({ isLoading, eosClient, accountData, contracts }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    setFsMgrContract,
-    setEosClient,
-    setOpResult,
-    setScatter
-  })(AppContainer)
+  connect(
+    mapStateToProps,
+    {
+      setFsMgrContract,
+      setEosClient,
+      setOpResult,
+      setScatter
+    }
+  )(AppContainer)
 )

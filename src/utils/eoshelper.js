@@ -46,7 +46,7 @@ export const getRamPrice = async eosClient => {
     let quoteBalance = fetchBalanceNumber(ramMarketRow.quote.balance)
     let baseBalance = fetchBalanceNumber(ramMarketRow.base.balance)
     if (!quoteBalance || !baseBalance) return null
-    let ramPrice = quoteBalance / baseBalance * 1000 // must be multiplied by 1000
+    let ramPrice = (quoteBalance / baseBalance) * 1000 // must be multiplied by 1000
     return ramPrice // XFS/KB
   } catch (err) {
     return null
@@ -70,7 +70,7 @@ export const getRamPriceStr = ramPrice => {
 }
 
 export const calcStakedRam = (ramPrice, ramQuota) => {
-  let stakedRam = ramQuota * ramPrice / 1024
+  let stakedRam = (ramQuota * ramPrice) / 1024
   if (stakedRam > 1) {
     stakedRam =
       Intl.NumberFormat()
