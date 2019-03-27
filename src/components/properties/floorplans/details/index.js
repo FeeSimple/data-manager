@@ -10,6 +10,9 @@ import Alert from '../../../layout/Alert'
 
 import ipfs from './ipfs'
 
+let totalUploadedFiles = 0
+let ipfsUploadedFiles = 0
+
 class FloorplanDetailsContainer extends Component {
   state = {
     floorplan: 'undefined',
@@ -22,7 +25,13 @@ class FloorplanDetailsContainer extends Component {
     alertHeader: ''
   }
 
+  // It takes long time to upload img to IPFS and thus must popup waiting notification when clicking "Save"
+  // while the img-uploading process is still in progress
   handleUploadedImg = acceptedFiles => {
+    
+    totalUploadedFiles = acceptedFiles.length
+    ipfsUploadedFiles = 0
+
     acceptedFiles.map(file => {
       // console.log('file:', file);
       const reader = new window.FileReader()
@@ -32,12 +41,14 @@ class FloorplanDetailsContainer extends Component {
         // console.log('file buffer', fileBuf)
 
         ipfs.files.add(fileBuf, (error, result) => {
+          ipfsUploadedFiles++
+
           if (error) {
             console.error(error)
             return
           }
           let imgIpfsHash = result[0].hash
-          console.log('ipfs.files.add - imgIpfsHash: ', imgIpfsHash)
+          console.log('ipfs.files.add - ipfs-address: ', imgIpfsHash)
           // this.simpleStorageInstance.set(result[0].hash, { from: this.state.account }).then((r) => {
           //   return this.setState({ ipfsHash: result[0].hash })
           //   console.log('ifpsHash', this.state.ipfsHash)
@@ -141,6 +152,16 @@ class FloorplanDetailsContainer extends Component {
         alertShow: true,
         alertHeader: 'Floorplan editing with invalid input',
         alertContent: result
+      })
+      return
+    }
+
+    if (totalUploadedFiles !== 0 && totalUploadedFiles !== ipfsUploadedFiles) {
+      console.log('IPFS image uploading is still in progress')
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Please wait',
+        alertContent: ['IPFS image uploading is still in progress']
       })
       return
     }
