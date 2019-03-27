@@ -13,7 +13,8 @@ function noTermPriceTxt (column, colIndex) {
   const hrefLink = `${window.location.href}/new`
   return (
     <span style={{ fontSize: '11px' }}>
-      This_unit_has_no_term_prices. Would_you_like_to_<a href={hrefLink}>add</a>_one?
+      This_unit_has_no_term_prices. Would_you_like_to_<a href={hrefLink}>add</a>
+      _one?
     </span>
   )
 }
@@ -145,11 +146,11 @@ export default props => {
                   <BootstrapTable
                     {...props.baseProps}
                     noDataIndication={
-                      showFooter
-                        ? () => <NoDataIndication />
-                        : (
-                          <Spinner color='#00B1EF' fadeIn='none' />
-                        )
+                      showFooter ? (
+                        () => <NoDataIndication />
+                      ) : (
+                        <Spinner color='#00B1EF' fadeIn='none' />
+                      )
                     }
                     pagination={paginationFactory()}
                   />

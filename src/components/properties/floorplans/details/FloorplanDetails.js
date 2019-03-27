@@ -157,8 +157,7 @@ const FloorplanDetails = ({
             />
           </div>
         </div>
-        {galleryItems &&
-          galleryItems.length > 0 && (
+        {galleryItems && galleryItems.length > 0 && (
           <div className='form-group row'>
             <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
               <ImageGallery items={galleryItems} />

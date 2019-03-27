@@ -239,8 +239,7 @@ class LoginContainer extends Component {
           newAccountCreationErr={this.state.newAccountCreationErr}
           isProcessing={this.state.isProcessing}
         />
-        {opResult &&
-          opResult.data && (
+        {opResult && opResult.data && (
           <SweetAlert
             show={opResult.data.show}
             type={opResult.data.type}
@@ -259,14 +258,17 @@ function mapStateToProps ({ eosClient, scatter, opResult }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    setActive,
-    setInfo,
-    addProperties,
-    setFsMgrContract,
-    setEosClient,
-    setScatter,
-    setLoading,
-    setOpResult
-  })(LoginContainer)
+  connect(
+    mapStateToProps,
+    {
+      setActive,
+      setInfo,
+      addProperties,
+      setFsMgrContract,
+      setEosClient,
+      setScatter,
+      setLoading,
+      setOpResult
+    }
+  )(LoginContainer)
 )

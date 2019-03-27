@@ -376,11 +376,14 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    setProperty,
-    addProperties,
-    delProperty,
-    setLoading,
-    setOpResult
-  })(PropertyDetailsContainer)
+  connect(
+    mapStateToProps,
+    {
+      setProperty,
+      addProperties,
+      delProperty,
+      setLoading,
+      setOpResult
+    }
+  )(PropertyDetailsContainer)
 )

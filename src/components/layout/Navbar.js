@@ -133,10 +133,13 @@ function mapStateToProps ({ eosClient, accountData, contracts }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    setInfo,
-    setActive,
-    setFsMgrContract,
-    setEosClient
-  })(NavbarContainer)
+  connect(
+    mapStateToProps,
+    {
+      setInfo,
+      setActive,
+      setFsMgrContract,
+      setEosClient
+    }
+  )(NavbarContainer)
 )
