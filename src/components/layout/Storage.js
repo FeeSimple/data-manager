@@ -75,8 +75,11 @@ function mapStateToProps ({ eosClient, accountData }) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
-    setInfo,
-    setActive
-  })(NavbarContainer)
+  connect(
+    mapStateToProps,
+    {
+      setInfo,
+      setActive
+    }
+  )(NavbarContainer)
 )

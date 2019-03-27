@@ -8,7 +8,11 @@ const Alert = props => {
     <Modal isOpen={isOpen} toggle={handleToggle}>
       <ModalHeader toggle={handleToggle}>{alertHeader}</ModalHeader>
       <ModalBody>
-        <ul>{alertContent.map(item => <li>{item}</li>)}</ul>
+        <ul>
+          {alertContent.map(item => (
+            <li>{item}</li>
+          ))}
+        </ul>
       </ModalBody>
     </Modal>
   )

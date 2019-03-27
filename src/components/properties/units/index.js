@@ -258,7 +258,8 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { addUnits, setLoading, delUnit, setOpResult })(
-    UnitContainer
-  )
+  connect(
+    mapStateToProps,
+    { addUnits, setLoading, delUnit, setOpResult }
+  )(UnitContainer)
 )

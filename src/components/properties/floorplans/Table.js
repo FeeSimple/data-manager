@@ -116,12 +116,12 @@ export default props => {
             <div className='col-5  col-md-5'>
               <h3 className='float-right'>
                 <Link to={`/${props.propertyId}/floorplan/new`}>
-                  <img src={IconAdd} alt='' />
-                  F<span className='hide-xs'>loor Plans</span>
+                  <img src={IconAdd} alt='' />F
+                  <span className='hide-xs'>loor Plans</span>
                 </Link>{' '}
                 <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
-                  <img src={IconAdd} alt='' />
-                  U<span className='hide-xs'>nit</span>
+                  <img src={IconAdd} alt='' />U
+                  <span className='hide-xs'>nit</span>
                 </Link>
               </h3>
             </div>
@@ -158,11 +158,11 @@ export default props => {
                   <BootstrapTable
                     {...props.baseProps}
                     noDataIndication={
-                      showFooter
-                        ? () => <NoDataIndication />
-                        : (
-                          <Spinner color='#00B1EF' fadeIn='none' />
-                        )
+                      showFooter ? (
+                        () => <NoDataIndication />
+                      ) : (
+                        <Spinner color='#00B1EF' fadeIn='none' />
+                      )
                     }
                     pagination={paginationFactory()}
                   />

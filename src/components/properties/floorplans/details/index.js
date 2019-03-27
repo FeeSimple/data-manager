@@ -28,7 +28,6 @@ class FloorplanDetailsContainer extends Component {
   // It takes long time to upload img to IPFS and thus must popup waiting notification when clicking "Save"
   // while the img-uploading process is still in progress
   handleUploadedImg = acceptedFiles => {
-    
     totalUploadedFiles = acceptedFiles.length
     ipfsUploadedFiles = 0
 
@@ -49,7 +48,7 @@ class FloorplanDetailsContainer extends Component {
           }
           let ipfsAddress = result[0].hash
           console.log('ipfs.files.add - ipfs-address: ', ipfsAddress)
-          
+
           let curImagesToUpload = this.state.imgIpfsAddrListFromUpload
           curImagesToUpload.push(ipfsAddress)
 
@@ -181,7 +180,9 @@ class FloorplanDetailsContainer extends Component {
       )
 
       setFloorplan(propertyId, floorplan)
-      console.log(`Floorplan ${floorplan.id} of the property ${propertyId} edited OK`);
+      console.log(
+        `Floorplan ${floorplan.id} of the property ${propertyId} edited OK`
+      )
     } catch (err) {
       operationOK = false
     }
@@ -194,7 +195,7 @@ class FloorplanDetailsContainer extends Component {
       })
 
       let imgIpfsAddressListCleaned = Object.values(imgIpfsAddressMap)
-      for (let i=0; i<imgIpfsAddressListCleaned.length; i++) {
+      for (let i = 0; i < imgIpfsAddressListCleaned.length; i++) {
         try {
           await fsmgrcontract.addflplanimg(
             accountData.active,
@@ -203,10 +204,12 @@ class FloorplanDetailsContainer extends Component {
             imgIpfsAddressListCleaned[i],
             options
           )
-          console.log(`fsmgrcontract.addflplanimg - OK (ipfs address:${imgIpfsAddressListCleaned[i]})`);
-        } catch (err) {
-
-        }
+          console.log(
+            `fsmgrcontract.addflplanimg - OK (ipfs address:${
+              imgIpfsAddressListCleaned[i]
+            })`
+          )
+        } catch (err) {}
       }
 
       // Clear images after done
@@ -352,7 +355,10 @@ class FloorplanDetailsContainer extends Component {
         .filter(row => row.floorplan_id === Number(floorplanId))
         .map(row => row.ipfs_address)
 
-      console.log('componentDidMount - imgIpfsAddrListFromTable:', imgIpfsAddrListFromTable)
+      console.log(
+        'componentDidMount - imgIpfsAddrListFromTable:',
+        imgIpfsAddrListFromTable
+      )
 
       this.setState({ imgIpfsAddrListFromTable })
     } else {
@@ -429,7 +435,8 @@ function mapStateToProps ({
 }
 
 export default withRouter(
-  connect(mapStateToProps, { setFloorplan, setLoading, setOpResult })(
-    FloorplanDetailsContainer
-  )
+  connect(
+    mapStateToProps,
+    { setFloorplan, setLoading, setOpResult }
+  )(FloorplanDetailsContainer)
 )

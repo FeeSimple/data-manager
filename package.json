@@ -47,7 +47,7 @@
     "sweetalert-react": "^0.4.11"
   },
   "devDependencies": {
-    "prettier-standard": "^8.0.1"
+    "prettier-standard": "^9.0.0"
   },
   "browserslist": [
     ">0.2%",
