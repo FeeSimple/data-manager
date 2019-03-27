@@ -17,8 +17,8 @@ class FloorplanDetailsContainer extends Component {
   state = {
     floorplan: 'undefined',
     buffer: null,
-    imagesToUpload: [],
-    imgMultihashes: [],
+    imgIpfsAddrListFromUpload: [],
+    imgIpfsAddrListFromTable: [],
 
     alertShow: false,
     alertContent: [],
@@ -47,19 +47,13 @@ class FloorplanDetailsContainer extends Component {
             console.error(error)
             return
           }
-          let imgIpfsHash = result[0].hash
-          console.log('ipfs.files.add - ipfs-address: ', imgIpfsHash)
-          // this.simpleStorageInstance.set(result[0].hash, { from: this.state.account }).then((r) => {
-          //   return this.setState({ ipfsHash: result[0].hash })
-          //   console.log('ifpsHash', this.state.ipfsHash)
-          // })
+          let ipfsAddress = result[0].hash
+          console.log('ipfs.files.add - ipfs-address: ', ipfsAddress)
+          
+          let curImagesToUpload = this.state.imgIpfsAddrListFromUpload
+          curImagesToUpload.push(ipfsAddress)
 
-          // this.setState({ ipfsHash: result[0].hash })
-
-          let curImagesToUpload = this.state.imagesToUpload
-          curImagesToUpload.push(imgIpfsHash)
-
-          this.setState({ imagesToUpload: curImagesToUpload })
+          this.setState({ imgIpfsAddrListFromUpload: curImagesToUpload })
         })
       }
     })
@@ -74,17 +68,17 @@ class FloorplanDetailsContainer extends Component {
       url => url.split('/')[url.split('/').length - 2]
     )
 
-    const { imagesToUpload } = this.state
-    const newImagesToUpload = [...imagesToUpload, ...multihashes]
-    this.setState({ imagesToUpload: newImagesToUpload })
+    const { imgIpfsAddrListFromUpload } = this.state
+    const newImagesToUpload = [...imgIpfsAddrListFromUpload, ...multihashes]
+    this.setState({ imgIpfsAddrListFromUpload: newImagesToUpload })
   }
 
   onImageDeleted = url => {
-    const { imagesToUpload } = this.state
-    const newImagesToUpload = [...imagesToUpload]
-    newImagesToUpload.splice(imagesToUpload.indexOf(url), 1)
+    const { imgIpfsAddrListFromUpload } = this.state
+    const newImagesToUpload = [...imgIpfsAddrListFromUpload]
+    newImagesToUpload.splice(imgIpfsAddrListFromUpload.indexOf(url), 1)
 
-    this.setState({ imagesToUpload: newImagesToUpload })
+    this.setState({ imgIpfsAddrListFromUpload: newImagesToUpload })
   }
 
   handleToggleAlert = () => {
@@ -129,7 +123,7 @@ class FloorplanDetailsContainer extends Component {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
-    const { floorplan, imagesToUpload } = this.state
+    const { floorplan, imgIpfsAddrListFromUpload } = this.state
     const {
       contracts,
       accountData,
@@ -192,43 +186,32 @@ class FloorplanDetailsContainer extends Component {
       operationOK = false
     }
 
-    if (imagesToUpload.length > 0) {
+    if (imgIpfsAddrListFromUpload.length > 0) {
       // Mapping values to object keys removes duplicates.
-      const imagesObj = {}
-      imagesToUpload.forEach(multihash => {
-        imagesObj[multihash] = multihash
+      const imgIpfsAddressMap = {}
+      imgIpfsAddrListFromUpload.forEach(ipfsAddr => {
+        imgIpfsAddressMap[ipfsAddr] = ipfsAddr
       })
 
-      for (let i=0; i<imagesToUpload.length; i++) {
+      let imgIpfsAddressListCleaned = Object.values(imgIpfsAddressMap)
+      for (let i=0; i<imgIpfsAddressListCleaned.length; i++) {
         try {
           await fsmgrcontract.addflplanimg(
             accountData.active,
             floorplan.id,
-            ecc.sha256(imagesToUpload[i]),
-            imagesToUpload[i],
+            ecc.sha256(imgIpfsAddressListCleaned[i]),
+            imgIpfsAddressListCleaned[i],
             options
           )
-          console.log(`fsmgrcontract.addflplanimg - OK (ipfs address:${imagesToUpload[i]})`);
+          console.log(`fsmgrcontract.addflplanimg - OK (ipfs address:${imgIpfsAddressListCleaned[i]})`);
         } catch (err) {
 
         }
       }
 
-      // await Promise.all(
-      //   Object.keys(imagesObj).map(multihash => {
-      //     return fsmgrcontract.addflplanimg(
-      //       accountData.active,
-      //       floorplan.id,
-      //       ecc.sha256(multihash),
-      //       multihash,
-      //       options
-      //     )
-      //   })
-      // )
-
       // Clear images after done
       this.setState({
-        imagesToUpload: []
+        imgIpfsAddrListFromUpload: []
       })
     }
 
@@ -365,13 +348,13 @@ class FloorplanDetailsContainer extends Component {
 
       console.log('get table FLOORPLANIMG:', rows)
 
-      const imgMultihashes = rows
+      const imgIpfsAddrListFromTable = rows
         .filter(row => row.floorplan_id === Number(floorplanId))
         .map(row => row.ipfs_address)
 
-      console.log('componentDidMount - imgMultihashes:', imgMultihashes)
+      console.log('componentDidMount - imgIpfsAddrListFromTable:', imgIpfsAddrListFromTable)
 
-      this.setState({ imgMultihashes })
+      this.setState({ imgIpfsAddrListFromTable })
     } else {
       // Create a new floorplan
       this.setState({
@@ -383,16 +366,16 @@ class FloorplanDetailsContainer extends Component {
   render () {
     const { isCreating } = this.props
     const { id } = this.props.match.params
-    const { imgMultihashes } = this.state
+    const { imgIpfsAddrListFromTable } = this.state
 
     let galleryItems = []
-    for (let i = 0; i < imgMultihashes.length; i++) {
+    for (let i = 0; i < imgIpfsAddrListFromTable.length; i++) {
       let imgItem = {
         original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgMultihashes[i]
+          imgIpfsAddrListFromTable[i]
         }&stream-channels=true`,
         thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgMultihashes[i]
+          imgIpfsAddrListFromTable[i]
         }&stream-channels=true`
       }
       galleryItems.push(imgItem)
