@@ -396,6 +396,24 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   background-color: $clr-base;
   border-color: $clr-base;
 }
+.btn-gray{
+  border-color: #9B9B9B;
+  background-color: #9B9B9B;
+  color: $clr-white;
+  opacity: 1;
+}
+.btn-gray:focus,
+.btn-gray:hover,
+.btn-gray:active,
+.btn-gray.active,
+.btn-gray.disabled,
+.btn-gray[disabled] {
+  opacity: 0.8;
+  color: $clr-white;
+  background-color: #9B9B9B;
+  border-color: #9B9B9B;
+}
+
 .btn-gray-o{
   border-color: #9b9b9b;
   background-color: transparent;
@@ -531,6 +549,37 @@ Dropzone
   opacity: 0.5;
 }
 
+/*-----------------------------------------
+  Circular progress bar
+-------------------------------------------*/
+.circular-bar{
+  padding: 0px;
+  list-style: none;
+  text-align: center; 
+  li{
+    position: relative;
+    display: inline-block;
+    width: 220px;
+    margin: 15px 20px 0;
+    .CircularProgressbar-path       { stroke: $clr-base; }
+    .CircularProgressbar-trail      { stroke: $clr-gray; }
+    .circular-text-container{
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+        h3{font-size: 12px; font-weight: 300; color: #9B9B9B; margin-top: 68px; }
+        p{font-size: 12px; font-weight: 600; color: $clr-base;
+          margin-bottom: 2px;
+          .gray-text{
+            color: #9B9B9B;
+          }
+          a:hover{text-decoration: none;}
+        }
+        h2{font-size: 32px; font-weight: 300; color: #404040; }
+    }
+  }
+}
 /*-----------------------------------------
   Various fixes and overwrites
 -------------------------------------------*/

@@ -305,11 +305,30 @@ class UserContainer extends Component {
             <Row>
               <Col>
                 <h3 className='float-left'>Wallet</h3>
+                <h3 className='float-right'><small>Balance</small> 1,333,000 XFS</h3>
               </Col>
             </Row>
           </Container>
         </div>
-        <div className='whitebar'>
+        <Container>
+            <Row>
+              <Col className='m-t-15'>
+                <div className='floor-btns'>
+                  <a href='' className='btn btn-base prop-btn'>
+                    Account
+                  </a>
+                  <a href='' className='btn btn-base-o prop-btn m-l-5'>
+                    Send
+                  </a>
+                </div>
+              
+                <a href='' className='btn btn-gray prop-btn fr'>
+                    Stake
+                  </a>
+              </Col>
+            </Row>
+          </Container>
+        <div>
           <Container>
             <User
               user={user}

@@ -7,6 +7,9 @@ import ManageCpuBw from './ManageCpuBw'
 import UserSend from './UserSend'
 import UserActivity from './UserActivity'
 
+import CircularProgressbar from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 export const USERTAB = {
   INFO: '1',
   RESOURCE: '2',
@@ -47,6 +50,47 @@ export const User = ({
   gettingActions
 }) => (
   <div>
+    <ul className='circular-bar'>
+      <li>
+        <div className='circular-text-container'>
+          <h3>RAM AVAILABLE</h3>
+          <h2>100.67 KiB</h2>
+          <p><a href=''>MANAGE RAM</a></p>
+        </div>
+        <CircularProgressbar
+          percentage={65}
+          strokeWidth={4}
+          initialAnimation= {true}
+        />
+      </li>
+      <li>
+        <div className='circular-text-container'>
+          <h3>RAM AVAILABLE</h3>
+          <h2>75.4%</h2>
+          <p><span>1,582,254.847 s</span></p>
+          <p><span className='gray-text'>1,582,254.847 s</span></p>
+        </div>
+        <CircularProgressbar
+          percentage={75}
+          strokeWidth={4}
+          initialAnimation= {true}
+        />
+      </li>
+      <li>
+        <div className='circular-text-container'>
+            <h3>BANDWIDTH AVAILABLE</h3>
+            <h2>95%</h2>
+            <p><span>125 GB</span></p>
+            <p><span className='gray-text'>124 GB</span></p>
+          </div>
+          <CircularProgressbar
+            percentage={95}
+            strokeWidth={4}
+            initialAnimation= {true}  
+          />
+      </li>
+  </ul>
+    {/*
     <Nav tabs>
       <NavItem>
         <NavLink
@@ -69,8 +113,10 @@ export const User = ({
         </NavLink>
       </NavItem>
     </Nav>
+    */}
     <TabContent activeTab={activeTab}>
       <TabPane tabId={USERTAB.INFO}>
+        {/*
         <br />
         <UserInfo
           user={user}
@@ -78,12 +124,12 @@ export const User = ({
           handleToggleModalCpu={handleToggleModalCpu}
           handleToggleModalBw={handleToggleModalBw}
         />
-
+        */}
         <UserActivity
           activityList={activityList}
           gettingActions={gettingActions}
         />
-
+        
         <ManageRam
           showModalRam={showModalRam}
           handleToggleModalRam={handleToggleModalRam}
@@ -94,6 +140,7 @@ export const User = ({
           isProcessing={isProcessing}
           resourceHandleErr={resourceHandleErr}
         />
+        
 
         <ManageCpuBw
           showModalCpuBw={showModalCpuBw}
