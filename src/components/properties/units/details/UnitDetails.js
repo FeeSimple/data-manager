@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import ImageGallery from 'react-image-gallery'
 import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
+import { StyledPreview } from '../../../layout/DropZone'
 
 const UnitDetails = ({
   unit,
@@ -14,6 +15,7 @@ const UnitDetails = ({
   onCreateClick,
   onSaveClick,
   onChange,
+  handleUploadedImg,
   onImagesUploaded,
   onImageDeleted,
   galleryItems
@@ -183,19 +185,9 @@ const UnitDetails = ({
         )}
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            <ImagesUploader
-              url='http://localhost:9000/multiple'
-              optimisticPreviews
-              onLoadEnd={onImagesUploaded}
-              onImageDeleted={onImageDeleted}
-              label='Upload multiple images'
-              styles={{
-                label: {
-                  fontFamily: 'Open sans, sans-serif',
-                  fontSize: '14px'
-                }
-              }}
-            />
+            {!isCreating && (
+              <StyledPreview handleUploadedImg={handleUploadedImg} />
+            )}
           </div>
         </div>
         <div className='form-group m-t-50 row'>

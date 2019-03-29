@@ -8,7 +8,7 @@ import FloorplanDetails from './FloorplanDetails'
 import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
 
-import ipfs from './ipfs'
+import ipfs from '../../../layout/ipfs'
 
 let totalUploadedFiles = 0
 let ipfsUploadedFiles = 0
