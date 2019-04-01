@@ -308,7 +308,7 @@ class UserContainer extends Component {
             <Row>
               <Col>
                 <h3 className='float-left'>Wallet</h3>
-                <h3 className='float-right'><small>Balance</small> 1,333,000 XFS</h3>
+                <h3 className='float-right'><small>Balance</small> {user.balance} </h3>
               </Col>
             </Row>
           </Container>

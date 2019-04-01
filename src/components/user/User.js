@@ -55,25 +55,24 @@ export const User = ({
       <li>
         <div className='circular-text-container'>
           <h3>RAM AVAILABLE</h3>
-          <h2>100.67 KiB</h2>
-          {/*<p><a href=''>MANAGE RAM</a></p>*/}
+          <h2>{user.ramStr && user.ramStr.split('/')[0]}</h2>
           <ManageRamModal />
         </div>
         <CircularProgressbar
-          percentage={65}
+          percentage={user.ramMeter}
           strokeWidth={4}
           initialAnimation= {true}
         />
       </li>
       <li>
         <div className='circular-text-container'>
-          <h3>RAM AVAILABLE</h3>
-          <h2>75.4%</h2>
-          <p><span>1,582,254.847 s</span></p>
-          <p><span className='gray-text'>1,582,254.847 s</span></p>
+          <h3>CPU AVAILABLE</h3>
+          <h2>{user.cpuMeter + ' %'}</h2>
+          <p><span>{user.cpuStr && user.cpuStr.split('/')[0]}</span></p>
+          <p><span className='gray-text'>{user.cpuStr && user.cpuStr.split('/')[1]}</span></p>
         </div>
         <CircularProgressbar
-          percentage={75}
+          percentage={user.cpuMeter}
           strokeWidth={4}
           initialAnimation= {true}
         />
@@ -81,12 +80,12 @@ export const User = ({
       <li>
         <div className='circular-text-container'>
             <h3>BANDWIDTH AVAILABLE</h3>
-            <h2>95%</h2>
-            <p><span>125 GB</span></p>
-            <p><span className='gray-text'>124 GB</span></p>
+            <h2>{user.bandwidthMeter + ' %'}</h2>
+            <p><span>{user.bandwidthStr && user.bandwidthStr.split('/')[0]}</span></p>
+            <p><span className='gray-text'>{user.bandwidthStr && user.bandwidthStr.split('/')[1]}</span></p>
           </div>
           <CircularProgressbar
-            percentage={95}
+            percentage={user.bandwidthMeter}
             strokeWidth={4}
             initialAnimation= {true}  
           />
