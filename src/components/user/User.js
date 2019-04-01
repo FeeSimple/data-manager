@@ -7,6 +7,7 @@ import ManageCpuBw from './ManageCpuBw'
 import UserSend from './UserSend'
 import UserActivity from './UserActivity'
 
+import ManageRamModal from './modals/ManageRamModal'
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -55,7 +56,8 @@ export const User = ({
         <div className='circular-text-container'>
           <h3>RAM AVAILABLE</h3>
           <h2>100.67 KiB</h2>
-          <p><a href=''>MANAGE RAM</a></p>
+          {/*<p><a href=''>MANAGE RAM</a></p>*/}
+          <ManageRamModal />
         </div>
         <CircularProgressbar
           percentage={65}

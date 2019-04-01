@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
+import SendModal from './modals/SendModal'
+import StakeModal from './modals/StakeModal'
+
 import {
   getAccountInfo,
   manageRam,
@@ -10,7 +13,7 @@ import {
   getActionsProcessed
 } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
-import { Col, Row, Container } from 'reactstrap'
+import { Button, Col, Row, Container } from 'reactstrap'
 
 class UserContainer extends Component {
   constructor (props) {
@@ -314,17 +317,10 @@ class UserContainer extends Component {
             <Row>
               <Col className='m-t-15'>
                 <div className='floor-btns'>
-                  <a href='' className='btn btn-base prop-btn'>
-                    Account
-                  </a>
-                  <a href='' className='btn btn-base-o prop-btn m-l-5'>
-                    Send
-                  </a>
+                  <Button color='base' className='btn prop-btn'>Account</Button>
+                  <SendModal/>
                 </div>
-              
-                <a href='' className='btn btn-gray prop-btn fr'>
-                    Stake
-                  </a>
+                <StakeModal/>
               </Col>
             </Row>
           </Container>

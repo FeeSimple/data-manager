@@ -553,7 +553,7 @@ Dropzone
   opacity: 0.5; }
 
 /*-----------------------------------------
-  Circular progress bar
+  Wallet page
 -------------------------------------------*/
 .circular-bar {
   padding: 0px;
@@ -585,12 +585,49 @@ Dropzone
         margin-bottom: 2px; }
         .circular-bar li .circular-text-container p .gray-text {
           color: #9B9B9B; }
-        .circular-bar li .circular-text-container p a:hover {
-          text-decoration: none; }
+        .circular-bar li .circular-text-container p span {
+          cursor: pointer; }
       .circular-bar li .circular-text-container h2 {
         font-size: 32px;
         font-weight: 300;
         color: #404040; }
+
+.stackvalueRange, .modal-h2 {
+  font-size: 32px;
+  font-weight: 300;
+  color: #404040;
+  text-align: center; }
+
+.stackvalue, .modal-h4 {
+  font-size: 12px;
+  font-weight: 300;
+  color: #9B9B9B;
+  text-align: center; }
+
+.rangeVal {
+  font-size: 11px;
+  font-weight: 300;
+  color: #9B9B9B; }
+
+.rangeslider-horizontal {
+  height: 8px; }
+
+.rangeslider, .rangeslider .rangeslider__fill {
+  box-shadow: none; }
+
+.rangeslider {
+  background: #E6E6E6; }
+
+.rangeslider-horizontal .rangeslider__fill {
+  background-color: #00b1ef; }
+
+.rangeslider-horizontal .rangeslider__handle::after {
+  display: none; }
+
+.rangeslider-horizontal .rangeslider__handle {
+  width: 16px;
+  height: 16px;
+  border-radius: 16px; }
 
 /*-----------------------------------------
   Various fixes and overwrites
