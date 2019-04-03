@@ -396,6 +396,24 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   background-color: $clr-base;
   border-color: $clr-base;
 }
+.btn-gray{
+  border-color: #9B9B9B;
+  background-color: #9B9B9B;
+  color: $clr-white;
+  opacity: 1;
+}
+.btn-gray:focus,
+.btn-gray:hover,
+.btn-gray:active,
+.btn-gray.active,
+.btn-gray.disabled,
+.btn-gray[disabled] {
+  opacity: 0.8;
+  color: $clr-white;
+  background-color: #9B9B9B;
+  border-color: #9B9B9B;
+}
+
 .btn-gray-o{
   border-color: #9b9b9b;
   background-color: transparent;
@@ -530,6 +548,50 @@ Dropzone
 .dpz-disabled {
   opacity: 0.5;
 }
+
+/*-----------------------------------------
+  Wallet page
+-------------------------------------------*/
+.circular-bar{
+  padding: 0px;
+  list-style: none;
+  text-align: center; 
+  li{
+    position: relative;
+    display: inline-block;
+    width: 220px;
+    margin: 15px 20px 0;
+    .CircularProgressbar-path       { stroke: $clr-base; }
+    .CircularProgressbar-trail      { stroke: $clr-gray; }
+    .circular-text-container{
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+        h3{font-size: 12px; font-weight: 300; color: #9B9B9B; margin-top: 68px; }
+        p{font-size: 12px; font-weight: 600; color: $clr-base;
+          margin-bottom: 2px;
+          .gray-text{
+            color: #9B9B9B;
+          }
+          span{
+            cursor: pointer;
+          }
+        }
+        h2{font-size: 32px; font-weight: 300; color: #404040; }
+    }
+  }
+}
+
+.stackvalueRange,.modal-h2{font-size: 32px; font-weight: 300; color: #404040; text-align: center;}
+.stackvalue,.modal-h4{font-size: 12px; font-weight: 300; color: #9B9B9B; text-align: center;}
+.rangeVal{font-size: 11px; font-weight: 300; color: #9B9B9B;}
+.rangeslider-horizontal {height: 8px;}
+.rangeslider, .rangeslider .rangeslider__fill {box-shadow: none;}
+.rangeslider{background: #E6E6E6;}
+.rangeslider-horizontal .rangeslider__fill{background-color: $clr-base;}
+.rangeslider-horizontal .rangeslider__handle::after{display: none;}
+.rangeslider-horizontal .rangeslider__handle {width: 16px;height: 16px;border-radius: 16px;}
 
 /*-----------------------------------------
   Various fixes and overwrites

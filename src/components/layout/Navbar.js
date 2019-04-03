@@ -102,7 +102,7 @@ class NavbarContainer extends Component {
                   </Link>
                 </li>
                 <li>
-                  <Link to='/'>
+                  <Link to='/marketplace'>
                     <img src={IconMarketplace} alt='' />
                     <span> Marketplace</span>
                   </Link>

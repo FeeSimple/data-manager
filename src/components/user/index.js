@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
+import SendModal from './modals/SendModal'
+import StakeModal from './modals/StakeModal'
+
 import {
   getAccountInfo,
   manageRam,
@@ -10,7 +13,7 @@ import {
   getActionsProcessed
 } from '../../utils/eoshelper'
 import { User, USERTAB } from './User'
-import { Col, Row, Container } from 'reactstrap'
+import { Button, Col, Row, Container } from 'reactstrap'
 
 class UserContainer extends Component {
   constructor (props) {
@@ -204,6 +207,35 @@ class UserContainer extends Component {
     }
   }
 
+  handleSetStake = async xfsAmount => {
+    // Reset state
+    this.setState({
+      resourceHandleErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+
+    const { isCpu, isStake } = this.state
+    let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, true, true)
+
+    res = await manageCpuBw(eosClient, activeAccount, xfsAmount, false, true)
+
+    // console.log('manageCpuBw:', res)
+    if (res.errMsg) {
+      this.setState({
+        resourceHandleErr: res.errMsg,
+        isProcessing: false
+      })
+    } else {
+      this.setState({
+        resourceHandleErr: 'Success',
+        isProcessing: false
+      })
+    }
+  }
+
   handleManageRam = async xfsAmount => {
     // Reset state
     this.setState({
@@ -305,11 +337,37 @@ class UserContainer extends Component {
             <Row>
               <Col>
                 <h3 className='float-left'>Wallet</h3>
+                <h3 className='float-right'>
+                  <small>Balance</small> {user.balance}{' '}
+                </h3>
               </Col>
             </Row>
           </Container>
         </div>
-        <div className='whitebar'>
+        <Container>
+          <Row>
+            <Col className='m-t-15'>
+              <div className='floor-btns'>
+                <Button color='base' className='btn prop-btn'>
+                  Account
+                </Button>
+                <SendModal
+                  user={user}
+                  handleUserSend={this.handleUserSend}
+                  userSendErr={this.state.userSendErr}
+                  isProcessing={this.state.isProcessing}
+                />
+              </div>
+              <StakeModal
+                userBalance={user.balance}
+                handleSetStake={this.handleSetStake}
+                isProcessing={this.state.isProcessing}
+                resourceHandleErr={this.state.resourceHandleErr}
+              />
+            </Col>
+          </Row>
+        </Container>
+        <div>
           <Container>
             <User
               user={user}
