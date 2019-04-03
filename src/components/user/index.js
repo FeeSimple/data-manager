@@ -318,7 +318,12 @@ class UserContainer extends Component {
               <Col className='m-t-15'>
                 <div className='floor-btns'>
                   <Button color='base' className='btn prop-btn'>Account</Button>
-                  <SendModal/>
+                  <SendModal
+                    user={user}
+                    handleUserSend={this.handleUserSend}
+                    userSendErr={this.state.userSendErr}
+                    isProcessing={this.state.isProcessing}
+                  />
                 </div>
                 <StakeModal/>
               </Col>

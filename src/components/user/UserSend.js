@@ -1,16 +1,12 @@
 import React from 'react'
 import {
-  Card,
-  InputGroupText,
-  InputGroupAddon,
-  InputGroup,
   Button,
   Form,
   FormGroup,
   Input,
   Alert,
   Collapse,
-  UncontrolledTooltip
+  Label
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
@@ -18,13 +14,6 @@ import {
   checkAccountNameError,
   checkXfsAmountError
 } from '../../utils/eoshelper'
-
-const USER_SEND_TOOLTIP =
-  'XFS sending will be charged with some CPU and Bandwidth'
-
-const balanceStr = balance => {
-  return 'Balance: ' + balance
-}
 
 const UserSendForm = props => {
   const {
@@ -34,48 +23,19 @@ const UserSendForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    user,
     userSendErr,
-    isProcessing
+    isProcessing,
+    toggle,
+    handleUserSend
   } = props
 
   return (
-    <div className='col-lg-8 offset-md-1 offset-lg-2'>
-      <Card>
-        <Form onSubmit={handleSubmit}>
-          <FormGroup>
-            <br />
-            <InputGroup id='resource'>
-              <InputGroupAddon addonType='prepend'>
-                <InputGroupText className='user-send-text-small'>
-                  <i>CPU: {user.cpuAvailableStr}</i>
-                </InputGroupText>
-              </InputGroupAddon>
-              <Input
-                type='text'
-                disabled
-                placeholder={balanceStr(user.balance)}
-              />
-              <InputGroupAddon addonType='append'>
-                <InputGroupText className='user-send-text-small'>
-                  <i>Bandwidth: {user.bandwidthAvailableStr}</i>
-                </InputGroupText>
-              </InputGroupAddon>
-              <UncontrolledTooltip
-                placement='right'
-                target='resource'
-                styleName='tooltip'
-              >
-                {USER_SEND_TOOLTIP}
-              </UncontrolledTooltip>
-            </InputGroup>
-            <br />
-            <InputGroup>
-              <InputGroupAddon addonType='prepend'>
-                <InputGroupText className='user-send-text'>
-                  <b>To account</b>
-                </InputGroupText>
-              </InputGroupAddon>
+    <Form onSubmit={handleSubmit}>
+      <FormGroup>
+        <div className='form-group'>
+          <div className='col-12'>
+            <div className='form-group m-b-0'>
+              <Label> To account </Label>
               <Input
                 id='accountName'
                 onBlur={handleBlur}
@@ -83,16 +43,15 @@ const UserSendForm = props => {
                 onChange={handleChange}
                 invalid={errors.accountName && touched.accountName}
                 type='text'
-                placeholder='Enter the recipient account'
               />
-            </InputGroup>
-            <br />
-            <InputGroup>
-              <InputGroupAddon addonType='prepend'>
-                <InputGroupText className='user-send-text'>
-                  <b>Amount</b>
-                </InputGroupText>
-              </InputGroupAddon>
+            </div>
+          </div>
+        </div>
+        <div className='form-group'>
+          <div className='col-12'>
+            <div className='form-group m-b-0'>
+              <Label> XFS Amount </Label>
+              <a className='fr' href='#'>Send Max</a>
               <Input
                 id='amount'
                 onBlur={handleBlur}
@@ -100,16 +59,14 @@ const UserSendForm = props => {
                 onChange={handleChange}
                 invalid={errors.amount && touched.amount}
                 type='text'
-                placeholder='Enter the amount to send (in XFS)'
               />
-            </InputGroup>
-            <br />
-            <InputGroup>
-              <InputGroupAddon addonType='prepend'>
-                <InputGroupText className='user-send-text' size='lg'>
-                  <b>Memo (optional)</b>
-                </InputGroupText>
-              </InputGroupAddon>
+            </div>
+          </div>
+        </div>
+        <div className='form-group'>
+          <div className='col-12'>
+            <div className='form-group'>
+              <Label> Message (optional) </Label>
               <Input
                 id='memo'
                 onBlur={handleBlur}
@@ -118,33 +75,35 @@ const UserSendForm = props => {
                 type='text'
                 placeholder='Attach some message (max 200 characters)'
               />
-            </InputGroup>
-            <br />
-          </FormGroup>
-          <Button
-            id='butt'
-            type='submit'
-            color='secondary'
-            className='btn-base btn-home'
-            disabled={
-              (touched.accountName && errors.accountName) ||
-              (touched.amount && errors.amount)
-            }
-          >
-            {isProcessing ? (
-              <Spinner name='three-bounce' color='white' fadeIn='none' />
-            ) : (
-              <span>Submit</span>
-            )}
-          </Button>
-          <UncontrolledTooltip
-            placement='right'
-            target='butt'
-            styleName='tooltip'
-          >
-            {USER_SEND_TOOLTIP}
-          </UncontrolledTooltip>
-          <Collapse isOpen={userSendErr} size='sm'>
+            </div>
+          </div>
+        </div>
+        <br></br>
+        <div className='form-group row m-l-0 m-r-0 m-b-15'>
+          <div className='col-6'>
+            <Button color='gray-o' className='btn prop-btn w100' onClick={toggle}>Cancel</Button>
+          </div>
+          <div className='col-6'>
+            <Button
+              id='butt'
+              type='submit'
+              color='base'
+              className='btn prop-btn w100'
+              disabled={
+                (touched.accountName && errors.accountName) ||
+                (touched.amount && errors.amount)
+              }
+            >
+              {isProcessing ? (
+                <Spinner name='three-bounce' color='white' fadeIn='none' />
+              ) : (
+                <span>Send</span>
+              )}
+            </Button>
+          </div>
+        </div>
+      </FormGroup>
+      <Collapse isOpen={userSendErr} size='sm'>
             {userSendErr === 'Success' ? (
               <Alert color='success'>
                 <div>
@@ -160,9 +119,7 @@ const UserSendForm = props => {
               <Alert color='danger'>{userSendErr}</Alert>
             )}
           </Collapse>
-        </Form>
-      </Card>
-    </div>
+    </Form>
   )
 }
 
