@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import GridContainer from './properties/grid'
 import PropertyDetails from './properties/details'
 import User from './user'
+import Marketplace from './marketplace'
 import Floorplans from './properties/floorplans'
 import FloorplanDetails from './properties/floorplans/details'
 import Unit from './properties/units'
@@ -86,6 +87,9 @@ class AppContainer extends Component {
         </Route>
         <Route exact path='/new'>
           <PropertyDetails isCreating />
+        </Route>
+        <Route exact path='/marketplace'>
+          <Marketplace />
         </Route>
         <Route exact path='/user'>
           <User />
