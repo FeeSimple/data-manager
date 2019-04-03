@@ -34,43 +34,24 @@ const ManageRamForm = props => {
   } = props
 
   return (
+    <>
+    <p><span href="" onClick={handleToggleModalRam}>MANAGE RAM</span></p>
     <Modal
-      className='modal-dialog-resource'
       isOpen={showModalRam}
       toggle={handleToggleModalRam}
     >
-      <ModalHeader toggle={handleToggleModalRam}>Manage RAM</ModalHeader>
+      <ModalHeader toggle={handleToggleModalRam}>
+        <div className='fs-16 clr-base tc'>Buy or Sell RAM</div>
+      </ModalHeader>
       <ModalBody>
-        <div className='form-group row'>
-          <Col xs={12} sm={6}>
-            <Button
-              size='sm'
-              outline
-              color='danger'
-              className='btn-base btn-home btn btn-secondary'
-              onClick={setBuy}
-            >
-              Buy
-            </Button>
-          </Col>
-          <Col xs={12} sm={6}>
-            <Button
-              size='sm'
-              outline
-              color='primary'
-              className='btn-base btn-home btn btn-secondary'
-              onClick={setSell}
-            >
-              Sell
-            </Button>
-          </Col>
-        </div>
+        <div className='tc m-b-30'>Buy additional RAM or sell what you have:</div>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <Label className='user-detail-label'>
-              <span>RAM </span>
-              {isBuy ? <span>buy</span> : <span>sell</span>} (in XFS)
-            </Label>
+            <Label className=""> XFS Amount</Label>
+            <div className='fr'>
+              <a className='fl' href='#'>Sell Max</a>
+              <a className='fl m-l-10' href='#'>Buy Max</a>
+            </div>
             <Input
               id='xfsAmount'
               onBlur={handleBlur}
@@ -80,19 +61,44 @@ const ManageRamForm = props => {
               type='text'
             />
           </FormGroup>
-          <Button
-            size='sm'
-            type='submit'
-            color='secondary'
-            className='btn-base btn-home'
-            disabled={touched.xfsAmount && errors.xfsAmount}
-          >
-            {isProcessing ? (
-              <Spinner name='three-bounce' color='white' fadeIn='none' />
-            ) : (
-              <span>Submit</span>
-            )}
-          </Button>
+          <div className='col-12'>
+            <h4 className='modal-h4 m-b-5'>In Bytes</h4>
+            <h2 className='modal-h2 m-b-5'>100,670 bytes</h2>
+            <h4 className='modal-h4 m-b-0'>1 kB = 0.02 XFS</h4>
+          </div>
+          <br></br>
+          <div className='form-group row m-l-0 m-r-0'>
+            <div className='col-6'>
+              <Button
+                size='sm'
+                type='submit'
+                color='base' className='btn prop-btn w100'
+                disabled={touched.xfsAmount && errors.xfsAmount}
+                onClick={setSell}
+              >
+                {isProcessing && !isBuy ? (
+                  <Spinner name='three-bounce' color='white' fadeIn='none' />
+                ) : (
+                  <span>Sell</span>
+                )}
+              </Button>
+            </div>
+            <div className='col-6'>
+              <Button
+                size='sm'
+                type='submit'
+                color='base' className='btn prop-btn w100'
+                disabled={touched.xfsAmount && errors.xfsAmount}
+                onClick={setBuy}
+              >
+                {isProcessing && isBuy ? (
+                  <Spinner name='three-bounce' color='white' fadeIn='none' />
+                ) : (
+                  <span>Buy</span>
+                )}
+              </Button>
+            </div>
+          </div>
         </Form>
         <Collapse isOpen={resourceHandleErr} size='sm'>
           {resourceHandleErr === 'Success' ? (
@@ -121,6 +127,7 @@ const ManageRamForm = props => {
         </Collapse>
       </ModalBody>
     </Modal>
+    </>
   )
 }
 

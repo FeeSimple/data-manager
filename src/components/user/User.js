@@ -56,7 +56,17 @@ export const User = ({
         <div className='circular-text-container'>
           <h3>RAM AVAILABLE</h3>
           <h2>{user.ramStr && user.ramStr.split('/')[0]}</h2>
-          <ManageRamModal />
+          {/* <ManageRamModal /> */}
+            <ManageRam
+            showModalRam={showModalRam}
+            handleToggleModalRam={handleToggleModalRam}
+            handleManageRam={handleManageRam}
+            isBuy={isBuy}
+            setBuy={setBuy}
+            setSell={setSell}
+            isProcessing={isProcessing}
+            resourceHandleErr={resourceHandleErr}
+          />
         </div>
         <CircularProgressbar
           percentage={user.ramMeter}
