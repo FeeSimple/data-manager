@@ -218,21 +218,9 @@ class UserContainer extends Component {
     let activeAccount = accountData.active
 
     const { isCpu, isStake } = this.state
-    let res = await manageCpuBw(
-      eosClient,
-      activeAccount,
-      xfsAmount,
-      true,
-      true
-    )
+    let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, true, true)
 
-    res = await manageCpuBw(
-      eosClient,
-      activeAccount,
-      xfsAmount,
-      false,
-      true
-    )
+    res = await manageCpuBw(eosClient, activeAccount, xfsAmount, false, true)
 
     // console.log('manageCpuBw:', res)
     if (res.errMsg) {
@@ -349,31 +337,36 @@ class UserContainer extends Component {
             <Row>
               <Col>
                 <h3 className='float-left'>Wallet</h3>
-                <h3 className='float-right'><small>Balance</small> {user.balance} </h3>
+                <h3 className='float-right'>
+                  <small>Balance</small> {user.balance}{' '}
+                </h3>
               </Col>
             </Row>
           </Container>
         </div>
         <Container>
-            <Row>
-              <Col className='m-t-15'>
-                <div className='floor-btns'>
-                  <Button color='base' className='btn prop-btn'>Account</Button>
-                  <SendModal
-                    user={user}
-                    handleUserSend={this.handleUserSend}
-                    userSendErr={this.state.userSendErr}
-                    isProcessing={this.state.isProcessing}
-                  />
-                </div>
-                <StakeModal 
-                  userBalance={user.balance} 
-                  handleSetStake={this.handleSetStake}
+          <Row>
+            <Col className='m-t-15'>
+              <div className='floor-btns'>
+                <Button color='base' className='btn prop-btn'>
+                  Account
+                </Button>
+                <SendModal
+                  user={user}
+                  handleUserSend={this.handleUserSend}
+                  userSendErr={this.state.userSendErr}
                   isProcessing={this.state.isProcessing}
-                  resourceHandleErr={this.state.resourceHandleErr} />
-              </Col>
-            </Row>
-          </Container>
+                />
+              </div>
+              <StakeModal
+                userBalance={user.balance}
+                handleSetStake={this.handleSetStake}
+                isProcessing={this.state.isProcessing}
+                resourceHandleErr={this.state.resourceHandleErr}
+              />
+            </Col>
+          </Row>
+        </Container>
         <div>
           <Container>
             <User

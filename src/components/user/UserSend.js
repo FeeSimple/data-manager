@@ -51,7 +51,9 @@ const UserSendForm = props => {
           <div className='col-12'>
             <div className='form-group m-b-0'>
               <Label> XFS Amount </Label>
-              <a className='fr' href='#'>Send Max</a>
+              <a className='fr' href='#'>
+                Send Max
+              </a>
               <Input
                 id='amount'
                 onBlur={handleBlur}
@@ -78,10 +80,16 @@ const UserSendForm = props => {
             </div>
           </div>
         </div>
-        <br></br>
+        <br />
         <div className='form-group row m-l-0 m-r-0 m-b-15'>
           <div className='col-6'>
-            <Button color='gray-o' className='btn prop-btn w100' onClick={toggle}>Cancel</Button>
+            <Button
+              color='gray-o'
+              className='btn prop-btn w100'
+              onClick={toggle}
+            >
+              Cancel
+            </Button>
           </div>
           <div className='col-6'>
             <Button
@@ -104,21 +112,19 @@ const UserSendForm = props => {
         </div>
       </FormGroup>
       <Collapse isOpen={userSendErr} size='sm'>
-            {userSendErr === 'Success' ? (
-              <Alert color='success'>
-                <div>
-                  <div>
-                    <b>Successful sending!</b>
-                  </div>
-                  <div>
-                    {values.amount} XFS will be deducted from your balance
-                  </div>
-                </div>
-              </Alert>
-            ) : (
-              <Alert color='danger'>{userSendErr}</Alert>
-            )}
-          </Collapse>
+        {userSendErr === 'Success' ? (
+          <Alert color='success'>
+            <div>
+              <div>
+                <b>Successful sending!</b>
+              </div>
+              <div>{values.amount} XFS will be deducted from your balance</div>
+            </div>
+          </Alert>
+        ) : (
+          <Alert color='danger'>{userSendErr}</Alert>
+        )}
+      </Collapse>
     </Form>
   )
 }
