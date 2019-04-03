@@ -56,8 +56,8 @@ export const User = ({
         <div className='circular-text-container'>
           <h3>RAM AVAILABLE</h3>
           <h2>{user.ramStr && user.ramStr.split('/')[0]}</h2>
-          {/* <ManageRamModal /> */}
-            <ManageRam
+          <p><span href="" onClick={handleToggleModalRam}>MANAGE RAM</span></p>
+          <ManageRam
             showModalRam={showModalRam}
             handleToggleModalRam={handleToggleModalRam}
             handleManageRam={handleManageRam}

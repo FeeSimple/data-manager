@@ -34,8 +34,8 @@ const ManageRamForm = props => {
   } = props
 
   return (
-    <>
-    <p><span href="" onClick={handleToggleModalRam}>MANAGE RAM</span></p>
+    <div>
+    
     <Modal
       isOpen={showModalRam}
       toggle={handleToggleModalRam}
@@ -127,7 +127,7 @@ const ManageRamForm = props => {
         </Collapse>
       </ModalBody>
     </Modal>
-    </>
+    </div>
   )
 }
 
