@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Button, Modal, ModalBody} from 'reactstrap';
+import { Button, Modal, ModalBody, ModalHeader, Collapse, Alert} from 'reactstrap';
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css'
+import Spinner from 'react-spinkit'
 
-class SendModalContainer extends React.Component {
+class StakeModalContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,22 +30,24 @@ class SendModalContainer extends React.Component {
     })
   };
   handleChangeComplete = () => {
-    //console.log('Change event completed')
   };
 
   render() {
     const { value } = this.state
+    const { userBalance, handleSetStake, isProcessing, resourceHandleErr } = this.props
     return (
       <>
         <Button color='gray' className='btn prop-btn fr' onClick={this.toggle}>Stake</Button>
 
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>
+            <div className='fs-16 clr-base tc'>Manage Stake</div>
+          </ModalHeader>
           <ModalBody>
-            <h3 className='fs-16 clr-base tc'>Manage Stake</h3>
-            <p className='tc m-b-30'>To gain additional resources, adjust the amount of <br/> XFS you would like to stake:</p>
+            <div className='tc m-b-30'>To gain additional resources, adjust the amount of <br/> XFS you would like to stake:</div>
 
             <h2 className='stackvalueRange'>{value}%</h2>
-            <h4 className='stackvalue'>10,000.123 XFS</h4>
+            <h4 className='stackvalue'>{(parseInt(value) * parseFloat(userBalance) / 100).toFixed(4)} XFS</h4>
 
             <from>
               <div className='form-group row'>
@@ -72,10 +75,34 @@ class SendModalContainer extends React.Component {
               </div>
               <div className='form-group row'>
                 <div className='col-12 col-md-6 offset-md-3'>
-                  <Button color='base' className='btn prop-btn w100' onClick={this.toggle}>Set Stake</Button>
+                  <Button 
+                    color='base' className='btn prop-btn w100' 
+                    onClick={() => {handleSetStake((parseInt(value) * parseFloat(userBalance) / 100))}}>
+                      {isProcessing ? (
+                        <Spinner name='three-bounce' color='white' fadeIn='none' />
+                      ) : (
+                        <span>Set Stake</span>
+                      )}
+                  </Button>
                 </div>
               </div>
             </from>
+            <Collapse isOpen={resourceHandleErr} size='sm'>
+              {resourceHandleErr === 'Success' ? (
+                <Alert color='success'>
+                    <div>
+                      <div>
+                        <b>Successful staking!</b>
+                      </div>
+                      <div>{(parseInt(value) * parseFloat(userBalance) / 100).toFixed(4)} XFS has been deducted</div>
+                      <div>from your balance</div>
+                    </div>
+                  
+                </Alert>
+              ) : (
+                <Alert color='danger'>{resourceHandleErr}</Alert>
+              )}
+            </Collapse>
           </ModalBody>
         </Modal>
       </>
@@ -83,4 +110,4 @@ class SendModalContainer extends React.Component {
   }
 }
 
-export default SendModalContainer;
+export default StakeModalContainer;

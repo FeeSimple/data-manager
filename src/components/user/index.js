@@ -207,6 +207,47 @@ class UserContainer extends Component {
     }
   }
 
+  handleSetStake = async xfsAmount => {
+    // Reset state
+    this.setState({
+      resourceHandleErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData } = this.props
+    let activeAccount = accountData.active
+
+    const { isCpu, isStake } = this.state
+    let res = await manageCpuBw(
+      eosClient,
+      activeAccount,
+      xfsAmount,
+      true,
+      true
+    )
+
+    res = await manageCpuBw(
+      eosClient,
+      activeAccount,
+      xfsAmount,
+      false,
+      true
+    )
+
+    // console.log('manageCpuBw:', res)
+    if (res.errMsg) {
+      this.setState({
+        resourceHandleErr: res.errMsg,
+        isProcessing: false
+      })
+    } else {
+      this.setState({
+        resourceHandleErr: 'Success',
+        isProcessing: false
+      })
+    }
+  }
+
   handleManageRam = async xfsAmount => {
     // Reset state
     this.setState({
@@ -325,7 +366,11 @@ class UserContainer extends Component {
                     isProcessing={this.state.isProcessing}
                   />
                 </div>
-                <StakeModal/>
+                <StakeModal 
+                  userBalance={user.balance} 
+                  handleSetStake={this.handleSetStake}
+                  isProcessing={this.state.isProcessing}
+                  resourceHandleErr={this.state.resourceHandleErr} />
               </Col>
             </Row>
           </Container>
