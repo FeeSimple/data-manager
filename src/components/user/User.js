@@ -1,10 +1,4 @@
 import React from 'react'
-import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from 'reactstrap'
-import classnames from 'classnames'
-import UserInfo from './UserInfo'
-import ManageRam from './ManageRam'
-import ManageCpuBw from './ManageCpuBw'
-import UserSend from './UserSend'
 import UserActivity from './UserActivity'
 
 import ManageRamModal from './modals/ManageRamModal'
@@ -21,32 +15,14 @@ export const USERTAB = {
 
 export const User = ({
   user,
-  activeTab,
-  toggleTab,
-
   showModalRam,
   handleToggleModalRam,
   handleManageRam,
   isBuy,
   setBuy,
   setSell,
-
-  showModalCpuBw,
-  handleToggleModalCpu,
-  handleToggleModalBw,
-  handleToggleModalCpuBw,
-  isCpu,
-  isStake,
-  setStake,
-  setUnstake,
-  handleManageCpuBw,
-
   isProcessing,
   resourceHandleErr,
-
-  handleUserSend,
-  userSendErr,
-
   activityList,
   gettingActions
 }) => (
@@ -57,7 +33,7 @@ export const User = ({
           <h3>RAM AVAILABLE</h3>
           <h2>{user.ramStr && user.ramStr.split('/')[0]}</h2>
           <p><span href="" onClick={handleToggleModalRam}>MANAGE RAM</span></p>
-          <ManageRam
+          <ManageRamModal
             showModalRam={showModalRam}
             handleToggleModalRam={handleToggleModalRam}
             handleManageRam={handleManageRam}
@@ -100,80 +76,12 @@ export const User = ({
             initialAnimation= {true}  
           />
       </li>
-  </ul>
-    {/*
-    <Nav tabs>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.INFO })}
-          onClick={() => {
-            toggleTab(USERTAB.INFO)
-          }}
-        >
-          <Button>Information</Button>
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          className={classnames({ active: activeTab === USERTAB.SEND })}
-          onClick={() => {
-            toggleTab(USERTAB.SEND)
-          }}
-        >
-          <Button>Send</Button>
-        </NavLink>
-      </NavItem>
-    </Nav>
-    */}
-    <TabContent activeTab={activeTab}>
-      <TabPane tabId={USERTAB.INFO}>
-        {/*
-        <br />
-        <UserInfo
-          user={user}
-          handleToggleModalRam={handleToggleModalRam}
-          handleToggleModalCpu={handleToggleModalCpu}
-          handleToggleModalBw={handleToggleModalBw}
-        />
-        */}
-        <UserActivity
-          activityList={activityList}
-          gettingActions={gettingActions}
-        />
-        
-        <ManageRam
-          showModalRam={showModalRam}
-          handleToggleModalRam={handleToggleModalRam}
-          handleManageRam={handleManageRam}
-          isBuy={isBuy}
-          setBuy={setBuy}
-          setSell={setSell}
-          isProcessing={isProcessing}
-          resourceHandleErr={resourceHandleErr}
-        />
-        
-
-        <ManageCpuBw
-          showModalCpuBw={showModalCpuBw}
-          handleToggleModalCpuBw={handleToggleModalCpuBw}
-          isProcessing={isProcessing}
-          resourceHandleErr={resourceHandleErr}
-          isCpu={isCpu}
-          isStake={isStake}
-          setStake={setStake}
-          setUnstake={setUnstake}
-          handleManageCpuBw={handleManageCpuBw}
-        />
-      </TabPane>
-      <TabPane tabId={USERTAB.SEND}>
-        <br />
-        <UserSend
-          user={user}
-          handleUserSend={handleUserSend}
-          userSendErr={userSendErr}
-          isProcessing={isProcessing}
-        />
-      </TabPane>
-    </TabContent>
+    </ul>
+    <div>
+      <UserActivity
+        activityList={activityList}
+        gettingActions={gettingActions}
+      />
+    </div>
   </div>
 )
