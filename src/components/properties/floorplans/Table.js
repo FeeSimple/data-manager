@@ -1,14 +1,16 @@
 import React from 'react'
-import { Container, Row, Col, Button } from 'reactstrap'
+import { Container, Row, Col, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem  } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
 import Spinner from 'react-spinkit'
 // import FloorplanRow from './Row'
-import IconAdd from '../../../img/icon-add.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
+import IconEditSqr from '../../../img/icon-edit-sq.svg'
+import IconCloseSqr from '../../../img/icon-close-sq.svg'
+import IconAddSqr from '../../../img/icon-plus-sq.svg'
 
 const NoDataIndication = () => {
   const hrefLinkFloor = `${window.location.href}/floorplan/new`
@@ -105,25 +107,40 @@ export default props => {
     }
   ]
 
-  return (
+  return (    
     <div>
       <div className='top-bar'>
         <div className='container-fluid'>
           <Row>
-            <div className='col-7 col-md-7'>
+            <div className='col-6 col-md-7'>
               <h3 className='float-left'>{property.name}</h3>
             </div>
-            <div className='col-5  col-md-5'>
-              <h3 className='float-right'>
-                <Link to={`/${props.propertyId}/floorplan/new`}>
-                  <img src={IconAdd} alt='' />F
-                  <span className='hide-xs'>loor Plans</span>
-                </Link>{' '}
-                <Link className='m-l-10' to={`/${props.propertyId}/unit/new`}>
-                  <img src={IconAdd} alt='' />U
-                  <span className='hide-xs'>nit</span>
-                </Link>
-              </h3>
+            <div className='col-6  col-md-5'>
+              <ul className='properties-menu'>
+                  <li>
+                    <Link to={`/`}>
+                      <img src={IconEditSqr} alt='' />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`/`}>
+                      <img src={IconCloseSqr} alt='' />
+                    </Link>
+                  </li>
+                  <li className='dropdown-li'>
+                    <Link to={`/`}>
+                      <img src={IconAddSqr} alt='' />
+                    </Link>
+                    <div className='properties-dropdpwn'>
+                      <Link to={`/${props.propertyId}/floorplan/new`}>
+                        Add Floor Plans
+                      </Link>{' '}
+                      <Link to={`/${props.propertyId}/unit/new`}>
+                        Add Unit
+                      </Link>
+                    </div>
+                  </li>
+              </ul>
             </div>
           </Row>
         </div>
@@ -137,8 +154,7 @@ export default props => {
               </Link>
               <Link
                 to={`/${property.id}/unit`}
-                className='btn btn-gray-o prop-btn m-l-5'
-              >
+                className='btn btn-gray-o prop-btn m-l-5'>
                 Units
               </Link>
             </div>

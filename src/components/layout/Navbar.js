@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import CircularProgressbar from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
 import Logo from '../../img/feesimple-logo-outline.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconWallet from '../../img/icon-wallet.svg'
@@ -108,12 +110,53 @@ class NavbarContainer extends Component {
                   </Link>
                 </li>
               </ul>
-
+              {/*
               <div className='storage'>
                 <span className='storage-text'>Manage Storage </span>
                 <span className='badge badge-pill'>
                   {this.state.data.ramAvailable}
                 </span>
+              </div>
+              */}
+              
+              <div className='memory-stat ms-row'>
+                <div className='ms-col p-l-20 p-r-20'>
+                  <h3>RAM</h3>
+                  <CircularProgressbar
+                    percentage={55}
+                    strokeWidth={10}
+                    text={`55%`}
+                    styles={{
+                      text: { fill: '#fff', fontWeight: 'bold', fontSize: '30px' },
+                    }}
+                    initialAnimation={true}
+                  />
+                </div>
+                <div className='ms-col p-l-20 p-r-20'>
+                  <h3>CPU</h3>
+                  <CircularProgressbar
+                    percentage={95}
+                    strokeWidth={10}
+                    text={`95%`}
+                    styles={{
+                      text: { fill: '#fff', fontWeight: 'bold', fontSize: '30px' },
+                    }}
+                    initialAnimation={true}
+                  />
+                </div>
+                <div className='ms-col p-l-20 p-r-20'>
+                  <h3>NET</h3>
+                  <CircularProgressbar
+                    percentage={75}
+                    strokeWidth={10}
+                    text={`75%`}
+                    styles={{
+                      text: { fill: '#fff', fontWeight: 'bold', fontSize: '30px' },
+                    }}
+                    initialAnimation={true}
+                  />
+                </div>
+
               </div>
 
               <Link to='/' onClick={this.handleLogout} className='logout'>

@@ -165,6 +165,57 @@ h1, h2, h3, h4, h5, h6 {
 .floor-btns {
   float: left; }
 
+.properties-menu {
+  padding: 0;
+  margin: 0;
+  float: right; }
+  .properties-menu > li {
+    float: left;
+    list-style: none;
+    margin-left: 10px;
+    position: relative; }
+    .properties-menu > li:first-child {
+      margin-left: 0; }
+    .properties-menu > li.dropdown-li .properties-dropdpwn {
+      z-index: 5;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      border-radius: 6px;
+      background: #fff;
+      min-width: 140px;
+      transition: all .5s;
+      visibility: hidden;
+      opacity: 0;
+      box-shadow: 1px 2px 6px #999; }
+      .properties-menu > li.dropdown-li .properties-dropdpwn a {
+        display: block;
+        padding: 10px 15px;
+        text-align: center;
+        font-weight: 600;
+        border-radius: 6px; }
+        .properties-menu > li.dropdown-li .properties-dropdpwn a:hover {
+          text-decoration: none;
+          background-color: #f4f4f4; }
+    .properties-menu > li.dropdown-li:hover .properties-dropdpwn {
+      opacity: 1;
+      top: 99%;
+      visibility: visible;
+      -webkit-animation-name: slideUpIn;
+      animation-name: slideUpIn;
+      -webkit-animation-duration: .3s;
+      animation-duration: .3s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both; }
+
+@keyframes slideUpIn {
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+  0% {
+    -webkit-transform: translateY(40px);
+    transform: translateY(40px); } }
+
 .properties-ul {
   list-style: none;
   padding: 0;
@@ -293,6 +344,25 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
     color: inherit;
     opacity: 0.9; }
+
+.memory-stat h3 {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 22px;
+  float: left;
+  line-height: 40px; }
+
+.memory-stat svg {
+  float: right;
+  height: 40px;
+  width: 40px; }
+
+.memory-stat .CircularProgressbar-path {
+  stroke: #5c7fa3; }
+
+.memory-stat .CircularProgressbar-trail {
+  stroke: #ffffff; }
 
 /*-----------------------------------------
   Footer
@@ -663,6 +733,17 @@ Dropzone
   cursor: pointer;
   margin-top: 3px; }
 
+.comingsonmp {
+  border: 2px solid rgba(16, 67, 120, 0.15);
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  max-width: 715px;
+  margin: 50px auto 0;
+  text-align: center;
+  font-size: 18px; }
+
 /*------------------------------------------
     Responsive Grid Media Queries Settings
     1600+   -     Extra Large Screen
@@ -704,6 +785,8 @@ Dropzone
 
 /*--- below medium screen -----*/
 @media all and (max-width: 991px) {
+  .memory-stat {
+    display: none; }
   .tc-sm {
     text-align: center; }
   .main-wrapper {

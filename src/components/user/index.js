@@ -348,9 +348,9 @@ class UserContainer extends Component {
           <Row>
             <Col className='m-t-15'>
               <div className='floor-btns'>
-                <Button color='base' className='btn prop-btn'>
+                {/*<Button color='base' className='btn prop-btn'>
                   Account
-                </Button>
+                </Button>*/}
                 <SendModal
                   user={user}
                   handleUserSend={this.handleUserSend}
@@ -358,12 +358,15 @@ class UserContainer extends Component {
                   isProcessing={this.state.isProcessing}
                 />
               </div>
+
+              <Button color='gray' className='btn prop-btn fr m-l-10' onClick={this.toggle}> RAM</Button>
               <StakeModal
                 userBalance={user.balance}
                 handleSetStake={this.handleSetStake}
                 isProcessing={this.state.isProcessing}
                 resourceHandleErr={this.state.resourceHandleErr}
               />
+              
             </Col>
           </Row>
         </Container>
