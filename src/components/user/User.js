@@ -31,22 +31,15 @@ export const User = ({
       <li>
         <div className='circular-text-container'>
           <h3>RAM AVAILABLE</h3>
-          <h2>{user.ramStr && user.ramStr.split('/')[0]}</h2>
+          <h2>{user.ramMeter + ' %'}</h2>
           <p>
-            <span href='' onClick={handleToggleModalRam}>
-              MANAGE RAM
+            <span>{user.ramStr && user.ramStr.split('/')[0]}</span>
+          </p>
+          <p>
+            <span className='gray-text'>
+              {user.ramStr && user.ramStr.split('/')[1]}
             </span>
           </p>
-          <ManageRamModal
-            showModalRam={showModalRam}
-            handleToggleModalRam={handleToggleModalRam}
-            handleManageRam={handleManageRam}
-            isBuy={isBuy}
-            setBuy={setBuy}
-            setSell={setSell}
-            isProcessing={isProcessing}
-            resourceHandleErr={resourceHandleErr}
-          />
         </div>
         <CircularProgressbar
           percentage={user.ramMeter}

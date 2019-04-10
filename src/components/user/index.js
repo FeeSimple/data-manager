@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
 import SendModal from './modals/SendModal'
 import StakeModal from './modals/StakeModal'
+import ManageRamModal from './modals/ManageRamModal'
 
 import {
   getAccountInfo,
@@ -348,9 +349,6 @@ class UserContainer extends Component {
           <Row>
             <Col className='m-t-15'>
               <div className='floor-btns'>
-                {/*<Button color='base' className='btn prop-btn'>
-                  Account
-                </Button>*/}
                 <SendModal
                   user={user}
                   handleUserSend={this.handleUserSend}
@@ -359,7 +357,19 @@ class UserContainer extends Component {
                 />
               </div>
 
-              <Button color='gray' className='btn prop-btn fr m-l-10' onClick={this.toggle}> RAM</Button>
+              <Button color='gray' className='btn prop-btn fr m-l-10' onClick={this.handleToggleModalRam}> RAM</Button>
+
+              <ManageRamModal
+                showModalRam={this.state.showModalRam}
+                handleToggleModalRam={this.handleToggleModalRam}
+                handleManageRam={this.handleManageRam}
+                isBuy={this.state.isBuy}
+                setBuy={this.setBuy}
+                setSell={this.setSell}
+                isProcessing={this.state.isProcessing}
+                resourceHandleErr={this.state.resourceHandleErr}
+              />
+              
               <StakeModal
                 userBalance={user.balance}
                 handleSetStake={this.handleSetStake}
