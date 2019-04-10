@@ -13,18 +13,56 @@ import UnitDetails from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
 
+import ipfs from '../../../layout/ipfs'
+
+let totalUploadedFiles = 0
+let ipfsUploadedFiles = 0
+
 class UnitDetailsContainer extends Component {
   state = {
     prevUnit: {},
     unit: 'undefined',
     isLeased: true,
     buffer: null,
-    imagesToUpload: [],
-    imgMultihashes: [],
+    imgIpfsAddrListFromUpload: [],
+    imgIpfsAddrListFromTable: [],
 
     alertShow: false,
     alertContent: [],
     alertHeader: ''
+  }
+
+  // It takes long time to upload img to IPFS and thus must popup waiting notification when clicking "Save"
+  // while the img-uploading process is still in progress
+  handleUploadedImg = acceptedFiles => {
+    totalUploadedFiles = acceptedFiles.length
+    ipfsUploadedFiles = 0
+
+    acceptedFiles.map(file => {
+      // console.log('file:', file);
+      const reader = new window.FileReader()
+      reader.readAsArrayBuffer(file)
+      reader.onloadend = () => {
+        let fileBuf = Buffer(reader.result)
+        // console.log('file buffer', fileBuf)
+
+        ipfs.files.add(fileBuf, (error, result) => {
+          ipfsUploadedFiles++
+
+          if (error) {
+            console.error(error)
+            return
+          }
+          let ipfsAddress = result[0].hash
+          console.log('ipfs.files.add - ipfs-address: ', ipfsAddress)
+
+          let curImagesToUpload = this.state.imgIpfsAddrListFromUpload
+          curImagesToUpload.push(ipfsAddress)
+
+          this.setState({ imgIpfsAddrListFromUpload: curImagesToUpload })
+        })
+      }
+    })
   }
 
   onImagesUploaded = (err, resp) => {
@@ -97,7 +135,7 @@ class UnitDetailsContainer extends Component {
     e.preventDefault()
 
     const propertyId = this.props.match.params.id
-    const { unit, imagesToUpload } = this.state
+    const { unit, imgIpfsAddrListFromUpload } = this.state
     const {
       contracts,
       accountData,
@@ -120,6 +158,16 @@ class UnitDetailsContainer extends Component {
         alertShow: true,
         alertHeader: 'Unit editing with invalid input',
         alertContent: result
+      })
+      return
+    }
+
+    if (totalUploadedFiles !== 0 && totalUploadedFiles !== ipfsUploadedFiles) {
+      console.log('IPFS image uploading is still in progress')
+      this.setState({
+        alertShow: true,
+        alertHeader: 'Please wait',
+        alertContent: ['IPFS image uploading is still in progress']
       })
       return
     }
@@ -150,25 +198,35 @@ class UnitDetailsContainer extends Component {
       operationOK = false
     }
 
-    if (imagesToUpload.length > 0) {
+    if (imgIpfsAddrListFromUpload.length > 0) {
       // Mapping values to object keys removes duplicates.
-      const imagesObj = {}
-      imagesToUpload.map(multihash => {
-        imagesObj[multihash] = multihash
-        return multihash
+      const imgIpfsAddressMap = {}
+      imgIpfsAddrListFromUpload.forEach(ipfsAddr => {
+        imgIpfsAddressMap[ipfsAddr] = ipfsAddr
       })
 
-      await Promise.all(
-        Object.keys(imagesObj).map(async multihash => {
-          fsmgrcontract.addflplanimg(
+      let imgIpfsAddressListCleaned = Object.values(imgIpfsAddressMap)
+      for (let i = 0; i < imgIpfsAddressListCleaned.length; i++) {
+        try {
+          await fsmgrcontract.addunitimg(
             accountData.active,
             unit.id,
-            ecc.sha256(multihash),
-            multihash,
+            ecc.sha256(imgIpfsAddressListCleaned[i]),
+            imgIpfsAddressListCleaned[i],
             options
           )
-        })
-      )
+          console.log(
+            `fsmgrcontract.addunitimg - OK (ipfs address:${
+              imgIpfsAddressListCleaned[i]
+            })`
+          )
+        } catch (err) {}
+      }
+
+      // Clear images after done
+      this.setState({
+        imgIpfsAddrListFromUpload: []
+      })
     }
 
     history.push(`/${propertyId}/unit`)
@@ -295,19 +353,8 @@ class UnitDetailsContainer extends Component {
   }
 
   async componentDidMount () {
-    const { eosClient, accountData } = this.props
+    const { eosClient, accountData, isCreating, properties } = this.props
 
-    const { rows } = await eosClient.getTableRows(
-      true,
-      FSMGRCONTRACT,
-      accountData.active,
-      UNITIMG
-    )
-
-    const imgMultihashes = rows.map(row => row.ipfs_address)
-    this.setState({ imgMultihashes })
-
-    const { isCreating, properties } = this.props
     const { id, unitid } = this.props.match.params
     const { units } = properties[id]
 
@@ -318,6 +365,26 @@ class UnitDetailsContainer extends Component {
         unit: existingUnit,
         isLeased: existingUnit.status.toLowerCase() === 'leased'
       })
+
+      const { rows } = await eosClient.getTableRows(
+        true,
+        FSMGRCONTRACT,
+        accountData.active,
+        UNITIMG
+      )
+
+      console.log('get table UNITIMG:', rows)
+
+      const imgIpfsAddrListFromTable = rows
+        .filter(row => row.unit_id === Number(unitid))
+        .map(row => row.ipfs_address)
+
+      console.log(
+        'componentDidMount - imgIpfsAddrListFromTable:',
+        imgIpfsAddrListFromTable
+      )
+
+      this.setState({ imgIpfsAddrListFromTable })
     } else {
       // Create a new unit
       this.setState({
@@ -330,12 +397,20 @@ class UnitDetailsContainer extends Component {
   render () {
     const { isCreating } = this.props
     const { id } = this.props.match.params
-    const { imgMultihashes } = this.state
+    const { imgIpfsAddrListFromTable } = this.state
 
-    const galleryItems = imgMultihashes.map(multihash => ({
-      original: `https://gateway.ipfs.io/ipfs/${multihash}/`,
-      thumbnail: `https://gateway.ipfs.io/ipfs/${multihash}/`
-    }))
+    let galleryItems = []
+    for (let i = 0; i < imgIpfsAddrListFromTable.length; i++) {
+      let imgItem = {
+        original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
+          imgIpfsAddrListFromTable[i]
+        }&stream-channels=true`,
+        thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
+          imgIpfsAddrListFromTable[i]
+        }&stream-channels=true`
+      }
+      galleryItems.push(imgItem)
+    }
 
     return (
       <div>
@@ -351,6 +426,7 @@ class UnitDetailsContainer extends Component {
           onImagesUploaded={this.onImagesUploaded}
           onImageDeleted={this.onImageDeleted}
           galleryItems={galleryItems}
+          handleUploadedImg={this.handleUploadedImg}
         />
         <Alert
           isOpen={this.state.alertShow}
