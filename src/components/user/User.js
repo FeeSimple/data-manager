@@ -31,7 +31,7 @@ export const User = ({
       <li>
         <div className='circular-text-container'>
           <h3>RAM AVAILABLE</h3>
-          <h2>{user.ramMeter + ' %'}</h2>
+          {user.ramMeter && <h2>{Number(user.ramMeter).toFixed(1) + ' %'}</h2>}
           <p>
             <span>{user.ramStr && user.ramStr.split('/')[0]}</span>
           </p>
@@ -42,7 +42,7 @@ export const User = ({
           </p>
         </div>
         <CircularProgressbar
-          percentage={user.ramMeter}
+          percentage={Number(user.ramMeter).toFixed(1)}
           strokeWidth={4}
           initialAnimation={true}
         />
@@ -50,7 +50,7 @@ export const User = ({
       <li>
         <div className='circular-text-container'>
           <h3>CPU AVAILABLE</h3>
-          <h2>{user.cpuMeter + ' %'}</h2>
+          {user.cpuMeter && <h2>{Number(user.cpuMeter).toFixed(1) + ' %'}</h2>}
           <p>
             <span>{user.cpuStr && user.cpuStr.split('/')[0]}</span>
           </p>
@@ -61,15 +61,15 @@ export const User = ({
           </p>
         </div>
         <CircularProgressbar
-          percentage={user.cpuMeter}
+          percentage={Number(user.cpuMeter).toFixed(1)}
           strokeWidth={4}
           initialAnimation={true}
         />
       </li>
       <li>
         <div className='circular-text-container'>
-          <h3>BANDWIDTH AVAILABLE</h3>
-          <h2>{user.bandwidthMeter + ' %'}</h2>
+          <h3>NET AVAILABLE</h3>
+          {user.bandwidthMeter && <h2>{Number(user.bandwidthMeter).toFixed(1) + ' %'}</h2>}
           <p>
             <span>{user.bandwidthStr && user.bandwidthStr.split('/')[0]}</span>
           </p>
@@ -80,7 +80,7 @@ export const User = ({
           </p>
         </div>
         <CircularProgressbar
-          percentage={user.bandwidthMeter}
+          percentage={Number(user.bandwidthMeter).toFixed(1)}
           strokeWidth={4}
           initialAnimation={true}
         />
