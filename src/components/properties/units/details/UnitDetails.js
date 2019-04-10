@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, { useCallback } from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import ImageGallery from 'react-image-gallery'
