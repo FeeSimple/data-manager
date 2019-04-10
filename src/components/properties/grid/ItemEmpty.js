@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Background from '../../../img/urbn-village.png'
+import Background from '../../../img/property-no-image.svg'
 import IconAdd from '../../../img/icon-add.svg'
 
 export default function (props) {
