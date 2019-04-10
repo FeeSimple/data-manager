@@ -5,7 +5,7 @@ import ImageGallery from 'react-image-gallery'
 import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
-import { StyledPreview } from './DropZone'
+import { StyledPreview } from '../../../layout/DropZone'
 
 const FloorplanDetails = ({
   floorplan,
@@ -166,19 +166,6 @@ const FloorplanDetails = ({
         )}
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-            {/* <ImagesUploader
-              url={process.env.REACT_APP_IPFS_IMAGES_UPLOADER_ADDR}
-              optimisticPreviews
-              onLoadEnd={onImagesUploaded}
-              onImageDeleted={onImageDeleted}
-              label='Upload multiple images'
-              styles={{
-                label: {
-                  fontFamily: 'Open sans, sans-serif',
-                  fontSize: '14px'
-                }
-              }}
-            /> */}
             {!isCreating && (
               <StyledPreview handleUploadedImg={handleUploadedImg} />
             )}
