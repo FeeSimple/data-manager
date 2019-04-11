@@ -8,6 +8,7 @@ import Spinner from 'react-spinkit'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
+import IconAddSqr from '../../../img/icon-plus-sq.svg'
 
 function noTermPriceTxt (column, colIndex) {
   const hrefLink = `${window.location.href}/new`
@@ -116,12 +117,11 @@ export default props => {
               <h3 className='float-left'>Term Pricing</h3>
             </div>
             <div className='col-5 col-md-4'>
-              <h3 className='float-right'>
+              <span className='float-right'>
                 <Link to={`/${propertyId}/unit/${unit.id}/termprice/new`}>
-                  <img src={IconAdd} alt='' />
-                  <span className='hide-xs'>Term Price</span>
+                  <img src={IconAddSqr} alt='' />
                 </Link>
-              </h3>
+              </span>
             </div>
           </Row>
         </div>

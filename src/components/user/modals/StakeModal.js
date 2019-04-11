@@ -68,7 +68,7 @@ class StakeModalContainer extends React.Component {
 
             <h2 className='stackvalueRange'>{value}%</h2>
             <h4 className='stackvalue'>
-              {((parseInt(value) * parseFloat(userBalance)) / 100).toFixed(4)}{' '}
+              {((parseInt(value) * parseFloat(userBalance)) / 100).toFixed(3)}{' '}
               XFS
             </h4>
 
