@@ -145,29 +145,27 @@ export default props => {
             </div>
             <div className='col-5 col-md-5'>
               <ul className='properties-menu'>
-                  <li>
-                    <Link to={`/`}>
-                      <img src={IconEditSqr} alt='' />
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={`/`}>
-                      <img src={IconCloseSqr} alt='' />
-                    </Link>
-                  </li>
-                  <li className='dropdown-li'>
-                    <Link to={`/`}>
-                      <img src={IconAddSqr} alt='' />
-                    </Link>
-                    <div className='properties-dropdpwn'>
-                      <Link to={`/${props.propertyId}/floorplan/new`}>
-                        Add Floor Plans
-                      </Link>{' '}
-                      <Link to={`/${props.propertyId}/unit/new`}>
-                        Add Unit
-                      </Link>
-                    </div>
-                  </li>
+                <li>
+                  <Link to={`/`}>
+                    <img src={IconEditSqr} alt='' />
+                  </Link>
+                </li>
+                <li>
+                  <Link to={`/`}>
+                    <img src={IconCloseSqr} alt='' />
+                  </Link>
+                </li>
+                <li className='dropdown-li'>
+                  <Link to={`/`}>
+                    <img src={IconAddSqr} alt='' />
+                  </Link>
+                  <div className='properties-dropdpwn'>
+                    <Link to={`/${props.propertyId}/floorplan/new`}>
+                      Add Floor Plans
+                    </Link>{' '}
+                    <Link to={`/${props.propertyId}/unit/new`}>Add Unit</Link>
+                  </div>
+                </li>
               </ul>
               {/*<h3 className='float-right'>
                 <Link to={`/${props.propertyId}/floorplan/new`}>

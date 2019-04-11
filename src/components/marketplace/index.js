@@ -19,7 +19,11 @@ class MarketplaceContainer extends Component {
           <div className='row'>
             <div className='col-12'>
               <p className='comingsonmp'>
-                <strong>Great things are happening like development of our dApp marketplace. </strong> <br/>
+                <strong>
+                  Great things are happening like development of our dApp
+                  marketplace.{' '}
+                </strong>{' '}
+                <br />
                 So, check back later. We promise it will be worth it.
               </p>
             </div>

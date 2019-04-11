@@ -69,7 +69,9 @@ export const User = ({
       <li>
         <div className='circular-text-container'>
           <h3>NET AVAILABLE</h3>
-          {user.bandwidthMeter && <h2>{Number(user.bandwidthMeter).toFixed(1) + ' %'}</h2>}
+          {user.bandwidthMeter && (
+            <h2>{Number(user.bandwidthMeter).toFixed(1) + ' %'}</h2>
+          )}
           <p>
             <span>{user.bandwidthStr && user.bandwidthStr.split('/')[0]}</span>
           </p>

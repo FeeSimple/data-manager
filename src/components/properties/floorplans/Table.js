@@ -1,5 +1,14 @@
 import React from 'react'
-import { Container, Row, Col, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem  } from 'reactstrap'
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap'
 import { Link } from 'react-router-dom'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
@@ -107,7 +116,7 @@ export default props => {
     }
   ]
 
-  return (    
+  return (
     <div>
       <div className='top-bar'>
         <div className='container-fluid'>
@@ -117,29 +126,27 @@ export default props => {
             </div>
             <div className='col-6  col-md-5'>
               <ul className='properties-menu'>
-                  <li>
-                    <Link to={`/`}>
-                      <img src={IconEditSqr} alt='' />
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={`/`}>
-                      <img src={IconCloseSqr} alt='' />
-                    </Link>
-                  </li>
-                  <li className='dropdown-li'>
-                    <Link to={`/`}>
-                      <img src={IconAddSqr} alt='' />
-                    </Link>
-                    <div className='properties-dropdpwn'>
-                      <Link to={`/${props.propertyId}/floorplan/new`}>
-                        Add Floor Plans
-                      </Link>{' '}
-                      <Link to={`/${props.propertyId}/unit/new`}>
-                        Add Unit
-                      </Link>
-                    </div>
-                  </li>
+                <li>
+                  <Link to={`/`}>
+                    <img src={IconEditSqr} alt='' />
+                  </Link>
+                </li>
+                <li>
+                  <Link to={`/`}>
+                    <img src={IconCloseSqr} alt='' />
+                  </Link>
+                </li>
+                <li className='dropdown-li'>
+                  <Link to={`/`}>
+                    <img src={IconAddSqr} alt='' />
+                  </Link>
+                  <div className='properties-dropdpwn'>
+                    <Link to={`/${props.propertyId}/floorplan/new`}>
+                      Add Floor Plans
+                    </Link>{' '}
+                    <Link to={`/${props.propertyId}/unit/new`}>Add Unit</Link>
+                  </div>
+                </li>
               </ul>
             </div>
           </Row>
@@ -154,7 +161,8 @@ export default props => {
               </Link>
               <Link
                 to={`/${property.id}/unit`}
-                className='btn btn-gray-o prop-btn m-l-5'>
+                className='btn btn-gray-o prop-btn m-l-5'
+              >
                 Units
               </Link>
             </div>

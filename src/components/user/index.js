@@ -357,7 +357,14 @@ class UserContainer extends Component {
                 />
               </div>
 
-              <Button color='gray' className='btn prop-btn fr m-l-10' onClick={this.handleToggleModalRam}> RAM</Button>
+              <Button
+                color='gray'
+                className='btn prop-btn fr m-l-10'
+                onClick={this.handleToggleModalRam}
+              >
+                {' '}
+                RAM
+              </Button>
 
               <ManageRamModal
                 showModalRam={this.state.showModalRam}
@@ -369,14 +376,13 @@ class UserContainer extends Component {
                 isProcessing={this.state.isProcessing}
                 resourceHandleErr={this.state.resourceHandleErr}
               />
-              
+
               <StakeModal
                 userBalance={user.balance}
                 handleSetStake={this.handleSetStake}
                 isProcessing={this.state.isProcessing}
                 resourceHandleErr={this.state.resourceHandleErr}
               />
-              
             </Col>
           </Row>
         </Container>

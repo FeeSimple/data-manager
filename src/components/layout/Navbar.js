@@ -17,9 +17,7 @@ import {
   setEosClient
 } from '../../actions/index'
 import { beautifyRam } from '../../utils/beautify'
-import {
-  getAccountInfo
-} from '../../utils/eoshelper'
+import { getAccountInfo } from '../../utils/eoshelper'
 
 class NavbarContainer extends Component {
   constructor () {
@@ -118,11 +116,15 @@ class NavbarContainer extends Component {
                 <div className='ms-col p-l-20 p-r-20'>
                   <h3>RAM</h3>
                   <CircularProgressbar
-                    percentage={info? Number(info.ramMeter).toFixed(1) : ''}
+                    percentage={info ? Number(info.ramMeter).toFixed(1) : ''}
                     strokeWidth={10}
-                    text={info? Number(info.ramMeter).toFixed(1) + ' %' : ''}
+                    text={info ? Number(info.ramMeter).toFixed(1) + ' %' : ''}
                     styles={{
-                      text: { fill: '#fff', fontWeight: 'bold', fontSize: '25px' },
+                      text: {
+                        fill: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: '25px'
+                      }
                     }}
                     initialAnimation={true}
                   />
@@ -130,11 +132,15 @@ class NavbarContainer extends Component {
                 <div className='ms-col p-l-20 p-r-20'>
                   <h3>CPU</h3>
                   <CircularProgressbar
-                    percentage={info? Number(info.cpuMeter).toFixed(1) : ''}
+                    percentage={info ? Number(info.cpuMeter).toFixed(1) : ''}
                     strokeWidth={10}
-                    text={info? Number(info.cpuMeter).toFixed(1) + ' %' : ''}
+                    text={info ? Number(info.cpuMeter).toFixed(1) + ' %' : ''}
                     styles={{
-                      text: { fill: '#fff', fontWeight: 'normal', fontSize: '25px' },
+                      text: {
+                        fill: '#fff',
+                        fontWeight: 'normal',
+                        fontSize: '25px'
+                      }
                     }}
                     initialAnimation={true}
                   />
@@ -142,16 +148,23 @@ class NavbarContainer extends Component {
                 <div className='ms-col p-l-20 p-r-20'>
                   <h3>NET</h3>
                   <CircularProgressbar
-                    percentage={info? Number(info.bandwidthMeter).toFixed(1) : ''}
+                    percentage={
+                      info ? Number(info.bandwidthMeter).toFixed(1) : ''
+                    }
                     strokeWidth={10}
-                    text={info? Number(info.bandwidthMeter).toFixed(1) + ' %' : ''}
+                    text={
+                      info ? Number(info.bandwidthMeter).toFixed(1) + ' %' : ''
+                    }
                     styles={{
-                      text: { fill: '#fff', fontWeight: 'bold', fontSize: '25px' },
+                      text: {
+                        fill: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: '25px'
+                      }
                     }}
                     initialAnimation={true}
                   />
                 </div>
-
               </div>
 
               <Link to='/' onClick={this.handleLogout} className='logout'>
