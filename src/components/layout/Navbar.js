@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import CircularProgressbar from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
 import Logo from '../../img/feesimple-logo-outline.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconWallet from '../../img/icon-wallet.svg'
@@ -15,11 +17,12 @@ import {
   setEosClient
 } from '../../actions/index'
 import { beautifyRam } from '../../utils/beautify'
+import { getAccountInfo } from '../../utils/eoshelper'
 
 class NavbarContainer extends Component {
   constructor () {
     super()
-    this.state = { data: [] }
+    this.state = { info: null }
   }
 
   async componentDidMount () {
@@ -32,25 +35,25 @@ class NavbarContainer extends Component {
     } = this.props
 
     let account = accountData.active
-    let result = await eosClient.getAccount(account)
+    let result = await getAccountInfo(eosClient, account)
     const created = result.created
-    const ram = result.ram_quota
-    const ramAvailable = beautifyRam(result.ram_quota - result.ram_usage)
-    const bandwidth = result.delegated_bandwidth
-    const pubkey = result.permissions[0].required_auth.keys[0].key
+    const ramMeter = result.ramMeter
+    const cpuMeter = result.cpuMeter
+    const bandwidthMeter = result.bandwidthMeter
+    const pubkey = result.pubkey
     const info = {
       account,
       created,
-      ram,
-      ramAvailable,
-      bandwidth,
+      ramMeter,
+      cpuMeter,
+      bandwidthMeter,
       pubkey
     }
 
     // Store into redux
     setInfo(info)
 
-    this.setState({ data: info })
+    this.setState({ info })
   }
 
   beautifyRam (ram) {
@@ -79,6 +82,7 @@ class NavbarContainer extends Component {
   }
 
   render () {
+    const { info } = this.state
     return (
       <div className='menu-holder'>
         <div className='container fix-mobile-nav'>
@@ -108,12 +112,59 @@ class NavbarContainer extends Component {
                   </Link>
                 </li>
               </ul>
-
-              <div className='storage'>
-                <span className='storage-text'>Manage Storage </span>
-                <span className='badge badge-pill'>
-                  {this.state.data.ramAvailable}
-                </span>
+              <div className='memory-stat ms-row'>
+                <div className='ms-col p-l-20 p-r-20'>
+                  <h3>RAM</h3>
+                  <CircularProgressbar
+                    percentage={info ? Number(info.ramMeter).toFixed(1) : ''}
+                    strokeWidth={10}
+                    text={info ? Number(info.ramMeter).toFixed(1) + ' %' : ''}
+                    styles={{
+                      text: {
+                        fill: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: '25px'
+                      }
+                    }}
+                    initialAnimation={true}
+                  />
+                </div>
+                <div className='ms-col p-l-20 p-r-20'>
+                  <h3>CPU</h3>
+                  <CircularProgressbar
+                    percentage={info ? Number(info.cpuMeter).toFixed(1) : ''}
+                    strokeWidth={10}
+                    text={info ? Number(info.cpuMeter).toFixed(1) + ' %' : ''}
+                    styles={{
+                      text: {
+                        fill: '#fff',
+                        fontWeight: 'normal',
+                        fontSize: '25px'
+                      }
+                    }}
+                    initialAnimation={true}
+                  />
+                </div>
+                <div className='ms-col p-l-20 p-r-20'>
+                  <h3>NET</h3>
+                  <CircularProgressbar
+                    percentage={
+                      info ? Number(info.bandwidthMeter).toFixed(1) : ''
+                    }
+                    strokeWidth={10}
+                    text={
+                      info ? Number(info.bandwidthMeter).toFixed(1) + ' %' : ''
+                    }
+                    styles={{
+                      text: {
+                        fill: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: '25px'
+                      }
+                    }}
+                    initialAnimation={true}
+                  />
+                </div>
               </div>
 
               <Link to='/' onClick={this.handleLogout} className='logout'>

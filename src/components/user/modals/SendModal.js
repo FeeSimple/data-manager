@@ -35,7 +35,7 @@ class SendModalContainer extends React.Component {
     return (
       <>
         <Button
-          color='base-o'
+          color='base'
           className='btn prop-btn m-l-5'
           onClick={this.toggle}
         >
