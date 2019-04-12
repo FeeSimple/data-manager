@@ -116,9 +116,9 @@ class NavbarContainer extends Component {
                 <div className='ms-col p-l-20 p-r-20'>
                   <h3>RAM</h3>
                   <CircularProgressbar
-                    percentage={info ? Number(info.ramMeter).toFixed(1) : ''}
+                    percentage={info ? Number(info.ramMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.ramMeter).toFixed(1) + ' %' : ''}
+                    text={info ? Number(info.ramMeter).toFixed(0) + ' %' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
@@ -132,13 +132,13 @@ class NavbarContainer extends Component {
                 <div className='ms-col p-l-20 p-r-20'>
                   <h3>CPU</h3>
                   <CircularProgressbar
-                    percentage={info ? Number(info.cpuMeter).toFixed(1) : ''}
+                    percentage={info ? Number(info.cpuMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.cpuMeter).toFixed(1) + ' %' : ''}
+                    text={info ? Number(info.cpuMeter).toFixed(0) + ' %' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
-                        fontWeight: 'normal',
+                        fontWeight: 'bold',
                         fontSize: '25px'
                       }
                     }}
@@ -149,11 +149,11 @@ class NavbarContainer extends Component {
                   <h3>NET</h3>
                   <CircularProgressbar
                     percentage={
-                      info ? Number(info.bandwidthMeter).toFixed(1) : ''
+                      info ? Number(info.bandwidthMeter).toFixed(0) : ''
                     }
                     strokeWidth={10}
                     text={
-                      info ? Number(info.bandwidthMeter).toFixed(1) + ' %' : ''
+                      info ? Number(info.bandwidthMeter).toFixed(0) + ' %' : ''
                     }
                     styles={{
                       text: {
