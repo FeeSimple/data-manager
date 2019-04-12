@@ -65,7 +65,11 @@ const ManageRamForm = props => {
             </FormGroup>
             <div className='col-12'>
               <h4 className='modal-h4 m-b-5'>In Bytes</h4>
-              <h2 className='modal-h2 m-b-5'>100,670 bytes</h2>
+              {values.xfsAmount && (
+                <h2 className='modal-h2 m-b-5'>
+                  {new Intl.NumberFormat().format(values.xfsAmount * 1024 / 0.02)} {' '} bytes
+                </h2> )
+              }
               <h4 className='modal-h4 m-b-0'>1 kB = 0.02 XFS</h4>
             </div>
             <br />
