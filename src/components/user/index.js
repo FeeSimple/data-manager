@@ -378,7 +378,7 @@ class UserContainer extends Component {
               />
 
               <StakeModal
-                userBalance={user.balance}
+                userBalance={user.balanceNumber}
                 handleSetStake={this.handleSetStake}
                 isProcessing={this.state.isProcessing}
                 resourceHandleErr={this.state.resourceHandleErr}
