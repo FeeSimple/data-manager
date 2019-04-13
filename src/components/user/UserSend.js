@@ -23,6 +23,7 @@ const UserSendForm = props => {
     handleSubmit,
     isProcessing,
     toggle,
+    user
   } = props
 
   return (
@@ -47,7 +48,10 @@ const UserSendForm = props => {
           <div className='col-12'>
             <div className='form-group m-b-0'>
               <Label> XFS Amount </Label>
-              <a className='fr' href='#'>
+              <a className='fr' href='#' 
+                  onClick={() => {
+                    values.amount=new Intl.NumberFormat().format(user.balanceNumber.toFixed(3)).toString()
+                  }}>
                 Send Max
               </a>
               <Input
@@ -129,7 +133,7 @@ const EnhancedUserSendForm = withFormik({
   },
 
   handleSubmit: async ({ accountName, amount, memo }, { props }) => {
-    await props.handleUserSend(accountName, amount, memo)
+    await props.handleUserSend(accountName, parseFloat(amount.replace(',', '')), memo)
   },
 
   displayName: 'UserSendForm' // helps with React DevTools

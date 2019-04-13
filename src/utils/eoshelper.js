@@ -443,8 +443,8 @@ export const sendXFSWithCheck = async (
 
   // Check spendable balance
   let balanceNum = userData.balanceNumber
-  if (!balanceNum || balanceNum <= parseFloat(xfsAmount)) {
-    return 'Not enough balance'
+  if (!balanceNum || balanceNum < parseFloat(xfsAmount)) {
+    return `Not enough balance (userBalance:${balanceNum}, sendAmount:${parseFloat(xfsAmount)})`
   }
 
   let checkErr = checkMinCpuBw(
