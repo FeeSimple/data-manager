@@ -62,6 +62,29 @@ class StakeModalContainer extends React.Component {
           </ModalHeader>
           <ModalBody>
             <div className='tc m-b-30'>
+              <Collapse isOpen={resourceHandleErr} size='sm'>
+                {resourceHandleErr === 'Success' ? (
+                  <Alert color='success'>
+                    <div>
+                      <div>
+                        <b>Successful staking!</b>
+                      </div>
+                      <div>
+                        {(
+                          (parseInt(value) * parseFloat(userBalance)) /
+                          100
+                        ).toFixed(4)}{' '}
+                        XFS has been deducted
+                      </div>
+                      <div>from your balance</div>
+                    </div>
+                  </Alert>
+                ) : (
+                  <Alert color='danger'>{resourceHandleErr}</Alert>
+                )}
+              </Collapse>
+            </div>
+            <div className='tc m-b-30'>
               To gain additional resources, adjust the amount of <br /> XFS you
               would like to stake:
             </div>
@@ -126,27 +149,6 @@ class StakeModalContainer extends React.Component {
                 </div>
               </div>
             </from>
-            <Collapse isOpen={resourceHandleErr} size='sm'>
-              {resourceHandleErr === 'Success' ? (
-                <Alert color='success'>
-                  <div>
-                    <div>
-                      <b>Successful staking!</b>
-                    </div>
-                    <div>
-                      {(
-                        (parseInt(value) * parseFloat(userBalance)) /
-                        100
-                      ).toFixed(4)}{' '}
-                      XFS has been deducted
-                    </div>
-                    <div>from your balance</div>
-                  </div>
-                </Alert>
-              ) : (
-                <Alert color='danger'>{resourceHandleErr}</Alert>
-              )}
-            </Collapse>
           </ModalBody>
         </Modal>
       </>

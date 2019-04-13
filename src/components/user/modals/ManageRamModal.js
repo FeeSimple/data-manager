@@ -14,10 +14,11 @@ import {
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
-import { checkXfsAmountError } from '../../../utils/eoshelper'
+import { checkXfsAmountError, RamBytes2Xfs, xfs2RamBytes } from '../../../utils/eoshelper'
 
 const ManageRamForm = props => {
   const {
+    user,
     values,
     touched,
     errors,
@@ -41,16 +42,38 @@ const ManageRamForm = props => {
         </ModalHeader>
         <ModalBody>
           <div className='tc m-b-30'>
+            <Collapse isOpen={resourceHandleErr} size='sm'>
+              {resourceHandleErr === 'Success' ? (
+                <Alert color='success'>
+                  <div>
+                    <div>
+                      <b>Transaction successful!</b>
+                    </div>
+                    <div>Your XFS balance has been updated.</div>
+                  </div>
+                </Alert>
+              ) : (
+                <Alert color='danger'>{<div>resourceHandleErr</div>}</Alert>
+              )}
+            </Collapse>
+          </div>
+          <div className='tc m-b-30'>
             Buy additional RAM or sell what you have:
           </div>
           <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label className=''> XFS Amount</Label>
               <div className='fr'>
-                <a className='fl' href='#'>
+                <a className='fl' href='#'
+                    onClick={() => {
+                      values.xfsAmount=RamBytes2Xfs(user.ramAvailable, user.ramPrice).toFixed(3)
+                    }}>
                   Sell Max
                 </a>
-                <a className='fl m-l-10' href='#'>
+                <a className='fl m-l-10' href='#'
+                    onClick={() => {
+                      values.xfsAmount=user.balanceNumber.toFixed(3)
+                    }}>
                   Buy Max
                 </a>
               </div>
@@ -67,7 +90,7 @@ const ManageRamForm = props => {
               <h4 className='modal-h4 m-b-5'>In Bytes</h4>
               {values.xfsAmount && (
                 <h2 className='modal-h2 m-b-5'>
-                  {new Intl.NumberFormat().format(values.xfsAmount * 1024 / 0.02)} {' '} bytes
+                  {new Intl.NumberFormat().format(xfs2RamBytes(values.xfsAmount, user.ramPrice))} {' '} bytes
                 </h2> )
               }
               <h4 className='modal-h4 m-b-0'>1 kB = 0.02 XFS</h4>
@@ -108,31 +131,6 @@ const ManageRamForm = props => {
               </div>
             </div>
           </Form>
-          <Collapse isOpen={resourceHandleErr} size='sm'>
-            {resourceHandleErr === 'Success' ? (
-              <Alert color='success'>
-                {isBuy ? (
-                  <div>
-                    <div>
-                      <b>Successful buying!</b>
-                    </div>
-                    <div>{values.xfsAmount} XFS will be deducted</div>
-                    <div>from your balance</div>
-                  </div>
-                ) : (
-                  <div>
-                    <div>
-                      <b>Successful selling!</b>
-                    </div>
-                    <div>{values.xfsAmount} XFS will be transferred back</div>
-                    <div>to your balance</div>
-                  </div>
-                )}
-              </Alert>
-            ) : (
-              <Alert color='danger'>{resourceHandleErr}</Alert>
-            )}
-          </Collapse>
         </ModalBody>
       </Modal>
     </div>

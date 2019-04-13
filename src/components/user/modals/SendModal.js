@@ -96,7 +96,7 @@ class SendModalContainer extends React.Component {
                     </div>
                   </Alert>
                 ) : (
-                  <Alert color='danger'>{this.state.userSendErr}</Alert>
+                  <Alert color='danger'>{<div>this.state.userSendErr</div>}</Alert>
                 )}
               </Collapse>
             </div>

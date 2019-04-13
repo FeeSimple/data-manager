@@ -137,7 +137,8 @@ class UserContainer extends Component {
       activeAccount,
       xfsAmount,
       ramPrice,
-      isBuy
+      isBuy,
+      this.state.data.ramAvailable
     )
     if (res.errMsg) {
       this.setState({
@@ -214,6 +215,7 @@ class UserContainer extends Component {
               </Button>
 
               <ManageRamModal
+                user={user}
                 showModalRam={this.state.showModalRam}
                 handleToggleModalRam={this.handleToggleModalRam}
                 handleManageRam={this.handleManageRam}
