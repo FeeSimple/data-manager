@@ -4,11 +4,7 @@ import UserActivity from './UserActivity'
 import CircularProgressbar from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 
-export const User = ({
-  user,
-  activityList,
-  gettingActions
-}) => (
+export const User = ({ user, activityList, gettingActions }) => (
   <div>
     <ul className='circular-bar'>
       <li>

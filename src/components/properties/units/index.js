@@ -59,7 +59,7 @@ class UnitContainer extends Component {
     this.handleToggleConfirm(-1, -1)
     const { propertyId, unitId } = this.state
     if (propertyId !== -1 && unitId === -2) {
-      this.deleteProperty(propertyId)      
+      this.deleteProperty(propertyId)
     } else {
       if (propertyId !== -1 && unitId !== -1) {
         await this.deleteOne(propertyId, unitId)
@@ -76,7 +76,7 @@ class UnitContainer extends Component {
     return property.name
   }
 
-  deleteProperty = async (propertyId) => {
+  deleteProperty = async propertyId => {
     // this.handleToggleConfirm(-1)
 
     const {
@@ -313,10 +313,11 @@ class UnitContainer extends Component {
             isOpen={this.state.showConfirm}
             handleToggle={this.handleToggleConfirm}
             onDelete={this.onDelete}
-            text=
-              { this.state.unitId === -2 && this.state.propertyId !== -1 ? 'this property'
+            text={
+              this.state.unitId === -2 && this.state.propertyId !== -1
+                ? 'this property'
                 : 'this unit?'
-              }
+            }
           />
         </div>
       )

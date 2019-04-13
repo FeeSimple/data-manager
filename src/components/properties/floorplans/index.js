@@ -59,7 +59,7 @@ class FloorplansContainer extends Component {
     this.handleToggleConfirm(-1, -1)
     const { propertyId, floorplanId } = this.state
     if (propertyId !== -1 && floorplanId === -2) {
-      this.deleteProperty(propertyId)      
+      this.deleteProperty(propertyId)
     } else {
       if (propertyId !== -1 && floorplanId !== -1) {
         this.deleteOne(propertyId, floorplanId)
@@ -122,7 +122,7 @@ class FloorplansContainer extends Component {
     return property.name
   }
 
-  deleteProperty = async (propertyId) => {
+  deleteProperty = async propertyId => {
     // this.handleToggleConfirm(-1)
 
     const {
@@ -321,10 +321,11 @@ class FloorplansContainer extends Component {
             isOpen={this.state.showConfirm}
             handleToggle={this.handleToggleConfirm}
             onDelete={this.onDelete}
-            text=
-              { this.state.floorplanId === -2 && this.state.propertyId !== -1 ? 'this property'
-                  : 'this floor-plan?'
-              }
+            text={
+              this.state.floorplanId === -2 && this.state.propertyId !== -1
+                ? 'this property'
+                : 'this floor-plan?'
+            }
           />
         </div>
       )

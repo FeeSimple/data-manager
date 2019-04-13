@@ -152,8 +152,8 @@ export default props => {
                 </li>
                 <li>
                   <button
-                      className='float-right del-btn-fx-property'
-                      onClick={e => handleToggle(property.id, -2)}
+                    className='float-right del-btn-fx-property'
+                    onClick={e => handleToggle(property.id, -2)}
                   >
                     <img
                       src={IconCloseSqr}

@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  Button,
-  Form,
-  FormGroup,
-  Input,
-  Label
-} from 'reactstrap'
+import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
 import {
@@ -48,10 +42,15 @@ const UserSendForm = props => {
           <div className='col-12'>
             <div className='form-group m-b-0'>
               <Label> XFS Amount </Label>
-              <a className='fr' href='#' 
-                  onClick={() => {
-                    values.amount=new Intl.NumberFormat().format(user.balanceNumber.toFixed(3)).toString()
-                  }}>
+              <a
+                className='fr'
+                href='#'
+                onClick={() => {
+                  values.amount = new Intl.NumberFormat()
+                    .format(user.balanceNumber.toFixed(3))
+                    .toString()
+                }}
+              >
                 Send Max
               </a>
               <Input
@@ -111,7 +110,6 @@ const UserSendForm = props => {
           </div>
         </div>
       </FormGroup>
-      
     </Form>
   )
 }
@@ -133,7 +131,11 @@ const EnhancedUserSendForm = withFormik({
   },
 
   handleSubmit: async ({ accountName, amount, memo }, { props }) => {
-    await props.handleUserSend(accountName, parseFloat(amount.replace(',', '')), memo)
+    await props.handleUserSend(
+      accountName,
+      parseFloat(amount.replace(',', '')),
+      memo
+    )
   },
 
   displayName: 'UserSendForm' // helps with React DevTools

@@ -102,9 +102,21 @@ class UserContainer extends Component {
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
 
-    let res = await manageCpuBw(eosClient, activeAccount, xfsAmount/2, true, true)
+    let res = await manageCpuBw(
+      eosClient,
+      activeAccount,
+      xfsAmount / 2,
+      true,
+      true
+    )
 
-    res = await manageCpuBw(eosClient, activeAccount, xfsAmount/2, false, true)
+    res = await manageCpuBw(
+      eosClient,
+      activeAccount,
+      xfsAmount / 2,
+      false,
+      true
+    )
 
     // console.log('manageCpuBw:', res)
     if (res.errMsg) {

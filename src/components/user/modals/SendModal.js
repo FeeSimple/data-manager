@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
-import { Button, Modal, ModalHeader, ModalBody, Collapse, Alert } from 'reactstrap'
-import UserSend from '../UserSend'
 import {
-  sendXFSWithCheck,
-} from '../../../utils/eoshelper'
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Collapse,
+  Alert
+} from 'reactstrap'
+import UserSend from '../UserSend'
+import { sendXFSWithCheck } from '../../../utils/eoshelper'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
@@ -61,9 +66,7 @@ class SendModalContainer extends React.Component {
   }
 
   render () {
-    const {
-      user
-    } = this.props
+    const { user } = this.props
 
     return (
       <>
@@ -96,7 +99,9 @@ class SendModalContainer extends React.Component {
                     </div>
                   </Alert>
                 ) : (
-                  <Alert color='danger'>{<div>this.state.userSendErr</div>}</Alert>
+                  <Alert color='danger'>
+                    {<div>this.state.userSendErr</div>}
+                  </Alert>
                 )}
               </Collapse>
             </div>

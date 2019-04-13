@@ -14,7 +14,11 @@ import {
 } from 'reactstrap'
 import { withFormik } from 'formik'
 import Spinner from 'react-spinkit'
-import { checkXfsAmountError, RamBytes2Xfs, xfs2RamBytes } from '../../../utils/eoshelper'
+import {
+  checkXfsAmountError,
+  RamBytes2Xfs,
+  xfs2RamBytes
+} from '../../../utils/eoshelper'
 
 const ManageRamForm = props => {
   const {
@@ -64,16 +68,25 @@ const ManageRamForm = props => {
             <FormGroup>
               <Label className=''> XFS Amount</Label>
               <div className='fr'>
-                <a className='fl' href='#'
-                    onClick={() => {
-                      values.xfsAmount=RamBytes2Xfs(user.ramAvailable, user.ramPrice).toFixed(3)
-                    }}>
+                <a
+                  className='fl'
+                  href='#'
+                  onClick={() => {
+                    values.xfsAmount = RamBytes2Xfs(
+                      user.ramAvailable,
+                      user.ramPrice
+                    ).toFixed(3)
+                  }}
+                >
                   Sell Max
                 </a>
-                <a className='fl m-l-10' href='#'
-                    onClick={() => {
-                      values.xfsAmount=user.balanceNumber.toFixed(3)
-                    }}>
+                <a
+                  className='fl m-l-10'
+                  href='#'
+                  onClick={() => {
+                    values.xfsAmount = user.balanceNumber.toFixed(3)
+                  }}
+                >
                   Buy Max
                 </a>
               </div>
@@ -90,9 +103,12 @@ const ManageRamForm = props => {
               <h4 className='modal-h4 m-b-5'>In Bytes</h4>
               {values.xfsAmount && (
                 <h2 className='modal-h2 m-b-5'>
-                  {new Intl.NumberFormat().format(xfs2RamBytes(values.xfsAmount, user.ramPrice))} {' '} bytes
-                </h2> )
-              }
+                  {new Intl.NumberFormat().format(
+                    xfs2RamBytes(values.xfsAmount, user.ramPrice)
+                  )}{' '}
+                  bytes
+                </h2>
+              )}
               <h4 className='modal-h4 m-b-0'>1 kB = 0.02 XFS</h4>
             </div>
             <br />

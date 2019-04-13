@@ -92,7 +92,9 @@ class NavbarContainer extends Component {
               </Link>
               <span className='nav-title'>
                 {info && (
-                  <Badge color="info" style={{ fontSize: '14px' }}>{info.account}</Badge>
+                  <Badge color='info' style={{ fontSize: '14px' }}>
+                    {info.account}
+                  </Badge>
                 )}
               </span>
               <ul id='main-menu'>

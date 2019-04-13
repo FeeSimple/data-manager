@@ -238,7 +238,11 @@ export const xfs2RamBytes = (xfsAmount, ramPrice) => {
 export const RamBytes2Xfs = (RamBytes, ramPrice) => {
   let res = parseFloat(RamBytes) * parseFloat(ramPrice)
   res = res / 1024
-  console.log(`RamBytes2Xfs - RamBytes:${RamBytes} - res:${parseFloat(res)} - ramPrice:${ramPrice}`);
+  console.log(
+    `RamBytes2Xfs - RamBytes:${RamBytes} - res:${parseFloat(
+      res
+    )} - ramPrice:${ramPrice}`
+  )
   return parseFloat(res)
 }
 
@@ -453,7 +457,9 @@ export const sendXFSWithCheck = async (
   // Check spendable balance
   let balanceNum = userData.balanceNumber
   if (!balanceNum || balanceNum < parseFloat(xfsAmount)) {
-    return `Not enough balance (userBalance:${balanceNum}, sendAmount:${parseFloat(xfsAmount)})`
+    return `Not enough balance (userBalance:${balanceNum}, sendAmount:${parseFloat(
+      xfsAmount
+    )})`
   }
 
   let checkErr = checkMinCpuBw(
