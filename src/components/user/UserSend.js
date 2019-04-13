@@ -4,8 +4,6 @@ import {
   Form,
   FormGroup,
   Input,
-  Alert,
-  Collapse,
   Label
 } from 'reactstrap'
 import { withFormik } from 'formik'
@@ -23,10 +21,8 @@ const UserSendForm = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    userSendErr,
     isProcessing,
     toggle,
-    handleUserSend
   } = props
 
   return (
@@ -111,20 +107,7 @@ const UserSendForm = props => {
           </div>
         </div>
       </FormGroup>
-      <Collapse isOpen={userSendErr} size='sm'>
-        {userSendErr === 'Success' ? (
-          <Alert color='success'>
-            <div>
-              <div>
-                <b>Successful sending!</b>
-              </div>
-              <div>{values.amount} XFS will be deducted from your balance</div>
-            </div>
-          </Alert>
-        ) : (
-          <Alert color='danger'>{userSendErr}</Alert>
-        )}
-      </Collapse>
+      
     </Form>
   )
 }

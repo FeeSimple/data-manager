@@ -1,12 +1,19 @@
 import React, { Component } from 'react'
-import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody, Collapse, Alert } from 'reactstrap'
 import UserSend from '../UserSend'
+import {
+  sendXFSWithCheck,
+} from '../../../utils/eoshelper'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 class SendModalContainer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      modal: false
+      modal: false,
+      userSendErr: false,
+      isProcessing: false
     }
 
     this.toggle = this.toggle.bind(this)
@@ -14,22 +21,48 @@ class SendModalContainer extends React.Component {
 
   toggle () {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      modal: !prevState.modal,
+      userSendErr: false
     }))
+  }
+
+  handleUserSend = async (receivingAccount, xfsAmount, memo) => {
+    // Reset state
+    this.setState({
+      userSendErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData, user, updateAccountInfo } = this.props
+    let activeAccount = accountData.active
+
+    let err = await sendXFSWithCheck(
+      eosClient,
+      activeAccount,
+      receivingAccount,
+      xfsAmount,
+      memo,
+      user
+    )
+
+    if (err) {
+      this.setState({
+        userSendErr: err,
+        isProcessing: false
+      })
+    } else {
+      updateAccountInfo()
+
+      this.setState({
+        userSendErr: 'Success',
+        isProcessing: false
+      })
+    }
   }
 
   render () {
     const {
-      values,
-      touched,
-      errors,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      user,
-      userSendErr,
-      isProcessing,
-      handleUserSend
+      user
     } = this.props
 
     return (
@@ -52,13 +85,29 @@ class SendModalContainer extends React.Component {
           </ModalHeader>
           <ModalBody>
             <div className='tc m-b-30'>
+              <Collapse isOpen={this.state.userSendErr} size='sm'>
+                {this.state.userSendErr === 'Success' ? (
+                  <Alert color='success'>
+                    <div>
+                      <div>
+                        <b>Transaction successful!</b>
+                      </div>
+                      <div>Your XFS balance has been updated.</div>
+                    </div>
+                  </Alert>
+                ) : (
+                  <Alert color='danger'>{this.state.userSendErr}</Alert>
+                )}
+              </Collapse>
+            </div>
+            <div className='tc m-b-30'>
               Send XFS to another FeeSimple account
             </div>
             <UserSend
               user={user}
-              handleUserSend={handleUserSend}
-              userSendErr={userSendErr}
-              isProcessing={isProcessing}
+              handleUserSend={this.handleUserSend}
+              userSendErr={this.state.userSendErr}
+              isProcessing={this.state.isProcessing}
               toggle={this.toggle}
             />
           </ModalBody>
@@ -68,4 +117,8 @@ class SendModalContainer extends React.Component {
   }
 }
 
-export default SendModalContainer
+function mapStateToProps ({ eosClient, accountData }) {
+  return { eosClient, accountData }
+}
+
+export default withRouter(connect(mapStateToProps)(SendModalContainer))
