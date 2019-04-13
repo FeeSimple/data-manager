@@ -62,16 +62,33 @@ class StakeModalContainer extends React.Component {
           </ModalHeader>
           <ModalBody>
             <div className='tc m-b-30'>
+              <Collapse isOpen={resourceHandleErr} size='sm'>
+                {resourceHandleErr === 'Success' ? (
+                  <Alert color='success'>
+                    <div>
+                      <div>
+                        <b>Transaction successful!</b>
+                      </div>
+                      <div>Your XFS balance has been updated.</div>
+                    </div>
+                  </Alert>
+                ) : (
+                  <Alert color='danger'>{resourceHandleErr}</Alert>
+                )}
+              </Collapse>
+            </div>
+            <div className='tc m-b-30'>
               To gain additional resources, adjust the amount of <br /> XFS you
               would like to stake:
             </div>
 
             <h2 className='stackvalueRange'>{value}%</h2>
-            <h4 className='stackvalue'>
-              {((parseInt(value) * parseFloat(userBalance)) / 100).toFixed(3)}{' '}
-              XFS
-            </h4>
-
+            {userBalance && (
+              <h4 className='stackvalue'>
+                {new Intl.NumberFormat().format((value * userBalance) / 100)}{' '}
+                XFS
+              </h4>
+            )}
             <from>
               <div className='form-group row'>
                 <div className='col-12'>
@@ -126,27 +143,6 @@ class StakeModalContainer extends React.Component {
                 </div>
               </div>
             </from>
-            <Collapse isOpen={resourceHandleErr} size='sm'>
-              {resourceHandleErr === 'Success' ? (
-                <Alert color='success'>
-                  <div>
-                    <div>
-                      <b>Successful staking!</b>
-                    </div>
-                    <div>
-                      {(
-                        (parseInt(value) * parseFloat(userBalance)) /
-                        100
-                      ).toFixed(4)}{' '}
-                      XFS has been deducted
-                    </div>
-                    <div>from your balance</div>
-                  </div>
-                </Alert>
-              ) : (
-                <Alert color='danger'>{resourceHandleErr}</Alert>
-              )}
-            </Collapse>
           </ModalBody>
         </Modal>
       </>

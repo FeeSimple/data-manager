@@ -155,7 +155,7 @@ export const manageCpuBw = async (
   try {
     xfsAmount = conformXfsAmount(xfsAmount)
     const zeroAmount = conformXfsAmount(0)
-    // console.log('xfsAmount:', xfsAmount);
+    //console.log(`manageCpuBw - isCpu:${isCpu} - xfsAmount:${xfsAmount}`);
 
     // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
     if (isCpu) {
@@ -233,6 +233,17 @@ export const xfs2RamBytes = (xfsAmount, ramPrice) => {
   let res = parseFloat(xfsAmount) / parseFloat(ramPrice)
   res = res * 1024 // bytes
   return parseInt(res, 10).toString()
+}
+
+export const RamBytes2Xfs = (RamBytes, ramPrice) => {
+  let res = parseFloat(RamBytes) * parseFloat(ramPrice)
+  res = res / 1024
+  console.log(
+    `RamBytes2Xfs - RamBytes:${RamBytes} - res:${parseFloat(
+      res
+    )} - ramPrice:${ramPrice}`
+  )
+  return parseFloat(res)
 }
 
 export const refundStake = async (eosClient, activeAccount) => {
@@ -373,7 +384,8 @@ export const manageRam = async (
   activeAccount,
   xfsAmount,
   ramPrice,
-  isBuy
+  isBuy,
+  maxRam
 ) => {
   try {
     await getActions(eosClient, activeAccount)
@@ -393,6 +405,7 @@ export const manageRam = async (
       })
     } else {
       let ramBytes = xfs2RamBytes(xfsAmount, ramPrice)
+      ramBytes = ramBytes > maxRam ? maxRam : ramBytes
       await eosClient.transaction(tr => {
         // "buyrambytes()" is used to buy RAM in bytes
         // "buyram()" is used to buy RAM in XFS
@@ -443,8 +456,10 @@ export const sendXFSWithCheck = async (
 
   // Check spendable balance
   let balanceNum = userData.balanceNumber
-  if (!balanceNum || balanceNum <= parseFloat(xfsAmount)) {
-    return 'Not enough balance'
+  if (!balanceNum || balanceNum < parseFloat(xfsAmount)) {
+    return `Not enough balance (userBalance:${balanceNum}, sendAmount:${parseFloat(
+      xfsAmount
+    )})`
   }
 
   let checkErr = checkMinCpuBw(
@@ -510,9 +525,11 @@ export const getAccountInfo = async (eosClient, account) => {
     // console.log('getAccountInfo - result: ', result)
     let ramStr = ''
     let ramMeter = '0'
+    let ramAvailable = 0
     if (result.ram_usage && result.ram_quota) {
       ramStr = getResourceStr({ used: result.ram_usage, max: result.ram_quota })
       ramMeter = remainingPercent(result.ram_usage, result.ram_quota).toString()
+      ramAvailable = result.ram_quota - result.ram_usage
     }
 
     let bandwidthStr = ''
@@ -575,6 +592,7 @@ export const getAccountInfo = async (eosClient, account) => {
       balanceNumber,
       ramStr,
       ramMeter,
+      ramAvailable,
       bandwidthStr,
       bandwidthMeter,
       bandwidthAvailable,

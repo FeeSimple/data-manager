@@ -1,31 +1,10 @@
 import React from 'react'
 import UserActivity from './UserActivity'
 
-import ManageRamModal from './modals/ManageRamModal'
 import CircularProgressbar from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 
-export const USERTAB = {
-  INFO: '1',
-  RESOURCE: '2',
-  SEND: '3',
-  RECEIVE: '4',
-  ACTIVITY: '5'
-}
-
-export const User = ({
-  user,
-  showModalRam,
-  handleToggleModalRam,
-  handleManageRam,
-  isBuy,
-  setBuy,
-  setSell,
-  isProcessing,
-  resourceHandleErr,
-  activityList,
-  gettingActions
-}) => (
+export const User = ({ user, activityList, gettingActions }) => (
   <div>
     <ul className='circular-bar'>
       <li>
