@@ -155,7 +155,7 @@ export const manageCpuBw = async (
   try {
     xfsAmount = conformXfsAmount(xfsAmount)
     const zeroAmount = conformXfsAmount(0)
-    // console.log('xfsAmount:', xfsAmount);
+    //console.log(`manageCpuBw - isCpu:${isCpu} - xfsAmount:${xfsAmount}`);
 
     // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
     if (isCpu) {

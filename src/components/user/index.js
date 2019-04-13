@@ -102,10 +102,9 @@ class UserContainer extends Component {
     const { eosClient, accountData } = this.props
     let activeAccount = accountData.active
 
-    const { isCpu, isStake } = this.state
-    let res = await manageCpuBw(eosClient, activeAccount, xfsAmount, true, true)
+    let res = await manageCpuBw(eosClient, activeAccount, xfsAmount/2, true, true)
 
-    res = await manageCpuBw(eosClient, activeAccount, xfsAmount, false, true)
+    res = await manageCpuBw(eosClient, activeAccount, xfsAmount/2, false, true)
 
     // console.log('manageCpuBw:', res)
     if (res.errMsg) {
@@ -114,6 +113,8 @@ class UserContainer extends Component {
         isProcessing: false
       })
     } else {
+      this.updateAccountInfo()
+
       this.setState({
         resourceHandleErr: 'Success',
         isProcessing: false

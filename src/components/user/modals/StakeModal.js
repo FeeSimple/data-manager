@@ -67,16 +67,9 @@ class StakeModalContainer extends React.Component {
                   <Alert color='success'>
                     <div>
                       <div>
-                        <b>Successful staking!</b>
+                        <b>Transaction successful!</b>
                       </div>
-                      <div>
-                        {(
-                          (parseInt(value) * parseFloat(userBalance)) /
-                          100
-                        ).toFixed(4)}{' '}
-                        XFS has been deducted
-                      </div>
-                      <div>from your balance</div>
+                      <div>Your XFS balance has been updated.</div>
                     </div>
                   </Alert>
                 ) : (
