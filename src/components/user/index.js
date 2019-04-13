@@ -12,7 +12,7 @@ import {
   manageCpuBw,
   getActionsProcessed
 } from '../../utils/eoshelper'
-import { User, USERTAB } from './User'
+import { User } from './User'
 import { Button, Col, Row, Container } from 'reactstrap'
 
 class UserContainer extends Component {

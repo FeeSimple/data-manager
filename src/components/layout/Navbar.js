@@ -8,7 +8,6 @@ import Logo from '../../img/feesimple-logo-outline.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconWallet from '../../img/icon-wallet.svg'
 import IconMarketplace from '../../img/icon-marketplace.svg'
-import IconUser from '../../img/icon-user.svg'
 import IconLogout from '../../img/icon-logout.svg'
 import {
   setInfo,
@@ -16,8 +15,8 @@ import {
   setFsMgrContract,
   setEosClient
 } from '../../actions/index'
-import { beautifyRam } from '../../utils/beautify'
 import { getAccountInfo } from '../../utils/eoshelper'
+import { Badge } from 'reactstrap'
 
 class NavbarContainer extends Component {
   constructor () {
@@ -91,7 +90,11 @@ class NavbarContainer extends Component {
               <Link to='/' className='logo'>
                 <img src={Logo} alt='Logo' />
               </Link>
-              <span className='nav-title'> team_open_re</span>
+              <span className='nav-title'>
+                {info && (
+                  <Badge color="info" style={{ fontSize: '14px' }}>{info.account}</Badge>
+                )}
+              </span>
               <ul id='main-menu'>
                 <li>
                   <Link to='/'>
