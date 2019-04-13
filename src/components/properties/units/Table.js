@@ -146,14 +146,21 @@ export default props => {
             <div className='col-5 col-md-5'>
               <ul className='properties-menu'>
                 <li>
-                  <Link to={`/`}>
+                  <Link to={`/${property.id}/edit`}>
                     <img src={IconEditSqr} alt='' />
                   </Link>
                 </li>
                 <li>
-                  <Link to={`/`}>
-                    <img src={IconCloseSqr} alt='' />
-                  </Link>
+                  <button
+                      className='float-right del-btn-fx-property'
+                      onClick={e => handleToggle(property.id, -2)}
+                  >
+                    <img
+                      src={IconCloseSqr}
+                      alt=''
+                      style={{ width: '40px', height: '40px' }}
+                    />
+                  </button>
                 </li>
                 <li className='dropdown-li'>
                   <Link to={`/`}>
