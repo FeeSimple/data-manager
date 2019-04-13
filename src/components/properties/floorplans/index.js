@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Table from './Table'
-import { FLOORPLAN, FSMGRCONTRACT } from '../../../utils/consts'
+import { FLOORPLAN, FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 import { addFloorplans, delFloorplan } from '../../../actions/index'
-import { setLoading, setOpResult } from '../../../actions'
+import { setLoading, setOpResult, addProperties } from '../../../actions'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
 import Confirm from '../../layout/Confirm'
 
@@ -58,10 +58,14 @@ class FloorplansContainer extends Component {
   onDelete = async () => {
     this.handleToggleConfirm(-1, -1)
     const { propertyId, floorplanId } = this.state
-    if (propertyId !== -1 && floorplanId !== -1) {
-      this.deleteOne(propertyId, floorplanId)
+    if (propertyId !== -1 && floorplanId === -2) {
+      this.deleteProperty(propertyId)
     } else {
-      this.deleteBulk(propertyId)
+      if (propertyId !== -1 && floorplanId !== -1) {
+        this.deleteOne(propertyId, floorplanId)
+      } else {
+        this.deleteBulk(propertyId)
+      }
     }
   }
 
@@ -109,6 +113,76 @@ class FloorplansContainer extends Component {
     }
 
     return operationOK
+  }
+
+  getPropertyName = propertyId => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    return property.name
+  }
+
+  deleteProperty = async propertyId => {
+    // this.handleToggleConfirm(-1)
+
+    const {
+      addProperties,
+      contracts,
+      eosClient,
+      accountData,
+      setLoading,
+      setOpResult,
+      history
+    } = this.props
+
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.delproperty(accountData.active, propertyId, options)
+      console.log('fsmgrcontract.delproperty - propertyId:', propertyId)
+    } catch (err) {
+      console.log('fsmgrcontract.delproperty - error:', err)
+      operationOK = false
+    }
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      PROPERTY
+    )
+    addProperties(rows)
+    history.push('/')
+
+    let propertyName = this.getPropertyName(propertyId)
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete property "${propertyName}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Property "${propertyName}" deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
   }
 
   deleteOne = async (propertyId, floorplanId) => {
@@ -247,7 +321,11 @@ class FloorplansContainer extends Component {
             isOpen={this.state.showConfirm}
             handleToggle={this.handleToggleConfirm}
             onDelete={this.onDelete}
-            text='this floor-plan?'
+            text={
+              this.state.floorplanId === -2 && this.state.propertyId !== -1
+                ? 'this property'
+                : 'this floor-plan?'
+            }
           />
         </div>
       )
@@ -272,7 +350,8 @@ export default withRouter(
       addFloorplans,
       setLoading,
       delFloorplan,
-      setOpResult
+      setOpResult,
+      addProperties
     }
   )(FloorplansContainer)
 )

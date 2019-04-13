@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Table from './Table'
-import { UNIT, FSMGRCONTRACT } from '../../../utils/consts'
+import { UNIT, FSMGRCONTRACT, PROPERTY } from '../../../utils/consts'
 import { addUnits, delUnit } from '../../../actions/index'
 import { ERR_DATA_LOADING_FAILED } from '../../../utils/error'
-import { setLoading, setOpResult } from '../../../actions'
+import { setLoading, setOpResult, addProperties } from '../../../actions'
 import Confirm from '../../layout/Confirm'
 
 class UnitContainer extends Component {
@@ -58,11 +58,85 @@ class UnitContainer extends Component {
   onDelete = async () => {
     this.handleToggleConfirm(-1, -1)
     const { propertyId, unitId } = this.state
-    if (propertyId !== -1 && unitId !== -1) {
-      await this.deleteOne(propertyId, unitId)
+    if (propertyId !== -1 && unitId === -2) {
+      this.deleteProperty(propertyId)
     } else {
-      await this.deleteBulk(propertyId)
+      if (propertyId !== -1 && unitId !== -1) {
+        await this.deleteOne(propertyId, unitId)
+      } else {
+        await this.deleteBulk(propertyId)
+      }
     }
+  }
+
+  getPropertyName = propertyId => {
+    const { properties } = this.props
+    const { id } = this.props.match.params
+    const property = properties[id]
+    return property.name
+  }
+
+  deleteProperty = async propertyId => {
+    // this.handleToggleConfirm(-1)
+
+    const {
+      addProperties,
+      contracts,
+      eosClient,
+      accountData,
+      setLoading,
+      setOpResult,
+      history
+    } = this.props
+
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.delproperty(accountData.active, propertyId, options)
+      console.log('fsmgrcontract.delproperty - propertyId:', propertyId)
+    } catch (err) {
+      console.log('fsmgrcontract.delproperty - error:', err)
+      operationOK = false
+    }
+
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      PROPERTY
+    )
+    addProperties(rows)
+    history.push('/')
+
+    let propertyName = this.getPropertyName(propertyId)
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete property "${propertyName}"`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Property "${propertyName}" deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
   }
 
   deleteOne = async (propertyId, unitId) => {
@@ -239,7 +313,11 @@ class UnitContainer extends Component {
             isOpen={this.state.showConfirm}
             handleToggle={this.handleToggleConfirm}
             onDelete={this.onDelete}
-            text='this unit?'
+            text={
+              this.state.unitId === -2 && this.state.propertyId !== -1
+                ? 'this property'
+                : 'this unit?'
+            }
           />
         </div>
       )
@@ -260,6 +338,6 @@ function mapStateToProps ({
 export default withRouter(
   connect(
     mapStateToProps,
-    { addUnits, setLoading, delUnit, setOpResult }
+    { addUnits, setLoading, delUnit, setOpResult, addProperties }
   )(UnitContainer)
 )

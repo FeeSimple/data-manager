@@ -8,7 +8,6 @@ import Logo from '../../img/feesimple-logo-outline.svg'
 import IconProperties from '../../img/icon-properties.svg'
 import IconWallet from '../../img/icon-wallet.svg'
 import IconMarketplace from '../../img/icon-marketplace.svg'
-import IconUser from '../../img/icon-user.svg'
 import IconLogout from '../../img/icon-logout.svg'
 import {
   setInfo,
@@ -16,8 +15,8 @@ import {
   setFsMgrContract,
   setEosClient
 } from '../../actions/index'
-import { beautifyRam } from '../../utils/beautify'
 import { getAccountInfo } from '../../utils/eoshelper'
+import { Badge } from 'reactstrap'
 
 class NavbarContainer extends Component {
   constructor () {
@@ -91,7 +90,13 @@ class NavbarContainer extends Component {
               <Link to='/' className='logo'>
                 <img src={Logo} alt='Logo' />
               </Link>
-              <span className='nav-title'> team_open_re</span>
+              <span className='nav-title'>
+                {info && (
+                  <Badge color='info' style={{ fontSize: '14px' }}>
+                    {info.account}
+                  </Badge>
+                )}
+              </span>
               <ul id='main-menu'>
                 <li>
                   <Link to='/'>
@@ -116,9 +121,9 @@ class NavbarContainer extends Component {
                 <div className='ms-col p-l-20 p-r-20'>
                   <h3>RAM</h3>
                   <CircularProgressbar
-                    percentage={info ? Number(info.ramMeter).toFixed(1) : ''}
+                    percentage={info ? Number(info.ramMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.ramMeter).toFixed(1) + ' %' : ''}
+                    text={info ? Number(info.ramMeter).toFixed(0) + ' %' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
@@ -132,13 +137,13 @@ class NavbarContainer extends Component {
                 <div className='ms-col p-l-20 p-r-20'>
                   <h3>CPU</h3>
                   <CircularProgressbar
-                    percentage={info ? Number(info.cpuMeter).toFixed(1) : ''}
+                    percentage={info ? Number(info.cpuMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.cpuMeter).toFixed(1) + ' %' : ''}
+                    text={info ? Number(info.cpuMeter).toFixed(0) + ' %' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
-                        fontWeight: 'normal',
+                        fontWeight: 'bold',
                         fontSize: '25px'
                       }
                     }}
@@ -149,11 +154,11 @@ class NavbarContainer extends Component {
                   <h3>NET</h3>
                   <CircularProgressbar
                     percentage={
-                      info ? Number(info.bandwidthMeter).toFixed(1) : ''
+                      info ? Number(info.bandwidthMeter).toFixed(0) : ''
                     }
                     strokeWidth={10}
                     text={
-                      info ? Number(info.bandwidthMeter).toFixed(1) + ' %' : ''
+                      info ? Number(info.bandwidthMeter).toFixed(0) + ' %' : ''
                     }
                     styles={{
                       text: {
