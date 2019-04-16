@@ -4,7 +4,7 @@ export const FLOORPLANIMG = 'floorplanimg'
 export const UNIT = 'unit'
 export const UNITIMG = 'unitimg'
 export const TERMPRICE = 'termpricing'
-export const FSMGRCONTRACT = 'fsmgrcode333'
+export const FSMGRCONTRACT = 'fsmgrcode444'
 
 export const NO_BALANCE = '0 XFS'
 export const MIN_STAKED_CPU = 800 // micro-second
