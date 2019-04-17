@@ -28,14 +28,17 @@ class GridContainer extends Component {
     let images = []
     Object.keys(properties).map(id => {
       let imgIpfsAddrListFromTable = rows
-      .filter(row => row.property_id === Number(id))
-      .map(row => row.ipfs_address)
+        .filter(row => row.property_id === Number(id))
+        .map(row => row.ipfs_address)
 
       if (!imgIpfsAddrListFromTable[0]) {
         images.push(Background)
       } else {
-        images.push(`https://ipfs.infura.io:5001/api/v0/cat?arg=${
-        imgIpfsAddrListFromTable[0]}&stream-channels=true`) // choose the first image for background
+        images.push(
+          `https://ipfs.infura.io:5001/api/v0/cat?arg=${
+            imgIpfsAddrListFromTable[0]
+          }&stream-channels=true`
+        ) // choose the first image for background
       }
     })
 
@@ -67,13 +70,23 @@ class GridContainer extends Component {
             </Row>
           </div>
         </div>
-        <Grid properties={properties} showTable={showTable} images={this.state.images}/>
+        <Grid
+          properties={properties}
+          showTable={showTable}
+          images={this.state.images}
+        />
       </div>
     )
   }
 }
 
-function mapStateToProps ({ properties, scatter, eosjs, eosClient, accountData }) {
+function mapStateToProps ({
+  properties,
+  scatter,
+  eosjs,
+  eosClient,
+  accountData
+}) {
   return { properties, scatter, eosjs, eosClient, accountData }
 }
 

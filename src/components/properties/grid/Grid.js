@@ -13,10 +13,12 @@ export default function (props) {
             {showTable ? (
               Object.keys(properties).map((id, index) => {
                 const property = properties[id]
-                return ( property &&
-                  <li key={id}>
-                    <Item property={property} image={ images[index]} />
-                  </li>
+                return (
+                  property && (
+                    <li key={id}>
+                      <Item property={property} image={images[index]} />
+                    </li>
+                  )
                 )
               })
             ) : (

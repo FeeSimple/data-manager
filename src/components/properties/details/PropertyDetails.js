@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
 import IconDelete from '../../../img/icon-delete.svg'
