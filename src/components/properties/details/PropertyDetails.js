@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
 import IconDelete from '../../../img/icon-delete.svg'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
+import { StyledPreview } from '../../layout/DropZone'
+import ImageGallery from 'react-image-gallery'
 
 const PropertyDetails = ({
   property,
@@ -10,6 +12,8 @@ const PropertyDetails = ({
   onCreateClick,
   onSaveClick,
   onChange,
+  handleUploadedImg,
+  galleryItems,
   handleToggle
 }) => (
   <div>
@@ -131,6 +135,20 @@ const PropertyDetails = ({
               value={property.unit_count}
               min='0'
             />
+          </div>
+        </div>
+        {galleryItems && galleryItems.length > 0 && (
+          <div className='form-group row'>
+            <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
+              <ImageGallery items={galleryItems} />
+            </div>
+          </div>
+        )}
+        <div className='form-group row'>
+          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
+            {!isCreating && (
+              <StyledPreview handleUploadedImg={handleUploadedImg} />
+            )}
           </div>
         </div>
         <div className='form-group m-t-50 row'>

@@ -1,4 +1,5 @@
 export const PROPERTY = 'property'
+export const PROPERTYIMG = 'propertyimg'
 export const FLOORPLAN = 'floorplan'
 export const FLOORPLANIMG = 'floorplanimg'
 export const UNIT = 'unit'
