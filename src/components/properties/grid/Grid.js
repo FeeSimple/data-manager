@@ -4,18 +4,18 @@ import Item from './Item'
 import ItemEmpty from './ItemEmpty'
 
 export default function (props) {
-  const { properties, showTable } = props
+  const { properties, showTable, images } = props
   return (
     <Container>
       <Row>
         <Col>
           <ul className='properties-ul'>
             {showTable ? (
-              Object.keys(properties).map(id => {
+              Object.keys(properties).map((id, index) => {
                 const property = properties[id]
-                return (
+                return ( property &&
                   <li key={id}>
-                    <Item property={property} />
+                    <Item property={property} image={ images[index]} />
                   </li>
                 )
               })
