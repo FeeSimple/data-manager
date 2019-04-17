@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Background from '../../../img/property-no-image.svg'
 
 export default function (props) {
-  const { property } = props
+  const { property, image } = props
   return (
     <div className='card panel-fs'>
       <div className='card-header text-center'>
@@ -14,7 +14,7 @@ export default function (props) {
           <div
             className='panel-fs-div property-grid-item'
             style={{
-              backgroundImage: `url(${Background})`,
+              backgroundImage: `url(${image})`,
               backgroundSize: '50%',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center'
