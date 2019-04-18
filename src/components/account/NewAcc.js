@@ -40,7 +40,7 @@ const NewAccForm = props => {
       <ModalBody>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <Label>Please enter account name</Label>
+            <Label>Please enter an account name:</Label>
             <Input
               id='accountName'
               onBlur={handleBlur}
@@ -48,7 +48,6 @@ const NewAccForm = props => {
               onChange={handleChange}
               invalid={errors.accountName && touched.accountName}
               type='text'
-              placeholder='must be 12 symbols long and include symbols a-z 1-5'
             />
           </FormGroup>
           <Button
@@ -84,7 +83,7 @@ const NewAccForm = props => {
             </FormGroup>
             <Alert color='success'>
               <h4 className='alert-heading'>Account created!</h4>
-              <p>Please make sure to store your private key somewhere safe</p>
+              <p>Please make sure to store your private key somewhere safe. You might need to it recover your account.</p>
             </Alert>
           </Collapse>
           <Collapse isOpen={newAccountCreationErr}>
@@ -92,7 +91,9 @@ const NewAccForm = props => {
           </Collapse>
         </Form>
       </ModalBody>
-      <ModalFooter />
+      <ModalFooter>
+				<i>Account names must be 12 symbols long and can only include the symbols a-z and 1-5. FeeSimple account names are used to manage your data and access and receive XFS.</i>
+			</ModalFooter>
     </Modal>
   )
 }

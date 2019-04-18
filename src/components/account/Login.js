@@ -22,7 +22,7 @@ const LoginForm = props => {
     <div className='main-wrapper home'>
       <Container>
         <Row>
-          <Col md={{ size: 10, offset: 1 }} lg={{ size: 8, offset: 2 }}>
+          <Col md={{ size: 8, offset: 2 }} lg={{ size: 6, offset: 3 }}>
             <Form onSubmit={handleSubmit} className='home-form'>
               <div className='form-group row'>
                 <Col xs={12} className='text-center'>
@@ -32,7 +32,15 @@ const LoginForm = props => {
                 </Col>
               </div>
               <div className='form-group row'>
-                <Col xs={12} sm={6}>
+								<Col xs={12} sm={12}>
+                  <Button
+                    onClick={onNewAccountClick}
+                    className='btn-base btn-home'
+                  >
+                    Create a New Account
+                  </Button>
+                </Col>
+                <Col xs={12} sm={12}>
                   <Button
                     onClick={onScatterClick}
                     className='btn-base btn-home'
@@ -48,14 +56,6 @@ const LoginForm = props => {
                     )}
                   </Button>
                 </Col>
-                <Col xs={12} sm={6}>
-                  <Button
-                    onClick={onNewAccountClick}
-                    className='btn-base btn-home'
-                  >
-                    Create a New Account
-                  </Button>
-                </Col>
               </div>
               <div className='form-group row'>
                 <Col md={8} lg={9}>
@@ -66,7 +66,7 @@ const LoginForm = props => {
                     onChange={handleChange}
                     invalid={errors.privKey && touched.privKey}
                     type='text'
-                    placeholder='Enter Private key'
+                    placeholder='Enter private key'
                     className='form-control input-home'
                   />
                 </Col>
@@ -88,7 +88,7 @@ const LoginForm = props => {
           {' '}
           Crafted by{' '}
           <a href='' className='p-l-10'>
-            <img src={OpenReLogoWhite} alt='logo' width='110' />
+            <img src={OpenReLogoWhite} class="mb-1" alt='logo' width='110' />
           </a>
         </span>
       </div>

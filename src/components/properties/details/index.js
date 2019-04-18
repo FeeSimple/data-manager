@@ -294,7 +294,7 @@ class PropertyDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to create new Property "${property.name}"`,
+        text: `Failed to create property "${property.name}"`,
         type: 'error'
       })
     } else {
