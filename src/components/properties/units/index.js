@@ -151,7 +151,7 @@ class UnitContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to delete Unit "${unitName}"`,
+        text: `Failed to delete unit "${unitName}"`,
         type: 'error'
       })
     } else {
@@ -268,7 +268,7 @@ class UnitContainer extends Component {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `Selected units are deleted successfully`,
+        text: `Selected units have been deleted successfully`,
         type: 'success'
       })
     }

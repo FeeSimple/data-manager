@@ -138,18 +138,18 @@ class PropertyDetailsContainer extends Component {
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
-        alertHeader: 'Property editing with invalid input',
+        alertHeader: 'Invalid input',
         alertContent: result
       })
       return
     }
 
     if (totalUploadedFiles !== 0 && totalUploadedFiles !== ipfsUploadedFiles) {
-      console.log('IPFS image uploading is still in progress')
+      console.log('IPFS image upload is still in progress')
       this.setState({
         alertShow: true,
         alertHeader: 'Please wait',
-        alertContent: ['IPFS image uploading is still in progress']
+        alertContent: ['IPFS image upload is still in progress']
       })
       return
     }
@@ -214,7 +214,7 @@ class PropertyDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to edit Property "${property.name}"`,
+        text: `Failed to edit property "${property.name}"`,
         type: 'error'
       })
     } else {
@@ -301,7 +301,7 @@ class PropertyDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `New Property "${property.name}" created successfully`,
+        text: `New property "${property.name}" created successfully`,
         type: 'success'
       })
     }
@@ -485,7 +485,7 @@ class PropertyDetailsContainer extends Component {
           isOpen={this.state.showConfirm}
           handleToggle={this.handleToggleConfirm}
           onDelete={this.deleteOne}
-          text='this property and its associated units/floor-plans?'
+          text='this property and its associated units and floor-plans?'
         />
         <Alert
           isOpen={this.state.alertShow}
