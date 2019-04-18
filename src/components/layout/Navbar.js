@@ -123,7 +123,7 @@ class NavbarContainer extends Component {
                   <CircularProgressbar
                     percentage={info ? Number(info.ramMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.ramMeter).toFixed(0) + ' %' : ''}
+                    text={info ? Number(info.ramMeter).toFixed(0) + '%' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
@@ -139,7 +139,7 @@ class NavbarContainer extends Component {
                   <CircularProgressbar
                     percentage={info ? Number(info.cpuMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.cpuMeter).toFixed(0) + ' %' : ''}
+                    text={info ? Number(info.cpuMeter).toFixed(0) + '%' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
@@ -158,7 +158,7 @@ class NavbarContainer extends Component {
                     }
                     strokeWidth={10}
                     text={
-                      info ? Number(info.bandwidthMeter).toFixed(0) + ' %' : ''
+                      info ? Number(info.bandwidthMeter).toFixed(0) + '%' : ''
                     }
                     styles={{
                       text: {
