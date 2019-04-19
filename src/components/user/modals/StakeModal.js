@@ -62,7 +62,7 @@ class StakeModalContainer extends React.Component {
           </ModalHeader>
           <ModalBody className='px-5'>
             <div className='tc'>
-              <Collapse isOpen={resourceHandleErr} class='m-b-30' size='sm'>
+              <Collapse isOpen={resourceHandleErr} size='sm'>
                 {resourceHandleErr === 'Success' ? (
                   <Alert color='success'>
                     <div>
