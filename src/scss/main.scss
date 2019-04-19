@@ -5,6 +5,7 @@ $font: 'Open Sans', sans-serif;
 $primary-text-color: #605e5e;
 $clr-base: #00b1ef;
 $clr-seconday: #2b8acb;
+$clr-seconday-light: rgba(0, 177,239, .35);
 $clr-bg: #104378;
 $clr-gray: #dbe3eb;
 $clr-white: #fff;
@@ -102,6 +103,8 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
     font-size: 16px;
     font-weight: 600;
     padding: 10px 0;
+		border-radius: 6px;
+		background-color: $clr-seconday-light;
   }
   .logout{
     display: block;
@@ -125,8 +128,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   #main-menu{
     list-style: none;
     padding-left: 0;
-    border-top: 2px solid $clr-seconday;
-    border-bottom: 2px solid $clr-seconday;
+    border-bottom: 1px solid $clr-seconday-light;
     li{
       display: block;
       padding: 0;

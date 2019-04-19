@@ -87,7 +87,9 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     font-size: 16px;
     font-weight: 600;
-    padding: 10px 0; }
+    padding: 10px 0;
+    border-radius: 6px;
+    background-color: rgba(0, 177, 239, 0.35); }
   .menu-holder .logout {
     display: block;
     position: fixed;
@@ -107,8 +109,7 @@ h1, h2, h3, h4, h5, h6 {
   .menu-holder #main-menu {
     list-style: none;
     padding-left: 0;
-    border-top: 2px solid #2b8acb;
-    border-bottom: 2px solid #2b8acb; }
+    border-bottom: 1px solid rgba(0, 177, 239, 0.35); }
     .menu-holder #main-menu li {
       display: block;
       padding: 0;
