@@ -36,11 +36,11 @@ const NewAccForm = props => {
 
   return (
     <Modal isOpen={isOpen} toggle={handleToggle}>
-      <ModalHeader toggle={handleToggle}>Create a New Account</ModalHeader>
+      <ModalHeader toggle={handleToggle}>Create a FeeSimple Account</ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <Label>Please enter an account name:</Label>
+            <Label>First, enter in a unique account name:</Label>
             <Input
               id='accountName'
               onBlur={handleBlur}
@@ -48,12 +48,13 @@ const NewAccForm = props => {
               onChange={handleChange}
               invalid={errors.accountName && touched.accountName}
               type='text'
+							autocomplete='off'
             />
           </FormGroup>
           <Button
             type='submit'
             color='secondary'
-            className='btn-base btn-home'
+            className='btn-base btn-home mb-0'
             disabled={touched.accountName && errors.accountName}
           >
             {isProcessing ? (
@@ -63,8 +64,12 @@ const NewAccForm = props => {
             )}
           </Button>
           <Collapse isOpen={isOpenKeyPair}>
+						<Alert color='success'>
+              <h4 className='alert-heading'>Account created!</h4>
+              <p>Please make sure to store your private key somewhere safe. You will need it to recover your account.</p>
+            </Alert>
             <FormGroup>
-              <Label>Public key</Label>
+              <Label>Public Key</Label>
               <Input
                 type='text'
                 id='accountPubKey'
@@ -73,7 +78,7 @@ const NewAccForm = props => {
               />
             </FormGroup>
             <FormGroup>
-              <Label>Private key</Label>
+              <Label>Private Key</Label>
               <Input
                 type='text'
                 id='accountPrivKey'
@@ -81,10 +86,6 @@ const NewAccForm = props => {
                 readOnly
               />
             </FormGroup>
-            <Alert color='success'>
-              <h4 className='alert-heading'>Account created!</h4>
-              <p>Please make sure to store your private key somewhere safe. You might need to it recover your account.</p>
-            </Alert>
           </Collapse>
           <Collapse isOpen={newAccountCreationErr}>
             <Alert color='danger'>{newAccountCreationErr}</Alert>
@@ -92,7 +93,7 @@ const NewAccForm = props => {
         </Form>
       </ModalBody>
       <ModalFooter>
-				<i>Account names must be 12 symbols long and can only include the symbols a-z and 1-5. FeeSimple account names are used to manage your data and access and receive XFS.</i>
+				<i>Account names are used to access the FeeSimple network, manage your data, and transact with the XFS token. Account names must be unique and 12 symbols long and they can only include symbols a-z and 1-5.</i>
 			</ModalFooter>
     </Modal>
   )

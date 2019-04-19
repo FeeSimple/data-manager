@@ -147,10 +147,10 @@ export default props => {
                     <img src={IconAddSqr} alt='' />
                   </Link>
                   <div className='properties-dropdpwn'>
-                    <Link to={`/${props.propertyId}/floorplan/new`}>
-                      Add Floor Plans
+                    <Link to={`#/`}>
+                      New Floor Plan
                     </Link>{' '}
-                    <Link to={`/${props.propertyId}/unit/new`}>Add Unit</Link>
+                    <Link to={`/${props.propertyId}/unit/new`}>New Unit</Link>
                   </div>
                 </li>
               </ul>
