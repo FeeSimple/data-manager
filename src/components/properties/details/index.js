@@ -96,19 +96,19 @@ class PropertyDetailsContainer extends Component {
   validator = property => {
     let alertContent = []
     if (property.name === '') {
-      alertContent.push('Empty name')
+      alertContent.push('Name is empty')
     }
 
     if (property.address_1 === '' && property.address_2 === '') {
-      alertContent.push('No valid address')
+      alertContent.push('Address is not valid')
     }
 
     if (property.city === '') {
-      alertContent.push('Empty city')
+      alertContent.push('City is empty')
     }
 
     if (property.postal_code === '') {
-      alertContent.push('Empty postal code')
+      alertContent.push('Zip/Postal Code is empty')
     }
 
     return alertContent
@@ -254,7 +254,7 @@ class PropertyDetailsContainer extends Component {
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
-        alertHeader: 'Property creation with invalid input',
+        alertHeader: 'Invalid input',
         alertContent: result
       })
       return
@@ -485,7 +485,7 @@ class PropertyDetailsContainer extends Component {
           isOpen={this.state.showConfirm}
           handleToggle={this.handleToggleConfirm}
           onDelete={this.deleteOne}
-          text='this property and its associated units and floor-plans?'
+          text='this property and its associated units and floor plans?'
         />
         <Alert
           isOpen={this.state.alertShow}

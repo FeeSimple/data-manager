@@ -263,7 +263,7 @@ class FloorplanDetailsContainer extends Component {
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
-        alertHeader: 'Floorplan creation with invalid input',
+        alertHeader: 'Invalid input',
         alertContent: result
       })
       return

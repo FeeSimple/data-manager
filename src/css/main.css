@@ -173,10 +173,12 @@ h1, h2, h3, h4, h5, h6 {
   .properties-menu > li {
     float: left;
     list-style: none;
-    margin-left: 10px;
+    margin-left: 5px;
     position: relative; }
     .properties-menu > li:first-child {
       margin-left: 0; }
+    .properties-menu > li:last-child {
+      margin-left: 20px; }
     .properties-menu > li.dropdown-li .properties-dropdpwn {
       z-index: 5;
       position: absolute;
@@ -386,15 +388,14 @@ h1, h2, h3, h4, h5, h6 {
 .panel-fs {
   border-color: #dbe3eb;
   border-width: 2px;
-  margin-bottom: 0;
-  border-radius: 0.60rem; }
+  margin-bottom: 0; }
   .panel-fs > .panel-heading {
     background-color: transparent;
     border-color: #dbe3eb;
     border-width: 2px;
     font-size: 15px; }
   .panel-fs .card-header {
-    border-bottom-width: 2px; }
+    background-color: transparent; }
     .panel-fs .card-header a {
       color: #404040;
       font-size: 14px; }
@@ -408,7 +409,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 50%;
     float: left;
     font-size: 13px;
-    font-weight: 600; }
+    font-weight: 400; }
   .panel-fs .panel-fs-footer a:first-child {
     border-radius: 4px 0 0 4px;
     border-right-color: #ffffff; }
