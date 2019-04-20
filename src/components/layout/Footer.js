@@ -15,7 +15,7 @@ export default function Footer () {
         {' '}
         Crafted by
         <a href='' className='p-l-10'>
-          <img src={OpenReLogoBlack} alt='logo' width='110' />
+          <img src={OpenReLogoBlack} class='mb-1' alt='logo' width='110' />
         </a>
       </span>
     </div>

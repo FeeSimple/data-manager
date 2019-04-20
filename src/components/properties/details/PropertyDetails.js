@@ -43,11 +43,6 @@ const PropertyDetails = ({
     <Container>
       <AvForm className=''>
         <div className='form-group row'>
-          <div className='col-12'>
-            <h3 className='bar-header'>Details</h3>
-          </div>
-        </div>
-        <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
             <AvField
               label='Name'

@@ -143,7 +143,7 @@ class FloorplanDetailsContainer extends Component {
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
-        alertHeader: 'Floorplan editing with invalid input',
+        alertHeader: 'Invalid input',
         alertContent: result
       })
       return
@@ -224,7 +224,7 @@ class FloorplanDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to edit Floorplan "${floorplan.name}"`,
+        text: `Failed to edit floorplan "${floorplan.name}"`,
         type: 'error'
       })
     } else {
@@ -263,7 +263,7 @@ class FloorplanDetailsContainer extends Component {
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
-        alertHeader: 'Floorplan creation with invalid input',
+        alertHeader: 'Invalid input',
         alertContent: result
       })
       return
@@ -298,14 +298,14 @@ class FloorplanDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to create new Floorplan "${floorplan.name}"`,
+        text: `Failed to create new floorplan "${floorplan.name}"`,
         type: 'error'
       })
     } else {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `New Floorplan "${floorplan.name}" created successfully`,
+        text: `New floorplan "${floorplan.name}" created successfully`,
         type: 'success'
       })
     }

@@ -26,7 +26,7 @@ const UserSendForm = props => {
         <div className='form-group'>
           <div className='col-12'>
             <div className='form-group m-b-0'>
-              <Label> To account </Label>
+              <Label> To Account </Label>
               <Input
                 id='accountName'
                 onBlur={handleBlur}
@@ -74,7 +74,6 @@ const UserSendForm = props => {
                 value={values.memo}
                 onChange={handleChange}
                 type='text'
-                placeholder='Attach some message (max 200 characters)'
               />
             </div>
           </div>

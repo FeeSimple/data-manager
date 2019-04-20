@@ -16,7 +16,7 @@ export default function SelectAcc (props) {
   const { accounts, handleToggle, onAccountSelect, isOpen } = props
   return (
     <Modal isOpen={isOpen} toggle={handleToggle}>
-      <ModalHeader toggle={handleToggle}>Please select an account</ModalHeader>
+      <ModalHeader toggle={handleToggle}>Select an Account</ModalHeader>
       <ModalBody>
         <ListGroup>
           {accounts.map(account => (
@@ -25,7 +25,7 @@ export default function SelectAcc (props) {
                 <Input disabled value={account} />
                 <InputGroupAddon addonType='append'>
                   <Button onClick={() => onAccountSelect(account)}>
-                    Select this account
+                    Select
                   </Button>
                 </InputGroupAddon>
               </InputGroup>
@@ -33,7 +33,6 @@ export default function SelectAcc (props) {
           ))}
         </ListGroup>
       </ModalBody>
-      <ModalFooter />
     </Modal>
   )
 }

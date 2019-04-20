@@ -63,7 +63,7 @@ class NavbarContainer extends Component {
     }
     ram = new Intl.NumberFormat().format(ram)
     if (cnt === 0) {
-      ram = ram.toString() + ' Byte'
+      ram = ram.toString() + ' Bytes'
     } else if (cnt === 1) {
       ram = ram.toString() + ' KB'
     } else if (cnt === 2) {
@@ -92,12 +92,10 @@ class NavbarContainer extends Component {
               </Link>
               <span className='nav-title'>
                 {info && (
-                  <Badge color='info' style={{ fontSize: '14px' }}>
-                    {info.account}
-                  </Badge>
+                  <span style={{ fontSize: '14px' }}>{info.account}</span>
                 )}
               </span>
-              <ul id='main-menu'>
+              <ul id='main-menu' class='mb-4'>
                 <li>
                   <Link to='/'>
                     <img src={IconProperties} alt='' />
@@ -123,7 +121,7 @@ class NavbarContainer extends Component {
                   <CircularProgressbar
                     percentage={info ? Number(info.ramMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.ramMeter).toFixed(0) + ' %' : ''}
+                    text={info ? Number(info.ramMeter).toFixed(0) + '%' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
@@ -139,7 +137,7 @@ class NavbarContainer extends Component {
                   <CircularProgressbar
                     percentage={info ? Number(info.cpuMeter).toFixed(0) : ''}
                     strokeWidth={10}
-                    text={info ? Number(info.cpuMeter).toFixed(0) + ' %' : ''}
+                    text={info ? Number(info.cpuMeter).toFixed(0) + '%' : ''}
                     styles={{
                       text: {
                         fill: '#fff',
@@ -158,7 +156,7 @@ class NavbarContainer extends Component {
                     }
                     strokeWidth={10}
                     text={
-                      info ? Number(info.bandwidthMeter).toFixed(0) + ' %' : ''
+                      info ? Number(info.bandwidthMeter).toFixed(0) + '%' : ''
                     }
                     styles={{
                       text: {
