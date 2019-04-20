@@ -32,7 +32,7 @@ const LoginForm = props => {
                 </Col>
               </div>
               <div className='form-group row'>
-								<Col xs={12} sm={12}>
+                <Col xs={12} sm={12}>
                   <Button
                     onClick={onNewAccountClick}
                     className='btn-base btn-home'
@@ -88,7 +88,7 @@ const LoginForm = props => {
           {' '}
           Crafted by{' '}
           <a href='' className='p-l-10'>
-            <img src={OpenReLogoWhite} class="mb-1" alt='logo' width='110' />
+            <img src={OpenReLogoWhite} class='mb-1' alt='logo' width='110' />
           </a>
         </span>
       </div>

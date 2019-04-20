@@ -92,12 +92,10 @@ class NavbarContainer extends Component {
               </Link>
               <span className='nav-title'>
                 {info && (
-                  <span style={{ fontSize: '14px' }}>
-                    {info.account}
-                  </span>
+                  <span style={{ fontSize: '14px' }}>{info.account}</span>
                 )}
               </span>
-              <ul id='main-menu' class="mb-4">
+              <ul id='main-menu' class='mb-4'>
                 <li>
                   <Link to='/'>
                     <img src={IconProperties} alt='' />

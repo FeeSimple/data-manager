@@ -36,7 +36,9 @@ const NewAccForm = props => {
 
   return (
     <Modal isOpen={isOpen} toggle={handleToggle}>
-      <ModalHeader toggle={handleToggle}>Create a FeeSimple Account</ModalHeader>
+      <ModalHeader toggle={handleToggle}>
+        Create a FeeSimple Account
+      </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
@@ -48,7 +50,7 @@ const NewAccForm = props => {
               onChange={handleChange}
               invalid={errors.accountName && touched.accountName}
               type='text'
-							autocomplete='off'
+              autocomplete='off'
             />
           </FormGroup>
           <Button
@@ -64,9 +66,12 @@ const NewAccForm = props => {
             )}
           </Button>
           <Collapse isOpen={isOpenKeyPair}>
-						<Alert color='success'>
+            <Alert color='success'>
               <h4 className='alert-heading'>Account created!</h4>
-              <p>Please make sure to store your private key somewhere safe. You will need it to recover your account.</p>
+              <p>
+                Please make sure to store your private key somewhere safe. You
+                will need it to recover your account.
+              </p>
             </Alert>
             <FormGroup>
               <Label>Public Key</Label>
@@ -93,8 +98,12 @@ const NewAccForm = props => {
         </Form>
       </ModalBody>
       <ModalFooter>
-				<i>Account names are used to access the FeeSimple network, manage your data, and transact with the XFS token. Account names must be unique and 12 symbols long and they can only include symbols a-z and 1-5.</i>
-			</ModalFooter>
+        <i>
+          Account names are used to access the FeeSimple network, manage your
+          data, and transact with the XFS token. Account names must be unique
+          and 12 symbols long and they can only include symbols a-z and 1-5.
+        </i>
+      </ModalFooter>
     </Modal>
   )
 }
