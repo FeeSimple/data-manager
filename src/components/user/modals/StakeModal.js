@@ -60,8 +60,8 @@ class StakeModalContainer extends React.Component {
           <ModalHeader toggle={this.toggle}>
             <div className='fs-16 clr-base tc'>Manage Stake</div>
           </ModalHeader>
-          <ModalBody>
-            <div className='tc m-b-30'>
+          <ModalBody className='px-5'>
+            <div className='tc'>
               <Collapse isOpen={resourceHandleErr} size='sm'>
                 {resourceHandleErr === 'Success' ? (
                   <Alert color='success'>

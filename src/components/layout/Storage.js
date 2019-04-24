@@ -43,7 +43,7 @@ class NavbarContainer extends Component {
     }
     ram = new Intl.NumberFormat().format(ram)
     if (cnt === 0) {
-      ram = ram.toString() + ' Byte'
+      ram = ram.toString() + ' Bytes'
     } else if (cnt === 1) {
       ram = ram.toString() + ' KB'
     } else if (cnt === 2) {
