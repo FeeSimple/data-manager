@@ -103,6 +103,25 @@ const PropertyDetails = ({
         <div className='form-group row'>
           <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
             <AvField
+              label='State/Province/Region'
+              id='region'
+              name='region'
+              type='text'
+              onChange={onChange}
+              value={property.region}
+              validate={{
+                required: {
+                  value: true,
+                  errorMessage: 'Please enter a state/province/region'
+                },
+                minLength: { value: 1 }
+              }}
+            />
+          </div>
+        </div>
+        <div className='form-group row'>
+          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
+            <AvField
               label='Postal Code'
               id='postal_code'
               name='postal_code'
