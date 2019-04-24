@@ -5,6 +5,7 @@ $font: 'Open Sans', sans-serif;
 $primary-text-color: #605e5e;
 $clr-base: #00b1ef;
 $clr-seconday: #2b8acb;
+$clr-seconday-light: rgba(0, 177,239, .35);
 $clr-bg: #104378;
 $clr-gray: #dbe3eb;
 $clr-white: #fff;
@@ -102,6 +103,8 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
     font-size: 16px;
     font-weight: 600;
     padding: 10px 0;
+		border-radius: 6px;
+		background-color: $clr-seconday-light;
   }
   .logout{
     display: block;
@@ -125,8 +128,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   #main-menu{
     list-style: none;
     padding-left: 0;
-    border-top: 2px solid $clr-seconday;
-    border-bottom: 2px solid $clr-seconday;
+    border-bottom: 1px solid $clr-seconday-light;
     li{
       display: block;
       padding: 0;
@@ -206,10 +208,13 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   >li{
     float: left;
     list-style: none;
-    margin-left: 10px;
+    margin-left: 5px;
     position: relative;
     &:first-child{
       margin-left: 0;
+    }
+		&:last-child{
+      margin-left: 20px;
     }
     &.dropdown-li{
       .properties-dropdpwn{
@@ -407,7 +412,6 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
 -------------------------------------------*/
 .form-control{border: 2px solid #dbe3eb; height: 42px; box-shadow: none; }
 .panel-fs{border-color: #dbe3eb; border-width: 2px; margin-bottom: 0;
-    border-radius: 0.60rem;
     >.panel-heading {
     background-color: transparent;
     border-color: #dbe3eb;
@@ -415,7 +419,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
     font-size: 15px;
   }
   .card-header{
-    border-bottom-width: 2px;
+		background-color:	transparent;
     a{
       color: #404040;
       font-size: 14px;
@@ -433,7 +437,7 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
       width: 50%;
       float: left;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 400;
     }
     a:first-child{
        border-radius: 4px 0 0 4px;

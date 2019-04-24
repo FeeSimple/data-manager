@@ -87,7 +87,7 @@ class SendModalContainer extends React.Component {
             <div className='fs-16 clr-base tc'>Send XFS</div>
           </ModalHeader>
           <ModalBody>
-            <div className='tc m-b-30'>
+            <div className='tc'>
               <Collapse isOpen={this.state.userSendErr} size='sm'>
                 {this.state.userSendErr === 'Success' ? (
                   <Alert color='success'>

@@ -12,38 +12,38 @@ const columns = [
     dataField: 'time',
     text: 'Time',
     sort: true,
-    headerStyle: { width: 45 }
+    headerStyle: { width: 50 }
   },
   {
     dataField: 'action',
     text: 'Action',
     sort: true,
-    headerStyle: { width: 35 }
+    headerStyle: { width: 45 }
   },
   {
     dataField: 'quantity',
     text: 'Quantity',
     sort: true,
-    headerStyle: { width: 40 }
+    headerStyle: { width: 45 }
   },
   {
     dataField: 'ramUsage',
     text: 'RAM Cost',
     sort: true,
-    headerStyle: { width: 45 }
+    headerStyle: { width: 35 }
   },
   {
     dataField: 'cpuBwUsage',
     text: 'CPU Used',
     sort: true,
-    headerStyle: { width: 45 },
+    headerStyle: { width: 35 },
     formatter: (cellContent, row) => <span>{row.cpuBwUsage.split('&')[0]}</span>
   },
   {
     dataField: 'cpuBwUsage',
-    text: 'Bandwidth Used',
+    text: 'Net Used',
     sort: true,
-    headerStyle: { width: 60 },
+    headerStyle: { width: 35 },
     formatter: (cellContent, row) => <span>{row.cpuBwUsage.split('&')[1]}</span>
   },
   {
@@ -62,7 +62,7 @@ const columns = [
 const NoDataIndication = () => {
   return (
     <div className='w-100 text-center'>
-      <span>No transaction at all</span>
+      <span>You have no transactions yet.</span>
     </div>
   )
 }

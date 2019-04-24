@@ -77,7 +77,7 @@ const UserInfo = ({
                 value={user.ramMeter}
                 color={progressColor(user.ramMeter)}
               >
-                {user.ramMeter + ' %'}
+                {user.ramMeter + '%'}
               </Progress>
               <div className='user-detail-label-small'>
                 Available / Max &nbsp; &nbsp; &nbsp; {user.ramStr}
@@ -117,7 +117,7 @@ const UserInfo = ({
                 value={user.cpuMeter}
                 color={progressColor(user.cpuMeter)}
               >
-                {user.cpuMeter + ' %'}
+                {user.cpuMeter + '%'}
               </Progress>
               <div className='user-detail-label-small'>
                 Available / Max &nbsp; &nbsp; &nbsp; {user.cpuStr}
@@ -157,7 +157,7 @@ const UserInfo = ({
                 value={user.bandwidthMeter}
                 color={progressColor(user.bandwidthMeter)}
               >
-                {user.bandwidthMeter + ' %'}
+                {user.bandwidthMeter + '%'}
               </Progress>
               <div className='user-detail-label-small'>
                 Available / Max &nbsp; &nbsp; &nbsp; {user.bandwidthStr}

@@ -44,8 +44,8 @@ const ManageRamForm = props => {
         <ModalHeader toggle={handleToggleModalRam}>
           <div className='fs-16 clr-base tc'>Buy or Sell RAM</div>
         </ModalHeader>
-        <ModalBody>
-          <div className='tc m-b-30'>
+        <ModalBody className='px-5'>
+          <div className='tc'>
             <Collapse isOpen={resourceHandleErr} size='sm'>
               {resourceHandleErr === 'Success' ? (
                 <Alert color='success'>
