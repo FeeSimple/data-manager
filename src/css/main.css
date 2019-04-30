@@ -151,7 +151,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 16px; }
   .top-bar h3 {
     font-size: 20px;
-    margin: 5px 0;
+    margin: 10px 0 0 0;
     font-weight: 400; }
     .top-bar h3 a {
       color: #605e5e; }
