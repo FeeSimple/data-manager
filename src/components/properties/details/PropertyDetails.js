@@ -20,7 +20,7 @@ const PropertyDetails = ({
 }) => (
   <div>
     <div className='top-bar'>
-      <Container>
+      <div className='container-fluid'>
 				<Row>
           <Col>
 						{ isCreating
@@ -67,7 +67,7 @@ const PropertyDetails = ({
 						</ul>
           </Col>
         </Row>
-      </Container>
+      </div>
     </div>
     <br />
     <Container>
