@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
-import IconDelete from '../../../img/icon-delete.svg'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
 import { StyledPreview } from '../../layout/DropZone'
 import ImageGallery from 'react-image-gallery'
+import IconCloseSqr from '../../../img/icon-close-sq.svg'
+import IconAddSqr from '../../../img/icon-plus-sq.svg'
+import IconEditSqr from '../../../img/icon-edit-sq.svg'
 
 const PropertyDetails = ({
   property,
@@ -18,26 +20,50 @@ const PropertyDetails = ({
 }) => (
   <div>
     <div className='top-bar'>
-      <Container>
+      <div className='container-fluid'>
         <Row>
           <Col>
-            <h3 className='float-left'>New Property</h3>
+            {isCreating ? (
+              <h3 className='float-left'>New Property</h3>
+            ) : (
+              <h3 className='float-left'>{property.name}</h3>
+            )}
           </Col>
           <Col>
-            <button
-              className='float-right del-btn-fx'
-              hidden={isCreating}
-              onClick={e => handleToggle(property.id)}
-            >
-              <img
-                src={IconDelete}
-                alt=''
-                style={{ width: '24px', height: '24px' }}
-              />
-            </button>
+            <ul className='properties-menu'>
+              <li hidden={isCreating}>
+                <Link to={`/${property.id}/edit`}>
+                  <img src={IconEditSqr} alt='' />
+                </Link>
+              </li>
+              <li>
+                <button
+                  className='float-right del-btn-fx-property'
+                  hidden={isCreating}
+                  onClick={e => handleToggle(property.id)}
+                >
+                  <img
+                    src={IconCloseSqr}
+                    alt=''
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                </button>
+              </li>
+              <li className='dropdown-li' hidden={isCreating}>
+                <Link to={`/`}>
+                  <img src={IconAddSqr} alt='' />
+                </Link>
+                <div className='properties-dropdpwn'>
+                  <Link to={`/${property.id}/floorplan/new`}>
+                    New Floor Plan
+                  </Link>{' '}
+                  <Link to={`/${property.id}/unit/new`}>New Unit</Link>
+                </div>
+              </li>
+            </ul>
           </Col>
         </Row>
-      </Container>
+      </div>
     </div>
     <br />
     <Container>
