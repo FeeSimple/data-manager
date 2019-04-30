@@ -10,7 +10,7 @@ const Confirm = props => {
         Please Confirm
       </ModalHeader>
       <ModalBody>
-        <div class="mb-3">
+        <div class='mb-3'>
           <Label>Are you sure you want to delete {text}</Label>
         </div>
         <div className='form-group row mb-0'>
@@ -25,7 +25,7 @@ const Confirm = props => {
               Yes
             </Button>
           </Col>
-					<Col xs={12} sm={6}>
+          <Col xs={12} sm={6}>
             <Button
               size='sm'
               outline

@@ -21,50 +21,46 @@ const PropertyDetails = ({
   <div>
     <div className='top-bar'>
       <div className='container-fluid'>
-				<Row>
+        <Row>
           <Col>
-						{ isCreating
-        			? <h3 className='float-left'>New Property</h3>
-        			: <h3 className='float-left'>{property.name}</h3>
-      			}
+            {isCreating ? (
+              <h3 className='float-left'>New Property</h3>
+            ) : (
+              <h3 className='float-left'>{property.name}</h3>
+            )}
           </Col>
           <Col>
-						<ul className='properties-menu'>
-							<li 
-								hidden={isCreating}
-							>
-              	<Link to={`/${property.id}/edit`}>
-                	<img src={IconEditSqr} alt='' />
-              	</Link>
+            <ul className='properties-menu'>
+              <li hidden={isCreating}>
+                <Link to={`/${property.id}/edit`}>
+                  <img src={IconEditSqr} alt='' />
+                </Link>
               </li>
-            	<li>
-            		<button
-              		className='float-right del-btn-fx-property'
-              		hidden={isCreating}
-              		onClick={e => handleToggle(property.id)}
-            		>
-              		<img
-              			src={IconCloseSqr}
-                		alt=''
-                		style={{ width: '40px', height: '40px' }}
-              		/>
-            		</button>
-							</li>
-							<li 
-								className='dropdown-li' 
-								hidden={isCreating}
-							>
-              	<Link to={`/`}>
-                	<img src={IconAddSqr} alt='' />
+              <li>
+                <button
+                  className='float-right del-btn-fx-property'
+                  hidden={isCreating}
+                  onClick={e => handleToggle(property.id)}
+                >
+                  <img
+                    src={IconCloseSqr}
+                    alt=''
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                </button>
+              </li>
+              <li className='dropdown-li' hidden={isCreating}>
+                <Link to={`/`}>
+                  <img src={IconAddSqr} alt='' />
                 </Link>
                 <div className='properties-dropdpwn'>
-                	<Link to={`/${property.id}/floorplan/new`}>
+                  <Link to={`/${property.id}/floorplan/new`}>
                     New Floor Plan
                   </Link>{' '}
                   <Link to={`/${property.id}/unit/new`}>New Unit</Link>
                 </div>
               </li>
-						</ul>
+            </ul>
           </Col>
         </Row>
       </div>
