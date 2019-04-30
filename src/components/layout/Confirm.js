@@ -19,7 +19,7 @@ const Confirm = props => {
               size='sm'
               outline
               color='danger'
-              className='btn-base btn-home btn btn-secondary mb-0'
+              className='btn-base btn-home btn btn-gray-o mb-0'
               onClick={onDelete}
             >
               Yes

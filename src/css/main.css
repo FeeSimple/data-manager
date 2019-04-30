@@ -472,7 +472,8 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #9b9b9b;
   background-color: transparent;
   color: #9b9b9b;
-  opacity: 1; }
+  opacity: 1;
+  border-width: 2px; }
 
 .btn-gray-o:focus,
 .btn-gray-o:hover,
