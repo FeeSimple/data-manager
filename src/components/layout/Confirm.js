@@ -7,33 +7,33 @@ const Confirm = props => {
   return (
     <Modal isOpen={isOpen} toggle={handleToggle}>
       <ModalHeader toggle={e => handleToggle(-1, -1)}>
-        Please confirm
+        Please Confirm
       </ModalHeader>
       <ModalBody>
-        <div>
+        <div class="mb-3">
           <Label>Are you sure you want to delete {text}</Label>
         </div>
-        <div className='form-group row'>
-          <Col xs={12} sm={6}>
-            <Button
-              size='sm'
-              outline
-              color='primary'
-              className='btn-base btn-home btn btn-secondary'
-              onClick={e => handleToggle(-1, -1)}
-            >
-              No
-            </Button>
-          </Col>
+        <div className='form-group row mb-0'>
           <Col xs={12} sm={6}>
             <Button
               size='sm'
               outline
               color='danger'
-              className='btn-base btn-home btn btn-secondary'
+              className='btn-base btn-home btn btn-secondary mb-0'
               onClick={onDelete}
             >
               Yes
+            </Button>
+          </Col>
+					<Col xs={12} sm={6}>
+            <Button
+              size='sm'
+              outline
+              color='primary'
+              className='btn-base btn-home btn btn-secondary mb-0'
+              onClick={e => handleToggle(-1, -1)}
+            >
+              No
             </Button>
           </Col>
         </div>
