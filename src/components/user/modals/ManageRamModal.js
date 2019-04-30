@@ -19,6 +19,7 @@ import {
   RamBytes2Xfs,
   xfs2RamBytes
 } from '../../../utils/eoshelper'
+import { beautifyRam } from '../../../utils/beautify'
 
 const ManageRamForm = props => {
   const {
@@ -103,10 +104,9 @@ const ManageRamForm = props => {
               <h4 className='modal-h4 m-b-5'>In Bytes</h4>
               {values.xfsAmount && (
                 <h2 className='modal-h2 m-b-5'>
-                  {new Intl.NumberFormat().format(
+                  {beautifyRam(
                     xfs2RamBytes(values.xfsAmount, user.ramPrice)
                   )}{' '}
-                  bytes
                 </h2>
               )}
               <h4 className='modal-h4 m-b-0'>1 kB = 0.02 XFS</h4>
