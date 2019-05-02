@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import {
   Button,
   Modal,
@@ -10,13 +12,18 @@ import {
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css'
 import Spinner from 'react-spinkit'
+import {
+  manageCpuBw
+} from '../../../utils/eoshelper'
 
 class StakeModalContainer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       modal: false,
-      value: 65
+      value: 1,
+      isProcessing: false,
+      resourceHandleErr: false
     }
 
     this.toggle = this.toggle.bind(this)
@@ -24,7 +31,8 @@ class StakeModalContainer extends React.Component {
 
   toggle () {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      modal: !prevState.modal,
+      resourceHandleErr: false
     }))
   }
 
@@ -38,13 +46,52 @@ class StakeModalContainer extends React.Component {
   }
   handleChangeComplete = () => {}
 
+  handleSetStake = async xfsAmount => {
+    // Reset state
+    this.setState({
+      resourceHandleErr: false,
+      isProcessing: true
+    })
+
+    const { eosClient, accountData, updateAccountInfo } = this.props
+    let activeAccount = accountData.active
+
+    let res = await manageCpuBw(
+      eosClient,
+      activeAccount,
+      xfsAmount / 2,
+      true,
+      true
+    )
+
+    res = await manageCpuBw(
+      eosClient,
+      activeAccount,
+      xfsAmount / 2,
+      false,
+      true
+    )
+
+    // console.log('manageCpuBw:', res)
+    if (res.errMsg) {
+      this.setState({
+        resourceHandleErr: res.errMsg,
+        isProcessing: false
+      })
+    } else {
+      updateAccountInfo()
+
+      this.setState({
+        resourceHandleErr: 'Success',
+        isProcessing: false
+      })
+    }
+  }
+
   render () {
-    const { value } = this.state
+    const { value, resourceHandleErr, isProcessing } = this.state
     const {
-      userBalance,
-      handleSetStake,
-      isProcessing,
-      resourceHandleErr
+      userBalance
     } = this.props
     return (
       <>
@@ -79,7 +126,7 @@ class StakeModalContainer extends React.Component {
             </div>
             <div className='tc m-b-30'>
               To gain additional resources, adjust the amount of <br /> XFS you
-              would like to stake:
+              would like to stake more:
             </div>
 
             <h2 className='stackvalueRange'>{value}%</h2>
@@ -125,7 +172,7 @@ class StakeModalContainer extends React.Component {
                     color='base'
                     className='btn prop-btn w100'
                     onClick={() => {
-                      handleSetStake(
+                      this.handleSetStake(
                         (parseInt(value) * parseFloat(userBalance)) / 100
                       )
                     }}
@@ -150,4 +197,8 @@ class StakeModalContainer extends React.Component {
   }
 }
 
-export default StakeModalContainer
+function mapStateToProps ({ eosClient, accountData }) {
+  return { eosClient, accountData }
+}
+
+export default withRouter(connect(mapStateToProps)(StakeModalContainer))
