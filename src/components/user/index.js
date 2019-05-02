@@ -207,7 +207,6 @@ class UserContainer extends Component {
                 userBalance={user.balanceNumber}
                 updateAccountInfo={this.updateAccountInfo}
               />
-
             </Col>
           </Row>
         </Container>

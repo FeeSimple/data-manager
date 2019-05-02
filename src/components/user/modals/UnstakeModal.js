@@ -12,9 +12,7 @@ import {
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css'
 import Spinner from 'react-spinkit'
-import {
-  manageCpuBw
-} from '../../../utils/eoshelper'
+import { manageCpuBw } from '../../../utils/eoshelper'
 
 class UnstakeModalContainer extends React.Component {
   constructor (props) {
@@ -90,12 +88,14 @@ class UnstakeModalContainer extends React.Component {
 
   render () {
     const { value, resourceHandleErr, isProcessing } = this.state
-    const {
-      userStakedBalance
-    } = this.props
+    const { userStakedBalance } = this.props
     return (
       <>
-        <Button color='gray' className='btn prop-btn fr m-l-10' onClick={this.toggle}>
+        <Button
+          color='gray'
+          className='btn prop-btn fr m-l-10'
+          onClick={this.toggle}
+        >
           Unstake
         </Button>
 
@@ -125,14 +125,16 @@ class UnstakeModalContainer extends React.Component {
               </Collapse>
             </div>
             <div className='tc m-b-30'>
-              To release additional resources, adjust the staked balance (<b>{userStakedBalance} XFS</b>) you
-              would like to unstake:
+              To release additional resources, adjust the staked balance (
+              <b>{userStakedBalance} XFS</b>) you would like to unstake:
             </div>
 
             <h2 className='stackvalueRange'>{value}%</h2>
             {userStakedBalance && (
               <h4 className='stackvalue'>
-                {new Intl.NumberFormat().format((value * userStakedBalance) / 100)}{' '}
+                {new Intl.NumberFormat().format(
+                  (value * userStakedBalance) / 100
+                )}{' '}
                 XFS
               </h4>
             )}

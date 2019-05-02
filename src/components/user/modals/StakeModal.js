@@ -12,9 +12,7 @@ import {
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css'
 import Spinner from 'react-spinkit'
-import {
-  manageCpuBw
-} from '../../../utils/eoshelper'
+import { manageCpuBw } from '../../../utils/eoshelper'
 
 class StakeModalContainer extends React.Component {
   constructor (props) {
@@ -90,12 +88,14 @@ class StakeModalContainer extends React.Component {
 
   render () {
     const { value, resourceHandleErr, isProcessing } = this.state
-    const {
-      userBalance
-    } = this.props
+    const { userBalance } = this.props
     return (
       <>
-        <Button color='gray' className='btn prop-btn fr m-l-10' onClick={this.toggle}>
+        <Button
+          color='gray'
+          className='btn prop-btn fr m-l-10'
+          onClick={this.toggle}
+        >
           Stake
         </Button>
 
@@ -125,8 +125,8 @@ class StakeModalContainer extends React.Component {
               </Collapse>
             </div>
             <div className='tc m-b-30'>
-              To gain additional resources, adjust the spendable balance (<b>{userBalance} XFS</b>) you
-              would like to stake:
+              To gain additional resources, adjust the spendable balance (
+              <b>{userBalance} XFS</b>) you would like to stake:
             </div>
 
             <h2 className='stackvalueRange'>{value}%</h2>

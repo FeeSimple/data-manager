@@ -576,7 +576,8 @@ export const getAccountInfo = async (eosClient, account) => {
     if (result.total_resources) {
       stakedCpu = beautifyBalance(result.total_resources.cpu_weight)
       stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
-      stakedBalanceNumber = fetchBalanceNumber(stakedCpu) + fetchBalanceNumber(stakedBandwidth)
+      stakedBalanceNumber =
+        fetchBalanceNumber(stakedCpu) + fetchBalanceNumber(stakedBandwidth)
     }
 
     let unstakedCpu = null
