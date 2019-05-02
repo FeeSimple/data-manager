@@ -522,7 +522,7 @@ export const sendXFS = async (
 export const getAccountInfo = async (eosClient, account) => {
   try {
     let result = await eosClient.getAccount(account)
-    // console.log('getAccountInfo - result: ', result)
+    console.log('getAccountInfo - result: ', result)
     let ramStr = ''
     let ramMeter = '0'
     let ramAvailable = 0
@@ -572,9 +572,11 @@ export const getAccountInfo = async (eosClient, account) => {
 
     let stakedCpu = NO_BALANCE
     let stakedBandwidth = NO_BALANCE
+    let stakedBalanceNumber = 0
     if (result.total_resources) {
       stakedCpu = beautifyBalance(result.total_resources.cpu_weight)
       stakedBandwidth = beautifyBalance(result.total_resources.net_weight)
+      stakedBalanceNumber = fetchBalanceNumber(stakedCpu) + fetchBalanceNumber(stakedBandwidth)
     }
 
     let unstakedCpu = null
@@ -590,6 +592,7 @@ export const getAccountInfo = async (eosClient, account) => {
       created,
       balance,
       balanceNumber,
+      stakedBalanceNumber,
       ramStr,
       ramMeter,
       ramAvailable,

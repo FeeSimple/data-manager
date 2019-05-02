@@ -16,7 +16,7 @@ import {
   manageCpuBw
 } from '../../../utils/eoshelper'
 
-class StakeModalContainer extends React.Component {
+class UnstakeModalContainer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -46,7 +46,7 @@ class StakeModalContainer extends React.Component {
   }
   handleChangeComplete = () => {}
 
-  handleSetStake = async xfsAmount => {
+  handleSetUnstake = async xfsAmount => {
     // Reset state
     this.setState({
       resourceHandleErr: false,
@@ -61,7 +61,7 @@ class StakeModalContainer extends React.Component {
       activeAccount,
       xfsAmount / 2,
       true,
-      true
+      false
     )
 
     res = await manageCpuBw(
@@ -69,7 +69,7 @@ class StakeModalContainer extends React.Component {
       activeAccount,
       xfsAmount / 2,
       false,
-      true
+      false
     )
 
     // console.log('manageCpuBw:', res)
@@ -91,12 +91,12 @@ class StakeModalContainer extends React.Component {
   render () {
     const { value, resourceHandleErr, isProcessing } = this.state
     const {
-      userBalance
+      userStakedBalance
     } = this.props
     return (
       <>
         <Button color='gray' className='btn prop-btn fr m-l-10' onClick={this.toggle}>
-          Stake
+          Unstake
         </Button>
 
         <Modal
@@ -105,7 +105,7 @@ class StakeModalContainer extends React.Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.toggle}>
-            <div className='fs-16 clr-base tc'>Manage Stake</div>
+            <div className='fs-16 clr-base tc'>Manage Unstake</div>
           </ModalHeader>
           <ModalBody className='px-5'>
             <div className='tc'>
@@ -125,14 +125,14 @@ class StakeModalContainer extends React.Component {
               </Collapse>
             </div>
             <div className='tc m-b-30'>
-              To gain additional resources, adjust the spendable balance (<b>{userBalance} XFS</b>) you
-              would like to stake:
+              To release additional resources, adjust the staked balance (<b>{userStakedBalance} XFS</b>) you
+              would like to unstake:
             </div>
 
             <h2 className='stackvalueRange'>{value}%</h2>
-            {userBalance && (
+            {userStakedBalance && (
               <h4 className='stackvalue'>
-                {new Intl.NumberFormat().format((value * userBalance) / 100)}{' '}
+                {new Intl.NumberFormat().format((value * userStakedBalance) / 100)}{' '}
                 XFS
               </h4>
             )}
@@ -172,8 +172,8 @@ class StakeModalContainer extends React.Component {
                     color='base'
                     className='btn prop-btn w100'
                     onClick={() => {
-                      this.handleSetStake(
-                        (parseInt(value) * parseFloat(userBalance)) / 100
+                      this.handleSetUnstake(
+                        (parseInt(value) * parseFloat(userStakedBalance)) / 100
                       )
                     }}
                   >
@@ -184,7 +184,7 @@ class StakeModalContainer extends React.Component {
                         fadeIn='none'
                       />
                     ) : (
-                      <span>Stake</span>
+                      <span>Unstake</span>
                     )}
                   </Button>
                 </div>
@@ -201,4 +201,4 @@ function mapStateToProps ({ eosClient, accountData }) {
   return { eosClient, accountData }
 }
 
-export default withRouter(connect(mapStateToProps)(StakeModalContainer))
+export default withRouter(connect(mapStateToProps)(UnstakeModalContainer))

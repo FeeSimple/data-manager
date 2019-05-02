@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
 import SendModal from './modals/SendModal'
 import StakeModal from './modals/StakeModal'
+import UnstakeModal from './modals/UnstakeModal'
 import ManageRamModal from './modals/ManageRamModal'
 
 import {
@@ -160,7 +161,7 @@ class UserContainer extends Component {
               <Col>
                 <h3 className='float-left'>Wallet</h3>
                 <h3 className='float-right'>
-                  <small>Balance</small> {user.balance}{' '}
+                  <small>Spendable Balance</small> {user.balance}{' '}
                 </h3>
               </Col>
             </Row>
@@ -197,10 +198,16 @@ class UserContainer extends Component {
                 resourceHandleErr={this.state.resourceHandleErr}
               />
 
+              <UnstakeModal
+                userStakedBalance={user.stakedBalanceNumber}
+                updateAccountInfo={this.updateAccountInfo}
+              />
+
               <StakeModal
                 userBalance={user.balanceNumber}
                 updateAccountInfo={this.updateAccountInfo}
               />
+
             </Col>
           </Row>
         </Container>
