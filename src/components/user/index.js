@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
 import SendModal from './modals/SendModal'
 import StakeModal from './modals/StakeModal'
+import UnstakeModal from './modals/UnstakeModal'
 import ManageRamModal from './modals/ManageRamModal'
 
 import {
@@ -92,48 +93,6 @@ class UserContainer extends Component {
     })
   }
 
-  handleSetStake = async xfsAmount => {
-    // Reset state
-    this.setState({
-      resourceHandleErr: false,
-      isProcessing: true
-    })
-
-    const { eosClient, accountData } = this.props
-    let activeAccount = accountData.active
-
-    let res = await manageCpuBw(
-      eosClient,
-      activeAccount,
-      xfsAmount / 2,
-      true,
-      true
-    )
-
-    res = await manageCpuBw(
-      eosClient,
-      activeAccount,
-      xfsAmount / 2,
-      false,
-      true
-    )
-
-    // console.log('manageCpuBw:', res)
-    if (res.errMsg) {
-      this.setState({
-        resourceHandleErr: res.errMsg,
-        isProcessing: false
-      })
-    } else {
-      this.updateAccountInfo()
-
-      this.setState({
-        resourceHandleErr: 'Success',
-        isProcessing: false
-      })
-    }
-  }
-
   handleManageRam = async xfsAmount => {
     // Reset state
     this.setState({
@@ -202,7 +161,7 @@ class UserContainer extends Component {
               <Col>
                 <h3 className='float-left'>Wallet</h3>
                 <h3 className='float-right'>
-                  <small>Balance</small> {user.balance}{' '}
+                  <small>Spendable Balance</small> {user.balance}{' '}
                 </h3>
               </Col>
             </Row>
@@ -239,11 +198,14 @@ class UserContainer extends Component {
                 resourceHandleErr={this.state.resourceHandleErr}
               />
 
+              <UnstakeModal
+                userStakedBalance={user.stakedBalanceNumber}
+                updateAccountInfo={this.updateAccountInfo}
+              />
+
               <StakeModal
                 userBalance={user.balanceNumber}
-                handleSetStake={this.handleSetStake}
-                isProcessing={this.state.isProcessing}
-                resourceHandleErr={this.state.resourceHandleErr}
+                updateAccountInfo={this.updateAccountInfo}
               />
             </Col>
           </Row>
