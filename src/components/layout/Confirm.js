@@ -40,7 +40,7 @@ const Confirm = props => {
       </ModalBody>
 			<ModalFooter>
         <i>
-          Deleting a property will also remove all associated floor plans and units. Please proceed with caution as once deleted, this data cannot be recovered.
+          Please proceed with caution as once deleted, this data cannot be recovered and must be reentered in.
         </i>
       </ModalFooter>
     </Modal>
