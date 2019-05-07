@@ -6,7 +6,7 @@ import SendModal from './modals/SendModal'
 import StakeModal from './modals/StakeModal'
 import UnstakeModal from './modals/UnstakeModal'
 import ManageRamModal from './modals/ManageRamModal'
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
+import Select from 'react-select'
 
 import {
   getAccountInfo,
@@ -30,15 +30,7 @@ class UserContainer extends Component {
       gettingActions: true,
 
       balanceList: [],
-
-      dropdownOpen: false
     }
-  }
-
-  toggleDropDown = () => {
-    this.setState(prevState => ({
-      dropdownOpen: !prevState.dropdownOpen
-    }))
   }
 
   resetProcessing = () => {
@@ -140,7 +132,14 @@ class UserContainer extends Component {
     const { eosClient, accountData } = this.props
     let account = accountData.active
     let info = await getAccountInfo(eosClient, account)
-    this.setState({ data: info })
+    this.setState({ 
+      data: info,
+      balanceList: [
+        { label: `Spendable Balance: ${info.balance}`, value: 1 },
+        { label: `Staked Balance: ${info.stakedBalanceNumber} XFS`, value: 2 },
+        { label: `Total Balance: ${info.totalBalanceNumber} XFS`, value: 3 }
+      ]
+    })
   }
 
   async componentDidMount () {
@@ -172,20 +171,14 @@ class UserContainer extends Component {
             <Row>
               <Col>
                 <h3 className='float-left'>Wallet</h3>
-                <h3 className='float-right'>
+              </Col>
+              <Col className="col-md-4" style={{fontSize: '18px'}}>
                   { user &&
-                    <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
-                      <DropdownToggle caret>
-                        Balance List
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem> <small> <b>Spendable:</b> {user.balance} </small> </DropdownItem>
-                        <DropdownItem> <small> <b>Staked:</b> {user.stakedBalanceNumber} XFS </small> </DropdownItem>
-                        <DropdownItem> <small> <b>Total:</b> {user.totalBalanceNumber} XFS </small> </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
+                    <Select 
+                      defaultValue={this.state.balanceList[0]}
+                      options={ this.state.balanceList }                      
+                    />
                   }
-                </h3>
               </Col>
             </Row>
           </Container>
