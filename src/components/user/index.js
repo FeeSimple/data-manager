@@ -6,6 +6,7 @@ import SendModal from './modals/SendModal'
 import StakeModal from './modals/StakeModal'
 import UnstakeModal from './modals/UnstakeModal'
 import ManageRamModal from './modals/ManageRamModal'
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 
 import {
   getAccountInfo,
@@ -20,14 +21,24 @@ class UserContainer extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      data: [],
+      data: null,
       showModalRam: false,
       isBuy: false,
       resourceHandleErr: false,
       isProcessing: false,
       activityList: [],
-      gettingActions: true
+      gettingActions: true,
+
+      balanceList: [],
+
+      dropdownOpen: false
     }
+  }
+
+  toggleDropDown = () => {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }))
   }
 
   resetProcessing = () => {
@@ -151,7 +162,8 @@ class UserContainer extends Component {
     const user = this.state.data
     if (!user) {
       // You can render any custom fallback UI
-      return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
+      // return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
+      return <div></div>
     }
     return (
       <div>
@@ -161,7 +173,18 @@ class UserContainer extends Component {
               <Col>
                 <h3 className='float-left'>Wallet</h3>
                 <h3 className='float-right'>
-                  <small>Spendable Balance</small> {user.balance}{' '}
+                  { user &&
+                    <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
+                      <DropdownToggle caret>
+                        Balance List
+                      </DropdownToggle>
+                      <DropdownMenu right>
+                        <DropdownItem> <small> <b>Spendable:</b> {user.balance} </small> </DropdownItem>
+                        <DropdownItem> <small> <b>Staked:</b> {user.stakedBalanceNumber} XFS </small> </DropdownItem>
+                        <DropdownItem> <small> <b>Total:</b> {user.totalBalanceNumber} XFS </small> </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  }
                 </h3>
               </Col>
             </Row>

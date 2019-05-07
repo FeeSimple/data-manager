@@ -126,7 +126,7 @@ class UnstakeModalContainer extends React.Component {
             </div>
             <div className='tc m-b-30'>
               To release additional resources, adjust the staked balance (
-              <b>{userStakedBalance} XFS</b>) you would like to unstake:
+              <b>{new Intl.NumberFormat().format(userStakedBalance)} XFS</b>) you would like to unstake:
             </div>
 
             <h2 className='stackvalueRange'>{value}%</h2>

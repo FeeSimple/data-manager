@@ -126,7 +126,7 @@ class StakeModalContainer extends React.Component {
             </div>
             <div className='tc m-b-30'>
               To gain additional resources, adjust the spendable balance (
-              <b>{userBalance} XFS</b>) you would like to stake:
+              <b>{new Intl.NumberFormat().format(userBalance)} XFS</b>) you would like to stake:
             </div>
 
             <h2 className='stackvalueRange'>{value}%</h2>
