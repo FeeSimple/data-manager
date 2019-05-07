@@ -19,7 +19,7 @@ class StakeModalContainer extends React.Component {
     super(props)
     this.state = {
       modal: false,
-      value: 1,
+      value: 0,
       isProcessing: false,
       resourceHandleErr: false
     }

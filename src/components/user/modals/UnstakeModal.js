@@ -19,7 +19,7 @@ class UnstakeModalContainer extends React.Component {
     super(props)
     this.state = {
       modal: false,
-      value: 1,
+      value: 100,
       isProcessing: false,
       resourceHandleErr: false
     }
