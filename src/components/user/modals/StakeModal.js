@@ -19,7 +19,7 @@ class StakeModalContainer extends React.Component {
     super(props)
     this.state = {
       modal: false,
-      value: 1,
+      value: 0,
       isProcessing: false,
       resourceHandleErr: false
     }
@@ -88,111 +88,93 @@ class StakeModalContainer extends React.Component {
 
   render () {
     const { value, resourceHandleErr, isProcessing } = this.state
-    const { userBalance } = this.props
+    const { userBalance, toggle, modal } = this.props
     return (
-      <>
-        <Button
-          color='gray'
-          className='btn prop-btn fr m-l-10'
-          onClick={this.toggle}
-        >
-          Stake
-        </Button>
-
-        <Modal
-          isOpen={this.state.modal}
-          toggle={this.toggle}
-          className={this.props.className}
-        >
-          <ModalHeader toggle={this.toggle}>
-            <div className='fs-16 clr-base tc'>Manage Stake</div>
-          </ModalHeader>
-          <ModalBody className='px-5'>
-            <div className='tc'>
-              <Collapse isOpen={resourceHandleErr} size='sm'>
-                {resourceHandleErr === 'Success' ? (
-                  <Alert color='success'>
+      <Modal isOpen={modal} toggle={toggle} className={this.props.className}>
+        <ModalHeader toggle={toggle}>
+          <div className='fs-16 clr-base tc'>Manage Stake</div>
+        </ModalHeader>
+        <ModalBody className='px-5'>
+          <div className='tc'>
+            <Collapse isOpen={resourceHandleErr} size='sm'>
+              {resourceHandleErr === 'Success' ? (
+                <Alert color='success'>
+                  <div>
                     <div>
-                      <div>
-                        <b>Transaction successful!</b>
-                      </div>
-                      <div>Your XFS balance has been updated.</div>
+                      <b>Transaction successful!</b>
                     </div>
-                  </Alert>
-                ) : (
-                  <Alert color='danger'>{resourceHandleErr}</Alert>
-                )}
-              </Collapse>
-            </div>
-            <div className='tc m-b-30'>
-              To gain additional resources, adjust the spendable balance (
-              <b>{userBalance} XFS</b>) you would like to stake:
-            </div>
+                    <div>Your XFS balance has been updated.</div>
+                  </div>
+                </Alert>
+              ) : (
+                <Alert color='danger'>{resourceHandleErr}</Alert>
+              )}
+            </Collapse>
+          </div>
+          <div className='tc m-b-30'>
+            To gain additional resources, adjust the spendable balance (
+            <b>{new Intl.NumberFormat().format(userBalance)} XFS</b>) you would
+            like to stake:
+          </div>
 
-            <h2 className='stackvalueRange'>{value}%</h2>
-            {userBalance && (
-              <h4 className='stackvalue'>
-                {new Intl.NumberFormat().format((value * userBalance) / 100)}{' '}
-                XFS
-              </h4>
-            )}
-            <from>
-              <div className='form-group row'>
-                <div className='col-12'>
-                  <div className='form-group'>
-                    <div className='slider'>
-                      <Slider
-                        min={0}
-                        max={100}
-                        value={value}
-                        onChangeStart={this.handleChangeStart}
-                        onChange={this.handleChange}
-                        onChangeComplete={this.handleChangeComplete}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className='col-12'>
-                  <div className='row'>
-                    <div className='col-4'>
-                      <span className='rangeVal'>0%</span>
-                    </div>
-                    <div className='col-4 a-center'>
-                      <span className='rangeVal'>50%</span>
-                    </div>
-                    <div className='col-4 a-right'>
-                      <span className='rangeVal'>100%</span>
-                    </div>
+          <h2 className='stackvalueRange'>{value}%</h2>
+          {userBalance && (
+            <h4 className='stackvalue'>
+              {new Intl.NumberFormat().format((value * userBalance) / 100)} XFS
+            </h4>
+          )}
+          <from>
+            <div className='form-group row'>
+              <div className='col-12'>
+                <div className='form-group'>
+                  <div className='slider'>
+                    <Slider
+                      min={0}
+                      max={100}
+                      value={value}
+                      onChangeStart={this.handleChangeStart}
+                      onChange={this.handleChange}
+                      onChangeComplete={this.handleChangeComplete}
+                    />
                   </div>
                 </div>
               </div>
-              <div className='form-group row'>
-                <div className='col-12 col-md-6 offset-md-3'>
-                  <Button
-                    color='base'
-                    className='btn prop-btn w100'
-                    onClick={() => {
-                      this.handleSetStake(
-                        (parseInt(value) * parseFloat(userBalance)) / 100
-                      )
-                    }}
-                  >
-                    {isProcessing ? (
-                      <Spinner
-                        name='three-bounce'
-                        color='white'
-                        fadeIn='none'
-                      />
-                    ) : (
-                      <span>Stake</span>
-                    )}
-                  </Button>
+              <div className='col-12'>
+                <div className='row'>
+                  <div className='col-4'>
+                    <span className='rangeVal'>0%</span>
+                  </div>
+                  <div className='col-4 a-center'>
+                    <span className='rangeVal'>50%</span>
+                  </div>
+                  <div className='col-4 a-right'>
+                    <span className='rangeVal'>100%</span>
+                  </div>
                 </div>
               </div>
-            </from>
-          </ModalBody>
-        </Modal>
-      </>
+            </div>
+            <div className='form-group row'>
+              <div className='col-12 col-md-6 offset-md-3'>
+                <Button
+                  color='base'
+                  className='btn prop-btn w100'
+                  onClick={() => {
+                    this.handleSetStake(
+                      (parseInt(value) * parseFloat(userBalance)) / 100
+                    )
+                  }}
+                >
+                  {isProcessing ? (
+                    <Spinner name='three-bounce' color='white' fadeIn='none' />
+                  ) : (
+                    <span>Stake</span>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </from>
+        </ModalBody>
+      </Modal>
     )
   }
 }
