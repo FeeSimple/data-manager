@@ -7,6 +7,12 @@ import StakeModal from './modals/StakeModal'
 import UnstakeModal from './modals/UnstakeModal'
 import ManageRamModal from './modals/ManageRamModal'
 import Select from 'react-select'
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap'
 
 import {
   getAccountInfo,
@@ -22,7 +28,11 @@ class UserContainer extends Component {
     super(props)
     this.state = {
       data: null,
+
       showModalRam: false,
+      showModalStake: false,
+      showModalUnstake: false,
+
       isBuy: false,
       resourceHandleErr: false,
       isProcessing: false,
@@ -30,7 +40,14 @@ class UserContainer extends Component {
       gettingActions: true,
 
       balanceList: [],
+      dropdownOpen: false
     }
+  }
+
+  toggle = () => {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }))
   }
 
   resetProcessing = () => {
@@ -51,6 +68,24 @@ class UserContainer extends Component {
   setSell = () => {
     this.setState({
       isBuy: false
+    })
+
+    this.resetProcessing()
+  }
+
+  handleToggleModalStake = () => {
+    const { showModalStake } = this.state
+    this.setState({
+      showModalStake: !showModalStake
+    })
+
+    this.resetProcessing()
+  }
+
+  handleToggleModalUnstake = () => {
+    const { showModalUnstake } = this.state
+    this.setState({
+      showModalUnstake: !showModalUnstake
     })
 
     this.resetProcessing()
@@ -132,7 +167,7 @@ class UserContainer extends Component {
     const { eosClient, accountData } = this.props
     let account = accountData.active
     let info = await getAccountInfo(eosClient, account)
-    this.setState({ 
+    this.setState({
       data: info,
       balanceList: [
         { label: `Spendable Balance: ${info.balance}`, value: 1 },
@@ -162,7 +197,7 @@ class UserContainer extends Component {
     if (!user) {
       // You can render any custom fallback UI
       // return <h1 className='error-message'>{ERR_DATA_LOADING_FAILED}</h1>
-      return <div></div>
+      return <div />
     }
     return (
       <div>
@@ -172,13 +207,13 @@ class UserContainer extends Component {
               <Col>
                 <h3 className='float-left'>Wallet</h3>
               </Col>
-              <Col className="col-md-4" style={{fontSize: '18px'}}>
-                  { user &&
-                    <Select 
-                      defaultValue={this.state.balanceList[0]}
-                      options={ this.state.balanceList }                      
-                    />
-                  }
+              <Col className='col-md-4' style={{ fontSize: '18px' }}>
+                {user && (
+                  <Select
+                    defaultValue={this.state.balanceList[0]}
+                    options={this.state.balanceList}
+                  />
+                )}
               </Col>
             </Row>
           </Container>
@@ -214,14 +249,48 @@ class UserContainer extends Component {
                 resourceHandleErr={this.state.resourceHandleErr}
               />
 
+              <Dropdown
+                isOpen={this.state.dropdownOpen}
+                toggle={this.toggle}
+                className='prop-btn fr m-l-10'
+              >
+                <DropdownToggle caret color='gray'>
+                  Stake/Unstake
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem>
+                    <Button
+                      color='gray'
+                      className='btn prop-btn fr m-l-10'
+                      onClick={this.handleToggleModalStake}
+                    >
+                      Stake
+                    </Button>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <Button
+                      color='gray'
+                      className='btn prop-btn fr m-l-10'
+                      onClick={this.handleToggleModalUnstake}
+                    >
+                      Unstake
+                    </Button>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+
               <UnstakeModal
                 userStakedBalance={user.stakedBalanceNumber}
                 updateAccountInfo={this.updateAccountInfo}
+                toggle={this.handleToggleModalUnstake}
+                modal={this.state.showModalUnstake}
               />
 
               <StakeModal
                 userBalance={user.balanceNumber}
                 updateAccountInfo={this.updateAccountInfo}
+                toggle={this.handleToggleModalStake}
+                modal={this.state.showModalStake}
               />
             </Col>
           </Row>
