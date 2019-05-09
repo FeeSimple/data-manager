@@ -366,7 +366,7 @@ export const getActionsProcessed = async (eosClient, account) => {
 
     activityList.push({
       index: i + 1,
-      time: beautifyBlockTime(item.block_time),
+      time: item.block_time,
       action: action,
       quantity: quantity,
       txLink: TX_LINK_ROOT + blockNum + '/' + item.action_trace.trx_id,
