@@ -204,7 +204,7 @@ class FloorplansContainer extends Component {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `Floor plan "${floorplanName}" deleted successfully`,
+        text: `Floor plan "${floorplanName}" deleted successfully!`,
         type: 'success'
       })
     }
@@ -239,14 +239,14 @@ class FloorplansContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to delete the following floor plans: ${failedFloorplans}`,
+        text: `Failed to delete the following floor plans: ${failedFloorplans}.`,
         type: 'error'
       })
     } else {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `The selected floor plans have been deleted successfully`,
+        text: `The selected floor plans have been deleted successfully!`,
         type: 'success'
       })
     }
