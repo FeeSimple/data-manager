@@ -1,5 +1,13 @@
 import React from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Col, Label } from 'reactstrap'
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Col,
+  Label
+} from 'reactstrap'
 
 const Confirm = props => {
   const { isOpen, handleToggle, onDelete, text } = props
@@ -38,9 +46,10 @@ const Confirm = props => {
           </Col>
         </div>
       </ModalBody>
-			<ModalFooter>
+      <ModalFooter>
         <i>
-          Please proceed with caution as once deleted, this data cannot be recovered and must be reentered in.
+          Please proceed with caution as once deleted, this data cannot be
+          recovered and must be reentered in.
         </i>
       </ModalFooter>
     </Modal>
