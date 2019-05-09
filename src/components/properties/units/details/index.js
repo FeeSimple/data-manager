@@ -98,34 +98,28 @@ class UnitDetailsContainer extends Component {
       alertContent.push('Empty name')
     }
 
-    if (unit.sq_ft_min < 0) {
+    if (Number(unit.sq_ft_min) < 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
 
-    if (unit.sq_ft_max <= 0) {
+    if (Number(unit.sq_ft_max) <= 0) {
       alertContent.push('Invalid Sq. Ft. Max')
     }
 
-    if (unit.sq_ft_max < unit.sq_ft_min) {
+    if (Number(unit.sq_ft_max) < Number(unit.sq_ft_min)) {
       alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
     }
 
-    if (unit.rent_min < 0) {
+    if (Number(unit.rent_min) < 0) {
       alertContent.push('Invalid Rent Min')
     }
 
-    if (unit.rent_max <= 0) {
+    if (Number(unit.rent_max) <= 0) {
       alertContent.push('Invalid Rent Max')
     }
 
-    if (unit.rent_max < unit.rent_min) {
+    if (Number(unit.rent_max) < Number(unit.rent_min)) {
       alertContent.push('Rent Max < Rent Min')
-    }
-
-    let dateAvailable = new Date(unit.date_available).getTime()
-    let currentDate = new Date().getTime()
-    if (dateAvailable < currentDate) {
-      alertContent.push('Date available in the past')
     }
 
     return alertContent

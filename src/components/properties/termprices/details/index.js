@@ -29,23 +29,23 @@ class TermPriceDetailsContainer extends Component {
 
   validator = termprice => {
     let alertContent = []
-    if (termprice.rent <= 0) {
+    if (Number(termprice.rent) <= 0) {
       alertContent.push('Invalid Rent')
     }
 
-    if (termprice.term <= 0) {
+    if (Number(termprice.term) <= 0) {
       alertContent.push('Invalid Term')
     }
 
     let startDate = new Date(termprice.start_date).getTime()
     let endDate = new Date(termprice.end_date).getTime()
-    let currentDate = new Date().getTime()
-    if (startDate < currentDate) {
-      alertContent.push('Start date in the past')
-    }
-    if (endDate < currentDate) {
-      alertContent.push('End date in the past')
-    }
+    // let currentDate = new Date().getTime()
+    // if (startDate < currentDate) {
+    //   alertContent.push('Start date in the past')
+    // }
+    // if (endDate < currentDate) {
+    //   alertContent.push('End date in the past')
+    // }
     if (endDate == startDate) {
       alertContent.push('End date same as Start date')
     }
