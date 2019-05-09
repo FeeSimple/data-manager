@@ -148,9 +148,9 @@ export default props => {
                   </Link>
                   <div className='properties-dropdpwn'>
                     <Link to={`/${props.propertyId}/floorplan/new`}>
-                      New Floor Plan
+                      Floor Plan
                     </Link>{' '}
-                    <Link to={`/${props.propertyId}/unit/new`}>New Unit</Link>
+                    <Link to={`/${props.propertyId}/unit/new`}>Unit</Link>
                   </div>
                 </li>
               </ul>

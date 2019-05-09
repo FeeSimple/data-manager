@@ -156,18 +156,18 @@ class UnitDetailsContainer extends Component {
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
-        alertHeader: 'Unit editing with invalid input',
+        alertHeader: 'Invalid input',
         alertContent: result
       })
       return
     }
 
     if (totalUploadedFiles !== 0 && totalUploadedFiles !== ipfsUploadedFiles) {
-      console.log('IPFS image uploading is still in progress')
+      console.log('IPFS image uploading is still in progress.')
       this.setState({
         alertShow: true,
         alertHeader: 'Please wait',
-        alertContent: ['IPFS image uploading is still in progress']
+        alertContent: ['IPFS image uploading is still in progress.']
       })
       return
     }
@@ -242,7 +242,7 @@ class UnitDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `Unit "${unit.name}" edited successfully`,
+        text: `Unit "${unit.name}" edited successfully!`,
         type: 'success'
       })
     }
@@ -274,7 +274,7 @@ class UnitDetailsContainer extends Component {
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
-        alertHeader: 'Unit creation with invalid input',
+        alertHeader: 'Invalid input',
         alertContent: result
       })
       return
@@ -324,7 +324,7 @@ class UnitDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `New Unit "${unit.name}" created successfully`,
+        text: `New Unit "${unit.name}" created successfully!`,
         type: 'success'
       })
     }
