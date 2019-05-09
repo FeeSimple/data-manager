@@ -8,8 +8,8 @@ import TimeAgo from 'react-timeago'
 
 const { SearchBar } = Search
 
-function UTCToLocalTimeString(d) {
-  let timeOffsetInHours = (new Date().getTimezoneOffset()/60) * (-1)
+function UTCToLocalTimeString (d) {
+  let timeOffsetInHours = (new Date().getTimezoneOffset() / 60) * -1
   d.setHours(d.getHours() + timeOffsetInHours)
   return d
 }
@@ -20,7 +20,9 @@ const columns = [
     text: 'Time',
     sort: true,
     headerStyle: { width: 50 },
-    formatter: (cellContent, row) => <TimeAgo date={UTCToLocalTimeString(new Date(row.time))} />
+    formatter: (cellContent, row) => (
+      <TimeAgo date={UTCToLocalTimeString(new Date(row.time))} />
+    )
   },
   {
     dataField: 'action',
