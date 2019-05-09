@@ -91,27 +91,27 @@ class FloorplanDetailsContainer extends Component {
       alertContent.push('Empty name')
     }
 
-    if (floorplan.sq_ft_min < 0) {
+    if (Number(floorplan.sq_ft_min) < 0) {
       alertContent.push('Invalid Sq. Ft. Min')
     }
 
-    if (floorplan.sq_ft_max <= 0) {
+    if (Number(floorplan.sq_ft_max) <= 0) {
       alertContent.push('Invalid Sq. Ft. Max')
     }
 
-    if (floorplan.sq_ft_max < floorplan.sq_ft_min) {
+    if (Number(floorplan.sq_ft_max) < Number(floorplan.sq_ft_min)) {
       alertContent.push('Sq. Ft. Max < Sq. Ft. Min')
     }
 
-    if (floorplan.rent_min < 0) {
+    if (Number(floorplan.rent_min) < 0) {
       alertContent.push('Invalid Rent Min')
     }
 
-    if (floorplan.rent_max <= 0) {
+    if (Number(floorplan.rent_max) <= 0) {
       alertContent.push('Invalid Rent Max')
     }
 
-    if (floorplan.rent_max < floorplan.rent_min) {
+    if (Number(floorplan.rent_max) < Number(floorplan.rent_min)) {
       alertContent.push('Rent Max < Rent Min')
     }
 

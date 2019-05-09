@@ -4,15 +4,25 @@ import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
 import Spinner from 'react-spinkit'
+import TimeAgo from 'react-timeago'
 
 const { SearchBar } = Search
+
+function UTCToLocalTimeString (d) {
+  let timeOffsetInHours = (new Date().getTimezoneOffset() / 60) * -1
+  d.setHours(d.getHours() + timeOffsetInHours)
+  return d
+}
 
 const columns = [
   {
     dataField: 'time',
     text: 'Time',
     sort: true,
-    headerStyle: { width: 50 }
+    headerStyle: { width: 50 },
+    formatter: (cellContent, row) => (
+      <TimeAgo date={UTCToLocalTimeString(new Date(row.time))} />
+    )
   },
   {
     dataField: 'action',
