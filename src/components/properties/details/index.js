@@ -221,7 +221,7 @@ class PropertyDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `Property "${property.name}" edited successfully`,
+        text: `Property "${property.name}" edited successfully!`,
         type: 'success'
       })
     }
@@ -294,14 +294,14 @@ class PropertyDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to create property "${property.name}"`,
+        text: `Failed to create property "${property.name}."`,
         type: 'error'
       })
     } else {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `New property "${property.name}" created successfully`,
+        text: `New property "${property.name}" created successfully!`,
         type: 'success'
       })
     }
@@ -382,14 +382,14 @@ class PropertyDetailsContainer extends Component {
       setOpResult({
         show: true,
         title: 'Internal Service Error',
-        text: `Failed to delete property "${propertyName}"`,
+        text: `Failed to delete property "${propertyName}!"`,
         type: 'error'
       })
     } else {
       setOpResult({
         show: true,
         title: 'Success',
-        text: `Property "${propertyName}" deleted successfully`,
+        text: `Property "${propertyName}" deleted successfully.`,
         type: 'success'
       })
     }
@@ -485,7 +485,7 @@ class PropertyDetailsContainer extends Component {
           isOpen={this.state.showConfirm}
           handleToggle={this.handleToggleConfirm}
           onDelete={this.deleteOne}
-          text='this property and its associated units and floor plans?'
+          text='this property and its associated units and floor plans'
         />
         <Alert
           isOpen={this.state.alertShow}
