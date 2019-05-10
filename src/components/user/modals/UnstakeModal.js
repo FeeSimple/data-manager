@@ -12,7 +12,7 @@ import {
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css'
 import Spinner from 'react-spinkit'
-import { manageCpuBw } from '../../../utils/eoshelper'
+import { stakeUnstakeHalfCpuHalfBw } from '../../../utils/eoshelper'
 
 class UnstakeModalContainer extends React.Component {
   constructor (props) {
@@ -54,19 +54,10 @@ class UnstakeModalContainer extends React.Component {
     const { eosClient, accountData, updateAccountInfo } = this.props
     let activeAccount = accountData.active
 
-    let res = await manageCpuBw(
+    let res = await stakeUnstakeHalfCpuHalfBw(
       eosClient,
       activeAccount,
-      xfsAmount / 2,
-      true,
-      false
-    )
-
-    res = await manageCpuBw(
-      eosClient,
-      activeAccount,
-      xfsAmount / 2,
-      false,
+      xfsAmount,
       false
     )
 

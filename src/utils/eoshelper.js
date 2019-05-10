@@ -145,6 +145,66 @@ export const conformXfsAmount = xfsAmount => {
   )
 }
 
+export const stakeUnstakeHalfCpuHalfBw = async (
+  eosClient,
+  activeAccount,
+  xfsAmount,
+  isStake
+) => {
+  try {
+    let xfsAmountHalf = conformXfsAmount(Number(xfsAmount)/2)
+    const zeroAmount = conformXfsAmount(0)
+    // console.log(`manageCpuBw - isCpu:${isCpu} - xfsAmount:${xfsAmount}`);
+
+    // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
+    if (isStake) {
+      console.log('stake');
+      // Stake half XFS for CPU and half XFS for Bw
+      await eosClient.transaction(tr => {
+        tr.delegatebw({
+          from: activeAccount,
+          receiver: activeAccount,
+          stake_cpu_quantity: xfsAmountHalf,
+          stake_net_quantity: xfsAmountHalf,
+          transfer: 0 // for staking, "transfer" must be 0
+        })
+      })
+    } else {
+      console.log('unstake');
+      // Unstake half XFS for CPU and half XFS for Bw
+      await eosClient.transaction(tr => {
+        tr.undelegatebw({
+          from: activeAccount,
+          receiver: activeAccount,
+          unstake_cpu_quantity: xfsAmountHalf,
+          unstake_net_quantity: xfsAmountHalf,
+          transfer: 0 // for unstaking, "transfer" can be 0
+        })
+      })
+    }
+
+    // refund still doesn't work
+    if (!isStake) {
+      let res = await refundStake(eosClient, activeAccount, xfsAmountHalf)
+      if (res.errMsg) {
+        console.log('manageCpuBw - error:', res.errMsg);
+      } else {
+        console.log('manageCpuBw - OK');
+      }
+    }
+
+    return {}
+  } catch (err) {
+    // Without JSON.parse(), it never works!
+    // err = JSON.parse(err)
+    // const errMsg = (err.error.what || "Resource management failed")
+    const errMsg = 'Resource management failed'
+    console.log('Error:', err);
+
+    return { errMsg }
+  }
+}
+
 export const manageCpuBw = async (
   eosClient,
   activeAccount,
@@ -246,15 +306,17 @@ export const RamBytes2Xfs = (RamBytes, ramPrice) => {
   return parseFloat(res)
 }
 
-export const refundStake = async (eosClient, activeAccount) => {
+export const refundStake = async (eosClient, activeAccount, xfsAmountHalf) => {
   try {
     await eosClient.transaction(tr => {
       tr.refund({
-        cpu_amount: '0.2000 XFS',
-        net_amount: '0.2000 XFS',
+        cpu_amount: xfsAmountHalf,
+        net_amount: xfsAmountHalf,
         owner: activeAccount
       })
     })
+
+    console.log('refundStake - OK')
 
     return {}
   } catch (err) {
@@ -262,7 +324,7 @@ export const refundStake = async (eosClient, activeAccount) => {
     // err = JSON.parse(err)
     // const errMsg = (err.error.what || "RAM management failed")
     const errMsg = 'Refund failed'
-
+    console.log('refundStake - Error:', err)
     return { errMsg }
   }
 }
@@ -362,6 +424,10 @@ export const getActionsProcessed = async (eosClient, account) => {
         action.indexOf('cpu') === -1)
     ) {
       action = 'transfer'
+    }
+
+    if (action.indexOf('stake') !== -1) {
+      action = 'stake'
     }
 
     activityList.push({
