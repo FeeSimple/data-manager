@@ -98,9 +98,6 @@ class UserContainer extends Component {
     })
 
     this.resetProcessing()
-
-    // Update account info
-    this.updateAccountInfo()
   }
 
   handleGetActions = async () => {
@@ -114,6 +111,7 @@ class UserContainer extends Component {
     let activeAccount = accountData.active
 
     let res = await getActionsProcessed(eosClient, activeAccount)
+    // console.log('getActionsProcessed - res:', res);
     if (res.errMsg || res.length === 0) {
       if (currActivityList.length === 0) {
         this.setState({
@@ -156,6 +154,9 @@ class UserContainer extends Component {
         isProcessing: false
       })
     } else {
+      // Update account info
+      this.updateAccountInfo()
+
       this.setState({
         resourceHandleErr: 'Success',
         isProcessing: false
@@ -175,6 +176,7 @@ class UserContainer extends Component {
         { label: `Total Balance: ${info.totalBalanceNumber} XFS`, value: 3 }
       ]
     })
+    this.handleGetActions()
   }
 
   async componentDidMount () {
