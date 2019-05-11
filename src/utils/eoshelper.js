@@ -152,13 +152,13 @@ export const stakeUnstakeHalfCpuHalfBw = async (
   isStake
 ) => {
   try {
-    let xfsAmountHalf = conformXfsAmount(Number(xfsAmount)/2)
+    let xfsAmountHalf = conformXfsAmount(Number(xfsAmount) / 2)
     const zeroAmount = conformXfsAmount(0)
     // console.log(`manageCpuBw - isCpu:${isCpu} - xfsAmount:${xfsAmount}`);
 
     // VIP: no matter cpu and bandwidth, must always specify both "_cpu_quantity" and "_net_quantity"
     if (isStake) {
-      console.log('stake');
+      console.log('stake')
       // Stake half XFS for CPU and half XFS for Bw
       await eosClient.transaction(tr => {
         tr.delegatebw({
@@ -170,7 +170,7 @@ export const stakeUnstakeHalfCpuHalfBw = async (
         })
       })
     } else {
-      console.log('unstake');
+      console.log('unstake')
       // Unstake half XFS for CPU and half XFS for Bw
       await eosClient.transaction(tr => {
         tr.undelegatebw({
@@ -187,9 +187,9 @@ export const stakeUnstakeHalfCpuHalfBw = async (
     if (!isStake) {
       let res = await refundStake(eosClient, activeAccount, xfsAmountHalf)
       if (res.errMsg) {
-        console.log('manageCpuBw - error:', res.errMsg);
+        console.log('manageCpuBw - error:', res.errMsg)
       } else {
-        console.log('manageCpuBw - OK');
+        console.log('manageCpuBw - OK')
       }
     }
 
@@ -199,7 +199,7 @@ export const stakeUnstakeHalfCpuHalfBw = async (
     // err = JSON.parse(err)
     // const errMsg = (err.error.what || "Resource management failed")
     const errMsg = 'Resource management failed'
-    console.log('Error:', err);
+    console.log('Error:', err)
 
     return { errMsg }
   }
@@ -344,7 +344,7 @@ export const getActions = async (eosClient, account) => {
 export const getTxData = async (eosClient, txid) => {
   try {
     let res = await eosClient.getTransaction(txid)
-    console.log('getTxData:', res);
+    console.log('getTxData:', res)
     return res
   } catch (err) {
     const errMsg = 'Get transaction failed'
@@ -398,7 +398,7 @@ export const getActionsProcessed = async (eosClient, account) => {
   let activityList = []
   let txIdMap = {}
   // res = res.reverse()
-  console.log('getActions - res:', res);
+  console.log('getActions - res:', res)
   for (let i = res.length - 1; i >= 0; i--) {
     let item = res[i]
     // console.log('getActionsProcessed - item:', item);
@@ -435,7 +435,7 @@ export const getActionsProcessed = async (eosClient, account) => {
 
     // reduce txid as it's too long,
     txid = txid.substring(0, 10) + '...'
-    console.log('txid:', txid);
+    console.log('txid:', txid)
 
     // Do not push duplicated txid. This happens for case of buy ram.
     // Buy ram tx includes memo "buy ram" and memo "ram fee"

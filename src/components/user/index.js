@@ -98,8 +98,6 @@ class UserContainer extends Component {
     })
 
     this.resetProcessing()
-
-    
   }
 
   handleGetActions = async () => {
