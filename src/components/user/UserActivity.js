@@ -57,7 +57,7 @@ const columns = [
     formatter: (cellContent, row) => <span>{row.cpuBwUsage.split('&')[1]}</span>
   },
   {
-    dataField: 'date_available',
+    dataField: 'txId',
     text: 'Transaction',
     formatter: (cellContent, row) => (
       <a href={row.txLink} target='_blank' className='table-edit'>
