@@ -113,6 +113,7 @@ class UserContainer extends Component {
     let activeAccount = accountData.active
 
     let res = await getActionsProcessed(eosClient, activeAccount)
+    // console.log('getActionsProcessed - res:', res);
     if (res.errMsg || res.length === 0) {
       if (currActivityList.length === 0) {
         this.setState({

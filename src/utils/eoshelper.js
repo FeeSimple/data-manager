@@ -401,7 +401,7 @@ export const getActionsProcessed = async (eosClient, account) => {
   console.log('getActions - res:', res);
   for (let i = res.length - 1; i >= 0; i--) {
     let item = res[i]
-    console.log('getActionsProcessed - item:', item);
+    // console.log('getActionsProcessed - item:', item);
     let txid = item.action_trace.trx_id
     let blockNum = item.block_num
     let quantity = item.action_trace.act.data.quantity
@@ -435,6 +435,7 @@ export const getActionsProcessed = async (eosClient, account) => {
 
     // reduce txid as it's too long,
     txid = txid.substring(0, 10) + '...'
+    console.log('txid:', txid);
 
     // Do not push duplicated txid. This happens for case of buy ram.
     // Buy ram tx includes memo "buy ram" and memo "ram fee"
