@@ -397,9 +397,9 @@ export const getActionsProcessed = async (eosClient, account) => {
 
   let activityList = []
   let txIdMap = {}
-  res = res.reverse()
-  console.log('getActions - res.reverse():', res.reverse());
-  for (let i = 0; i < res.length; i++) {
+  // res = res.reverse()
+  console.log('getActions - res:', res);
+  for (let i = res.length - 1; i >= 0; i--) {
     let item = res[i]
     console.log('getActionsProcessed - item:', item);
     let txid = item.action_trace.trx_id
