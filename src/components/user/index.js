@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
+import IconInfo from '../../img/info.svg'
 import SendModal from './modals/SendModal'
 import StakeModal from './modals/StakeModal'
 import UnstakeModal from './modals/UnstakeModal'
@@ -209,13 +210,31 @@ class UserContainer extends Component {
               <Col>
                 <h3 className='float-left'>Wallet</h3>
               </Col>
-              <Col className='col-md-4' style={{ fontSize: '18px' }}>
+              <Col className='col-md-4'>
+                <h4 className='wallet-info-h4'>Total Balance
+                <div className='wallet-info wattet-info-top'>
+                  <img src={IconInfo} alt='' />
+                  <div className='info-content'>
+                    <div className='ms-arrow_box'>
+                      <span>
+                      333,000 available
+                      </span>
+                      <span>
+                        1,000,000 staked
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </h4>
+                <h3 className='float-right mt-0'> 1,333,000 XFS</h3>
+                {/*
                 {user && (
                   <Select
                     defaultValue={this.state.balanceList[0]}
                     options={this.state.balanceList}
                   />
-                )}
+                )}*/}
+                
               </Col>
             </Row>
           </Container>
@@ -249,7 +268,7 @@ class UserContainer extends Component {
                 setSell={this.setSell}
                 isProcessing={this.state.isProcessing}
                 resourceHandleErr={this.state.resourceHandleErr}
-              />
+              /> 
 
               <Dropdown
                 isOpen={this.state.dropdownOpen}
