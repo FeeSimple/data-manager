@@ -7,7 +7,6 @@ import SendModal from './modals/SendModal'
 import StakeModal from './modals/StakeModal'
 import UnstakeModal from './modals/UnstakeModal'
 import ManageRamModal from './modals/ManageRamModal'
-import Select from 'react-select'
 import {
   Dropdown,
   DropdownToggle,
@@ -217,23 +216,16 @@ class UserContainer extends Component {
                   <div className='info-content'>
                     <div className='ms-arrow_box'>
                       <span>
-                      333,000 available
+                      {user.balance} available
                       </span>
                       <span>
-                        1,000,000 staked
+                        {user.stakedBalanceNumber} XFS staked
                       </span>
                     </div>
                   </div>
                 </div>
                 </h4>
-                <h3 className='float-right mt-0'> 1,333,000 XFS</h3>
-                {/*
-                {user && (
-                  <Select
-                    defaultValue={this.state.balanceList[0]}
-                    options={this.state.balanceList}
-                  />
-                )}*/}
+                <h3 className='float-right mt-0'> {user.totalBalanceNumber} XFS</h3>
                 
               </Col>
             </Row>
