@@ -22,9 +22,6 @@ class ManageResourcesModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: 0,
-      isProcessing: false,
-      resourceHandleErr: false,
       subModal: 'unstake'
     }
   }
@@ -39,11 +36,12 @@ class ManageResourcesModal extends React.Component {
   }
 
   render () {
-    const { value, resourceHandleErr, isProcessing, subModal } = this.state
+    const { subModal } = this.state
     const { 
-      userBalance, userStakedBalance, user, isBuy, setBuy, setSell, 
-      updateAccountInfo, handleManageRam,
-      toggle, modal 
+      userBalance, userStakedBalance, user, 
+      updateAccountInfo,
+      toggle, modal,
+      isBuy, setBuy, setSell, resourceHandleErrRam, isProcessingRam, handleManageRam
     } = this.props
     
     return (
@@ -55,7 +53,7 @@ class ManageResourcesModal extends React.Component {
           <Row>
             <Col>
               <button type="button"
-                color='primary'
+                color='gray'
                 className='btn prop-btn fr m-l-10'
                 onClick={() => this.handleToggleSubModal('stake')}
               >
@@ -74,14 +72,14 @@ class ManageResourcesModal extends React.Component {
               </button>
             </Col>
             <Col>
-              <button type="button"
-                color='gray'
+              <Button
+                color='base'
                 className='btn prop-btn fr m-l-10'
                 onClick={() => this.handleToggleSubModal('ram')}
               >
                 {' '}
                 RAM
-              </button>
+              </Button>
             </Col>
           </Row>
         </ModalBody>
@@ -108,8 +106,8 @@ class ManageResourcesModal extends React.Component {
             isBuy={isBuy}
             updateAccountInfo={updateAccountInfo}
             handleManageRam={handleManageRam}
-            resourceHandleErr={resourceHandleErr}
-            isProcessing={isProcessing}
+            resourceHandleErr={resourceHandleErrRam}
+            isProcessing={isProcessingRam}
           />
         }
 

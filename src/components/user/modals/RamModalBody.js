@@ -30,13 +30,12 @@ const RamModalBody = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    showModalRam,
-    handleToggleModalRam,
     setBuy,
     setSell,
     isBuy,
     isProcessing,
-    resourceHandleErr
+    resourceHandleErr,
+    handleManageRam
   } = props
 
   return (

@@ -61,7 +61,7 @@ export function getResourceStr (resource, cpu) {
 
 // Get the numeric balance from the balance string (e.g. "123 XFS")
 export function fetchBalanceNumber (balance) {
-  if (!balance) return null
+  if (!balance) return 0
   let idx = balance.indexOf(' ') // 100000 XFS
   if (idx !== -1) {
     let balanceNum = balance.substring(0, idx)

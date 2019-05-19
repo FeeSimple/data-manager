@@ -15,8 +15,7 @@ import {
 
 import {
   getAccountInfo,
-  manageRam,
-  manageCpuBw,
+  manageCpuBw, manageRam,
   getActionsProcessed
 } from '../../utils/eoshelper'
 import { User } from './User'
@@ -29,38 +28,13 @@ class UserContainer extends Component {
       data: null,
 
       showModalResource: false,
-
       isBuy: false,
-      resourceHandleErr: false,
-      isProcessing: false,
+      isProcessingRam: false,
+      resourceHandleErrRam: false,
+
       activityList: [],
       gettingActions: true,
-
-      balanceList: [],
     }
-  }
-
-  resetProcessing = () => {
-    this.setState({
-      resourceHandleErr: false,
-      isProcessing: false
-    })
-  }
-
-  setBuy = () => {
-    this.setState({
-      isBuy: true
-    })
-
-    this.resetProcessing()
-  }
-
-  setSell = () => {
-    this.setState({
-      isBuy: false
-    })
-
-    this.resetProcessing()
   }
 
   handleToggleModalResource = () => {
@@ -73,6 +47,8 @@ class UserContainer extends Component {
 
     // Update account info
     this.updateAccountInfo()
+
+    this.handleGetActions()
   }
 
   handleGetActions = async () => {
@@ -103,11 +79,43 @@ class UserContainer extends Component {
     })
   }
 
+  updateAccountInfo = async () => {
+    const { eosClient, accountData } = this.props
+    let account = accountData.active
+    let info = await getAccountInfo(eosClient, account)
+    this.setState({
+      data: info
+    })
+  }
+
+  resetProcessing = () => {
+    this.setState({
+      resourceHandleErrRam: false,
+      isProcessingRam: false
+    })
+  }
+
+  setBuy = () => {
+    this.setState({
+      isBuy: true
+    })
+
+    this.resetProcessing()
+  }
+
+  setSell = () => {
+    this.setState({
+      isBuy: false
+    })
+
+    this.resetProcessing()
+  }
+
   handleManageRam = async xfsAmount => {
     // Reset state
     this.setState({
-      resourceHandleErr: false,
-      isProcessing: true
+      resourceHandleErrRam: false,
+      isProcessingRam: true
     })
 
     const { eosClient, accountData } = this.props
@@ -124,29 +132,15 @@ class UserContainer extends Component {
     )
     if (res.errMsg) {
       this.setState({
-        resourceHandleErr: res.errMsg,
-        isProcessing: false
+        resourceHandleErrRam: res.errMsg,
+        isProcessingRam: false
       })
     } else {
       this.setState({
-        resourceHandleErr: 'Success',
-        isProcessing: false
+        resourceHandleErrRam: 'Success',
+        isProcessingRam: false
       })
     }
-  }
-
-  updateAccountInfo = async () => {
-    const { eosClient, accountData } = this.props
-    let account = accountData.active
-    let info = await getAccountInfo(eosClient, account)
-    this.setState({
-      data: info,
-      balanceList: [
-        { label: `Spendable Balance: ${info.balance}`, value: 1 },
-        { label: `Staked Balance: ${info.stakedBalanceNumber} XFS`, value: 2 },
-        { label: `Total Balance: ${info.totalBalanceNumber} XFS`, value: 3 }
-      ]
-    })
   }
 
   async componentDidMount () {
@@ -223,17 +217,16 @@ class UserContainer extends Component {
                 modal={this.state.showModalResource}
                 toggle={this.handleToggleModalResource}
                 user={user}
-                handleManageRam={this.handleManageRam}
+                userStakedBalance={user.stakedBalanceNumber}
+                userBalance={user.balanceNumber}
+                updateAccountInfo={this.updateAccountInfo}
+
                 isBuy={this.state.isBuy}
                 setBuy={this.setBuy}
                 setSell={this.setSell}
-                isProcessing={this.state.isProcessing}
-                resourceHandleErr={this.state.resourceHandleErr}
-
-                userStakedBalance={user.stakedBalanceNumber}
-                userBalance={user.balanceNumber}
-
-                updateAccountInfo={this.updateAccountInfo}
+                handleManageRam={this.handleManageRam}
+                isProcessingRam={this.state.isProcessingRam}
+                resourceHandleErrRam={this.state.resourceHandleErrRam}
               />
             </Col>
           </Row>
