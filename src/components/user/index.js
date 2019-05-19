@@ -4,9 +4,8 @@ import { withRouter } from 'react-router-dom'
 import { ERR_DATA_LOADING_FAILED } from '../../utils/error'
 import IconInfo from '../../img/info.svg'
 import SendModal from './modals/SendModal'
-import StakeModal from './modals/StakeModal'
-import UnstakeModal from './modals/UnstakeModal'
-import ManageRamModal from './modals/ManageRamModal'
+import ManageResourcesModal from './modals/ManageResourcesModal'
+
 import {
   Dropdown,
   DropdownToggle,
@@ -29,9 +28,7 @@ class UserContainer extends Component {
     this.state = {
       data: null,
 
-      showModalRam: false,
-      showModalStake: false,
-      showModalUnstake: false,
+      showModalResource: false,
 
       isBuy: false,
       resourceHandleErr: false,
@@ -40,14 +37,7 @@ class UserContainer extends Component {
       gettingActions: true,
 
       balanceList: [],
-      dropdownOpen: false
     }
-  }
-
-  toggle = () => {
-    this.setState(prevState => ({
-      dropdownOpen: !prevState.dropdownOpen
-    }))
   }
 
   resetProcessing = () => {
@@ -73,31 +63,16 @@ class UserContainer extends Component {
     this.resetProcessing()
   }
 
-  handleToggleModalStake = () => {
-    const { showModalStake } = this.state
+  handleToggleModalResource = () => {
+    const { showModalResource } = this.state
     this.setState({
-      showModalStake: !showModalStake
+      showModalResource: !showModalResource
     })
 
     this.resetProcessing()
-  }
 
-  handleToggleModalUnstake = () => {
-    const { showModalUnstake } = this.state
-    this.setState({
-      showModalUnstake: !showModalUnstake
-    })
-
-    this.resetProcessing()
-  }
-
-  handleToggleModalRam = () => {
-    const { showModalRam } = this.state
-    this.setState({
-      showModalRam: !showModalRam
-    })
-
-    this.resetProcessing()
+    // Update account info
+    this.updateAccountInfo()
   }
 
   handleGetActions = async () => {
@@ -111,7 +86,6 @@ class UserContainer extends Component {
     let activeAccount = accountData.active
 
     let res = await getActionsProcessed(eosClient, activeAccount)
-    // console.log('getActionsProcessed - res:', res);
     if (res.errMsg || res.length === 0) {
       if (currActivityList.length === 0) {
         this.setState({
@@ -154,9 +128,6 @@ class UserContainer extends Component {
         isProcessing: false
       })
     } else {
-      // Update account info
-      this.updateAccountInfo()
-
       this.setState({
         resourceHandleErr: 'Success',
         isProcessing: false
@@ -176,7 +147,6 @@ class UserContainer extends Component {
         { label: `Total Balance: ${info.totalBalanceNumber} XFS`, value: 3 }
       ]
     })
-    this.handleGetActions()
   }
 
   async componentDidMount () {
@@ -241,69 +211,29 @@ class UserContainer extends Component {
                 />
               </div>
 
-              <Button
-                color='gray'
-                className='btn prop-btn fr m-l-10'
-                onClick={this.handleToggleModalRam}
+              <button type="button"
+                className='btn btn-outline-primary fr m-l-10'
+                onClick={this.handleToggleModalResource}
               >
                 {' '}
-                RAM
-              </Button>
+                Manage Resources
+              </button>
 
-              <ManageRamModal
+              <ManageResourcesModal
+                modal={this.state.showModalResource}
+                toggle={this.handleToggleModalResource}
                 user={user}
-                showModalRam={this.state.showModalRam}
-                handleToggleModalRam={this.handleToggleModalRam}
                 handleManageRam={this.handleManageRam}
                 isBuy={this.state.isBuy}
                 setBuy={this.setBuy}
                 setSell={this.setSell}
                 isProcessing={this.state.isProcessing}
                 resourceHandleErr={this.state.resourceHandleErr}
-              /> 
 
-              <Dropdown
-                isOpen={this.state.dropdownOpen}
-                toggle={this.toggle}
-                className='prop-btn fr m-l-10'
-              >
-                <DropdownToggle caret color='gray'>
-                  Stake/Unstake
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem>
-                    <Button
-                      color='gray'
-                      className='btn prop-btn fr m-l-10'
-                      onClick={this.handleToggleModalStake}
-                    >
-                      Stake
-                    </Button>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Button
-                      color='gray'
-                      className='btn prop-btn fr m-l-10'
-                      onClick={this.handleToggleModalUnstake}
-                    >
-                      Unstake
-                    </Button>
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-
-              <UnstakeModal
                 userStakedBalance={user.stakedBalanceNumber}
-                updateAccountInfo={this.updateAccountInfo}
-                toggle={this.handleToggleModalUnstake}
-                modal={this.state.showModalUnstake}
-              />
-
-              <StakeModal
                 userBalance={user.balanceNumber}
+
                 updateAccountInfo={this.updateAccountInfo}
-                toggle={this.handleToggleModalStake}
-                modal={this.state.showModalStake}
               />
             </Col>
           </Row>
