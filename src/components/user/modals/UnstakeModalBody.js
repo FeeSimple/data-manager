@@ -107,9 +107,7 @@ class UnstakeModalBody extends React.Component {
         <h2 className='stackvalueRange'>{value}%</h2>
         {userStakedBalance && (
           <h4 className='stackvalue'>
-            {new Intl.NumberFormat().format(
-              (value * userStakedBalance) / 100
-            )}{' '}
+            {new Intl.NumberFormat().format((value * userStakedBalance) / 100)}{' '}
             XFS
           </h4>
         )}

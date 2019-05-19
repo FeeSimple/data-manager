@@ -15,7 +15,8 @@ import {
 
 import {
   getAccountInfo,
-  manageCpuBw, manageRam,
+  manageCpuBw,
+  manageRam,
   getActionsProcessed
 } from '../../utils/eoshelper'
 import { User } from './User'
@@ -33,7 +34,7 @@ class UserContainer extends Component {
       resourceHandleErrRam: false,
 
       activityList: [],
-      gettingActions: true,
+      gettingActions: true
     }
   }
 
@@ -174,23 +175,22 @@ class UserContainer extends Component {
                 <h3 className='float-left'>Wallet</h3>
               </Col>
               <Col className='col-md-4'>
-                <h4 className='wallet-info-h4'>Total Balance
-                <div className='wallet-info wattet-info-top'>
-                  <img src={IconInfo} alt='' />
-                  <div className='info-content'>
-                    <div className='ms-arrow_box'>
-                      <span>
-                      {user.balance} available
-                      </span>
-                      <span>
-                        {user.stakedBalanceNumber} XFS staked
-                      </span>
+                <h4 className='wallet-info-h4'>
+                  Total Balance
+                  <div className='wallet-info wattet-info-top'>
+                    <img src={IconInfo} alt='' />
+                    <div className='info-content'>
+                      <div className='ms-arrow_box'>
+                        <span>{user.balance} available</span>
+                        <span>{user.stakedBalanceNumber} XFS staked</span>
+                      </div>
                     </div>
                   </div>
-                </div>
                 </h4>
-                <h3 className='float-right mt-0'> {user.totalBalanceNumber} XFS</h3>
-                
+                <h3 className='float-right mt-0'>
+                  {' '}
+                  {user.totalBalanceNumber} XFS
+                </h3>
               </Col>
             </Row>
           </Container>
@@ -205,7 +205,8 @@ class UserContainer extends Component {
                 />
               </div>
 
-              <button type="button"
+              <button
+                type='button'
                 className='btn btn-outline-primary fr m-l-10'
                 onClick={this.handleToggleModalResource}
               >
@@ -220,7 +221,6 @@ class UserContainer extends Component {
                 userStakedBalance={user.stakedBalanceNumber}
                 userBalance={user.balanceNumber}
                 updateAccountInfo={this.updateAccountInfo}
-
                 isBuy={this.state.isBuy}
                 setBuy={this.setBuy}
                 setSell={this.setSell}

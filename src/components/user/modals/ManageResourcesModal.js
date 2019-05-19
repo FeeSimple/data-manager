@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
   Button,
-  Row, Col,
+  Row,
+  Col,
   Modal,
   ModalBody,
   ModalHeader,
@@ -37,13 +38,21 @@ class ManageResourcesModal extends React.Component {
 
   render () {
     const { subModal } = this.state
-    const { 
-      userBalance, userStakedBalance, user, 
+    const {
+      userBalance,
+      userStakedBalance,
+      user,
       updateAccountInfo,
-      toggle, modal,
-      isBuy, setBuy, setSell, resourceHandleErrRam, isProcessingRam, handleManageRam
+      toggle,
+      modal,
+      isBuy,
+      setBuy,
+      setSell,
+      resourceHandleErrRam,
+      isProcessingRam,
+      handleManageRam
     } = this.props
-    
+
     return (
       <Modal isOpen={modal} className={this.props.className}>
         <ModalHeader toggle={toggle}>
@@ -52,7 +61,8 @@ class ManageResourcesModal extends React.Component {
         <ModalBody className='px-5'>
           <Row>
             <Col>
-              <button type="button"
+              <button
+                type='button'
                 color='gray'
                 className='btn prop-btn fr m-l-10'
                 onClick={() => this.handleToggleSubModal('stake')}
@@ -62,7 +72,8 @@ class ManageResourcesModal extends React.Component {
               </button>
             </Col>
             <Col>
-              <button type="button"
+              <button
+                type='button'
                 color='gray'
                 className='btn prop-btn fr m-l-10'
                 onClick={() => this.handleToggleSubModal('unstake')}
@@ -83,22 +94,22 @@ class ManageResourcesModal extends React.Component {
             </Col>
           </Row>
         </ModalBody>
-        
-        { subModal === 'stake' &&
-          <StakeModalBody 
+
+        {subModal === 'stake' && (
+          <StakeModalBody
             userBalance={userBalance}
             updateAccountInfo={updateAccountInfo}
           />
-        }
+        )}
 
-        { subModal === 'unstake' &&
+        {subModal === 'unstake' && (
           <UnstakeModalBody
             userStakedBalance={userStakedBalance}
             updateAccountInfo={updateAccountInfo}
           />
-        }
+        )}
 
-        { subModal === 'ram' &&
+        {subModal === 'ram' && (
           <RamModalBody
             user={user}
             setBuy={setBuy}
@@ -109,9 +120,7 @@ class ManageResourcesModal extends React.Component {
             resourceHandleErr={resourceHandleErrRam}
             isProcessing={isProcessingRam}
           />
-        }
-
-
+        )}
       </Modal>
     )
   }

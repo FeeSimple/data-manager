@@ -56,9 +56,7 @@ const RamModalBody = props => {
           )}
         </Collapse>
       </div>
-      <div className='tc m-b-30'>
-        Buy additional RAM or sell what you have:
-      </div>
+      <div className='tc m-b-30'>Buy additional RAM or sell what you have:</div>
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <Label className=''> XFS Amount</Label>

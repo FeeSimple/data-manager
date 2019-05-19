@@ -19,9 +19,7 @@ export const User = ({ user, activityList, gettingActions }) => (
                 <span>
                   {user.ramStr && user.ramStr.split('/')[0]} available
                 </span>
-                <span>
-                  {user.ramStr && user.ramStr.split('/')[1]} total
-                </span>
+                <span>{user.ramStr && user.ramStr.split('/')[1]} total</span>
               </div>
             </div>
           </div>
@@ -43,9 +41,7 @@ export const User = ({ user, activityList, gettingActions }) => (
                 <span>
                   {user.cpuStr && user.cpuStr.split('/')[0]} available
                 </span>
-                <span>
-                 {user.cpuStr && user.cpuStr.split('/')[1]} total
-                </span>
+                <span>{user.cpuStr && user.cpuStr.split('/')[1]} total</span>
               </div>
             </div>
           </div>
@@ -67,10 +63,11 @@ export const User = ({ user, activityList, gettingActions }) => (
             <div className='info-content'>
               <div className='ms-arrow_box'>
                 <span>
-                  {user.bandwidthStr && user.bandwidthStr.split('/')[0]} available
+                  {user.bandwidthStr && user.bandwidthStr.split('/')[0]}{' '}
+                  available
                 </span>
                 <span>
-                 {user.bandwidthStr && user.bandwidthStr.split('/')[1]} total
+                  {user.bandwidthStr && user.bandwidthStr.split('/')[1]} total
                 </span>
               </div>
             </div>
