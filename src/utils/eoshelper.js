@@ -344,7 +344,7 @@ export const getActions = async (eosClient, account) => {
 export const getTxData = async (eosClient, txid) => {
   try {
     let res = await eosClient.getTransaction(txid)
-    console.log('getTxData:', res)
+    // console.log('getTxData:', res)
     return res
   } catch (err) {
     const errMsg = 'Get transaction failed'
@@ -398,7 +398,7 @@ export const getActionsProcessed = async (eosClient, account) => {
   let activityList = []
   let txIdMap = {}
   // res = res.reverse()
-  console.log('getActions - res:', res)
+  // console.log('getActions - res:', res)
   for (let i = res.length - 1; i >= 0; i--) {
     let item = res[i]
     // console.log('getActionsProcessed - item:', item);
@@ -435,7 +435,7 @@ export const getActionsProcessed = async (eosClient, account) => {
 
     // reduce txid as it's too long,
     txid = txid.substring(0, 10) + '...'
-    console.log('txid:', txid)
+    // console.log('txid:', txid)
 
     // Do not push duplicated txid. This happens for case of buy ram.
     // Buy ram tx includes memo "buy ram" and memo "ram fee"
