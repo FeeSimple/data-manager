@@ -780,6 +780,23 @@ Dropzone
   height: 16px;
   border-radius: 16px; }
 
+.manageModalUl {
+  padding: 0;
+  margin: 0 -5px; }
+  .manageModalUl li {
+    float: left;
+    list-style: none;
+    padding: 5px;
+    width: 33.3333333%; }
+    .manageModalUl li > button {
+      width: 100%; }
+      .manageModalUl li > button:active, .manageModalUl li > button:focus {
+        outline: none;
+        box-shadow: none; }
+    .manageModalUl li.active .btn {
+      background-color: #00b1ef;
+      color: #fff; }
+
 /*-----------------------------------------
   Various fixes and overwrites
 -------------------------------------------*/
@@ -819,6 +836,9 @@ Dropzone
   border: none;
   cursor: pointer;
   margin-top: 0px; }
+
+.btn.brd-2px {
+  border-width: 2px; }
 
 .comingsonmp {
   border: 2px solid rgba(16, 67, 120, 0.15);
