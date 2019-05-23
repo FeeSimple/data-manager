@@ -386,13 +386,13 @@ export const getTxDataSellRam = async (eosClient, txid) => {
 }
 
 const compareTxEntryForSort = (a, b) => {
-  let comparison = 0;
+  let comparison = 0
   if (a.seq < b.seq) {
-    comparison = 1;
+    comparison = 1
   } else {
-    comparison = -1;
+    comparison = -1
   }
-  return comparison;
+  return comparison
 }
 
 // Determine the XFS transfer tx to a given account.
@@ -403,23 +403,24 @@ export const getReceiveTx = async (eosClient, account) => {
   try {
     let res = await eosClient.getActions('eosio.token')
     actions = res.actions
-    console.log('getReceiveTx - getActions on eosio.token:', actions);
+    console.log('getReceiveTx - getActions on eosio.token:', actions)
   } catch (err) {
-    console.log('getReceiveTx - Failed to get actions on "eosio.token"');
+    console.log('getReceiveTx - Failed to get actions on "eosio.token"')
     return null
   }
 
-  let receiveTx=[]
-  for (let i=0; i<actions.length; i++) {
-    let action=actions[i]
-    let actionData=action.action_trace.act.data
+  let receiveTx = []
+  for (let i = 0; i < actions.length; i++) {
+    let action = actions[i]
+    let actionData = action.action_trace.act.data
     if (actionData.to === account) {
-      console.log('found - actionData:', actionData);
+      console.log('found - actionData:', actionData)
       receiveTx.push({
         time: action.block_time,
         action: `receive from ${actionData.from}`,
         quantity: actionData.quantity,
-        txLink: TX_LINK_ROOT + action.block_num + '/' + action.action_trace.trx_id,
+        txLink:
+          TX_LINK_ROOT + action.block_num + '/' + action.action_trace.trx_id,
         txId: action.action_trace.trx_id.substring(0, 10) + '...',
         ramUsage: '0 XFS',
         cpuBwUsage: '0 µs & 0 byte',
@@ -428,7 +429,7 @@ export const getReceiveTx = async (eosClient, account) => {
     }
   }
 
-  console.log('receiveTx:', receiveTx);
+  console.log('receiveTx:', receiveTx)
 
   return receiveTx
 }

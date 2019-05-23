@@ -47,14 +47,18 @@ const columns = [
     text: 'CPU Used',
     sort: true,
     headerStyle: { width: 35 },
-    formatter: (cellContent, row) => <span>{row.cpuBwUsage && row.cpuBwUsage.split('&')[0]}</span>
+    formatter: (cellContent, row) => (
+      <span>{row.cpuBwUsage && row.cpuBwUsage.split('&')[0]}</span>
+    )
   },
   {
     dataField: 'cpuBwUsage',
     text: 'Net Used',
     sort: true,
     headerStyle: { width: 35 },
-    formatter: (cellContent, row) => <span>{row.cpuBwUsage && row.cpuBwUsage.split('&')[1]}</span>
+    formatter: (cellContent, row) => (
+      <span>{row.cpuBwUsage && row.cpuBwUsage.split('&')[1]}</span>
+    )
   },
   {
     dataField: 'txId',
