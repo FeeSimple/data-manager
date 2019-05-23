@@ -38,7 +38,13 @@ class SendModalContainer extends React.Component {
       isProcessing: true
     })
 
-    const { eosClient, accountData, user, updateAccountInfo } = this.props
+    const {
+      eosClient,
+      accountData,
+      user,
+      updateAccountInfo,
+      handleGetActions
+    } = this.props
     let activeAccount = accountData.active
 
     let err = await sendXFSWithCheck(
@@ -57,6 +63,8 @@ class SendModalContainer extends React.Component {
       })
     } else {
       updateAccountInfo()
+
+      handleGetActions()
 
       this.setState({
         userSendErr: 'Success',

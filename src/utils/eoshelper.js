@@ -385,6 +385,55 @@ export const getTxDataSellRam = async (eosClient, txid) => {
   return { action, quantity, ramUsage, cpuBwUsage }
 }
 
+const compareTxEntryForSort = (a, b) => {
+  let comparison = 0
+  if (a.seq < b.seq) {
+    comparison = 1
+  } else {
+    comparison = -1
+  }
+  return comparison
+}
+
+// Determine the XFS transfer tx to a given account.
+// This is done by getting actions on the special account 'eosio.token'
+// and then make some filter based on the column 'to'
+export const getReceiveTx = async (eosClient, account) => {
+  let actions = null
+  try {
+    let res = await eosClient.getActions('eosio.token')
+    actions = res.actions
+    console.log('getReceiveTx - getActions on eosio.token:', actions)
+  } catch (err) {
+    console.log('getReceiveTx - Failed to get actions on "eosio.token"')
+    return null
+  }
+
+  let receiveTx = []
+  for (let i = 0; i < actions.length; i++) {
+    let action = actions[i]
+    let actionData = action.action_trace.act.data
+    if (actionData.to === account) {
+      console.log('found - actionData:', actionData)
+      receiveTx.push({
+        time: action.block_time,
+        action: `receive from ${actionData.from}`,
+        quantity: actionData.quantity,
+        txLink:
+          TX_LINK_ROOT + action.block_num + '/' + action.action_trace.trx_id,
+        txId: action.action_trace.trx_id.substring(0, 10) + '...',
+        ramUsage: '0 XFS',
+        cpuBwUsage: '0 µs & 0 byte',
+        seq: action.global_action_seq
+      })
+    }
+  }
+
+  console.log('receiveTx:', receiveTx)
+
+  return receiveTx
+}
+
 export const getActionsProcessed = async (eosClient, account) => {
   let res = await getActions(eosClient, account)
   if (res.errMsg) {
@@ -404,10 +453,11 @@ export const getActionsProcessed = async (eosClient, account) => {
     // console.log('getActionsProcessed - item:', item);
     let txid = item.action_trace.trx_id
     let blockNum = item.block_num
+    let seq = item.global_action_seq
     let quantity = item.action_trace.act.data.quantity
     let action = item.action_trace.act.data.memo.toLowerCase()
     let ramUsage = '0 XFS'
-    let cpuBwUsage = '0 µs & O byte'
+    let cpuBwUsage = '0 µs & 0 byte'
     let txDat = await getTxDataSellRam(eosClient, txid)
 
     if (txDat) {
@@ -449,12 +499,15 @@ export const getActionsProcessed = async (eosClient, account) => {
         txLink: TX_LINK_ROOT + blockNum + '/' + item.action_trace.trx_id,
         txId: txid,
         ramUsage: ramUsage,
-        cpuBwUsage: cpuBwUsage
+        cpuBwUsage: cpuBwUsage,
+        seq
       })
     }
   }
 
-  return activityList
+  let rxTxList = await getReceiveTx(eosClient, account)
+
+  return [...rxTxList, ...activityList].sort(compareTxEntryForSort)
 }
 
 export const manageRam = async (
