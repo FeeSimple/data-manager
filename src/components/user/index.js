@@ -202,6 +202,7 @@ class UserContainer extends Component {
                 <SendModal
                   user={user}
                   updateAccountInfo={this.updateAccountInfo}
+                  handleGetActions={this.handleGetActions}
                 />
               </div>
 
