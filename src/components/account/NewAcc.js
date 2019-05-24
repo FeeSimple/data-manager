@@ -42,7 +42,7 @@ const NewAccForm = props => {
       <ModalBody>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <Label>First, enter in a unique account name:</Label>
+            <Label>First, enter in a unique 12 character account name:</Label>
             <Input
               id='accountName'
               onBlur={handleBlur}
@@ -100,9 +100,7 @@ const NewAccForm = props => {
       </ModalBody>
       <ModalFooter>
         <i>
-          Account names are used to access the FeeSimple network, manage your
-          data and transact with the XFS token. Account names must be unique
-          and 12 symbols long and can only include symbols a-z and 1-5.
+          FeeSimple account names are used to access the network, manage data and transact with the XFS token. Account names must be unique and 12 symbols long and can only include symbols a-z and 1-5.
         </i>
       </ModalFooter>
     </Modal>
