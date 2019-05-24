@@ -2,7 +2,6 @@ import React from 'react'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import { Link } from 'react-router-dom'
-import IconFinderEye from '../../../img/iconfinder_eye.png'
 
 export default props => {
   const { unit, property, onChange, handleToggle } = props
