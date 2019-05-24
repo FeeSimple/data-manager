@@ -837,6 +837,9 @@ Dropzone
   cursor: pointer;
   margin-top: 0px; }
 
+.list-group-item {
+  border: none; }
+
 .btn.brd-2px {
   border-width: 2px; }
 
