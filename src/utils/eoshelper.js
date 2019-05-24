@@ -712,22 +712,25 @@ export const getAccountInfo = async (eosClient, account) => {
         parseFloat(result.total_resources.cpu_weight) +
         parseFloat(result.total_resources.net_weight)
 
-      totalBalanceNumber =
-        parseFloat(balanceNumber) + parseFloat(stakedBalanceNumber)
-      totalBalanceNumber = new Intl.NumberFormat().format(totalBalanceNumber)
+      totalBalanceNumber = parseFloat(balanceNumber) + parseFloat(stakedBalanceNumber)
 
-      console.log(
-        `stakedCpu:${stakedCpu}, stakedBandwidth:${stakedBandwidth}, stakedBalanceNumber:${stakedBalanceNumber}, totalBalanceNumber:${totalBalanceNumber}, balanceNumber:${balanceNumber}`
-      )
+      // console.log(
+      //   `stakedCpu:${stakedCpu}, stakedBandwidth:${stakedBandwidth}, stakedBalanceNumber:${stakedBalanceNumber}, totalBalanceNumber:${totalBalanceNumber}, balanceNumber:${balanceNumber}`
+      // )
     }
 
     let unstakedCpu = null
     let unstakedBandwidth = null
+    let unstakedBalanceNumber = 0
     let refund = result.refund_request
     if (refund) {
       unstakedCpu = beautifyBalance(refund.cpu_amount) || null
       unstakedBandwidth = beautifyBalance(refund.net_amount) || null
+      unstakedBalanceNumber = parseFloat(refund.cpu_amount || 0) + parseFloat(refund.net_amount || 0)
+      totalBalanceNumber += unstakedBalanceNumber
     }
+
+    totalBalanceNumber = new Intl.NumberFormat().format(totalBalanceNumber)
 
     let info = {
       account,
@@ -736,6 +739,7 @@ export const getAccountInfo = async (eosClient, account) => {
       balanceNumber,
       stakedBalanceNumber,
       totalBalanceNumber,
+      unstakedBalanceNumber,
       ramStr,
       ramMeter,
       ramAvailable,

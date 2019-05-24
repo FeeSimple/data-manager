@@ -182,7 +182,8 @@ class UserContainer extends Component {
                     <div className='info-content'>
                       <div className='ms-arrow_box'>
                         <span>{user.balance} available</span>
-                        <span>{user.stakedBalanceNumber} XFS staked</span>
+                        <span>{(user.stakedBalanceNumber).toLocaleString()} XFS staked</span>
+                        {user.unstakedBalanceNumber !== 0 && <span>{(user.unstakedBalanceNumber).toLocaleString()} XFS unstaked</span>}
                       </div>
                     </div>
                   </div>
@@ -208,7 +209,7 @@ class UserContainer extends Component {
 
               <button
                 type='button'
-                className='btn btn-outline-primary fr m-l-10'
+                className='btn btn-base-o brd-2px fr m-l-10'
                 onClick={this.handleToggleModalResource}
               >
                 {' '}

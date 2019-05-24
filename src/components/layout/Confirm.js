@@ -15,7 +15,7 @@ const Confirm = props => {
   return (
     <Modal isOpen={isOpen} toggle={handleToggle}>
       <ModalHeader toggle={e => handleToggle(-1, -1)}>
-        Please Confirm
+        <div className='fs-16 clr-base tc'>Please Confirm</div>
       </ModalHeader>
       <ModalBody>
         <div class='mb-3 text-center'>

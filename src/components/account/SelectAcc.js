@@ -16,7 +16,9 @@ export default function SelectAcc (props) {
   const { accounts, handleToggle, onAccountSelect, isOpen } = props
   return (
     <Modal isOpen={isOpen} toggle={handleToggle}>
-      <ModalHeader toggle={handleToggle}>Select an Account</ModalHeader>
+      <ModalHeader toggle={handleToggle}>
+				<div className='fs-16 clr-base tc'>Select an Account</div>
+			</ModalHeader>
       <ModalBody>
         <ListGroup>
           {accounts.map(account => (

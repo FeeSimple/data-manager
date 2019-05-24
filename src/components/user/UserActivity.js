@@ -19,7 +19,7 @@ const columns = [
     dataField: 'time',
     text: 'Time',
     sort: true,
-    headerStyle: { width: 50 },
+    headerStyle: { width: 35 },
     formatter: (cellContent, row) => (
       <TimeAgo date={UTCToLocalTimeString(new Date(row.time))} />
     )
@@ -28,7 +28,7 @@ const columns = [
     dataField: 'action',
     text: 'Action',
     sort: true,
-    headerStyle: { width: 45 }
+    headerStyle: { width: 55 }
   },
   {
     dataField: 'quantity',
