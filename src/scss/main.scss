@@ -771,6 +771,29 @@ Dropzone
 .rangeslider-horizontal .rangeslider__handle::after{display: none;}
 .rangeslider-horizontal .rangeslider__handle {width: 16px;height: 16px;border-radius: 16px;}
 
+.manageModalUl{
+  padding: 0;
+  margin: 0 -5px; 
+  li{ 
+    float: left;
+    list-style: none;
+    padding: 5px; 
+    width: 33.3333333%;
+    >button{
+      width: 100%;
+      &:active, &:focus{ 
+        outline: none;
+        box-shadow: none;
+      }
+    }
+    &.active{
+      .btn{
+        background-color: $clr-base;
+        color: $clr-white;
+      }
+    }
+  }
+}
 /*-----------------------------------------
   Various fixes and overwrites
 -------------------------------------------*/
@@ -787,7 +810,9 @@ Dropzone
 .c-pointer{cursor: pointer;}
 .del-btn-fx{background: none; border: none; cursor: pointer; margin-top: 3px;}
 .del-btn-fx-property{background: none; border: none; cursor: pointer; margin-top: 0px;}
+.list-group-item{border:none;}
 
+.btn.brd-2px{border-width: 2px;}
 .comingsonmp{
   border: 2px solid rgba(16, 67, 120, 0.15);
   box-sizing: border-box;

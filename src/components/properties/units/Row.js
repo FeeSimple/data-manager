@@ -2,7 +2,6 @@ import React from 'react'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
 import { Link } from 'react-router-dom'
-import IconFinderEye from '../../../img/iconfinder_eye.png'
 
 export default props => {
   const { unit, property, onChange, handleToggle } = props
@@ -38,11 +37,7 @@ export default props => {
       <td>{unit.date_available}</td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}/termprice`}>
-          <img
-            src={IconFinderEye}
-            alt='icon-finder'
-            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
-          />
+          Manage
         </Link>
       </td>
       <td>
