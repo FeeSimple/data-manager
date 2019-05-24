@@ -101,11 +101,7 @@ export default props => {
       isDummyField: true,
       formatter: (cellContent, row) => (
         <Link to={`/${property.id}/unit/${row.id}/termprice`}>
-          <img
-            src={IconFinderEye}
-            alt='icon-finder'
-            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
-          />
+          Manage
         </Link>
       ),
       headerStyle: { width: 150 }

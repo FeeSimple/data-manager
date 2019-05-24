@@ -38,11 +38,7 @@ export default props => {
       <td>{unit.date_available}</td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}/termprice`}>
-          <img
-            src={IconFinderEye}
-            alt='icon-finder'
-            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
-          />
+          Manage
         </Link>
       </td>
       <td>
