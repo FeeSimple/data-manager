@@ -282,20 +282,42 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   font-weight: 400;
   padding-bottom: 5px;
 }
-
+.uploadedImgTumb{
+  padding: 0; margin: 0 -5px 0; 
+  list-style: none; 
+  li{
+    float: left;
+    margin: 5px;
+    border: 2px solid #e7ecf2;
+    padding: 5px;
+    transition: all 0.5s;
+    background-color: $clr-white;
+    &:hover{
+      transform: scale(1.5);
+      z-index: 50;
+    }
+    >{
+      img{
+        height: 90px;
+        width: auto;
+      }
+    }
+  }
+}
 .user-detail-label{
   font-weight: 400;
   font-size: 15px;
   padding: 0;
   margin: 12px -1% 3px;
-  color: $clr-seconday;
+  color: $clr-seconday; 
 }
 
 .user-detail-label-small{
   font-weight:  400;
   font-size: 12px;
   margin: 0;
-  color: $clr-seconday;
+  color: #181818;
+  font-size: 16px;
 }
 
 .no-property-txt{

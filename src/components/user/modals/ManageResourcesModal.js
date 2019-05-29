@@ -24,12 +24,12 @@ class ManageResourcesModal extends React.Component {
     super(props)
     this.state = {
       subModal: 'stake',
-      'active': 0
+      active: 0
     }
   }
 
-  setActive( index ) {
-    this.setState({ 'active': index });
+  setActive (index) {
+    this.setState({ active: index })
   }
 
   handleToggleSubModal = subModal => {
@@ -42,12 +42,11 @@ class ManageResourcesModal extends React.Component {
   }
 
   render () {
-    var current = this.state.active;
-    var getClass = function(index) {
-        if ( index === current )
-          return 'active';
-          return '';
-    };
+    var current = this.state.active
+    var getClass = function (index) {
+      if (index === current) return 'active'
+      return ''
+    }
     const { subModal } = this.state
     const {
       userBalance,
@@ -73,7 +72,10 @@ class ManageResourcesModal extends React.Component {
           <Row>
             <Col>
               <ul className='manageModalUl'>
-                <li onClick={this.setActive.bind(this, 0)} className={getClass(0)}>
+                <li
+                  onClick={this.setActive.bind(this, 0)}
+                  className={getClass(0)}
+                >
                   <button
                     type='button'
                     color=''
@@ -84,7 +86,10 @@ class ManageResourcesModal extends React.Component {
                     Stake
                   </button>
                 </li>
-                <li onClick={this.setActive.bind(this, 1)} className={getClass(1)}>
+                <li
+                  onClick={this.setActive.bind(this, 1)}
+                  className={getClass(1)}
+                >
                   <button
                     type='button'
                     color=''
@@ -95,7 +100,10 @@ class ManageResourcesModal extends React.Component {
                     Unstake
                   </button>
                 </li>
-                <li onClick={this.setActive.bind(this, 2)} className={getClass(2)}>
+                <li
+                  onClick={this.setActive.bind(this, 2)}
+                  className={getClass(2)}
+                >
                   <button
                     type='button'
                     color=''

@@ -316,7 +316,7 @@ class UnitContainer extends Component {
             text={
               this.state.unitId === -2 && this.state.propertyId !== -1
                 ? 'this property'
-                : 'this unit?'
+                : 'this unit'
             }
           />
         </div>
