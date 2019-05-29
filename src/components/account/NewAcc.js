@@ -51,7 +51,7 @@ const NewAccForm = props => {
               invalid={errors.accountName && touched.accountName}
               type='text'
               autocomplete='off'
-							maxlength='12'
+              maxlength='12'
             />
           </FormGroup>
           <Button
@@ -100,7 +100,9 @@ const NewAccForm = props => {
       </ModalBody>
       <ModalFooter>
         <i>
-          FeeSimple account names are used to access the network, manage data and transact with the XFS token. Account names must be unique and 12 symbols long and can only include symbols a-z and 1-5.
+          FeeSimple account names are used to access the network, manage data
+          and transact with the XFS token. Account names must be unique and 12
+          symbols long and can only include symbols a-z and 1-5.
         </i>
       </ModalFooter>
     </Modal>

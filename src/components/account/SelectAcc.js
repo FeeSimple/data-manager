@@ -17,8 +17,8 @@ export default function SelectAcc (props) {
   return (
     <Modal isOpen={isOpen} toggle={handleToggle}>
       <ModalHeader toggle={handleToggle}>
-				<div className='fs-16 clr-base tc'>Select an Account</div>
-			</ModalHeader>
+        <div className='fs-16 clr-base tc'>Select an Account</div>
+      </ModalHeader>
       <ModalBody>
         <ListGroup>
           {accounts.map(account => (

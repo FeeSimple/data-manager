@@ -182,8 +182,15 @@ class UserContainer extends Component {
                     <div className='info-content'>
                       <div className='ms-arrow_box'>
                         <span>{user.balance} available</span>
-                        <span>{(user.stakedBalanceNumber).toLocaleString()} XFS staked</span>
-                        {user.unstakedBalanceNumber !== 0 && <span>{(user.unstakedBalanceNumber).toLocaleString()} XFS unstaked</span>}
+                        <span>
+                          {user.stakedBalanceNumber.toLocaleString()} XFS staked
+                        </span>
+                        {user.unstakedBalanceNumber !== 0 && (
+                          <span>
+                            {user.unstakedBalanceNumber.toLocaleString()} XFS
+                            unstaked
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
