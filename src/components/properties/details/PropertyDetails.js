@@ -183,7 +183,9 @@ const PropertyDetails = ({
               {/*<ImageGallery items={galleryItems} />*/}
               <ul className='uploadedImgTumb'>
                 {galleryItems.map(item => (
-                  <li><img src={item.thumbnail} /></li>
+                  <li>
+                    <img src={item.thumbnail} />
+                  </li>
                 ))}
               </ul>
             </div>

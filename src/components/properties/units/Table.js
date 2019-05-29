@@ -99,9 +99,7 @@ export default props => {
       text: 'Term Pricing',
       isDummyField: true,
       formatter: (cellContent, row) => (
-        <Link to={`/${property.id}/unit/${row.id}/termprice`}>
-          Manage
-        </Link>
+        <Link to={`/${property.id}/unit/${row.id}/termprice`}>Manage</Link>
       ),
       headerStyle: { width: 150 }
     },
