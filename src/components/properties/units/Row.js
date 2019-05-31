@@ -36,9 +36,7 @@ export default props => {
       <td>{unit.status}</td>
       <td>{unit.date_available}</td>
       <td>
-        <Link to={`/${property.id}/unit/${unit.id}/termprice`}>
-          Manage
-        </Link>
+        <Link to={`/${property.id}/unit/${unit.id}/termprice`}>Manage</Link>
       </td>
       <td>
         <Link to={`/${property.id}/unit/${unit.id}`} className='table-edit'>

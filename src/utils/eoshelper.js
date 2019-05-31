@@ -712,7 +712,8 @@ export const getAccountInfo = async (eosClient, account) => {
         parseFloat(result.total_resources.cpu_weight) +
         parseFloat(result.total_resources.net_weight)
 
-      totalBalanceNumber = parseFloat(balanceNumber) + parseFloat(stakedBalanceNumber)
+      totalBalanceNumber =
+        parseFloat(balanceNumber) + parseFloat(stakedBalanceNumber)
 
       // console.log(
       //   `stakedCpu:${stakedCpu}, stakedBandwidth:${stakedBandwidth}, stakedBalanceNumber:${stakedBalanceNumber}, totalBalanceNumber:${totalBalanceNumber}, balanceNumber:${balanceNumber}`
@@ -726,7 +727,8 @@ export const getAccountInfo = async (eosClient, account) => {
     if (refund) {
       unstakedCpu = beautifyBalance(refund.cpu_amount) || null
       unstakedBandwidth = beautifyBalance(refund.net_amount) || null
-      unstakedBalanceNumber = parseFloat(refund.cpu_amount || 0) + parseFloat(refund.net_amount || 0)
+      unstakedBalanceNumber =
+        parseFloat(refund.cpu_amount || 0) + parseFloat(refund.net_amount || 0)
       totalBalanceNumber += unstakedBalanceNumber
     }
 

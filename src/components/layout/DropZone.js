@@ -8,7 +8,7 @@ const baseStyle = {
   borderStyle: 'dashed',
   borderRadius: 6,
   lineHeight: '160px',
-  textAlign: 'center',
+  textAlign: 'center'
 }
 
 const activeStyle = {

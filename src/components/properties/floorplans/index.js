@@ -324,7 +324,7 @@ class FloorplansContainer extends Component {
             text={
               this.state.floorplanId === -2 && this.state.propertyId !== -1
                 ? 'this property'
-                : 'this floor-plan?'
+                : 'this floor-plan'
             }
           />
         </div>
