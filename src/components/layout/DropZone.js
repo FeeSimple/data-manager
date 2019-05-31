@@ -19,7 +19,7 @@ const activeStyle = {
 
 const acceptStyle = {
   borderStyle: 'solid',
-  borderColor: '#00e676'
+  borderColor: '#00b1ef'
 }
 
 const rejectStyle = {

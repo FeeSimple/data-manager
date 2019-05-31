@@ -292,9 +292,29 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
     padding: 5px;
     transition: all 0.5s;
     background-color: $clr-white;
+    position: relative;
+    .imgDelBtn{
+      display: block;
+      height: 18px;
+      width: 18px;
+      text-align: center;
+      line-height: 13px;
+      font-size: 12px;
+      border: 1px solid #ff7272;
+      border-radius: 5px;
+      position: absolute;
+      right: 5px;
+      top: 5px; 
+      cursor: pointer;
+      color: $clr-white;
+      background-color: rgba(#ff7272,.85);
+      opacity: 0;
+      transition: all .5s;
+    }
     &:hover{
-      transform: scale(1.5);
-      z-index: 50;
+      .imgDelBtn {
+        opacity: 1;
+      }
     }
     >{
       img{
