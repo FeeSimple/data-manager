@@ -2,12 +2,13 @@ import React, { useMemo, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 const baseStyle = {
-  width: 100,
-  height: 100,
+  height: '160px',
   borderWidth: 2,
-  borderColor: '#666',
+  borderColor: '#ccd6e1',
   borderStyle: 'dashed',
-  borderRadius: 5
+  borderRadius: 6,
+  lineHeight: '160px',
+  textAlign: 'center'
 }
 
 const activeStyle = {
@@ -18,7 +19,7 @@ const activeStyle = {
 
 const acceptStyle = {
   borderStyle: 'solid',
-  borderColor: '#00e676'
+  borderColor: '#00b1ef'
 }
 
 const rejectStyle = {
@@ -59,25 +60,25 @@ const thumbsContainer = {
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
-  marginTop: 16
+  marginTop: 16,
+  backgroundColor: '#f9f9f9'
 }
 
 const thumb = {
-  display: 'inline-flex',
+  display: 'inline-block',
   borderRadius: 2,
   border: '1px solid #eaeaea',
-  marginBottom: 8,
-  marginRight: 8,
-  width: 100,
+  margin: 5,
   height: 100,
   padding: 4,
   boxSizing: 'border-box'
 }
 
 const thumbInner = {
-  display: 'flex',
+  display: 'block',
   minWidth: 0,
-  overflow: 'hidden'
+  overflow: 'hidden',
+  height: 90
 }
 
 const img = {

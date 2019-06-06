@@ -12,7 +12,7 @@ import {
 import UnitDetails from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
-
+import Confirm from '../../../layout/Confirm'
 import ipfs from '../../../layout/ipfs'
 
 let totalUploadedFiles = 0
@@ -26,6 +26,9 @@ class UnitDetailsContainer extends Component {
     buffer: null,
     imgIpfsAddrListFromUpload: [],
     imgIpfsAddrListFromTable: [],
+
+    showConfirmDelImg: false,
+    imgId: null,
 
     alertShow: false,
     alertContent: [],
@@ -326,6 +329,66 @@ class UnitDetailsContainer extends Component {
     setLoading(false)
   }
 
+  deleteImg = async id => {
+    this.handleToggleConfirmDelImg(-1)
+    const imgId = this.state.imgId
+
+    const { contracts, accountData, setLoading, setOpResult } = this.props
+
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.delunitimg(accountData.active, imgId, options)
+      console.log('fsmgrcontract.delunitimg - imgId:', imgId)
+    } catch (err) {
+      console.log('fsmgrcontract.delunitimg - error:', err)
+      operationOK = false
+    }
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete image`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Image deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
+
+    await this.getImgIpfsAddrListFromTable()
+  }
+
+  handleToggleConfirmDelImg = imgId => {
+    const { showConfirmDelImg } = this.state
+    this.setState({ showConfirmDelImg: !showConfirmDelImg })
+
+    if (imgId !== -1) {
+      this.setState({
+        imgId
+      })
+
+      console.log(`handleToggleConfirmDelImg - imgId: ${imgId}`)
+    }
+  }
+
   handleChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
@@ -346,6 +409,30 @@ class UnitDetailsContainer extends Component {
     })
   }
 
+  async getImgIpfsAddrListFromTable () {
+    const { eosClient, accountData } = this.props
+    const { id, unitid } = this.props.match.params
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      UNITIMG
+    )
+
+    const imgIpfsAddrListFromTable = rows
+      .filter(row => row.unit_id === Number(unitid))
+      .map(row => {
+        return { ipfs_address: row.ipfs_address, id: row.id }
+      })
+
+    console.log(
+      'componentDidMount - imgIpfsAddrListFromTable:',
+      imgIpfsAddrListFromTable
+    )
+
+    this.setState({ imgIpfsAddrListFromTable })
+  }
+
   async componentDidMount () {
     const { eosClient, accountData, isCreating, properties } = this.props
 
@@ -360,25 +447,7 @@ class UnitDetailsContainer extends Component {
         isLeased: existingUnit.status.toLowerCase() === 'leased'
       })
 
-      const { rows } = await eosClient.getTableRows(
-        true,
-        FSMGRCONTRACT,
-        accountData.active,
-        UNITIMG
-      )
-
-      console.log('get table UNITIMG:', rows)
-
-      const imgIpfsAddrListFromTable = rows
-        .filter(row => row.unit_id === Number(unitid))
-        .map(row => row.ipfs_address)
-
-      console.log(
-        'componentDidMount - imgIpfsAddrListFromTable:',
-        imgIpfsAddrListFromTable
-      )
-
-      this.setState({ imgIpfsAddrListFromTable })
+      await this.getImgIpfsAddrListFromTable()
     } else {
       // Create a new unit
       this.setState({
@@ -397,11 +466,12 @@ class UnitDetailsContainer extends Component {
     for (let i = 0; i < imgIpfsAddrListFromTable.length; i++) {
       let imgItem = {
         original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i]
+          imgIpfsAddrListFromTable[i].ipfs_address
         }&stream-channels=true`,
         thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i]
-        }&stream-channels=true`
+          imgIpfsAddrListFromTable[i].ipfs_address
+        }&stream-channels=true`,
+        id: imgIpfsAddrListFromTable[i].id
       }
       galleryItems.push(imgItem)
     }
@@ -421,6 +491,13 @@ class UnitDetailsContainer extends Component {
           onImageDeleted={this.onImageDeleted}
           galleryItems={galleryItems}
           handleUploadedImg={this.handleUploadedImg}
+          handleToggleConfirmDelImg={this.handleToggleConfirmDelImg}
+        />
+        <Confirm
+          isOpen={this.state.showConfirmDelImg}
+          handleToggle={this.handleToggleConfirmDelImg}
+          onDelete={this.deleteImg}
+          text='this image'
         />
         <Alert
           isOpen={this.state.alertShow}

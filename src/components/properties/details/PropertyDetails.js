@@ -16,7 +16,8 @@ const PropertyDetails = ({
   onChange,
   handleUploadedImg,
   galleryItems,
-  handleToggle
+  handleToggle,
+  handleToggleConfirmDelImg
 }) => (
   <div>
     <div className='top-bar'>
@@ -180,7 +181,20 @@ const PropertyDetails = ({
         {galleryItems && galleryItems.length > 0 && (
           <div className='form-group row'>
             <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
-              <ImageGallery items={galleryItems} />
+              {/*<ImageGallery items={galleryItems} />*/}
+              <ul className='uploadedImgTumb'>
+                {galleryItems.map(item => (
+                  <li>
+                    <span
+                      className='imgDelBtn'
+                      onClick={e => handleToggleConfirmDelImg(item.id)}
+                    >
+                      x
+                    </span>{' '}
+                    <img src={item.thumbnail} />
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         )}

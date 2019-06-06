@@ -23,12 +23,17 @@ class ManageResourcesModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      subModal: 'unstake'
+      subModal: 'stake',
+      active: 0
     }
   }
 
+  setActive (index) {
+    this.setState({ active: index })
+  }
+
   handleToggleSubModal = subModal => {
-    console.log('handleToggleSubModal - subModal:', subModal)
+    //console.log('handleToggleSubModal - subModal:', subModal)
     if (subModal !== this.state.subModal) {
       this.setState({
         subModal
@@ -37,6 +42,11 @@ class ManageResourcesModal extends React.Component {
   }
 
   render () {
+    var current = this.state.active
+    var getClass = function (index) {
+      if (index === current) return 'active'
+      return ''
+    }
     const { subModal } = this.state
     const {
       userBalance,
@@ -61,36 +71,50 @@ class ManageResourcesModal extends React.Component {
         <ModalBody className='px-5'>
           <Row>
             <Col>
-              <button
-                type='button'
-                color='gray'
-                className='btn prop-btn fr m-l-10'
-                onClick={() => this.handleToggleSubModal('stake')}
-              >
-                {' '}
-                Stake
-              </button>
-            </Col>
-            <Col>
-              <button
-                type='button'
-                color='gray'
-                className='btn prop-btn fr m-l-10'
-                onClick={() => this.handleToggleSubModal('unstake')}
-              >
-                {' '}
-                Unstake
-              </button>
-            </Col>
-            <Col>
-              <Button
-                color='base'
-                className='btn prop-btn fr m-l-10'
-                onClick={() => this.handleToggleSubModal('ram')}
-              >
-                {' '}
-                RAM
-              </Button>
+              <ul className='manageModalUl'>
+                <li
+                  onClick={this.setActive.bind(this, 0)}
+                  className={getClass(0)}
+                >
+                  <button
+                    type='button'
+                    color=''
+                    className='btn'
+                    onClick={() => this.handleToggleSubModal('stake')}
+                  >
+                    {' '}
+                    Stake
+                  </button>
+                </li>
+                <li
+                  onClick={this.setActive.bind(this, 1)}
+                  className={getClass(1)}
+                >
+                  <button
+                    type='button'
+                    color=''
+                    className='btn'
+                    onClick={() => this.handleToggleSubModal('unstake')}
+                  >
+                    {' '}
+                    Unstake
+                  </button>
+                </li>
+                <li
+                  onClick={this.setActive.bind(this, 2)}
+                  className={getClass(2)}
+                >
+                  <button
+                    type='button'
+                    color=''
+                    className='btn'
+                    onClick={() => this.handleToggleSubModal('ram')}
+                  >
+                    {' '}
+                    RAM
+                  </button>
+                </li>
+              </ul>
             </Col>
           </Row>
         </ModalBody>

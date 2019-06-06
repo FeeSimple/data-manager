@@ -23,7 +23,10 @@ class PropertyDetailsContainer extends Component {
   state = {
     property: 'undefined',
     showConfirm: false,
+    showConfirmDelImg: false,
+
     propertyId: null,
+    imgId: null,
 
     imgIpfsAddrListFromUpload: [],
     imgIpfsAddrListFromTable: [],
@@ -333,6 +336,53 @@ class PropertyDetailsContainer extends Component {
     return property.name
   }
 
+  deleteImg = async id => {
+    this.handleToggleConfirmDelImg(-1)
+    const imgId = this.state.imgId
+
+    const { contracts, accountData, setLoading, setOpResult } = this.props
+
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.delpropimg(accountData.active, imgId, options)
+      console.log('fsmgrcontract.delpropimg - imgId:', imgId)
+    } catch (err) {
+      console.log('fsmgrcontract.delpropimg - error:', err)
+      operationOK = false
+    }
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete image`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Image deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
+
+    await this.getImgIpfsAddrListFromTable()
+  }
+
   deleteOne = async () => {
     this.handleToggleConfirm(-1)
     const propertyId = this.state.propertyId
@@ -410,6 +460,41 @@ class PropertyDetailsContainer extends Component {
     }
   }
 
+  handleToggleConfirmDelImg = imgId => {
+    const { showConfirmDelImg } = this.state
+    this.setState({ showConfirmDelImg: !showConfirmDelImg })
+
+    if (imgId !== -1) {
+      this.setState({
+        imgId
+      })
+
+      console.log(`handleToggleConfirmDelImg - imgId: ${imgId}`)
+    }
+  }
+
+  async getImgIpfsAddrListFromTable () {
+    const { id, eosClient, accountData } = this.props
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      PROPERTYIMG
+    )
+
+    console.log('get table PROPERTYIMG:', rows)
+
+    const imgIpfsAddrListFromTable = rows
+      .filter(row => row.property_id === Number(id))
+      .map(row => {
+        return { ipfs_address: row.ipfs_address, id: row.id }
+      })
+
+    console.log('getImgIpfsAddrListFromTable:', imgIpfsAddrListFromTable)
+
+    this.setState({ imgIpfsAddrListFromTable })
+  }
+
   async componentDidMount () {
     const { isCreating, properties, id, eosClient, accountData } = this.props
 
@@ -420,25 +505,7 @@ class PropertyDetailsContainer extends Component {
         property: existingProperty
       })
 
-      const { rows } = await eosClient.getTableRows(
-        true,
-        FSMGRCONTRACT,
-        accountData.active,
-        PROPERTYIMG
-      )
-
-      console.log('get table PROPERTYIMG:', rows)
-
-      const imgIpfsAddrListFromTable = rows
-        .filter(row => row.property_id === Number(id))
-        .map(row => row.ipfs_address)
-
-      console.log(
-        'componentDidMount - imgIpfsAddrListFromTable:',
-        imgIpfsAddrListFromTable
-      )
-
-      this.setState({ imgIpfsAddrListFromTable })
+      await this.getImgIpfsAddrListFromTable()
     } else {
       // Create a new property
       this.setState({
@@ -455,11 +522,12 @@ class PropertyDetailsContainer extends Component {
     for (let i = 0; i < imgIpfsAddrListFromTable.length; i++) {
       let imgItem = {
         original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i]
+          imgIpfsAddrListFromTable[i].ipfs_address
         }&stream-channels=true`,
         thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i]
-        }&stream-channels=true`
+          imgIpfsAddrListFromTable[i].ipfs_address
+        }&stream-channels=true`,
+        id: imgIpfsAddrListFromTable[i].id
       }
       galleryItems.push(imgItem)
     }
@@ -479,6 +547,7 @@ class PropertyDetailsContainer extends Component {
             onImageDeleted={this.onImageDeleted}
             galleryItems={galleryItems}
             handleUploadedImg={this.handleUploadedImg}
+            handleToggleConfirmDelImg={this.handleToggleConfirmDelImg}
           />
         )}
         <Confirm
@@ -486,6 +555,12 @@ class PropertyDetailsContainer extends Component {
           handleToggle={this.handleToggleConfirm}
           onDelete={this.deleteOne}
           text='this property and its associated units and floor plans'
+        />
+        <Confirm
+          isOpen={this.state.showConfirmDelImg}
+          handleToggle={this.handleToggleConfirmDelImg}
+          onDelete={this.deleteImg}
+          text='this image'
         />
         <Alert
           isOpen={this.state.alertShow}

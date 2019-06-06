@@ -8,7 +8,6 @@ import Spinner from 'react-spinkit'
 import IconAdd from '../../../img/icon-add.svg'
 import IconEditBlue from '../../../img/icon-edit-blue.svg'
 import IconDelete from '../../../img/icon-delete.svg'
-import IconFinderEye from '../../../img/iconfinder_eye.png'
 import IconEditSqr from '../../../img/icon-edit-sq.svg'
 import IconCloseSqr from '../../../img/icon-close-sq.svg'
 import IconAddSqr from '../../../img/icon-plus-sq.svg'
@@ -100,13 +99,7 @@ export default props => {
       text: 'Term Pricing',
       isDummyField: true,
       formatter: (cellContent, row) => (
-        <Link to={`/${property.id}/unit/${row.id}/termprice`}>
-          <img
-            src={IconFinderEye}
-            alt='icon-finder'
-            style={{ marginLeft: '24px', width: '27px', height: '27px' }}
-          />
-        </Link>
+        <Link to={`/${property.id}/unit/${row.id}/termprice`}>Manage</Link>
       ),
       headerStyle: { width: 150 }
     },

@@ -64,7 +64,7 @@ export const User = ({ user, activityList, gettingActions }) => (
               <div className='ms-arrow_box'>
                 <span>
                   {user.bandwidthStr && user.bandwidthStr.split('/')[0]}{' '}
-                  available
+                  spendable
                 </span>
                 <span>
                   {user.bandwidthStr && user.bandwidthStr.split('/')[1]} total

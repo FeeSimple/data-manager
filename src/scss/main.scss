@@ -282,20 +282,62 @@ h1,h2,h3,h4,h5,h6{ font-weight: 600; }
   font-weight: 400;
   padding-bottom: 5px;
 }
-
+.uploadedImgTumb{
+  padding: 0; margin: 0 -5px 0; 
+  list-style: none; 
+  li{
+    float: left;
+    margin: 5px;
+    border: 2px solid #e7ecf2;
+    padding: 5px;
+    transition: all 0.5s;
+    background-color: $clr-white;
+    position: relative;
+    .imgDelBtn{
+      display: block;
+      height: 18px;
+      width: 18px;
+      text-align: center;
+      line-height: 13px;
+      font-size: 12px;
+      border: 1px solid #ff7272;
+      border-radius: 5px;
+      position: absolute;
+      right: 5px;
+      top: 5px; 
+      cursor: pointer;
+      color: $clr-white;
+      background-color: rgba(#ff7272,.85);
+      opacity: 0;
+      transition: all .5s;
+    }
+    &:hover{
+      .imgDelBtn {
+        opacity: 1;
+      }
+    }
+    >{
+      img{
+        height: 90px;
+        width: auto;
+      }
+    }
+  }
+}
 .user-detail-label{
   font-weight: 400;
   font-size: 15px;
   padding: 0;
   margin: 12px -1% 3px;
-  color: $clr-seconday;
+  color: $clr-seconday; 
 }
 
 .user-detail-label-small{
   font-weight:  400;
   font-size: 12px;
   margin: 0;
-  color: $clr-seconday;
+  color: #181818;
+  font-size: 16px;
 }
 
 .no-property-txt{
@@ -771,6 +813,29 @@ Dropzone
 .rangeslider-horizontal .rangeslider__handle::after{display: none;}
 .rangeslider-horizontal .rangeslider__handle {width: 16px;height: 16px;border-radius: 16px;}
 
+.manageModalUl{
+  padding: 0;
+  margin: 0 -5px; 
+  li{ 
+    float: left;
+    list-style: none;
+    padding: 5px; 
+    width: 33.3333333%;
+    >button{
+      width: 100%;
+      &:active, &:focus{ 
+        outline: none;
+        box-shadow: none;
+      }
+    }
+    &.active{
+      .btn{
+        background-color: $clr-base;
+        color: $clr-white;
+      }
+    }
+  }
+}
 /*-----------------------------------------
   Various fixes and overwrites
 -------------------------------------------*/
@@ -787,7 +852,9 @@ Dropzone
 .c-pointer{cursor: pointer;}
 .del-btn-fx{background: none; border: none; cursor: pointer; margin-top: 3px;}
 .del-btn-fx-property{background: none; border: none; cursor: pointer; margin-top: 0px;}
+.list-group-item{border:none;}
 
+.btn.brd-2px{border-width: 2px;}
 .comingsonmp{
   border: 2px solid rgba(16, 67, 120, 0.15);
   box-sizing: border-box;
