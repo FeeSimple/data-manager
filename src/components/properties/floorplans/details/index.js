@@ -7,7 +7,7 @@ import { setFloorplan, setLoading, setOpResult } from '../../../../actions'
 import FloorplanDetails from './FloorplanDetails'
 import { FSMGRCONTRACT, FLOORPLANIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
-
+import Confirm from '../../../layout/Confirm'
 import ipfs from '../../../layout/ipfs'
 
 let totalUploadedFiles = 0
@@ -19,7 +19,10 @@ class FloorplanDetailsContainer extends Component {
     buffer: null,
     imgIpfsAddrListFromUpload: [],
     imgIpfsAddrListFromTable: [],
-
+    
+    showConfirmDelImg: false,
+    imgId: null,
+    
     alertShow: false,
     alertContent: [],
     alertHeader: ''
@@ -313,6 +316,71 @@ class FloorplanDetailsContainer extends Component {
     setLoading(false)
   }
 
+  deleteImg = async (id) => {
+    this.handleToggleConfirmDelImg(-1)
+    const imgId = this.state.imgId
+
+    const {
+      contracts,
+      accountData,
+      setLoading,
+      setOpResult
+    } = this.props
+
+    const fsmgrcontract = contracts[FSMGRCONTRACT]
+
+    const options = {
+      authorization: `${accountData.active}@active`,
+      broadcast: true,
+      sign: true
+    }
+
+    setLoading(true)
+
+    let operationOK = true
+
+    try {
+      await fsmgrcontract.delflplanimg(accountData.active, imgId, options)
+      console.log('fsmgrcontract.delflplanimg - imgId:', imgId)
+    } catch (err) {
+      console.log('fsmgrcontract.delflplanimg - error:', err)
+      operationOK = false
+    }
+
+    if (!operationOK) {
+      setOpResult({
+        show: true,
+        title: 'Internal Service Error',
+        text: `Failed to delete image`,
+        type: 'error'
+      })
+    } else {
+      setOpResult({
+        show: true,
+        title: 'Success',
+        text: `Image deleted successfully`,
+        type: 'success'
+      })
+    }
+
+    setLoading(false)
+
+    await this.getImgIpfsAddrListFromTable()
+  }
+
+  handleToggleConfirmDelImg = (imgId) => {
+    const { showConfirmDelImg } = this.state
+    this.setState({ showConfirmDelImg: !showConfirmDelImg })
+
+    if (imgId !== -1) {
+      this.setState({
+        imgId
+      })
+
+      console.log(`handleToggleConfirmDelImg - imgId: ${imgId}`)
+    }
+  }
+
   handleChange (event) {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
@@ -330,8 +398,32 @@ class FloorplanDetailsContainer extends Component {
     })
   }
 
+  async getImgIpfsAddrListFromTable () {
+    const { eosClient, accountData } = this.props
+    const { floorplanId } = this.props.match.params
+    const { rows } = await eosClient.getTableRows(
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      FLOORPLANIMG
+    )
+
+    const imgIpfsAddrListFromTable = rows
+      .filter(row => row.floorplan_id === Number(floorplanId))
+      .map(row => {
+        return {ipfs_address: row.ipfs_address, id: row.id}
+      })
+
+    console.log(
+      'componentDidMount - imgIpfsAddrListFromTable:',
+      imgIpfsAddrListFromTable
+    )
+
+    this.setState({ imgIpfsAddrListFromTable })
+  }
+
   async componentDidMount () {
-    const { eosClient, accountData, isCreating, properties } = this.props
+    const { isCreating, properties } = this.props
     const { id, floorplanId } = this.props.match.params
     const { floorplans } = properties[id]
 
@@ -342,25 +434,8 @@ class FloorplanDetailsContainer extends Component {
         floorplan: existingFloorplan
       })
 
-      const { rows } = await eosClient.getTableRows(
-        true,
-        FSMGRCONTRACT,
-        accountData.active,
-        FLOORPLANIMG
-      )
-
-      console.log('get table FLOORPLANIMG:', rows)
-
-      const imgIpfsAddrListFromTable = rows
-        .filter(row => row.floorplan_id === Number(floorplanId))
-        .map(row => row.ipfs_address)
-
-      console.log(
-        'componentDidMount - imgIpfsAddrListFromTable:',
-        imgIpfsAddrListFromTable
-      )
-
-      this.setState({ imgIpfsAddrListFromTable })
+      await this.getImgIpfsAddrListFromTable()
+      
     } else {
       // Create a new floorplan
       this.setState({
@@ -378,11 +453,12 @@ class FloorplanDetailsContainer extends Component {
     for (let i = 0; i < imgIpfsAddrListFromTable.length; i++) {
       let imgItem = {
         original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i]
+          imgIpfsAddrListFromTable[i].ipfs_address
         }&stream-channels=true`,
         thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i]
-        }&stream-channels=true`
+          imgIpfsAddrListFromTable[i].ipfs_address
+        }&stream-channels=true`,
+        id: imgIpfsAddrListFromTable[i].id
       }
       galleryItems.push(imgItem)
     }
@@ -401,6 +477,13 @@ class FloorplanDetailsContainer extends Component {
           onImageDeleted={this.onImageDeleted}
           galleryItems={galleryItems}
           handleUploadedImg={this.handleUploadedImg}
+          handleToggleConfirmDelImg={this.handleToggleConfirmDelImg}
+        />
+        <Confirm
+          isOpen={this.state.showConfirmDelImg}
+          handleToggle={this.handleToggleConfirmDelImg}
+          onDelete={this.deleteImg}
+          text='this image'
         />
         <Alert
           isOpen={this.state.alertShow}
