@@ -183,8 +183,8 @@ class UnitDetailsContainer extends Component {
         unit.bathrooms,
         unit.sq_ft_min,
         unit.sq_ft_max,
-        unit.rent_min,
         unit.rent_max,
+        unit.rent_min,
         unit.status,
         new Date(unit.date_available).getTime(),
         options

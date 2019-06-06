@@ -176,8 +176,8 @@ class FloorplanDetailsContainer extends Component {
         floorplan.bathrooms,
         floorplan.sq_ft_min,
         floorplan.sq_ft_max,
-        floorplan.rent_min,
         floorplan.rent_max,
+        floorplan.rent_min,
         floorplan.deposit,
         options
       )
