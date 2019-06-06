@@ -164,7 +164,15 @@ const FloorplanDetails = ({
               {/* <ImageGallery items={galleryItems} /> */}
               <ul className='uploadedImgTumb'>
                 {galleryItems.map(item => (
-                  <li><span className='imgDelBtn' onClick={e => handleToggleConfirmDelImg(item.id)}>x</span> <img src={item.thumbnail} /></li>
+                  <li>
+                    <span
+                      className='imgDelBtn'
+                      onClick={e => handleToggleConfirmDelImg(item.id)}
+                    >
+                      x
+                    </span>{' '}
+                    <img src={item.thumbnail} />
+                  </li>
                 ))}
               </ul>
             </div>

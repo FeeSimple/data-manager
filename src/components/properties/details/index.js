@@ -336,16 +336,11 @@ class PropertyDetailsContainer extends Component {
     return property.name
   }
 
-  deleteImg = async (id) => {
+  deleteImg = async id => {
     this.handleToggleConfirmDelImg(-1)
     const imgId = this.state.imgId
 
-    const {
-      contracts,
-      accountData,
-      setLoading,
-      setOpResult
-    } = this.props
+    const { contracts, accountData, setLoading, setOpResult } = this.props
 
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -465,7 +460,7 @@ class PropertyDetailsContainer extends Component {
     }
   }
 
-  handleToggleConfirmDelImg = (imgId) => {
+  handleToggleConfirmDelImg = imgId => {
     const { showConfirmDelImg } = this.state
     this.setState({ showConfirmDelImg: !showConfirmDelImg })
 
@@ -481,26 +476,23 @@ class PropertyDetailsContainer extends Component {
   async getImgIpfsAddrListFromTable () {
     const { id, eosClient, accountData } = this.props
     const { rows } = await eosClient.getTableRows(
-        true,
-        FSMGRCONTRACT,
-        accountData.active,
-        PROPERTYIMG
-      )
+      true,
+      FSMGRCONTRACT,
+      accountData.active,
+      PROPERTYIMG
+    )
 
     console.log('get table PROPERTYIMG:', rows)
 
     const imgIpfsAddrListFromTable = rows
       .filter(row => row.property_id === Number(id))
       .map(row => {
-        return {ipfs_address: row.ipfs_address, id: row.id}
+        return { ipfs_address: row.ipfs_address, id: row.id }
       })
 
-    console.log(
-      'getImgIpfsAddrListFromTable:',
-      imgIpfsAddrListFromTable
-    )
+    console.log('getImgIpfsAddrListFromTable:', imgIpfsAddrListFromTable)
 
-    this.setState({ imgIpfsAddrListFromTable }) 
+    this.setState({ imgIpfsAddrListFromTable })
   }
 
   async componentDidMount () {
@@ -514,7 +506,6 @@ class PropertyDetailsContainer extends Component {
       })
 
       await this.getImgIpfsAddrListFromTable()
-
     } else {
       // Create a new property
       this.setState({

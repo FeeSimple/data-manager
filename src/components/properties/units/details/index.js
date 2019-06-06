@@ -329,16 +329,11 @@ class UnitDetailsContainer extends Component {
     setLoading(false)
   }
 
-  deleteImg = async (id) => {
+  deleteImg = async id => {
     this.handleToggleConfirmDelImg(-1)
     const imgId = this.state.imgId
 
-    const {
-      contracts,
-      accountData,
-      setLoading,
-      setOpResult
-    } = this.props
+    const { contracts, accountData, setLoading, setOpResult } = this.props
 
     const fsmgrcontract = contracts[FSMGRCONTRACT]
 
@@ -381,7 +376,7 @@ class UnitDetailsContainer extends Component {
     await this.getImgIpfsAddrListFromTable()
   }
 
-  handleToggleConfirmDelImg = (imgId) => {
+  handleToggleConfirmDelImg = imgId => {
     const { showConfirmDelImg } = this.state
     this.setState({ showConfirmDelImg: !showConfirmDelImg })
 
@@ -427,7 +422,7 @@ class UnitDetailsContainer extends Component {
     const imgIpfsAddrListFromTable = rows
       .filter(row => row.unit_id === Number(unitid))
       .map(row => {
-        return {ipfs_address: row.ipfs_address, id: row.id}
+        return { ipfs_address: row.ipfs_address, id: row.id }
       })
 
     console.log(
@@ -453,7 +448,6 @@ class UnitDetailsContainer extends Component {
       })
 
       await this.getImgIpfsAddrListFromTable()
-      
     } else {
       // Create a new unit
       this.setState({
