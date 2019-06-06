@@ -190,7 +190,9 @@ const UnitDetails = ({
                     >
                       x
                     </span>{' '}
-                    <img src={item.thumbnail} />
+                    <a href={item.original} target="_blank"> 
+                      <img src={item.thumbnail} style={{height: '90px', width: 'auto'}}/>
+                    </a>
                   </li>
                 ))}
               </ul>
