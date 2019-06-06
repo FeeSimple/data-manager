@@ -244,10 +244,27 @@ h1, h2, h3, h4, h5, h6 {
     border: 2px solid #e7ecf2;
     padding: 5px;
     transition: all 0.5s;
-    background-color: #fff; }
-    .uploadedImgTumb li:hover {
-      transform: scale(1.5);
-      z-index: 50; }
+    background-color: #fff;
+    position: relative; }
+    .uploadedImgTumb li .imgDelBtn {
+      display: block;
+      height: 18px;
+      width: 18px;
+      text-align: center;
+      line-height: 13px;
+      font-size: 12px;
+      border: 1px solid #ff7272;
+      border-radius: 5px;
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      cursor: pointer;
+      color: #fff;
+      background-color: rgba(255, 114, 114, 0.85);
+      opacity: 0;
+      transition: all .5s; }
+    .uploadedImgTumb li:hover .imgDelBtn {
+      opacity: 1; }
     .uploadedImgTumb li > img {
       height: 90px;
       width: auto; }
