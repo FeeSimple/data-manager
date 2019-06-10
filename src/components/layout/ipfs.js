@@ -1,7 +1,7 @@
 const IPFS = require('ipfs-api')
 const ipfsHost = 'ipfs.feesimple.io'
-const ipfsPort = 80
-const ipfsProtocol = 'http'
+const ipfsPort = 443
+const ipfsProtocol = 'https'
 export const ipfs = new IPFS({
   host: ipfsHost,
   port: ipfsPort,
