@@ -12,9 +12,12 @@ import {
   Label,
   Input,
   Alert,
-  Collapse
+  Collapse,
+  UncontrolledPopover, PopoverBody
 } from 'reactstrap'
 
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {Icon} from 'antd';
 import { checkAccountNameError } from '../../utils/eoshelper'
 
 const NewAccForm = props => {
@@ -75,7 +78,13 @@ const NewAccForm = props => {
               </p>
             </Alert>
             <FormGroup>
-              <Label>Public Key</Label>
+              <Label>Public Key</Label> { }
+              <CopyToClipboard text={accountPubKey} id='copyPub'>
+                  <Icon type="copy" theme="twoTone" style={{ color: '#08c' }} />
+              </CopyToClipboard>
+              <UncontrolledPopover trigger="focus" placement="right" target="copyPub">
+                <PopoverBody>Public key copied to clipboard</PopoverBody>
+              </UncontrolledPopover>
               <Input
                 type='text'
                 id='accountPubKey'
@@ -84,7 +93,13 @@ const NewAccForm = props => {
               />
             </FormGroup>
             <FormGroup>
-              <Label>Private Key</Label>
+              <Label>Private Key</Label> { }
+              <CopyToClipboard text={accountPrivKey} id='copyPriv'>
+                  <Icon type="copy" theme="twoTone" style={{ color: '#08c' }} />
+              </CopyToClipboard>
+              <UncontrolledPopover trigger="focus" placement="right" target="copyPriv">
+                <PopoverBody>Private key copied to clipboard</PopoverBody>
+              </UncontrolledPopover>
               <Input
                 type='text'
                 id='accountPrivKey'
