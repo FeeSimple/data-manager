@@ -13,7 +13,7 @@ import UnitDetails from './UnitDetails'
 import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
 import Confirm from '../../../layout/Confirm'
-import ipfs from '../../../layout/ipfs'
+import { ipfs, ipfsLink } from '../../../layout/ipfs'
 
 let totalUploadedFiles = 0
 let ipfsUploadedFiles = 0
@@ -465,12 +465,8 @@ class UnitDetailsContainer extends Component {
     let galleryItems = []
     for (let i = 0; i < imgIpfsAddrListFromTable.length; i++) {
       let imgItem = {
-        original: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i].ipfs_address
-        }&stream-channels=true`,
-        thumbnail: `https://ipfs.infura.io:5001/api/v0/cat?arg=${
-          imgIpfsAddrListFromTable[i].ipfs_address
-        }&stream-channels=true`,
+        original: `${ipfsLink}${imgIpfsAddrListFromTable[i].ipfs_address}`,
+        thumbnail: `${ipfsLink}${imgIpfsAddrListFromTable[i].ipfs_address}`,
         id: imgIpfsAddrListFromTable[i].id
       }
       galleryItems.push(imgItem)
