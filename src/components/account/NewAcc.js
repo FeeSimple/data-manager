@@ -38,37 +38,39 @@ const NewAccForm = props => {
   } = props
 
   return (
-    <Modal isOpen={isOpen} toggle={handleToggle}>
+    <Modal isOpen={isOpen}>
       <ModalHeader toggle={handleToggle}>
         <div className='fs-16 clr-base tc'>Create a FeeSimple Account</div>
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label>First, enter in a unique 12 character account name:</Label>
-            <Input
-              id='accountName'
-              onBlur={handleBlur}
-              value={values.accountName}
-              onChange={handleChange}
-              invalid={errors.accountName && touched.accountName}
-              type='text'
-              autocomplete='off'
-              maxlength='12'
-            />
-          </FormGroup>
-          <Button
-            type='submit'
-            color='secondary'
-            className='btn-base btn-home mb-0'
-            disabled={touched.accountName && errors.accountName}
-          >
-            {isProcessing ? (
-              <Spinner name='three-bounce' color='white' fadeIn='none' />
-            ) : (
-              <span>Submit</span>
-            )}
-          </Button>
+          <Collapse isOpen={!isOpenKeyPair}>
+            <FormGroup>
+              <Label>First, enter in a unique 12 character account name:</Label>
+              <Input
+                id='accountName'
+                onBlur={handleBlur}
+                value={values.accountName}
+                onChange={handleChange}
+                invalid={errors.accountName && touched.accountName}
+                type='text'
+                autocomplete='off'
+                maxlength='12'
+              />
+            </FormGroup>
+            <Button
+              type='submit'
+              color='secondary'
+              className='btn-base btn-home mb-0'
+              disabled={touched.accountName && errors.accountName}
+            >
+              {isProcessing ? (
+                <Spinner name='three-bounce' color='white' fadeIn='none' />
+              ) : (
+                <span>Submit</span>
+              )}
+            </Button>
+          </Collapse>
           <Collapse isOpen={isOpenKeyPair}>
             <Alert color='success'>
               <h4 className='alert-heading'>Account created!</h4>
