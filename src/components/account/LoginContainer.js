@@ -199,7 +199,7 @@ class LoginContainer extends Component {
 
   handleToggleNewAcc = () => {
     const { showNewAccModal } = this.state
-    this.setState({ 
+    this.setState({
       showNewAccModal: !showNewAccModal,
       isOpenKeyPair: false
     })
