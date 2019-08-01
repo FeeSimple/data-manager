@@ -9,12 +9,20 @@ const certificate = fs.readFileSync('/etc/letsencrypt/live/fsmanager.io/fullchai
 const credentials = {key: privateKey, cert: certificate};
 
 const app = express()
+
+const httpApp = express()
+
+httpApp.set('port', process.env.PORT || 80);
+httpApp.get("*", function (req, res, next) {
+    res.redirect("https://" + req.headers.host + req.path);
+});
+
 app.use(express.static('build'))
 app.get('/*', (undefined, res) => {
   res.sendFile(path.resolve('', 'build', 'index.html'));
 })
 
-const httpServer = http.createServer(app)
+const httpServer = http.createServer(httpApp)
 const httpsServer = https.createServer(credentials, app)
 
 httpServer.listen(80)
