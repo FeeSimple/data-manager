@@ -179,6 +179,7 @@ class FloorplanDetailsContainer extends Component {
         floorplan.rent_max,
         floorplan.rent_min,
         floorplan.deposit,
+        floorplan.created_at,
         options
       )
 
@@ -288,6 +289,7 @@ class FloorplanDetailsContainer extends Component {
         floorplan.rent_min,
         floorplan.rent_max,
         floorplan.deposit,
+        new Date().getTime(),
         options
       )
 

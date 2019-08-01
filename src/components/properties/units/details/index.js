@@ -187,6 +187,7 @@ class UnitDetailsContainer extends Component {
         unit.rent_min,
         unit.status,
         new Date(unit.date_available).getTime(),
+        unit.created_at,
         options
       )
 
@@ -294,6 +295,7 @@ class UnitDetailsContainer extends Component {
         unit.rent_max,
         unit.status,
         new Date(unit.date_available).getTime(),
+        new Date().getTime(),
         options
       )
     } catch (err) {
