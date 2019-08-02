@@ -288,7 +288,7 @@ class UnitDetailsContainer extends Component {
       await fsmgrcontract.addunit(
         accountData.active,
         propertyId,
-        0xFFFFFF, // add dummy floorplan_id
+        0xffffff, // add dummy floorplan_id
         unit.name,
         unit.bedrooms,
         unit.bathrooms,
