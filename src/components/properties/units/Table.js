@@ -89,8 +89,8 @@ export default props => {
     {
       dataField: 'date_available',
       text: 'Date Available',
-      formatter: (cellContent, row) =>
-        `${new Date(parseInt(row.date_available, 10)).toLocaleDateString()}`,
+      // formatter: (cellContent, row) =>
+      //   `${(row.date_available)}`,
       sort: true,
       headerStyle: { width: 150 }
     },

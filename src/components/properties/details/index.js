@@ -172,6 +172,7 @@ class PropertyDetailsContainer extends Component {
         property.region,
         property.postal_code,
         property.unit_count,
+        property.created_at,
         options
       )
 
@@ -277,6 +278,7 @@ class PropertyDetailsContainer extends Component {
         property.region,
         property.postal_code,
         property.unit_count,
+        new Date().getTime(),
         options
       )
 

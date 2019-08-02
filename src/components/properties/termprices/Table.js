@@ -72,15 +72,11 @@ export default props => {
     {
       dataField: 'start_date',
       text: 'Start Date',
-      formatter: cellContent =>
-        `${new Date(parseInt(cellContent, 10)).toLocaleDateString()}`,
       sort: true
     },
     {
       dataField: 'end_date',
       text: 'End Date',
-      formatter: cellContent =>
-        `${new Date(parseInt(cellContent, 10)).toLocaleDateString()}`,
       sort: true
     },
     {

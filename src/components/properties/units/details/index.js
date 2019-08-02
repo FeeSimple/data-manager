@@ -178,6 +178,7 @@ class UnitDetailsContainer extends Component {
         accountData.active,
         unit.id,
         propertyId,
+        unit.floorplan_id,
         unit.name,
         unit.bedrooms,
         unit.bathrooms,
@@ -187,6 +188,7 @@ class UnitDetailsContainer extends Component {
         unit.rent_min,
         unit.status,
         new Date(unit.date_available).getTime(),
+        unit.created_at,
         options
       )
 
@@ -210,6 +212,7 @@ class UnitDetailsContainer extends Component {
             unit.id,
             ecc.sha256(imgIpfsAddressListCleaned[i]),
             imgIpfsAddressListCleaned[i],
+            new Date().getTime(),
             options
           )
           console.log(
@@ -285,6 +288,7 @@ class UnitDetailsContainer extends Component {
       await fsmgrcontract.addunit(
         accountData.active,
         propertyId,
+        0xffffff, // add dummy floorplan_id
         unit.name,
         unit.bedrooms,
         unit.bathrooms,
@@ -294,6 +298,7 @@ class UnitDetailsContainer extends Component {
         unit.rent_max,
         unit.status,
         new Date(unit.date_available).getTime(),
+        new Date().getTime(),
         options
       )
     } catch (err) {
