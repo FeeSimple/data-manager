@@ -100,6 +100,7 @@ class TermPriceDetailsContainer extends Component {
         termprice.term,
         new Date(termprice.start_date).getTime(),
         new Date(termprice.end_date).getTime(),
+        termprice.created_at,
         options
       )
     } catch (err) {
@@ -182,6 +183,7 @@ class TermPriceDetailsContainer extends Component {
         termprice.term,
         new Date(termprice.start_date).getTime(),
         new Date(termprice.end_date).getTime(),
+        new Date().getTime(),
         options
       )
     } catch (err) {
