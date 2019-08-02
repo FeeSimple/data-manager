@@ -206,6 +206,7 @@ class FloorplanDetailsContainer extends Component {
             floorplan.id,
             ecc.sha256(imgIpfsAddressListCleaned[i]),
             imgIpfsAddressListCleaned[i],
+            new Date().getTime(),
             options
           )
           console.log(

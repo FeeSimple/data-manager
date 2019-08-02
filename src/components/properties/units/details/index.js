@@ -178,6 +178,7 @@ class UnitDetailsContainer extends Component {
         accountData.active,
         unit.id,
         propertyId,
+        unit.floorplan_id,
         unit.name,
         unit.bedrooms,
         unit.bathrooms,
@@ -211,6 +212,7 @@ class UnitDetailsContainer extends Component {
             unit.id,
             ecc.sha256(imgIpfsAddressListCleaned[i]),
             imgIpfsAddressListCleaned[i],
+            new Date().getTime(),
             options
           )
           console.log(
@@ -286,6 +288,7 @@ class UnitDetailsContainer extends Component {
       await fsmgrcontract.addunit(
         accountData.active,
         propertyId,
+        0xFFFFFF, // add dummy floorplan_id
         unit.name,
         unit.bedrooms,
         unit.bathrooms,
