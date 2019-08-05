@@ -10,7 +10,12 @@ import {
   setOpResult
 } from '../../../../actions'
 import UnitDetails from './UnitDetails'
-import { FSMGRCONTRACT, UNITIMG } from '../../../../utils/consts'
+import {
+  FSMGRCONTRACT,
+  UNITIMG,
+  FLOORPLAN_ID_DUMMY,
+  FLOORPLAN_NAME_DUMMY
+} from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
 import Confirm from '../../../layout/Confirm'
 import { ipfs, ipfsLink } from '../../../layout/ipfs'
@@ -22,6 +27,7 @@ class UnitDetailsContainer extends Component {
   state = {
     prevUnit: {},
     unit: 'undefined',
+    floorplans: {},
     isLeased: true,
     buffer: null,
     imgIpfsAddrListFromUpload: [],
@@ -178,7 +184,7 @@ class UnitDetailsContainer extends Component {
         accountData.active,
         unit.id,
         propertyId,
-        unit.floorplan_id,
+        this.getFloorplanIdFromName(unit.floorplan_name),
         unit.name,
         unit.bedrooms,
         unit.bathrooms,
@@ -284,18 +290,20 @@ class UnitDetailsContainer extends Component {
 
     let operationOK = true
 
+    console.log('addunit - unit:', unit)
+
     try {
       await fsmgrcontract.addunit(
         accountData.active,
         propertyId,
-        0xffffff, // add dummy floorplan_id
+        this.getFloorplanIdFromName(unit.floorplan_name),
         unit.name,
         unit.bedrooms,
         unit.bathrooms,
         unit.sq_ft_min,
         unit.sq_ft_max,
-        unit.rent_min,
         unit.rent_max,
+        unit.rent_min,
         unit.status,
         new Date(unit.date_available).getTime(),
         new Date().getTime(),
@@ -414,6 +422,50 @@ class UnitDetailsContainer extends Component {
     })
   }
 
+  getFloorplanIdFromName = floorplan_name => {
+    if (floorplan_name === FLOORPLAN_NAME_DUMMY) return FLOORPLAN_ID_DUMMY
+
+    const { properties } = this.props
+
+    const { id } = this.props.match.params
+    const { floorplans } = properties[id]
+
+    let floorplanId = FLOORPLAN_ID_DUMMY
+    Object.values(floorplans).map(floorplan => {
+      if (floorplan.name === floorplan_name) {
+        floorplanId = floorplan.id
+      }
+    })
+
+    console.log(`Found floorplanId: ${floorplanId} for name:${floorplan_name}`)
+
+    return floorplanId
+  }
+
+  getFloorplanNameFromId = floorplan_id => {
+    if (floorplan_id === FLOORPLAN_ID_DUMMY) return FLOORPLAN_NAME_DUMMY
+
+    const { properties } = this.props
+
+    const { id } = this.props.match.params
+    const { floorplans } = properties[id]
+
+    console.log('getFloorplanNameFromId - floorplans:', floorplans)
+
+    let floorplanName = ''
+    Object.values(floorplans).map(floorplan => {
+      console.log('floorplan: ', floorplan)
+      if (floorplan.id === floorplan_id) {
+        console.log('Found floorplan: ', floorplan)
+        floorplanName = floorplan.name
+      }
+    })
+
+    console.log(`Found floorplanName: ${floorplanName} for id:${floorplan_id}`)
+
+    return floorplanName
+  }
+
   async getImgIpfsAddrListFromTable () {
     const { eosClient, accountData } = this.props
     const { id, unitid } = this.props.match.params
@@ -442,11 +494,18 @@ class UnitDetailsContainer extends Component {
     const { eosClient, accountData, isCreating, properties } = this.props
 
     const { id, unitid } = this.props.match.params
-    const { units } = properties[id]
+    const { units, floorplans } = properties[id]
+
+    this.setState({
+      floorplans
+    })
 
     // Edit an existing unit
     if (!isCreating) {
       let existingUnit = units[unitid]
+      existingUnit.floorplan_name = this.getFloorplanNameFromId(
+        existingUnit.floorplan_id
+      )
       this.setState({
         unit: existingUnit,
         isLeased: existingUnit.status.toLowerCase() === 'leased'
@@ -481,6 +540,7 @@ class UnitDetailsContainer extends Component {
       <div>
         <UnitDetails
           unit={this.state.unit}
+          floorplans={this.state.floorplans}
           isCreating={isCreating}
           isLeased={this.state.isLeased}
           propertyId={id}
@@ -520,7 +580,8 @@ const newUnit = () => ({
   rent_min: 0,
   rent_max: 0,
   status: 'Available',
-  date_available: new Date().toISOString().split('T')[0]
+  date_available: new Date().toISOString().split('T')[0],
+  floorplan_name: FLOORPLAN_NAME_DUMMY
 })
 
 function mapStateToProps ({
