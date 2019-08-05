@@ -6,9 +6,11 @@ import ImagesUploader from 'react-images-uploader-fs'
 import 'react-images-uploader-fs/styles.css'
 import { AvForm, AvField } from 'availity-reactstrap-validation'
 import { StyledPreview } from '../../../layout/DropZone'
+import { FLOORPLAN_NAME_DUMMY } from '../../../../utils/consts'
 
 const UnitDetails = ({
   unit,
+  floorplans,
   isCreating,
   isLeased,
   propertyId,
@@ -175,6 +177,23 @@ const UnitDetails = ({
               type='date'
               onChange={onChange}
             />
+          </div>
+        </div>
+        <div className='form-group row'>
+          <div className='col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2'>
+            <AvField
+              label='Floor Plan Reference'
+              type='select'
+              id='floorplan_name'
+              name='floorplan_name'
+              value={unit.floorplan_name}
+              onChange={onChange}
+            >
+              <option>{FLOORPLAN_NAME_DUMMY}</option>
+              {Object.values(floorplans).map(floorplan => {
+                return <option>{floorplan.name}</option>
+              })}
+            </AvField>
           </div>
         </div>
         {galleryItems && galleryItems.length > 0 && (
