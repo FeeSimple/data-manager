@@ -10,7 +10,12 @@ import {
   setOpResult
 } from '../../../../actions'
 import UnitDetails from './UnitDetails'
-import { FSMGRCONTRACT, UNITIMG, FLOORPLAN_ID_DUMMY, FLOORPLAN_NAME_DUMMY } from '../../../../utils/consts'
+import {
+  FSMGRCONTRACT,
+  UNITIMG,
+  FLOORPLAN_ID_DUMMY,
+  FLOORPLAN_NAME_DUMMY
+} from '../../../../utils/consts'
 import Alert from '../../../layout/Alert'
 import Confirm from '../../../layout/Confirm'
 import { ipfs, ipfsLink } from '../../../layout/ipfs'
@@ -417,7 +422,7 @@ class UnitDetailsContainer extends Component {
     })
   }
 
-  getFloorplanIdFromName = (floorplan_name) => {
+  getFloorplanIdFromName = floorplan_name => {
     if (floorplan_name === FLOORPLAN_NAME_DUMMY) return FLOORPLAN_ID_DUMMY
 
     const { properties } = this.props
@@ -433,11 +438,11 @@ class UnitDetailsContainer extends Component {
     })
 
     console.log(`Found floorplanId: ${floorplanId} for name:${floorplan_name}`)
-    
+
     return floorplanId
   }
 
-  getFloorplanNameFromId = (floorplan_id) => {
+  getFloorplanNameFromId = floorplan_id => {
     if (floorplan_id === FLOORPLAN_ID_DUMMY) return FLOORPLAN_NAME_DUMMY
 
     const { properties } = this.props
@@ -447,7 +452,7 @@ class UnitDetailsContainer extends Component {
 
     console.log('getFloorplanNameFromId - floorplans:', floorplans)
 
-    let floorplanName = ""
+    let floorplanName = ''
     Object.values(floorplans).map(floorplan => {
       console.log('floorplan: ', floorplan)
       if (floorplan.id === floorplan_id) {
@@ -457,7 +462,7 @@ class UnitDetailsContainer extends Component {
     })
 
     console.log(`Found floorplanName: ${floorplanName} for id:${floorplan_id}`)
-    
+
     return floorplanName
   }
 
@@ -498,7 +503,9 @@ class UnitDetailsContainer extends Component {
     // Edit an existing unit
     if (!isCreating) {
       let existingUnit = units[unitid]
-      existingUnit.floorplan_name = this.getFloorplanNameFromId(existingUnit.floorplan_id)
+      existingUnit.floorplan_name = this.getFloorplanNameFromId(
+        existingUnit.floorplan_id
+      )
       this.setState({
         unit: existingUnit,
         isLeased: existingUnit.status.toLowerCase() === 'leased'

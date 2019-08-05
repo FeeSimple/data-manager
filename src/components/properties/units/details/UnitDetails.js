@@ -190,11 +190,9 @@ const UnitDetails = ({
               onChange={onChange}
             >
               <option>{FLOORPLAN_NAME_DUMMY}</option>
-              { 
-                Object.values(floorplans).map(floorplan => {
-                  return <option>{floorplan.name}</option>
-                })
-              }
+              {Object.values(floorplans).map(floorplan => {
+                return <option>{floorplan.name}</option>
+              })}
             </AvField>
           </div>
         </div>
