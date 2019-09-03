@@ -196,6 +196,7 @@ class PropertyDetailsContainer extends Component {
             property.id,
             ecc.sha256(imgIpfsAddressListCleaned[i]),
             imgIpfsAddressListCleaned[i],
+            new Date().getTime(),
             options
           )
           console.log(
